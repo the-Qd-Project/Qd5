@@ -13,6 +13,8 @@ Components.TextField {
     bottomMargin: meegostyle.current.get("paddingBottom")
     minimumHeight: meegostyle.preferredHeight
 
+    placeholderText: ""
+
     Style {
         id: meegostyle
         styleClass: "MTextEditStyle"
