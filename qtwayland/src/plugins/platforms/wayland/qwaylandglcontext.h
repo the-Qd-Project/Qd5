@@ -44,16 +44,19 @@
 
 #include <QtGui/QPlatformGLContext>
 
+#include <QtCore/QMutex>
 class QWaylandDisplay;
 class QWaylandWindow;
+class QWaylandDrmWindowSurface;
 
-#define GL_GLEXT_PROTOTYPES
-#include <GLES2/gl2.h>
-#include <GLES2/gl2ext.h>
+#define MESA_EGL_NO_X11_HEADERS
+#define EGL_EGLEXT_PROTOTYPES
+#include <EGL/egl.h>
+#include <EGL/eglext.h>
 
 class QWaylandGLContext : public QPlatformGLContext {
 public:
-    QWaylandGLContext(QWaylandDisplay *wd, QWaylandWindow *window, const QPlatformWindowFormat &format);
+    QWaylandGLContext(QWaylandDisplay *wd, const QPlatformWindowFormat &format);
     ~QWaylandGLContext();
     void makeCurrent();
     void doneCurrent();
@@ -64,8 +67,13 @@ public:
 private:
     QPlatformWindowFormat mFormat;
     QWaylandDisplay *mDisplay;
-    QWaylandWindow *mWindow;
-    GLuint parentFbo, parentRbo;
+
+    static EGLint contextAttibutes[];
+    EGLContext mContext;
+
+    void createDefaultSharedContex(QWaylandDisplay *display);
+    QWaylandGLContext();
+
 };
 
 
