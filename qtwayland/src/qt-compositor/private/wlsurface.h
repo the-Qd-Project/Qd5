@@ -51,7 +51,7 @@
 #include <QtCore/QMetaType>
 #include <QtGui/private/qapplication_p.h>
 
-#ifdef QT_COMPOSITOR_WAYLAND_EGL
+#ifdef QT_COMPOSITOR_WAYLAND_GL
 #define GL_GLEXT_PROTOTYPES
 #include <GLES2/gl2.h>
 #include <GLES2/gl2ext.h>
@@ -72,8 +72,8 @@ public:
     ~Surface();
 
     uint id() const { return base()->resource.object.id; }
-#ifdef QT_COMPOSITOR_WAYLAND_EGL
-    void attachEgl(wl_buffer *egl_buffer);
+#ifdef QT_COMPOSITOR_WAYLAND_GL
+    void attachHWBuffer(struct wl_buffer *buffer);
 #endif
     void attachShm(ShmBuffer *shm_buffer);
 
@@ -86,7 +86,7 @@ public:
     QImage image() const;
     bool hasImage() const;
 
-#ifdef QT_COMPOSITOR_WAYLAND_EGL
+#ifdef QT_COMPOSITOR_WAYLAND_GL
     bool hasTexture() const;
     GLuint textureId() const;
 #endif

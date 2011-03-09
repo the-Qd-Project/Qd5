@@ -109,7 +109,7 @@ const QImage WaylandCompositor::image(uint winId) const
     return m_compositor->image(winId);
 }
 
-#ifdef QT_COMPOSITOR_WAYLAND_EGL
+#ifdef QT_COMPOSITOR_WAYLAND_GL
 GLuint WaylandCompositor::textureId(uint winId) const
 {
     return m_compositor->getSurfaceFromWinId(winId)->textureId();
