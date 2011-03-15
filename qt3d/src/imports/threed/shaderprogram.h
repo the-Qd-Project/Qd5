@@ -72,8 +72,6 @@ public Q_SLOTS:
 Q_SIGNALS:
     void finishedLoading();
     void shaderChanged();
-private Q_SLOTS:
-    void pixmapRequestFinished();
 private:
     ShaderProgramPrivate *d;
 };
