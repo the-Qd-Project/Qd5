@@ -45,14 +45,49 @@ Rectangle {
 
     x: -400;
     y: 0;
+    opacity: 0
+
+    property variant child: null;
+    property bool animationsEnabled: false;
 
     Behavior on x {
-        enabled: true
-        NumberAnimation { easing.type: Easing.InCubic; duration: 1000; }
+        enabled: container.animationsEnabled;
+        NumberAnimation { easing.type: Easing.InCubic; duration: 200; }
     }
 
     Behavior on y {
-        enabled: true
-        NumberAnimation { easing.type: Easing.InQuad; duration: 1000; }
+        enabled: container.animationsEnabled;
+        NumberAnimation { easing.type: Easing.InQuad; duration: 200; }
+    }
+
+    Behavior on scale {
+        enabled: container.animationsEnabled;
+        NumberAnimation { easing.type: Easing.InQuad; duration: 200; }
+    }
+
+    Behavior on opacity {
+        enabled: true;
+        NumberAnimation { easing.type: Easing.Linear; duration: 250; }
+    }
+
+    MouseArea {
+        anchors.fill: { if (child == null) parent; else child; }
+        z: 1
+        enabled: { if (child == null) true; else !child.focus; }
+        onClicked: {
+            child.takeFocus();
+        }
+    }
+
+    ShaderEffect {
+        source: child
+        anchors.fill: child
+        opacity: { if (child && child.focus) 0.0; else 0.8; }
+        z: 1
+
+        Behavior on opacity {
+            enabled: true;
+            NumberAnimation { easing.type: Easing.Linear; duration: 200; }
+        }
     }
 }
