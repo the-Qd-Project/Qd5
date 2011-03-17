@@ -41,6 +41,9 @@
 #include "qstyleplugin.h"
 #include "qstyleitem.h"
 #include "qrangemodel.h"
+#include "qtmenu.h"
+#include "qtmenubar.h"
+#include "qtmenuitem.h"
 #include <qdeclarativeextensionplugin.h>
 
 #include <qdeclarativeengine.h>
@@ -78,6 +81,9 @@ void StylePlugin::registerTypes(const char *uri)
     qmlRegisterType<QRangeModel>(uri, 1, 0, "RangeModel");
     qmlRegisterType<QGraphicsDropShadowEffect>(uri, 1, 0, "DropShadow");
     qmlRegisterType<QDeclarativeFolderListModel>(uri, 1, 0, "FileSystemModel");
+    qmlRegisterType<QtMenu>(uri, 1, 0, "Menu");
+    qmlRegisterType<QtMenuBar>(uri, 1, 0, "MenuBar");
+    qmlRegisterType<QtMenuItem>(uri, 1, 0, "MenuItem");
 }
 
 void StylePlugin::initializeEngine(QDeclarativeEngine *engine, const char *uri)
