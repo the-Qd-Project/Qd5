@@ -41,6 +41,7 @@
 #include "qstyleplugin.h"
 #include "qstyleitem.h"
 #include "qrangemodel.h"
+#include "qwheelarea.h"
 #include <qdeclarativeextensionplugin.h>
 
 #include <qdeclarativeengine.h>
@@ -78,6 +79,7 @@ void StylePlugin::registerTypes(const char *uri)
     qmlRegisterType<QRangeModel>(uri, 1, 0, "RangeModel");
     qmlRegisterType<QGraphicsDropShadowEffect>(uri, 1, 0, "DropShadow");
     qmlRegisterType<QDeclarativeFolderListModel>(uri, 1, 0, "FileSystemModel");
+    qmlRegisterType<QWheelArea>(uri, 1, 0, "WheelArea");
 }
 
 void StylePlugin::initializeEngine(QDeclarativeEngine *engine, const char *uri)
