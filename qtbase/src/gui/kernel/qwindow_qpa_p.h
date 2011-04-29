@@ -62,7 +62,6 @@ public:
         , platformWindow(0)
         , visible(false)
         , glContext(0)
-        , widget(0)
     {
         isWindow = true;
     }
@@ -81,7 +80,6 @@ public:
     QString windowTitle;
     QRect geometry;
     QWindowContext *glContext;
-    QWidget *widget;
 };
 
 
