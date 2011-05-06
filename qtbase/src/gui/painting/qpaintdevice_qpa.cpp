@@ -42,7 +42,7 @@
 #include "qpaintdevice.h"
 #include "qpainter.h"
 #include "qbitmap.h"
-#include "qapplication.h"
+#include "qguiapplication.h"
 
 QT_BEGIN_NAMESPACE
 
