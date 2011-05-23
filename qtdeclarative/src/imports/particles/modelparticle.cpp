@@ -49,6 +49,7 @@ QT_BEGIN_NAMESPACE
 ModelParticle::ModelParticle(QSGItem *parent) :
     ParticleType(parent), m_ownModel(false), m_comp(0), m_model(0), m_fade(true), m_modelCount(0)
 {
+    qDebug() << "Deprecation warning: ModelParticle has bifurcated. I really should just delete this class";//TODO: What he said
     setFlag(QSGItem::ItemHasContents);
 }
 
