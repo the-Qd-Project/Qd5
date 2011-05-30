@@ -69,6 +69,8 @@ public:
 
     QPlatformNativeInterface *nativeInterface()const;
 
+    QPlatformPrinterSupport *printerSupport() const;
+
 private:
     bool hasOpenGL() const;
     QList<QPlatformScreen *> m_screens;
@@ -76,6 +78,7 @@ private:
 
     QPlatformFontDatabase *m_fontDatabase;
     QPlatformNativeInterface *m_nativeInterface;
+    QPlatformPrinterSupport *m_printerSupport;
 };
 
 QT_END_NAMESPACE
