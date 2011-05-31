@@ -48,6 +48,7 @@
 QT_BEGIN_NAMESPACE
 
 class QXcbConnection;
+class QSimpleDrag;
 
 class QXcbIntegration : public QPlatformIntegration
 {
@@ -71,6 +72,7 @@ public:
 
     QPlatformPrinterSupport *printerSupport() const;
     QPlatformClipboard *clipboard() const;
+    QPlatformDrag *drag() const;
 
 private:
     bool hasOpenGL() const;
@@ -80,6 +82,7 @@ private:
     QPlatformFontDatabase *m_fontDatabase;
     QPlatformNativeInterface *m_nativeInterface;
     QPlatformPrinterSupport *m_printerSupport;
+    QSimpleDrag *m_drag;
 };
 
 QT_END_NAMESPACE
