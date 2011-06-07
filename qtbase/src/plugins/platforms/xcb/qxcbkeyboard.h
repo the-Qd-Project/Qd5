@@ -56,8 +56,8 @@ public:
     QXcbKeyboard(QXcbConnection *connection);
     ~QXcbKeyboard();
 
-    void handleKeyPressEvent(QWindow *window, const xcb_key_press_event_t *event);
-    void handleKeyReleaseEvent(QWindow *window, const xcb_key_release_event_t *event);
+    void handleKeyPressEvent(QXcbWindow *window, const xcb_key_press_event_t *event);
+    void handleKeyReleaseEvent(QXcbWindow *window, const xcb_key_release_event_t *event);
 
     void handleMappingNotifyEvent(const xcb_mapping_notify_event_t *event);
 
