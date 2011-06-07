@@ -50,6 +50,7 @@
 #include "qxcbobject.h"
 
 class QXcbConnection;
+class QXcbCursor;
 
 class QXcbScreen : public QXcbObject, public QPlatformScreen
 {
@@ -83,6 +84,7 @@ private:
     bool m_syncRequestSupported;
     xcb_window_t m_clientLeader;
     QMap<xcb_visualid_t, xcb_visualtype_t> m_visuals;
+    QXcbCursor *m_cursor;
 };
 
 #endif
