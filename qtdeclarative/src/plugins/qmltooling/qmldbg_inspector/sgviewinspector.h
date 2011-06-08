@@ -47,13 +47,15 @@
 #include <QtCore/QWeakPointer>
 
 QT_BEGIN_NAMESPACE
-
 class QMouseEvent;
 class QKeyEvent;
 class QWheelEvent;
 
 class QSGView;
 class QSGItem;
+QT_END_NAMESPACE
+
+namespace QmlJSDebugger {
 
 class SGAbstractTool;
 class SGSelectionTool;
@@ -104,6 +106,6 @@ private:
     bool m_designMode;
 };
 
-QT_END_NAMESPACE
+} // namespace QmlJSDebugger
 
 #endif // QSGVIEWINSPECTOR_H
