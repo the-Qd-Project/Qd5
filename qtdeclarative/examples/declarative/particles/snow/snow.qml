@@ -41,6 +41,7 @@
 import QtQuick 2.0
 import QtQuick.Particles 2.0
 import "content"
+import "../launcherContent" as UI
 
 Rectangle{
     width: 360
@@ -77,15 +78,15 @@ Rectangle{
     Row{
         anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter
-        Button{
+        UI.Button{
             text:"dx/dt"
             onClicked: wanderer.physics = Wander.Position;
         }
-        Button{
+        UI.Button{
             text:"dv/dt"
             onClicked: wanderer.physics = Wander.Velocity;
         }
-        Button{
+        UI.Button{
             text:"da/dt"
             onClicked: wanderer.physics = Wander.Acceleration;
         }
