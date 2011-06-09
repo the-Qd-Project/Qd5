@@ -42,9 +42,11 @@
 #include "qdeclarativeinspectorplugin.h"
 
 #include "qdeclarativeviewinspector_p.h"
+#include "sgviewinspector.h"
 
 #include <QtCore/qplugin.h>
 #include <QtDeclarative/private/qdeclarativeinspectorservice_p.h>
+#include <QtDeclarative/QSGView>
 
 QT_BEGIN_NAMESPACE
 
@@ -61,13 +63,16 @@ QDeclarativeInspectorPlugin::~QDeclarativeInspectorPlugin()
 void QDeclarativeInspectorPlugin::activate()
 {
     QDeclarativeInspectorService *service = QDeclarativeInspectorService::instance();
-    QList<QDeclarativeView*> views = service->views();
+    QList<QObject*> views = service->views();
     if (views.isEmpty())
         return;
 
     // TODO: Support multiple views
-    QDeclarativeView *view = service->views().at(0);
-    m_inspector = new QDeclarativeViewInspector(view, view);
+    QObject *firstView = views.first();
+    if (QDeclarativeView *declarativeView = qobject_cast<QDeclarativeView*>(firstView))
+        m_inspector = new QDeclarativeViewInspector(declarativeView, declarativeView);
+    else if (QSGView *sgView = qobject_cast<QSGView*>(firstView))
+        m_inspector = new SGViewInspector(sgView, sgView);
 }
 
 void QDeclarativeInspectorPlugin::deactivate()
@@ -78,4 +83,3 @@ void QDeclarativeInspectorPlugin::deactivate()
 Q_EXPORT_PLUGIN2(declarativeinspector, QDeclarativeInspectorPlugin)
 
 QT_END_NAMESPACE
-
