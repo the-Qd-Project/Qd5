@@ -53,7 +53,7 @@ class QPlaceManagerEngine;
 class Q_LOCATION_EXPORT QPlaceManagerEngineFactory
 {
 public:
-    virtual ~QPlaceManagerEngineFactory();
+    virtual ~QPlaceManagerEngineFactory(){}
     virtual QPlaceManagerEngine *engine(const QMap<QString, QString> &parameters,
                                            QPlaceManager::Error *error,
                                            QString *errorString) = 0;
