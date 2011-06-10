@@ -39,7 +39,7 @@
 **
 ****************************************************************************/
 #include <qtest.h>
-#include "../../../../src/3rdparty/v8/include/v8.h"
+#include "v8test.h"
 
 using namespace v8;
 
@@ -51,37 +51,14 @@ public:
 
 private slots:
     void initTestCase() {}
-    void cleanupTestCase();
+    void cleanupTestCase() {}
 
     void eval();
-
-private:
-    Persistent<Context> context;
 };
 
 void tst_v8::eval()
 {
-    HandleScope handle_scope;
-    context = Context::New();
-    Context::Scope context_scope(context);
-
-    Local<Object> qmlglobal = Object::New();
-    qmlglobal->Set(String::New("a"), v8::Integer::New(1922));
-
-    Local<Script> script = Script::Compile(String::New("eval(\"a\")"), NULL, NULL, 
-                                           Handle<String>(), Script::QmlMode);
-    
-    TryCatch tc;
-    Local<Value> result = script->Run(qmlglobal);
-
-    QVERIFY(!tc.HasCaught());
-    QCOMPARE(result->Int32Value(), 1922);
-}
-
-void tst_v8::cleanupTestCase()
-{
-    context.Dispose();
-    context = Persistent<Context>();
+    QVERIFY(v8test_eval());
 }
 
 int main(int argc, char *argv[]) 
