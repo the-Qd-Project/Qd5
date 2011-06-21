@@ -89,7 +89,6 @@ protected:
 
 private slots:
     void removeFromSelectedItems(QObject *);
-    void adjustSelectionHighlight(QSGItem *item = 0);
 
 private:
     bool syncSelectedItems(const QList<QSGItem*> &items);
