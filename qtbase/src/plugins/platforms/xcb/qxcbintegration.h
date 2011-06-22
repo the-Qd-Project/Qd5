@@ -76,6 +76,8 @@ public:
     QPlatformClipboard *clipboard() const;
     QPlatformDrag *drag() const;
 
+    QPlatformInputContext *inputContext() const;
+
 private:
     bool hasOpenGL() const;
     QList<QPlatformScreen *> m_screens;
@@ -84,6 +86,8 @@ private:
     QPlatformFontDatabase *m_fontDatabase;
     QPlatformNativeInterface *m_nativeInterface;
     QPlatformPrinterSupport *m_printerSupport;
+
+    QPlatformInputContext *m_inputContext;
 };
 
 QT_END_NAMESPACE
