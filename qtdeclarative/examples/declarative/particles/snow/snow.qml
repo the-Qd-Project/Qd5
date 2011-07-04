@@ -54,6 +54,7 @@ Rectangle{
             source: "content/flake-01.png"
             frames: 51
             duration: 40
+            durationVariation: 8
         }
     }
     Wander { 

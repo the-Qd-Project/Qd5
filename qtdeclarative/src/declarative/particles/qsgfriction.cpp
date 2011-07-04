@@ -48,7 +48,7 @@ QSGFrictionAffector::QSGFrictionAffector(QSGItem *parent) :
 
 bool QSGFrictionAffector::affectParticle(QSGParticleData *d, qreal dt)
 {
-    if(!m_factor)
+    if (!m_factor)
         return false;
     qreal curSX = d->curSX();
     qreal curSY = d->curSY();
