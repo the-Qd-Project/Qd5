@@ -42,6 +42,7 @@
 #ifndef QDECLARATIVEGEOBOUNDINGCIRCLE_P_H
 #define QDECLARATIVEGEOBOUNDINGCIRCLE_P_H
 
+#include "qdeclarativegeoboundingarea_p.h"
 #include "qdeclarativecoordinate_p.h"
 #include <qgeoboundingcircle.h>
 
@@ -51,7 +52,7 @@
 
 QTM_BEGIN_NAMESPACE
 
-class QDeclarativeGeoBoundingCircle : public QObject
+class QDeclarativeGeoBoundingCircle : public QDeclarativeGeoBoundingArea
 {
     Q_OBJECT
     Q_PROPERTY(QDeclarativeCoordinate* center READ center WRITE setCenter NOTIFY centerChanged)
