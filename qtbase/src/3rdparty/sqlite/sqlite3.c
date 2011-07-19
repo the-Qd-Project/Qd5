@@ -424,7 +424,7 @@
 **
 ** See also ticket #2741.
 */
-#if !defined(_XOPEN_SOURCE) && !defined(__DARWIN__) && !defined(__APPLE__) && SQLITE_THREADSAFE
+#if !defined(_XOPEN_SOURCE) && !defined(__DARWIN__) && !defined(__APPLE__) && SQLITE_THREADSAFE && !defined(VXWORKS)
 #  define _XOPEN_SOURCE 500  /* Needed to enable pthread recursive mutexes */
 #endif
 
@@ -575,6 +575,13 @@ SQLITE_PRIVATE   void sqlite3Coverage(int);
 */
 #ifndef _SQLITE3_H_
 #define _SQLITE3_H_
+
+#ifdef VXWORKS
+# define SQLITE_HOMEGROWN_RECURSIVE_MUTEX
+# define NO_GETTOD
+# include <ioLib.h>
+#endif
+
 #include <stdarg.h>     /* Needed for the definition of va_list */
 
 /*
@@ -24379,7 +24386,11 @@ SQLITE_API int sqlite3_os_end(void){
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include <sys/time.h>
+#ifdef VXWORKS
+# include <sys/times.h>
+#else
+# include <sys/time.h>
+#endif
 #include <errno.h>
 #ifndef SQLITE_OMIT_WAL
 #include <sys/mman.h>
@@ -24827,7 +24838,12 @@ static struct unix_syscall {
 #define osPread64   ((ssize_t(*)(int,void*,size_t,off_t))aSyscall[10].pCurrent)
 
   { "write",        (sqlite3_syscall_ptr)write,      0  },
-#define osWrite     ((ssize_t(*)(int,const void*,size_t))aSyscall[11].pCurrent)
+
+#ifndef VXWORKS
+    #define osWrite     ((ssize_t(*)(int,const void*,size_t))aSyscall[11].pCurrent)
+#else
+    #define osWrite     ((ssize_t(*)(int,char*,size_t))aSyscall[11].pCurrent)
+#endif
 
 #if defined(USE_PREAD) || SQLITE_ENABLE_LOCKING_STYLE
   { "pwrite",       (sqlite3_syscall_ptr)pwrite,     0  },
@@ -25701,6 +25717,11 @@ static int unixCheckReservedLock(sqlite3_file *id, int *pResOut){
   return rc;
 }
 
+#ifdef VXWORKS
+static int getpid(){
+    return (int)taskIdCurrent();
+}
+#endif
 /*
 ** Attempt to set a system-lock on the file pFile.  The lock is 
 ** described by pLock.
@@ -27507,7 +27528,11 @@ static int seekAndWrite(unixFile *id, i64 offset, const void *pBuf, int cnt){
     }
     return -1;
   }
+#ifndef VXWORKS
   do{ got = osWrite(id->h, pBuf, cnt); }while( got<0 && errno==EINTR );
+#else
+  do{ got = osWrite(id->h, (char *)pBuf, cnt); }while( got<0 && errno==EINTR );
+#endif
 #endif
   TIMER_END;
   if( got<0 ){
