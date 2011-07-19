@@ -13579,6 +13579,16 @@ static int osLocaltime(time_t *t, struct tm *pTm){
 
 #ifndef SQLITE_OMIT_LOCALTIME
 /*
+** Windows CE does not declare the localtime
+** function as it is not defined anywhere.
+** Anyway we need the forward-declaration to be
+** able to define it later on.
+*/
+#if defined(_WIN32_WCE) && (_WIN32_WCE >= 0x600)
+static struct tm *__cdecl localtime(const time_t *t);
+#endif
+
+/*
 ** Compute the difference (in milliseconds) between localtime and UTC
 ** (a.k.a. GMT) for the time value p where p is in UTC. If no error occurs,
 ** return this value and set *pRc to SQLITE_OK. 
@@ -24316,6 +24326,8 @@ SQLITE_API int sqlite3_os_end(void){
 */
 #if SQLITE_OS_UNIX              /* This file is used on unix only */
 
+#include <qconfig.h>
+
 /*
 ** There are various methods for file locking used for concurrency
 ** control:
@@ -24424,7 +24436,7 @@ SQLITE_API int sqlite3_os_end(void){
 ** If we are to be thread-safe, include the pthreads header and define
 ** the SQLITE_UNIX_THREADS macro.
 */
-#if SQLITE_THREADSAFE
+#ifndef QT_NO_THREAD
 # define SQLITE_UNIX_THREADS 1
 #endif
 
@@ -31281,6 +31293,8 @@ SQLITE_API int sqlite3_os_end(void){
 ** desktops but not so well in embedded systems.
 */
 
+#include <qconfig.h>
+
 #include <winbase.h>
 
 #ifdef __CYGWIN__
@@ -31290,7 +31304,7 @@ SQLITE_API int sqlite3_os_end(void){
 /*
 ** Macros used to determine whether or not to use threads.
 */
-#if defined(THREADSAFE) && THREADSAFE
+#ifndef QT_NO_THREAD
 # define SQLITE_W32_THREADS 1
 #endif
 
