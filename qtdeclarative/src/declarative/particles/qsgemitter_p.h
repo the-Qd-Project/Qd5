@@ -42,7 +42,7 @@
 #ifndef TRAILSEMITTER_H
 #define TRAILSEMITTER_H
 
-#include <QtCore>
+#include <QtCore>//FIXME
 #include <QtGui>
 
 #include "qsgparticleemitter_p.h"
