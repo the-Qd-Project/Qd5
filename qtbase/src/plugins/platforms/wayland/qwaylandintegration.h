@@ -69,6 +69,8 @@ public:
 
     QPlatformClipboard *clipboard() const;
 
+    QPlatformDrag *drag() const;
+
 private:
     QPlatformFontDatabase *mFontDb;
     QWaylandDisplay *mDisplay;
