@@ -71,7 +71,8 @@ public:
         PlaceSearchReply,
         TextPredictionReply,
         ReviewReply,
-        MediaReply
+        MediaReply,
+        SaveReply
     };
 
     QPlaceReply(QObject *parent);
