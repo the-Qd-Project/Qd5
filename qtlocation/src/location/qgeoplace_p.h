@@ -110,6 +110,8 @@ public:
     QString primaryEmail;
     QUrl primaryUrl;
 
+    QGeoPlace::ExtendedAttributes extendedAttributes;
+
     bool detailsFetched;
 };
 
