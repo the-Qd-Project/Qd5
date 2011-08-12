@@ -70,7 +70,7 @@ public:
     ~QPlaceCategoriesRepository();
 
     QPlaceReply *initializeCategories();
-    QList<QPlaceCategory> categories() const;
+    QPlaceCategoryTree categories() const;
 
     QPlaceCategory mapCategory(const QString &number);
     QString getCategoryTagId(const QPlaceCategory &category);
@@ -85,7 +85,7 @@ private:
 private:
     QPlaceCategoriesRepository(QObject *parent = 0);
 
-    QHash<QString, QPlaceCategory> allCategories;
+    QPlaceCategoryTree m_categoryTree;
     static QPlaceCategoriesRepository *repositoryInstance;
     QPointer<QPlaceCategoriesReplyImpl> categoriesReply;
 };
