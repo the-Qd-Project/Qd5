@@ -41,7 +41,7 @@
 
 #include "qgenericunixprintersupport_p.h"
 
-#include <QtGui/QPrinterInfo>
+#include <QtPrintSupport/QPrinterInfo>
 #include <private/qcups_p.h>
 
 QT_BEGIN_NAMESPACE
