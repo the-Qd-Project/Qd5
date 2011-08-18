@@ -72,6 +72,8 @@ public:
     void setPageSize(PageSize size);
     void setPageSizeMM(const QSizeF &size);
 
+    void setMargins(const Margins &m);
+
 protected:
     QPaintEngine *paintEngine() const;
     int metric(PaintDeviceMetric id) const;
