@@ -1,28 +1,41 @@
 attribute highp vec2 vPos;
-attribute highp vec2 vTex;
 attribute highp vec4 vData; //  x = time,  y = lifeSpan, z = size,  w = endSize
 attribute highp vec4 vVec; // x,y = constant speed,  z,w = acceleration
+#ifdef COLOR
 attribute lowp vec4 vColor;
+#endif
+#ifdef DEFORM
+attribute highp vec2 vTex;
 attribute highp vec4 vDeformVec; //x,y x unit vector; z,w = y unit vector
 attribute highp vec3 vRotation; //x = radians of rotation, y=rotation speed, z= bool autoRotate
+#endif
+#ifdef SPRITE
 attribute highp vec4 vAnimData;// idx, duration, frameCount (this anim), timestamp (this anim)
+uniform highp float framecount; //maximum of all anims
+uniform highp float animcount;
+#endif
 
 uniform highp mat4 qt_Matrix;
 uniform highp float timestamp;
-uniform highp float framecount; //maximum of all anims
-uniform highp float animcount;
-
+#ifdef TABLE
 varying lowp float tt;
+#endif
+#ifdef SPRITE
+varying lowp float progress;
 varying highp vec2 fTexA;
 varying highp vec2 fTexB;
-varying lowp float progress;
+#elseif DEFORM
+varying highp vec2 fTex;
+#endif
+#ifdef COLOR
 varying lowp vec4 fColor;
+#endif
 
 
 void main() {
 
     highp float t = (timestamp - vData.x) / vData.y;
-
+#ifdef SPRITE
     //Calculate frame location in texture
     highp float frameIndex = mod((((timestamp - vAnimData.w)*1000.)/vAnimData.y),vAnimData.z);
     progress = mod((timestamp - vAnimData.w)*1000., vAnimData.y) / vAnimData.y;
@@ -55,6 +68,7 @@ void main() {
     else
         frameTex.y = 1. * ((vAnimData.x + 1.)/animcount);
     fTexB = frameTex;
+#endif
 
     highp float currentSize = mix(vData.z, vData.w, t * t);
 
@@ -62,6 +76,7 @@ void main() {
         currentSize = 0.;
 
     highp vec2 pos;
+#ifdef DEFORM
     highp float rotation = vRotation.x + vRotation.y * t * vData.y;
     if(vRotation.z == 1.0){
         highp vec2 curVel = vVec.zw * t * vData.y + vVec.xy;
@@ -82,9 +97,17 @@ void main() {
           //- vec2(1,1) * currentSize * 0.5 // 'center'
           + vVec.xy * t * vData.y         // apply speed
           + 0.5 * vVec.zw * pow(t * vData.y, 2.); // apply acceleration
-
+#else
+    pos = vPos
+          + vVec.xy * t * vData.y         // apply speed vector..
+          + 0.5 * vVec.zw * pow(t * vData.y, 2.);
+#endif
     gl_Position = qt_Matrix * vec4(pos.x, pos.y, 0, 1);
 
+#ifdef COLOR
     fColor = vColor;
+#endif
+#ifdef TABLE
     tt = t;
+#endif
 }
