@@ -101,8 +101,8 @@ public:
     QString shortDescription;
     QStringList tags;
 
-    QMap<QString, PlaceMediaCollection> media;
-    QMap<QString, int> mediaCounts;
+    QMap<QPlaceContent::Type, QPlaceContent::Collection> contentCollections;
+    QMap<QPlaceContent::Type, int> contentCounts;
 
     QString primaryPhone;
     QString primaryFax;

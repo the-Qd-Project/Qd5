@@ -71,7 +71,7 @@ public:
         PlaceSearchReply,
         TextPredictionReply,
         ReviewReply,
-        MediaReply,
+        ContentReply,
         SaveReply
     };
 
