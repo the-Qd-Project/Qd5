@@ -45,10 +45,11 @@
 #include <QSharedData>
 
 #include "qplacereview.h"
+#include "qplacecontent_p.h"
 
 QT_BEGIN_NAMESPACE
 
-class QPlaceReviewPrivate : public QSharedData
+class QPlaceReviewPrivate : public QPlaceContentPrivate
 {
 public:
     QPlaceReviewPrivate();
@@ -56,7 +57,9 @@ public:
 
     ~QPlaceReviewPrivate();
 
-    bool operator==(const QPlaceReviewPrivate &other) const;
+    bool compare(const QPlaceContentPrivate *other) const;
+
+    Q_DEFINE_CONTENT_PRIVATE_HELPER(QPlaceReview, QPlaceContent::ReviewType);
 
     QString date;
     QString description;
@@ -75,4 +78,4 @@ public:
 
 QT_END_NAMESPACE
 
-#endif // QPLACEREVIEW_P_H
+#endif
