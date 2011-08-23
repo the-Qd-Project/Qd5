@@ -6,7 +6,7 @@ TARGETPATH = Qt/sensors
 
 include(qsensorsimport.pri)
 
-QT += declarative sensors
+QT = declarative sensors
 
 SOURCES += sensors.cpp
 
