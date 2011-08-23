@@ -47,7 +47,6 @@
 #include <QtCore/qfactoryinterface.h>
 
 QT_BEGIN_NAMESPACE
-class QSensorBackend;
 
 class Q_SENSORS_EXPORT QSensorPluginInterface
 {
@@ -65,9 +64,10 @@ protected:
     ~QSensorChangesInterface() {}
 };
 
+QT_END_NAMESPACE
+
 Q_DECLARE_INTERFACE(QSensorPluginInterface, "com.nokia.Qt.QSensorPluginInterface/1.0");
 Q_DECLARE_INTERFACE(QSensorChangesInterface, "com.nokia.Qt.QSensorChangesInterface/1.0");
-QT_END_NAMESPACE
 
 #endif
 

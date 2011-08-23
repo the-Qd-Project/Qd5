@@ -43,6 +43,7 @@
 #define DUMMYCOMMON_H
 
 #include <qsensorbackend.h>
+#include <qsensor.h>
 
 class dummycommon : public QSensorBackend
 {
