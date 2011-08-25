@@ -90,7 +90,7 @@ QPlaceReply::Type QPlaceDetailsReply::type() const
 }
 
  /*!
-    Returns a place result;
+    Returns a place result
 */
 QGeoPlace QPlaceDetailsReply::result() const
 {
@@ -99,10 +99,10 @@ QGeoPlace QPlaceDetailsReply::result() const
 }
 
 /*!
-    Sets place \a result.
+    Sets the \a place
 */
-void QPlaceDetailsReply::setResult(const QGeoPlace &result)
+void QPlaceDetailsReply::setResult(const QGeoPlace &place)
 {
     Q_D(QPlaceDetailsReply);
-    d->result = result;
+    d->result = place;
 }
