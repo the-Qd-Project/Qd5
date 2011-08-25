@@ -49,6 +49,7 @@
 #include "qdeclarativeaudio_p.h"
 #include "qdeclarativevideooutput_p.h"
 #include "qdeclarativeradio_p.h"
+#include "qdeclarativebackgroundaudio_p.h"
 #if 0
 #include "qdeclarativecamera_p.h"
 #include "qdeclarativecamerapreviewprovider_p.h"
@@ -71,6 +72,7 @@ public:
         qmlRegisterType<QDeclarativeAudio>(uri, 4, 0, "MediaPlayer");
         qmlRegisterType<QDeclarativeVideoOutput>(uri, 4, 0, "VideoOutput");
         qmlRegisterType<QDeclarativeRadio>(uri, 4, 0, "Radio");
+        qmlRegisterType<QDeclarativeBackgroundAudio>(uri, 4, 0, "BackgroundAudio");
         /* Disabled until ported to scenegraph */
 #if 0
         qmlRegisterType<QDeclarativeCamera>(uri, 4, 0, "Camera");
