@@ -81,6 +81,15 @@ public:
 
     void maybeQuitOnLastWindowClosed();
 
+    QPoint globalPosition() const {
+        Q_Q(const QWindow);
+        QPoint offset = q->pos();
+        for (const QWindow *p = q->parent(); p; p = p->parent())
+            offset += p->pos();
+        return offset;
+    }
+
+
     QWindow::SurfaceType surfaceType;
     Qt::WindowFlags windowFlags;
     QWindow *parentWindow;
