@@ -47,8 +47,8 @@
 
 #include "qdeclarativemediametadata_p.h"
 #include "qdeclarativeaudio_p.h"
+#include "qdeclarativevideooutput_p.h"
 #if 0
-#include "qdeclarativevideo_p.h"
 #include "qdeclarativecamera_p.h"
 #include "qdeclarativecamerapreviewprovider_p.h"
 #endif
@@ -67,9 +67,10 @@ public:
 
         qmlRegisterType<QSoundEffect>(uri, 4, 0, "SoundEffect");
         qmlRegisterType<QDeclarativeAudio>(uri, 4, 0, "Audio");
+        qmlRegisterType<QDeclarativeAudio>(uri, 4, 0, "MediaPlayer");
+        qmlRegisterType<QDeclarativeVideoOutput>(uri, 4, 0, "VideoOutput");
         /* Disabled until ported to scenegraph */
 #if 0
-        qmlRegisterType<QDeclarativeVideo>(uri, 4, 0, "Video");
         qmlRegisterType<QDeclarativeCamera>(uri, 4, 0, "Camera");
 #endif
         qmlRegisterType<QDeclarativeMediaMetaData>();
