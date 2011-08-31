@@ -1,0 +1,18 @@
+{
+    "info-version": "1.0",
+    "dict": {
+        "Category": "application",
+        "Runtime": "qml",
+        "DisplayName": "Thing",
+        "Subcategory": "utility",
+        "MainQML": "mt.qml",
+        "Version": "1.0",
+        "Identifier": "com.nokia.qtquick3d.thing",
+        "Depends": {
+            "com.nokia.components": "1.0",
+            "com.nokia.sphone.components": "1.0",
+            "com.nokia.sphone.JsonDB": "1.0"
+        },
+        "Summary": "Thing QML Demo"
+    }
+}

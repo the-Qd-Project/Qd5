@@ -7,7 +7,7 @@
         "Subcategory": "utility",
         "MainQML": "mt.qml",
         "Version": "1.0",
-        "Identifier": "com.nokia.quick3d.cube_qml",
+        "Identifier": "com.nokia.qtquick3d.cube_qml",
         "Depends": {
             "com.nokia.components": "1.0",
             "com.nokia.sphone.components": "1.0",
