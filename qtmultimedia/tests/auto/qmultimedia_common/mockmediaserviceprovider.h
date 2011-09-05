@@ -43,6 +43,7 @@
 #define MOCKMEDIASERVICEPROVIDER_H
 
 #include "qmediaserviceprovider.h"
+#include "qmediaservice.h"
 
 // Simple provider that lets you set the service
 class MockMediaServiceProvider : public QMediaServiceProvider
