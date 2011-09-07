@@ -52,21 +52,6 @@ QT_BEGIN_NAMESPACE
 
 QT_MODULE(Gui)
 
-class Q_GUI_EXPORT QPlatformSurface
-{
-public:
-    virtual QSurfaceFormat format() const = 0;
-
-    QSurface::SurfaceType surfaceType() const { return m_type; }
-
-private:
-    QPlatformSurface(QSurface::SurfaceType type) : m_type(type) {}
-
-    QSurface::SurfaceType m_type;
-
-    friend class QPlatformWindow;
-};
-
 class QPlatformOpenGLContextPrivate;
 
 class Q_GUI_EXPORT QPlatformOpenGLContext
