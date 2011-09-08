@@ -53,8 +53,9 @@ QT_MODULE(Gui)
 class QWindow;
 class QMouseEvent;
 
-class Q_GUI_EXPORT QPlatformInputContext
+class Q_GUI_EXPORT QPlatformInputContext : public QObject
 {
+    Q_OBJECT
 public:
     QPlatformInputContext();
     virtual ~QPlatformInputContext();
