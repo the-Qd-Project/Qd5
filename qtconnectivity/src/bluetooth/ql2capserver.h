@@ -42,7 +42,7 @@
 #ifndef QL2CAPSERVER_H
 #define QL2CAPSERVER_H
 
-#include "../qtconnectivityglobal.h"
+#include "qbluetoothglobal.h"
 
 #include <QObject>
 
@@ -55,7 +55,7 @@ QT_BEGIN_HEADER
 class QL2capServerPrivate;
 class QBluetoothSocket;
 
-class Q_CONNECTIVITY_EXPORT QL2capServer : public QObject
+class Q_BLUETOOTH_EXPORT QL2capServer : public QObject
 {
     Q_OBJECT
 
