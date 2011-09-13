@@ -44,11 +44,9 @@
 #include <QObject>
 #include <QImage>
 #include <QRect>
+#include <QOpenGLContext>
 
-#ifdef QT_COMPOSITOR_WAYLAND_GL
-#include <QtOpenGL/QGLContext>
-#endif
-
+class QGLContext;
 class QWidget;
 class QMimeData;
 class WaylandSurface;
@@ -61,7 +59,7 @@ namespace Wayland
 class WaylandCompositor
 {
 public:
-    WaylandCompositor(QWidget *topLevelWidget = 0, const char *socketName = 0);
+    WaylandCompositor(QWindow *window = 0, QOpenGLContext *context = 0, const char *socketName = 0);
     virtual ~WaylandCompositor();
 
     void frameFinished(WaylandSurface *surface = 0);
@@ -73,7 +71,8 @@ public:
     void setDirectRenderSurface(WaylandSurface *surface);
     WaylandSurface *directRenderSurface() const;
 
-    QWidget *topLevelWidget()const;
+    QOpenGLContext *glContext() const;
+    QWindow *window()const;
 
     virtual void surfaceCreated(WaylandSurface *surface) = 0;
 
@@ -87,11 +86,18 @@ public:
     void setScreenOrientation(qint32 orientationInDegrees);
     void setOutputGeometry(const QRect &outputGeometry);
 
+    bool isDragging() const;
+    void sendDragMoveEvent(const QPoint &global, const QPoint &local, WaylandSurface *surface);
+    void sendDragEndEvent();
+
+    virtual void changeCursor(const QImage &image, int hotspotX, int hotspotY);
+
 private:
     static void retainedSelectionChanged(QMimeData *mimeData, void *param);
 
     Wayland::Compositor *m_compositor;
-    QWidget  *m_toplevel_widget;
+    QOpenGLContext *m_glContext;
+    QWindow  *m_toplevel_widget;
     QByteArray m_socket_name;
 };
 
