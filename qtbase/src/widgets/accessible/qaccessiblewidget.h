@@ -42,7 +42,7 @@
 #ifndef QACCESSIBLEWIDGET_H
 #define QACCESSIBLEWIDGET_H
 
-#include <QtWidgets/qaccessibleobject.h>
+#include <QtGui/qaccessibleobject.h>
 
 QT_BEGIN_HEADER
 
@@ -59,25 +59,26 @@ class Q_WIDGETS_EXPORT QAccessibleWidget : public QAccessibleObject
 public:
     explicit QAccessibleWidget(QWidget *o, Role r = Client, const QString& name = QString());
 
+    QWindow *window() const;
     int childCount() const;
     int indexOfChild(const QAccessibleInterface *child) const;
     Relation relationTo(int child, const QAccessibleInterface *other, int otherChild) const;
 
     int childAt(int x, int y) const;
-    QRect rect(int child) const;
+    QRect rect(int child = 0) const;
 
     QAccessibleInterface *parent() const;
     QAccessibleInterface *child(int index) const;
     int navigate(RelationFlag rel, int entry, QAccessibleInterface **target) const;
 
-    QString text(Text t, int child) const;
-    Role role(int child) const;
-    State state(int child) const;
+    QString text(Text t, int child = 0) const;
+    Role role(int child = 0) const;
+    State state(int child = 0) const;
 
 #ifndef QT_NO_ACTION
-    int userActionCount(int child) const;
-    QString actionText(int action, Text t, int child) const;
-    bool doAction(int action, int child, const QVariantList &params);
+    int userActionCount(int child = 0) const;
+    QString actionText(int action, Text t, int child = 0) const;
+    bool doAction(int action, int child = 0, const QVariantList &params = QVariantList());
 #endif
 
     QVariant invokeMethod(Method method, int child, const QVariantList &params);

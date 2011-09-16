@@ -66,6 +66,7 @@ public:
     virtual QPlatformClipboard *clipboard() const;
     virtual QPlatformDrag *drag() const;
     virtual QPlatformInputContext *inputContext() const;
+    virtual QPlatformAccessibility *accessibility() const;
     virtual QPlatformNativeInterface *nativeInterface() const;
     virtual QPlatformFontDatabase *fontDatabase() const;
 
