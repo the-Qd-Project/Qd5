@@ -58,6 +58,7 @@
 #include "QtCore/qpointer.h"
 #include "QtWidgets/qdialog.h"
 #include "QtWidgets/qpushbutton.h"
+#include "QtWidgets/qplatformdialoghelper_qpa.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -74,7 +75,7 @@ public:
           resizer(0),
           sizeGripEnabled(false),
 #endif
-          rescode(0), resetModalityTo(-1), wasModalitySet(true), eventLoop(0)
+          rescode(0), resetModalityTo(-1), wasModalitySet(true), eventLoop(0), platformHelper(0)
         {}
 
     QPointer<QPushButton> mainDef;
@@ -97,15 +98,13 @@ public:
     void _q_doneAction();
 #endif
 
-#ifdef Q_WS_MAC
-    virtual void mac_nativeDialogModalHelp() {}
-#endif
-
     int rescode;
     int resetModalityTo;
     bool wasModalitySet;
 
     QPointer<QEventLoop> eventLoop;
+
+    QPlatformDialogHelper *platformHelper;
 };
 
 QT_END_NAMESPACE

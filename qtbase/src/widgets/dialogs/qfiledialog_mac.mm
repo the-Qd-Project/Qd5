@@ -703,7 +703,7 @@ bool QFileDialogPrivate::hideCocoaFilePanel()
 }
 
 
-void QFileDialogPrivate::mac_nativeDialogModalHelp()
+void QFileDialogPrivate::platformNativeDialogModalHelp()
 {
     // Do a queued meta-call to open the native modal dialog so it opens after the new
     // event loop has started to execute (in QDialog::exec). Using a timer rather than
