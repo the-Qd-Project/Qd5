@@ -42,6 +42,7 @@
 #ifndef QPLACECATEGORYTREE_H
 #define QPLACECATEGORYTREE_H
 
+#include <QtCore/QHash>
 #include <QtLocation/QPlaceCategory>
 
 class QPlaceCategoryTree
