@@ -79,6 +79,7 @@ public:
     QObject *result;
     QDeclarativeCompiledData *component;
     QDeclarativeVME vme;
+    QDeclarativeVMEGuard vmeGuard;
 
     typedef QDeclarativeIncubatorPrivate QIP;
     QIP *waitingOnMe;
