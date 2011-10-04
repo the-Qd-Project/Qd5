@@ -33,6 +33,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "repositorymanager.h"
 #include <QtCore/QTemporaryFile>
 #include <QtCore/QUrl>
 #include <QtCore/QDate>
@@ -45,12 +46,6 @@ namespace Ui {
     class MainWindow;
 }
 
-struct RepositoryDescription {
-    QString version;
-    QDate releaseDate;
-    QString checksum;
-    QString updateText;
-};
 
 class MainWindow : public QMainWindow
 {
@@ -60,25 +55,18 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    void compareRepositories();
 
 public slots:
-    void receiveRepository(QNetworkReply* reply);
+    void displayRepositories();
     void getProductionRepository();
     void getUpdateRepository();
     void createExportFile();
 
 private:
-    void createRepositoryMap(const QByteArray &data, QMap<QString, RepositoryDescription> &map);
+    void createRepositoryMap(const QByteArray &data, QMap<QString, ComponentDescription> &map);
 
     Ui::MainWindow *ui;
-    QTemporaryFile productionFile;
-    QTemporaryFile updateFile;
-    QNetworkReply *productionReply;
-    QNetworkReply *updateReply;
-    QNetworkAccessManager *manager;
-    QMap<QString, RepositoryDescription> productionMap;
-    QMap<QString, RepositoryDescription> updateMap;
+    RepositoryManager manager;
 };
 
 #endif // MAINWINDOW_H
