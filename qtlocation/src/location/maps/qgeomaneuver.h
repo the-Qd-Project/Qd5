@@ -42,7 +42,7 @@
 #ifndef QGEOMANEUVER_H
 #define QGEOMANEUVER_H
 
-#include <QExplicitlySharedDataPointer>
+#include <qshareddata.h>
 
 QT_BEGIN_HEADER
 
@@ -104,7 +104,7 @@ public:
     QGeoCoordinate waypoint() const;
 
 private:
-    QExplicitlySharedDataPointer<QGeoManeuverPrivate> d_ptr;
+    QSharedDataPointer<QGeoManeuverPrivate> d_ptr;
 };
 
 QT_END_NAMESPACE
