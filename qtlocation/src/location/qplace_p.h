@@ -61,6 +61,7 @@
 #include "qgeoboundingbox.h"
 #include "qgeocoordinate.h"
 #include "qplacesupplier.h"
+#include <QtLocation/QPlaceIcon>
 
 QT_BEGIN_NAMESPACE
 
@@ -94,7 +95,7 @@ public:
     QPlace::ExtendedAttributes extendedAttributes;
 
     QtLocation::Visibility visibility;
-
+    QPlaceIcon icon;
     bool detailsFetched;
 };
 

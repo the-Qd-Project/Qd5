@@ -53,6 +53,8 @@ QT_BEGIN_NAMESPACE
 
 QT_MODULE(Location)
 
+class QPlaceIcon;
+
 class QPlaceCategoryPrivate;
 class Q_LOCATION_EXPORT QPlaceCategory
 {
@@ -71,11 +73,15 @@ public:
 
     QString categoryId() const;
     void setCategoryId(const QString &catID);
+
     QString name() const;
     void setName(const QString &name);
 
     QtLocation::Visibility visibility() const;
     void setVisibility(QtLocation::Visibility visibility);
+
+    QPlaceIcon icon() const;
+    void setIcon(const QPlaceIcon &icon);
 
 private:
     QSharedDataPointer<QPlaceCategoryPrivate> d;
