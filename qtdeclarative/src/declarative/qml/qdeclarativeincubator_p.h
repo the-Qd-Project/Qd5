@@ -44,6 +44,7 @@
 
 #include <private/qintrusivelist_p.h>
 #include <private/qdeclarativevme_p.h>
+#include <private/qrecursionwatcher_p.h>
 #include <private/qdeclarativeengine_p.h>
 
 //
@@ -84,6 +85,8 @@ public:
     QDeclarativeIncubatorPrivate *waitingOnMe;
     typedef QDeclarativeEnginePrivate::Incubator QIPBase;
     QIntrusiveList<QIPBase, &QIPBase::nextWaitingFor> waitingFor;
+
+    QRecursionNode recursion;
 
     void clear();
 
