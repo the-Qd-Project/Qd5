@@ -43,9 +43,9 @@
 #define QFONTCONFIGDATABASE_H
 
 #include <QPlatformFontDatabase>
-#include <QtPlatformSupport/private/qbasicunixfontdatabase_p.h>
+#include <QtPlatformSupport/private/qbasicfontdatabase_p.h>
 
-class QFontconfigDatabase : public QBasicUnixFontDatabase
+class QFontconfigDatabase : public QBasicFontDatabase
 {
 public:
     void populateFontDatabase();
