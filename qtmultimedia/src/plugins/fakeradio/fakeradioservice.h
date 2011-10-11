@@ -43,25 +43,36 @@
 #define FAKERADIOSERVICE_H
 
 #include <QtCore/qobject.h>
+#include <QMutex>
 
 #include <qmediaservice.h>
 QT_USE_NAMESPACE
 
 class FakeRadioTunerControl;
+class FakeRadioDataControl;
 
 class FakeRadioService : public QMediaService
 {
     Q_OBJECT
 
-public:
+private:
     FakeRadioService(QObject *parent = 0);
     ~FakeRadioService();
+
+public:
+    static FakeRadioService* instance();
+    void release();
 
     QMediaControl *requestControl(const char* name);
     void releaseControl(QMediaControl *);
 
 private:
-    FakeRadioTunerControl *m_control;
+    static FakeRadioService* m_instance;
+    static int m_referenceCount;
+
+    FakeRadioTunerControl *m_tunerControl;
+    FakeRadioDataControl *m_dataControl;
+
 };
 
 #endif // FAKERADIOSERVICE_H
