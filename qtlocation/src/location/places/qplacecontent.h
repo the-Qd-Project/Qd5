@@ -59,6 +59,7 @@ QT_MODULE(Location)
 #define Q_DECLARE_CONTENT_COPY_CTOR(Class) \
     Class(const QPlaceContent &other);
 
+class QPlaceUser;
 class QPlaceSupplier;
 class QPlaceContentPrivate;
 class Q_LOCATION_EXPORT QPlaceContent
@@ -90,10 +91,8 @@ public:
     QUrl sourceUrl() const;
     void setSourceUrl(const QUrl &url);
 
-    QString userId() const;
-    void setUserId(const QString &id);
-    QString userName() const;
-    void setUserName(const QString &name);
+    QPlaceUser user() const;
+    void setUser(const QPlaceUser &user);
 
 protected:
     explicit QPlaceContent(QPlaceContentPrivate *d);

@@ -63,7 +63,8 @@ QPlaceImagePrivate::~QPlaceImagePrivate()
 bool QPlaceImagePrivate::compare(const QPlaceContentPrivate *other) const
 {
     const QPlaceImagePrivate *od = static_cast<const QPlaceImagePrivate *>(other);
-    return url == od->url && id == od->id && mimeType == od->mimeType;
+    return QPlaceContentPrivate::compare(other)
+            && url == od->url && id == od->id && mimeType == od->mimeType;
 }
 
 /*!
