@@ -43,7 +43,7 @@
 #define QGSTREAMERVIDEORENDERER_H
 
 #include <qvideorenderercontrol.h>
-#include "qvideosurfacegstsink.h"
+#include <private/qvideosurfacegstsink_p.h>
 
 #include "qgstreamervideorendererinterface.h"
 
