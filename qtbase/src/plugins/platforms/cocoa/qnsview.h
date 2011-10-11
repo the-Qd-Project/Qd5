@@ -45,11 +45,13 @@
 #include <Cocoa/Cocoa.h>
 
 #include <QtGui/QImage>
+#include <QtGui/QAccessible>
 
 @interface QNSView : NSView {
     CGImageRef m_cgImage;
     QWindow *m_window;
     Qt::MouseButtons m_buttons;
+    QAccessibleInterface *m_accessibleRoot;
 }
 
 - (id)init;
