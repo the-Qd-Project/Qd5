@@ -47,7 +47,7 @@ const qreal EPSILON = 0.0001;
 
 bool extremelyFuzzyCompare(qreal a, qreal b, qreal e)//For cases which can have larger variances
 {
-    return (a + e > b) && (a - e < b);
+    return (a + e >= b) && (a - e <= b);
 }
 
 bool myFuzzyCompare(qreal a, qreal b)//For cases which might be near 0 so qFuzzyCompare fails
@@ -55,7 +55,17 @@ bool myFuzzyCompare(qreal a, qreal b)//For cases which might be near 0 so qFuzzy
     return (a + EPSILON > b) && (a - EPSILON < b);
 }
 
-QSGView* createView(const QString &filename, int additionalWait)
+bool myFuzzyLEQ(qreal a, qreal b)
+{
+    return (a - EPSILON < b);
+}
+
+bool myFuzzyGEQ(qreal a, qreal b)
+{
+    return (a + EPSILON > b);
+}
+
+QSGView* createView(const QString &filename, int additionalWait=0)
 {
     QSGView *canvas = new QSGView(0);
 
