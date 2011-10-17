@@ -38,6 +38,7 @@
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
+
 #ifndef QSENSORSGLOBAL_H
 #define QSENSORSGLOBAL_H
 
