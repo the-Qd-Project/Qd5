@@ -52,7 +52,7 @@
 // We mean it.
 //
 
-#include "qglobal.h"
+#include <QtLocation/qlocationglobal.h>
 
 #include <QObject>
 #include <QSet>
@@ -73,7 +73,7 @@ class MapPrivate;
 
 class QGeoMappingManager;
 
-class Q_LOCATION_EXPORT MapSphere : public QObject
+class Q_LOCATION_EXPORT_TEMP MapSphere : public QObject
 {
     Q_OBJECT
 public:
