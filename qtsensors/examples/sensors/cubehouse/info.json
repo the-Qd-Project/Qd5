@@ -1,0 +1,14 @@
+{
+    "info-version": "1.0",
+    "dict": {
+        "Category": "application",
+        "Runtime": "qml",
+        "DisplayName": "Cubehouse",
+        "Subcategory": "utility",
+        "MainQML": "Cubehouse.qml",
+        "Version": "1.0",
+        "Identifier": "com.nokia.mt.cubehouse.demo",
+        "Summary": "Cubehouse using Accelerometer",
+        "Author": "Qt"
+    }
+}

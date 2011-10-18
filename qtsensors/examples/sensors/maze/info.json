@@ -8,7 +8,7 @@
         "MainQML": "Maze.qml",
         "Version": "1.0",
         "Identifier": "com.noklab.nrcc.maze.demo",
-        "Summary": "Labyrinth game using TitlSensor",
+        "Summary": "Labyrinth game using TiltSensor",
         "Author": "Qt"
     }
 }
