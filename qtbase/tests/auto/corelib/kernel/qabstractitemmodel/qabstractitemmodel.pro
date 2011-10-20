@@ -1,9 +1,7 @@
 load(qttest_p4)
 
-INCLUDEPATH += $$PWD/../../../modeltest
+mtdir = ../../../integrationtests/modeltest
+INCLUDEPATH += $$PWD/$${mtdir}
 QT += widgets
-SOURCES         += tst_qabstractitemmodel.cpp ../../../modeltest/dynamictreemodel.cpp ../../../modeltest/modeltest.cpp
-HEADERS         += ../../../modeltest/dynamictreemodel.h ../../../modeltest/modeltest.h
-
-
-
+SOURCES         += tst_qabstractitemmodel.cpp $${mtdir}/dynamictreemodel.cpp $${mtdir}/modeltest.cpp
+HEADERS         += $${mtdir}/dynamictreemodel.h $${mtdir}/modeltest.h
