@@ -54,6 +54,7 @@ class QSGFrictionAffector : public QSGParticleAffector
 {
     Q_OBJECT
     Q_PROPERTY(qreal factor READ factor WRITE setFactor NOTIFY factorChanged)
+    Q_PROPERTY(qreal threshold READ threshold WRITE setThreshold NOTIFY thresholdChanged)
 public:
     explicit QSGFrictionAffector(QQuickItem *parent = 0);
 
@@ -61,24 +62,41 @@ public:
     {
         return m_factor;
     }
+
+    qreal threshold() const
+    {
+        return m_threshold;
+    }
+
 protected:
     virtual bool affectParticle(QSGParticleData *d, qreal dt);
+
 signals:
 
     void factorChanged(qreal arg);
+    void thresholdChanged(qreal arg);
 
 public slots:
 
-void setFactor(qreal arg)
-{
-    if (m_factor != arg) {
-        m_factor = arg;
-        emit factorChanged(arg);
+    void setFactor(qreal arg)
+    {
+        if (m_factor != arg) {
+            m_factor = arg;
+            emit factorChanged(arg);
+        }
     }
-}
+
+    void setThreshold(qreal arg)
+    {
+        if (m_threshold != arg) {
+            m_threshold = arg;
+            emit thresholdChanged(arg);
+        }
+    }
 
 private:
-qreal m_factor;
+    qreal m_factor;
+    qreal m_threshold;
 };
 
 QT_END_NAMESPACE
