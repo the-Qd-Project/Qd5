@@ -39,8 +39,7 @@
 **
 ****************************************************************************/
 
-#include <qcoreapplication.h>
-#include <qdir.h>
+#include <qdebug.h>
 #include <qurl.h>
 
 QT_BEGIN_NAMESPACE
@@ -57,38 +56,6 @@ static bool openDocument(const QUrl &file)
     Q_UNUSED(file);
     qWarning("QDesktopServices::openDocument not implemented");
     return false;
-}
-
-
-QString QDesktopServices::storageLocation(StandardLocation type)
-{
-    if (type == DataLocation) {
-        QString qwsDataHome = QLatin1String(qgetenv("QWS_DATA_HOME"));
-        if (qwsDataHome.isEmpty())
-            qwsDataHome = QDir::homePath() + QLatin1String("/.qws/share");
-        qwsDataHome += QLatin1String("/data/")
-                    + QCoreApplication::organizationName() + QLatin1Char('/')
-                    + QCoreApplication::applicationName();
-        return qwsDataHome;
-    }
-    if (type == QDesktopServices::CacheLocation) {
-        QString qwsCacheHome = QLatin1String(qgetenv("QWS_CACHE_HOME"));
-        if (qwsCacheHome.isEmpty())
-            qwsCacheHome = QDir::homePath() + QLatin1String("/.qws/cache/");
-        qwsCacheHome += QCoreApplication::organizationName() +  QLatin1Char('/')
-                    + QCoreApplication::applicationName();
-        return qwsCacheHome;
-    }
-
-    qWarning("QDesktopServices::storageLocation %d not implemented", type);
-    return QString();
-}
-
-QString QDesktopServices::displayName(StandardLocation type)
-{
-    Q_UNUSED(type);
-    qWarning("QDesktopServices::displayName not implemented");
-    return QString();
 }
 
 QT_END_NAMESPACE
