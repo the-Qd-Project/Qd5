@@ -78,6 +78,7 @@ private:
 
 private:
     friend class QPlatformPrinterSupport;
+    friend class QWindowsPrinterSupport;
     Q_DECLARE_PRIVATE(QPrinterInfo)
     QScopedPointer<QPrinterInfoPrivate, QPrinterInfoPrivateDeleter> d_ptr;
 };
