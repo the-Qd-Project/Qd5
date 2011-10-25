@@ -87,12 +87,8 @@ public:
     QMap<QPlaceContent::Type, QPlaceContent::Collection> contentCollections;
     QMap<QPlaceContent::Type, int> contentCounts;
 
-    QString primaryPhone;
-    QString primaryFax;
-    QString primaryEmail;
-    QUrl primaryUrl;
-
     QPlace::ExtendedAttributes extendedAttributes;
+    QMap<QString, QList<QPlaceContactDetail> > contacts;
 
     QtLocation::Visibility visibility;
     QPlaceIcon icon;
