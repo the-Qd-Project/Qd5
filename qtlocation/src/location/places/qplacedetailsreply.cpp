@@ -57,13 +57,12 @@ QT_USE_NAMESPACE
 
 /*!
     \class QPlaceDetailsReply
+    \inmodule QtLocation
+    \ingroup QtLocation-places
+    \since QtLocation 5.0
 
     \brief The QPlaceDetailsReply class manages a place datails operation started by an
     instance of QPlaceManager.
-
-    \inmodule QtPlaces
-
-    \ingroup places-main
 */
 
 /*!
