@@ -80,11 +80,28 @@ public:
 
     void wakeUp();
 
+    bool event(QEvent *event);
+
 public Q_SLOTS:
     void quit();
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QEventLoop::ProcessEventsFlags)
+
+
+class QEventLoopLockerPrivate;
+
+class Q_CORE_EXPORT QEventLoopLocker
+{
+public:
+    QEventLoopLocker();
+    explicit QEventLoopLocker(QEventLoop *loop);
+    ~QEventLoopLocker();
+
+private:
+    Q_DISABLE_COPY(QEventLoopLocker)
+    QEventLoopLockerPrivate *d_ptr;
+};
 
 QT_END_NAMESPACE
 
