@@ -65,7 +65,8 @@ public:
     Map3DPrivate(Map *parent, TileCache *cache, double radius);
     virtual ~Map3DPrivate();
 
-    virtual QGLSceneNode* createTileNode(const Tile &tile);
+    virtual QRect specToRect(const TileSpec &tileSpec) const;
+    virtual QGLSceneNode* createTileSpecNode(const TileSpec &tileSpec);
 
     virtual void updateGlCamera(QGLCamera* glCamera);
     virtual void updateFrustum(Frustum &frustum);
