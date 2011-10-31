@@ -42,14 +42,24 @@
 #define WLINPUTDEVICE_H
 
 #include "waylandobject.h"
+#include <QtCore/QList>
 
 namespace Wayland {
 
 class Compositor;
+class DataDevice;
+class Surface;
+class DataDeviceManager;
+
 class InputDevice : public Object<struct wl_input_device>
 {
 public:
     InputDevice(Compositor *compositor);
+
+    void clientRequestedDataDevice(DataDeviceManager *dndSelection, struct wl_client *client, uint32_t id);
+    DataDevice *dataDevice(struct wl_client *client) const;
+
+    void sendSelectionFocus(Surface *surface);
 
     static void bind_func(struct wl_client *client, void *data,
                                 uint32_t version, uint32_t id);
@@ -59,6 +69,10 @@ public:
                              struct wl_resource *buffer, int32_t x, int32_t y);
     const static struct wl_input_device_interface input_device_interface;
     static void destroy_resource(struct wl_resource *resource);
+
+private:
+    QList<DataDevice *>m_data_devices;
+
 };
 
 }
