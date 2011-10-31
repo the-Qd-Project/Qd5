@@ -45,15 +45,18 @@
 
 namespace Wayland {
 
-void output_post_geometry(struct wl_client *client, struct wl_object *global, uint32_t version)
+void Output::output_bind_func(struct wl_client *client, void *data,
+                          uint32_t version, uint32_t id)
 {
     Q_UNUSED(version);
-    Output *output = wayland_cast<Output *>(global);
+    Output *output = static_cast<Output *>(data);
 
-    wl_client_post_event(client, global, WL_OUTPUT_GEOMETRY, output->x(), output->y(),
+    struct wl_resource *resource = wl_client_add_object(client,&wl_output_interface,0,id,data);
+    wl_resource_post_event(resource, WL_OUTPUT_GEOMETRY, 0, 0,
                          output->size().width(), output->size().height(),0,"","");
 
-    wl_client_post_event(client,global,WL_OUTPUT_MODE, 0,output->size().width(),output->size().height());
+    wl_resource_post_event(resource,WL_OUTPUT_MODE, WL_OUTPUT_MODE_CURRENT|WL_OUTPUT_MODE_PREFERRED,
+                           output->size().width(),output->size().height());
 }
 
 
