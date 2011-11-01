@@ -44,6 +44,7 @@
 #include "qsensor2ambientlight.h"
 #include "qsensor2proximity.h"
 #include "qsensor2tilt.h"
+#include "qsensor2gesture.h"
 #include <QtCore/QDebug>
 
 QT_BEGIN_NAMESPACE
@@ -60,6 +61,7 @@ public:
         qmlRegisterType<QSensor2Tilt>(uri, 5, 0, "TiltSensor");
         qmlRegisterType<QSensor2AmbientLight>(uri, 5, 0, "AmbientLightSensor");
         qmlRegisterType<QSensor2Proximity>(uri, 5, 0, "ProximitySensor");
+        qmlRegisterType<QSensor2Gesture>(uri, 5, 0, "SensorGesture");
     }
 };
 
