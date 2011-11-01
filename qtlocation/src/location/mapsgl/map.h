@@ -58,6 +58,7 @@ class QGeoMappingManager;
 class TileCache;
 class MapPrivate;
 class MapItem;
+class MapController;
 
 class QGLCamera;
 class QGLPainter;
@@ -76,10 +77,14 @@ public:
 
     void setMappingManager(QGeoMappingManager *manager);
 
+    MapController* mapController();
+
     QGLCamera* glCamera() const;
     void paintGL(QGLPainter *painter);
 
     void resize(int width, int height);
+    int width() const;
+    int height() const;
 
     void setAutoUpdate(bool autoUpdate);
     bool autoUpdate() const;
