@@ -45,6 +45,7 @@
 #include <Cocoa/Cocoa.h>
 
 #include "qcocoaautoreleasepool.h"
+#include "qcocoacursor.h"
 
 #include <QtGui/QPlatformIntegration>
 
@@ -67,6 +68,7 @@ public:
     int m_depth;
     QImage::Format m_format;
     QSizeF m_physicalSize;
+    QCocoaCursor *m_cursor;
 };
 
 class QCocoaIntegration : public QPlatformIntegration
