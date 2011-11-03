@@ -46,22 +46,18 @@
 #include <QSize>
 #include <QPair>
 #include <QtLocation/qlocationglobal.h>
+#include "maptype.h"
 
 QT_BEGIN_HEADER
 
 QT_BEGIN_NAMESPACE
 
-
-
 class QLocale;
-
 class QGeoBoundingBox;
 class QGeoCoordinate;
 class QGeoMappingManagerPrivate;
 class QGeoMapRequestOptions;
-
 class QGeoMappingManagerEngine;
-
 class QGeoTiledMapReply;
 class TileSpec;
 
@@ -77,18 +73,8 @@ public:
 
     void requestTiles(const QList<TileSpec> &tiles);
 
-    /*
-      Possibly replace the MapType enum with some kind of struct / class
-        MapLayer {
-            enum? type
-            QString key;
-            QString description;
-        }
-        where enum includes things like street, satellite (day), satellite (night), traffic
-        but _really_ needs to include custom so people can go wild with layers
-    */
-//    QList<QGraphicsGeoMap::MapType> supportedMapTypes() const;
-//    QList<QGraphicsGeoMap::ConnectivityMode> supportedConnectivityModes() const;
+    QList<MapType> supportedMapTypes() const;
+ //    QList<QGraphicsGeoMap::ConnectivityMode> supportedConnectivityModes() const;
 
     qreal minimumZoomLevel() const;
     qreal maximumZoomLevel() const;
