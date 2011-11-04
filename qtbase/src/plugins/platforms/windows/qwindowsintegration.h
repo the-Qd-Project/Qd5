@@ -71,6 +71,11 @@ public:
     virtual QPlatformFontDatabase *fontDatabase() const;
     virtual QVariant styleHint(StyleHint hint) const;
 
+#ifdef QT_WIDGETS_LIB
+    virtual bool usePlatformNativeDialog(QDialog *dialog = 0) const;
+    virtual QPlatformDialogHelper *createPlatformDialogHelper(QDialog *dialog = 0) const;
+#endif // QT_WIDGETS_LIB
+
     static QWindowsIntegration *instance();
 
 private:
