@@ -42,7 +42,9 @@
 #include <Cocoa/Cocoa.h>
 
 #include <QtGui/QPlatformIntegrationPlugin>
+#include <QtGui/QPlatformThemePlugin>
 #include "qcocoaintegration.h"
+#include "qcocoatheme.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -69,6 +71,6 @@ QPlatformIntegration * QCocoaIntegrationPlugin::create(const QString& system, co
     return 0;
 }
 
-Q_EXPORT_PLUGIN2(Cocoa, QCocoaIntegrationPlugin)
+Q_EXPORT_PLUGIN2(CocoaIntegration, QCocoaIntegrationPlugin)
 
 QT_END_NAMESPACE
