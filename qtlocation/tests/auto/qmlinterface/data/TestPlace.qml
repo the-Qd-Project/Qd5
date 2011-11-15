@@ -56,7 +56,7 @@ Place {
         }
     ]
     location: TestLocation { }
-    rating: TestRating { }
+    ratings: TestRatings { }
     icon: TestIcon { }
     supplier: TestSupplier { }
     visibility: Place.PrivateVisibility
