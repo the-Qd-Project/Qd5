@@ -41,8 +41,19 @@
 
 #include <QtGui/QPlatformIntegrationPlugin>
 #include "qdirectfbintegration.h"
+#include "qdirectfb_egl.h"
 
 QT_BEGIN_NAMESPACE
+
+#ifdef DIRECTFB_GL_EGL
+#define QT_EGL_BACKEND_STRING(list) list << "directfbegl";
+#define QT_EGL_BACKEND_CREATE(list, out) \
+    if (list.toLower() == "directfbegl") \
+        out = new QDirectFbIntegrationEGL;
+#else
+#define QT_EGL_BACKEND_STRING(list)
+#define QT_EGL_BACKEND_CREATE(system, out)
+#endif
 
 class QDirectFbIntegrationPlugin : public QPlatformIntegrationPlugin
 {
@@ -55,16 +66,24 @@ QStringList QDirectFbIntegrationPlugin::keys() const
 {
     QStringList list;
     list << "directfb";
+    QT_EGL_BACKEND_STRING(list);
     return list;
 }
 
 QPlatformIntegration * QDirectFbIntegrationPlugin::create(const QString& system, const QStringList& paramList)
 {
     Q_UNUSED(paramList);
-    if (system.toLower() == "directfb")
-        return new QDirectFbIntegration;
+    QDirectFbIntegration *integration = 0;
 
-    return 0;
+    if (system.toLower() == "directfb")
+        integration = new QDirectFbIntegration;
+    QT_EGL_BACKEND_CREATE(system, integration)
+
+    if (!integration)
+        return 0;
+
+    integration->initialize();
+    return integration;
 }
 
 Q_EXPORT_PLUGIN2(directfb, QDirectFbIntegrationPlugin)
