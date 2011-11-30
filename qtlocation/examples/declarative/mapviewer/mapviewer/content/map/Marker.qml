@@ -77,7 +77,7 @@ MapQuickItem {  //to be used inside MapComponent only
             width:27
             horizontalAlignment: Text.AlignHCenter
             Component.onCompleted: {
-                text = map.counter
+                text = map.markerCounter
             }
         }
 
