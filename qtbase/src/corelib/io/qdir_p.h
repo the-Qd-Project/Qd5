@@ -67,11 +67,11 @@ public:
 
     static inline QStringList splitFilters(const QString &nameFilter, QChar sep = 0);
 
-    inline void setPath(const QString &path);
+    void setPath(const QString &path);
 
-    inline void clearFileLists();
+    void clearFileLists();
 
-    inline void resolveAbsoluteEntry() const;
+    void resolveAbsoluteEntry() const;
 
     QStringList nameFilters;
     QDir::SortFlags sort;
