@@ -40,7 +40,7 @@
 
 import QtQuick 2.0
 import QtLocation 5.0
-import "../components"
+import QtLocation.examples 5.0
 
 Item {
     id: root
@@ -75,9 +75,9 @@ Item {
         anchors.right: cross.left
         visible: placesPlugin.supportedPlacesFeatures & Plugin.SaveCategoryFeature
 
-        source: "../resources/pencil.png"
-        hoveredSource: "../resources/pencil_hovered.png"
-        pressedSource: "../resources/pencil_pressed.png"
+        source: "../../resources/pencil.png"
+        hoveredSource: "../../resources/pencil_hovered.png"
+        pressedSource: "../../resources/pencil_pressed.png"
 
         onClicked: root.editClicked()
     }
@@ -88,9 +88,9 @@ Item {
         anchors.right: arrow.left
         visible: placesPlugin.supportedPlacesFeatures & Plugin.RemoveCategoryFeature
 
-        source: "../resources/cross.png"
-        hoveredSource: "../resources/cross_hovered.png"
-        pressedSource: "../resources/cross_pressed.png"
+        source: "../../resources/cross.png"
+        hoveredSource: "../../resources/cross_hovered.png"
+        pressedSource: "../../resources/cross_pressed.png"
 
         onClicked: root.crossClicked()
     }
@@ -101,9 +101,9 @@ Item {
         anchors.right: parent.right
         visible: model.hasModelChildren
 
-        source: "../resources/right.png"
-        hoveredSource: "../resources/right_hovered.png"
-        pressedSource: "../resources/right_pressed.png"
+        source: "../../resources/right.png"
+        hoveredSource: "../../resources/right_hovered.png"
+        pressedSource: "../../resources/right_pressed.png"
 
         onClicked: root.arrowClicked()
     }
