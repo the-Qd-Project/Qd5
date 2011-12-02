@@ -179,8 +179,8 @@ void QDeclarativePolylineMapItem::update()
         return;
 
     quickItem_->setCoordinate(
-        new QDeclarativeCoordinate(polylineMapPaintedItem_->screenItemCoordinate()));
-    quickItem_->setAnchorPoint(polylineMapPaintedItem_->screenItemAnchorPoint());
+        new QDeclarativeCoordinate(polylineMapPaintedItem_->quickItemCoordinate()));
+    quickItem_->setAnchorPoint(polylineMapPaintedItem_->quickItemAnchorPoint());
 
     if (quickItem_->sourceItem() == 0) {
         QObject::connect(map(), SIGNAL(cameraDataChanged(CameraData)), this,
@@ -208,8 +208,7 @@ void QDeclarativePolylineMapItem::setColor(const QColor &color)
         return;
 
     color_ = color;
-    QPen pen(color);
-    polylineMapPaintedItem_->setPen(pen);
+    polylineMapPaintedItem_->setPen(color);
     emit colorChanged(color_);
 }
 
@@ -257,12 +256,12 @@ QList<QGeoCoordinate> PolylineMapPaintedItem::path() const
     return coordPath_;
 }
 
-QGeoCoordinate PolylineMapPaintedItem::screenItemCoordinate() const
+QGeoCoordinate PolylineMapPaintedItem::quickItemCoordinate() const
 {
     return quickItemCoordinate_;
 }
 
-QPointF PolylineMapPaintedItem::screenItemAnchorPoint() const
+QPointF PolylineMapPaintedItem::quickItemAnchorPoint() const
 {
     return quickItemAnchorPoint_;
 }

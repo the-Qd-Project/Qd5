@@ -127,8 +127,8 @@ public:
     QBrush brush() const;
     void setBrush(const QBrush &brush);
 
-    QGeoCoordinate screenItemCoordinate() const;
-    QPointF screenItemAnchorPoint() const;
+    QGeoCoordinate quickItemCoordinate() const;
+    QPointF quickItemAnchorPoint() const;
 
 private:
     void updateGeometry();
