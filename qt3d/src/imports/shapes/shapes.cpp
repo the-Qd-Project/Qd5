@@ -41,7 +41,7 @@
 
 #include <QtDeclarative/qdeclarativeextensionplugin.h>
 
-#include "sphere.h"
+#include "spheremesh.h"
 #include "cylinder.h"
 #include "capsule.h"
 #include "line.h"
@@ -56,7 +56,7 @@ public:
     virtual void registerTypes(const char *uri)
     {
         Q_ASSERT(QLatin1String(uri) == QLatin1String("Qt3D.Shapes"));
-        qmlRegisterType<Sphere>(uri,1,0,"Sphere");
+        qmlRegisterType<SphereMesh>(uri,1,0,"SphereMesh");
         qmlRegisterType<Cylinder>(uri,1,0,"Cylinder");
         qmlRegisterType<Capsule>(uri,1,0,"Capsule");
         qmlRegisterType<Line>(uri,1,0,"Line");
