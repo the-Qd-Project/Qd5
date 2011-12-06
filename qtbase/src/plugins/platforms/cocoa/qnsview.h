@@ -47,15 +47,17 @@
 #include <QtGui/QImage>
 #include <QtGui/QAccessible>
 
+class QCocoaWindow;
 @interface QNSView : NSView {
     CGImageRef m_cgImage;
     QWindow *m_window;
+    QCocoaWindow *m_platformWindow;
     Qt::MouseButtons m_buttons;
     QAccessibleInterface *m_accessibleRoot;
 }
 
 - (id)init;
-- (id)initWithQWindow:(QWindow *)window;
+- (id)initWithQWindow:(QWindow *)window platformWindow:(QCocoaWindow *) platformWindow;
 
 - (void)setImage:(QImage *)image;
 - (void)drawRect:(NSRect)dirtyRect;
