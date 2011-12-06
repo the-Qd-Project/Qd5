@@ -41,6 +41,8 @@
 #ifndef QTCOMP_H
 #define QTCOMP_H
 
+#include "waylandexport.h"
+
 #include <QObject>
 #include <QImage>
 #include <QRect>
