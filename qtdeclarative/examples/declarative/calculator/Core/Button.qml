@@ -47,6 +47,10 @@ BorderImage {
     property alias operation: buttonText.text
     property string color: ""
 
+    Accessible.name: operation
+    Accessible.description: "This button does " + operation
+    Accessible.role: Accessible.Button
+
     signal clicked
 
     source: "images/button-" + color + ".png"; clip: true
