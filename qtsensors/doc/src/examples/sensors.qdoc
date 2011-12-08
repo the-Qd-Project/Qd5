@@ -47,12 +47,4 @@
     It was designed as a debugging aid.
 */
 
-/*!
-    \example sensors/maze
-    \title Maze
-    \brief The Maze example demonstrates the TiltSensor QML element
-    \ingroup qtsensors-examples
-
-    The Maze example demonstrates the use of the TiltSensor QML element.
-*/
 
