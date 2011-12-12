@@ -49,6 +49,7 @@
 
 class QWaylandDisplay;
 class QWaylandBuffer;
+class QWaylandShellSurface;
 struct wl_egl_window;
 
 class QWaylandWindow : public QPlatformWindow
@@ -77,8 +78,10 @@ public:
 
     struct wl_surface *wl_surface() const { return mSurface; }
 
+    QWaylandShellSurface *shellSurface() const;
 protected:
     struct wl_surface *mSurface;
+    QWaylandShellSurface *mShellSurface;
     virtual void newSurfaceCreated();
     QWaylandDisplay *mDisplay;
     QWaylandBuffer *mBuffer;
@@ -90,7 +93,6 @@ protected:
 private:
     static const wl_callback_listener callbackListener;
     static void frameCallback(void *data, struct wl_callback *wl_callback, uint32_t time);
-
 
 };
 
