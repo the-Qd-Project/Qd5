@@ -52,6 +52,7 @@ void Output::output_bind_func(struct wl_client *client, void *data,
     Output *output = static_cast<Output *>(data);
 
     struct wl_resource *resource = wl_client_add_object(client,&wl_output_interface,0,id,data);
+    output->registerResource(resource);
     wl_resource_post_event(resource, WL_OUTPUT_GEOMETRY, 0, 0,
                          output->size().width(), output->size().height(),0,"","");
 
