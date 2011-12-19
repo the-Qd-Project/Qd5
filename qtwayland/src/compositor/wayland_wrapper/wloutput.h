@@ -45,18 +45,24 @@
 
 #include <QtCore/QRect>
 
+
 namespace Wayland {
 
-class Output : public ResourceCollection
+class Output;
+class ExtendedOutput;
+
+class OutputGlobal : public ResourceCollection
 {
 public:
-    Output();
+    OutputGlobal();
 
     void setGeometry(const QRect &geometry);
 
     int x() const { return m_geometry.x(); }
     int y() const { return m_geometry.y(); }
     QSize size() const { return m_geometry.size(); }
+
+    Output *outputForClient(struct wl_client *client) const;
 
     static void output_bind_func(struct wl_client *client, void *data,
                           uint32_t version, uint32_t id);
@@ -66,6 +72,24 @@ private:
     int m_numQueued;
 };
 
+
+class Output
+{
+public:
+    Output(OutputGlobal *outputGlobal, wl_client *client, uint32_t version, uint32_t id);
+
+    OutputGlobal *outputGlobal() const;
+
+    ExtendedOutput *extendedOutput() const;
+    void setExtendedOutput(ExtendedOutput *extendedOutput);
+
+    struct wl_resource *handle() const;
+private:
+    struct wl_resource *m_output_resource;
+    OutputGlobal *m_output_global;
+    ExtendedOutput *m_extended_output;
+
+};
 
 }
 
