@@ -46,6 +46,7 @@ QT_BEGIN_NAMESPACE
 
 /*!
     \qmlclass ProximitySensor QSensor2Proximity
+    \inherits QtSensors5::Sensor
     \inqmlmodule QtSensors 5
     \ingroup qml-QtSensors5
     \since QtSensors 5.0
@@ -55,7 +56,7 @@ QT_BEGIN_NAMESPACE
 */
 
 QSensor2Proximity::QSensor2Proximity(QObject* parent)
-    : QObject(parent)
+    : qsensor2common(parent)
     , _near(false)
 {
     _proximity = new QProximitySensor(this);
@@ -64,30 +65,6 @@ QSensor2Proximity::QSensor2Proximity(QObject* parent)
 
 QSensor2Proximity::~QSensor2Proximity()
 {
-}
-
-/*!
-    \qmlproperty bool QtSensors5::ProximitySensor::enabled
-    This property can be used to activate or deactivate the sensor.
-*/
-bool QSensor2Proximity::enabled()
-{
-    return _proximity->isActive();
-}
-
-void QSensor2Proximity::setEnabled(bool val)
-{
-    bool active = enabled();
-    if (active != val){
-        if (val){
-            bool ret = _proximity->start();
-            if (!ret)
-                qWarning() << "couldn't start the sensor.";
-        }
-        else
-            _proximity->stop();
-        emit enabledChanged();
-    }
 }
 
 /*!
