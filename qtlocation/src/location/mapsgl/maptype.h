@@ -44,10 +44,13 @@
 
 #include <QtLocation/qlocationglobal.h>
 #include <QString>
+#include <QSharedDataPointer>
 
 QT_BEGIN_HEADER
 
 QT_BEGIN_NAMESPACE
+
+class MapTypePrivate;
 
 class Q_LOCATION_EXPORT MapType
 {
@@ -66,8 +69,12 @@ public:
     };
 
     MapType();
+    MapType(const MapType &other);
     MapType(MapStyle style, const QString &name, const QString &description, bool mobile, int mapId);
     ~MapType();
+
+    MapType& operator = (const MapType &other);
+
     bool operator == (const MapType &other) const;
     bool operator != (const MapType &other) const;
 
@@ -78,11 +85,7 @@ public:
     int mapId() const;
 
 private:
-    MapStyle style_;
-    QString name_;
-    QString description_;
-    bool mobile_;
-    int mapId_;
+    QSharedDataPointer<MapTypePrivate> d_ptr;
 };
 
 QT_END_NAMESPACE
