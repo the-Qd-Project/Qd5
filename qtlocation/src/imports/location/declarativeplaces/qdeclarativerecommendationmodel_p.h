@@ -43,17 +43,15 @@
 #define QDECLARATIVERECOMMENDATIONMODEL_P_H
 
 #include <QtDeclarative/QDeclarativeParserStatus>
-#include "qdeclarativesearchmodelbase.h"
+#include "qdeclarativeresultmodelbase_p.h"
 
 QT_BEGIN_NAMESPACE
 
-class QDeclarativeRecommendationModel : public QDeclarativeSearchModelBase
+class QDeclarativeRecommendationModel : public QDeclarativeResultModelBase
 {
     Q_OBJECT
 
     Q_PROPERTY(QString placeId READ placeId WRITE setPlaceId NOTIFY placeIdChanged)
-    Q_PROPERTY(int count READ rowCount NOTIFY rowCountChanged)
-
     Q_INTERFACES(QDeclarativeParserStatus)
 
 public:
@@ -63,29 +61,13 @@ public:
     QString placeId() const;
     void setPlaceId(const QString &placeId);
 
-    void clearData();
-    void updateSearchRequest();
-    void processReply(QPlaceReply *reply);
-
-    // From QAbstractListModel
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    QVariant data(const QModelIndex &index, int role) const;
-    Q_INVOKABLE QVariant data(int index, const QString &roleName) const;
-    enum Roles {
-        DistanceRole = Qt::UserRole,
-        PlaceRole
-    };
-
 signals:
     void placeIdChanged();
-    void rowCountChanged();
 
 protected:
     QPlaceReply *sendQuery(QPlaceManager *manager, const QPlaceSearchRequest &request);
 
 private:
-    QList<QPlaceSearchResult> m_results;
-    QList<QDeclarativePlace *> m_places;
     QString m_placeId;
 };
 

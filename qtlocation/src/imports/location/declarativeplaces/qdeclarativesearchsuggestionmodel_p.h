@@ -69,7 +69,6 @@ public:
 
     void clearData();
     void updateSearchRequest();
-    void processReply(QPlaceReply *reply);
 
     // From QAbstractListModel
     int rowCount(const QModelIndex &parent) const;
@@ -77,6 +76,9 @@ public:
     enum Roles {
         SearchSuggestionRole = Qt::UserRole
     };
+
+protected slots:
+    virtual void queryFinished();
 
 signals:
     void searchTermChanged();
