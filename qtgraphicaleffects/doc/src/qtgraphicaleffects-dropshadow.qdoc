@@ -160,7 +160,7 @@
 /*!
     \qmlproperty real QtGraphicalEffects::DropShadow::spread
 
-    This property defines how large part of the glow color is strenghtened near
+    This property defines how large part of the shadow color is strenghtened near
     the source edges.
 
     The value ranges from 0.0 to 1.0. By default, the property is set to \c 0.5.
