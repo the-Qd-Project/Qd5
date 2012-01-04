@@ -42,6 +42,8 @@ import QtQuick 2.0
 
 Item {
     id: rgbaSlider
+    property color color: Qt.rgba(rValue, gValue, bValue, aValue)
+
     property alias rValue: rSlider.value
     property alias gValue: gSlider.value
     property alias bValue: bSlider.value
