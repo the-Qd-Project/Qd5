@@ -70,6 +70,7 @@ public:
     QVariantMap properties() const;
     QVariant property(const QString &name);
     QVariant property(const QString &name, const QVariant &defaultValue);
+
 private:
     QWaylandWindow *m_window;
     struct wl_extended_surface *m_extended_surface;

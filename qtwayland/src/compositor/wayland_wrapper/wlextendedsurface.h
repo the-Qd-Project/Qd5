@@ -43,12 +43,16 @@
 
 #include "wayland-surface-extension-server-protocol.h"
 
+#include "wlsurface.h"
+
 #include <QtCore/QVariant>
+#include <QtCore/QLinkedList>
+
+class WaylandSurface;
 
 namespace Wayland {
 
 class Compositor;
-class Surface;
 
 class SurfaceExtensionGlobal
 {
@@ -72,9 +76,16 @@ class ExtendedSurface
 {
 public:
     ExtendedSurface(struct wl_client *client, uint32_t id, Surface *surface);
+    ~ExtendedSurface();
 
     void sendGenericProperty(const char *name, const QVariant &variant);
     void sendOnScreenVisibllity(bool visible);
+
+    void setSubSurface(ExtendedSurface *subSurface,int x, int y);
+    void removeSubSurface(ExtendedSurface *subSurfaces);
+    ExtendedSurface *parent() const;
+    void setParent(ExtendedSurface *parent);
+    QLinkedList<WaylandSurface *> subSurfaces() const;
 
 private:
     struct wl_resource *m_extended_surface_resource;
@@ -84,6 +95,17 @@ private:
                                     struct wl_resource *resource,
                                     const char *name,
                                     struct wl_array *value);
+    static void map_sub_surface(struct wl_client *client,
+                            struct wl_resource *extended_surface_resource,
+                            struct wl_resource *sub_surface_resource,
+                            int32_t x,
+                            int32_t y);
+    static void move_sub_surface(struct wl_client *client,
+                             struct wl_resource *extended_surface_resource,
+                             struct wl_resource *sub_surface_resource,
+                             int32_t x,
+                             int32_t y);
+
     static const struct wl_extended_surface_interface extended_surface_interface;
 };
 

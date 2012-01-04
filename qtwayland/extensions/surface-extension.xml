@@ -66,7 +66,6 @@
             <arg name="value" type="array"/>
         </event>
 
-        <!-- update generic property from client to server -->
         <request name="update_generic_property">
             <arg name="name" type="string"/>
             <arg name="value" type="array"/>
