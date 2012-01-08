@@ -62,11 +62,11 @@ public:
     QGeoProjection2D(double baseHeight, double sideLength);
     virtual ~QGeoProjection2D();
 
-    virtual QVector3D coordToPoint(const QGeoCoordinate &coord) const;
-    virtual QGeoCoordinate pointToCoord(const QVector3D &point) const;
+    virtual QDoubleVector3D coordToPoint(const QGeoCoordinate &coord) const;
+    virtual QGeoCoordinate pointToCoord(const QDoubleVector3D &point) const;
 
-    virtual QVector3D mercatorToPoint(const QVector2D &mercator) const;
-    virtual QVector2D pointToMercator(const QVector3D &point) const;
+    virtual QDoubleVector3D mercatorToPoint(const QDoubleVector2D &mercator) const;
+    virtual QDoubleVector2D pointToMercator(const QDoubleVector3D &point) const;
 
     virtual QGeoCoordinate interpolate(const QGeoCoordinate &start, const QGeoCoordinate &end, qreal progress);
 
