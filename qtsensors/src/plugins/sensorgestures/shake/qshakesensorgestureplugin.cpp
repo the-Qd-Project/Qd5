@@ -46,7 +46,6 @@
 #include "qshakesensorgestureplugin.h"
 
 #include <qsensorgestureplugininterface.h>
-#include <qsensorgesturemanager.h>
 
 #include "qshakerecognizer.h"
 
@@ -76,5 +75,5 @@ QList <QSensorGestureRecognizer *> QShakeSensorGesturePlugin::createRecognizers(
     return recognizers;
 }
 
-Q_EXPORT_PLUGIN2(QShakeSensorGestureRecognizer, QShakeSensorGesturePlugin)
+Q_EXPORT_PLUGIN2(qtsensorgestures_shakeplugin, QShakeSensorGesturePlugin)
 
