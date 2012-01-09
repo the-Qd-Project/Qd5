@@ -95,7 +95,6 @@ TestCase {
     }
 
     function test_setAndGet_data() {
-        var myNull = null;
         return [
             { tag: "name", property: "name", signal: "nameChanged", value: "Test Supplier", reset: "" },
             { tag: "supplierId", property: "supplierId", signal: "supplierIdChanged", value: "test-supplier-id-1", reset: "" },
