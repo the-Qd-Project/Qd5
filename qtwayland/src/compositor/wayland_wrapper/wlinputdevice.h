@@ -46,6 +46,10 @@
 #include <stdint.h>
 
 #include <QtCore/QList>
+#include <QtCore/QPoint>
+
+class QTouchEvent;
+class WaylandInputDevice;
 
 namespace Wayland {
 
@@ -57,12 +61,40 @@ class DataDeviceManager;
 class InputDevice : public Object<struct wl_input_device>
 {
 public:
-    InputDevice(Compositor *compositor);
+    InputDevice(WaylandInputDevice *handle, Compositor *compositor);
+
+    void sendMousePressEvent(Qt::MouseButton button, const QPoint &localPos, const QPoint &globalPos = QPoint());
+    void sendMouseReleaseEvent(Qt::MouseButton button, const QPoint &localPos, const QPoint &globalPos = QPoint());
+    void sendMouseMoveEvent(const QPoint &localPos, const QPoint &globalPos = QPoint());
+    void sendMouseMoveEvent(Surface *surface, const QPoint &localPos, const QPoint &globalPos = QPoint());
+
+    void sendKeyPressEvent(uint code);
+    void sendKeyReleaseEvent(uint code);
+
+    void sendTouchPointEvent(int id, int x, int y, Qt::TouchPointState state);
+    void sendTouchFrameEvent();
+    void sendTouchCancelEvent();
+
+    void sendFullTouchEvent(QTouchEvent *event);
+
+    Surface *keyboardFocus() const;
+    void setKeyboardFocus(Surface *surface);
+
+    Surface *mouseFocus() const;
+    void setMouseFocus(Surface *surface, const QPoint &localPos, const QPoint &globalPos);
 
     void clientRequestedDataDevice(DataDeviceManager *dndSelection, struct wl_client *client, uint32_t id);
     DataDevice *dataDevice(struct wl_client *client) const;
-
     void sendSelectionFocus(Surface *surface);
+
+    Compositor *compositor() const;
+    WaylandInputDevice *handle() const;
+private:
+    WaylandInputDevice *m_handle;
+    Compositor *m_compositor;
+    QList<DataDevice *>m_data_devices;
+
+    uint32_t toWaylandButton(Qt::MouseButton button);
 
     static void bind_func(struct wl_client *client, void *data,
                                 uint32_t version, uint32_t id);
@@ -72,11 +104,6 @@ public:
                              struct wl_resource *buffer, int32_t x, int32_t y);
     const static struct wl_input_device_interface input_device_interface;
     static void destroy_resource(struct wl_resource *resource);
-
-private:
-    Compositor *m_compositor;
-    QList<DataDevice *>m_data_devices;
-
 };
 
 }
