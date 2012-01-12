@@ -39,8 +39,8 @@
 **
 ****************************************************************************/
 
-#ifndef SPHERE_P_H
-#define SPHERE_P_H
+#ifndef SPHEREMESH_P_H
+#define SPHEREMESH_P_H
 
 //
 //  W A R N I N G
@@ -84,4 +84,4 @@ QT_END_NAMESPACE
 
 QT_END_HEADER
 
-#endif // SPHERE_P_H
+#endif // SPHEREMESH_P_H
