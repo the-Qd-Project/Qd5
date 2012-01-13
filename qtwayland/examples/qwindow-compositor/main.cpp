@@ -47,6 +47,10 @@
 
 int main(int argc, char *argv[])
 {
+    // Enable the following to have touch events generated from mouse events.
+    // Very handy for testing touch event delivery without a real touch device.
+    // QGuiApplication::setAttribute(Qt::AA_SynthesizeTouchForUnhandledMouseEvents, true);
+
     QGuiApplication app(argc, argv);
     QScreen *screen = QGuiApplication::primaryScreen();
     QRect screenGeometry = screen->availableGeometry();
