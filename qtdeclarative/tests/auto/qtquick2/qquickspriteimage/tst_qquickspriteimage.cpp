@@ -51,6 +51,7 @@ public:
 
 private slots:
     void test_properties();
+    void test_framerateAdvance();//Separate codepath for QQuickSpriteEngine
 };
 
 void tst_qquickspriteimage::test_properties()
@@ -73,6 +74,22 @@ void tst_qquickspriteimage::test_properties()
     sprite->setInterpolate(false);
     QVERIFY(!sprite->interpolate());
 
+    delete canvas;
+}
+
+void tst_qquickspriteimage::test_framerateAdvance()
+{
+    QQuickView *canvas = new QQuickView(0);
+
+    canvas->setSource(testFileUrl("advance.qml"));
+    canvas->show();
+    QTest::qWaitForWindowShown(canvas);
+
+    QVERIFY(canvas->rootObject());
+    QQuickSpriteImage* sprite = canvas->rootObject()->findChild<QQuickSpriteImage*>("sprite");
+    QVERIFY(sprite);
+
+    QCOMPARE(sprite->currentSprite(), QLatin1String("secondState"));
     delete canvas;
 }
 
