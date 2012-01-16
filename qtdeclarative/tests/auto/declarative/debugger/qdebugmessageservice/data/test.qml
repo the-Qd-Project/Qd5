@@ -44,8 +44,7 @@ import QtQuick 2.0
 Item {
     width: 360
     height: 360
-    Timer {
-        interval: 100; running: true; repeat: true
-        onTriggered: console.log("Timer")
+    Component.onCompleted:  {
+        console.log("console.log")
     }
 }
