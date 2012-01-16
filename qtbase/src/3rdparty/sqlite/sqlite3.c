@@ -13540,6 +13540,16 @@ static void clearYMD_HMS_TZ(DateTime *p){
 
 #ifndef SQLITE_OMIT_LOCALTIME
 /*
+** Windows CE does not declare the localtime
+** function as it is not defined anywhere.
+** Anyway we need the forward-declaration to be
+** able to define it later on.
+*/
+#if defined(_WIN32_WCE) && (_WIN32_WCE >= 0x600)
+static struct tm *__cdecl localtime(const time_t *t);
+#endif
+
+/*
 ** The following routine implements the rough equivalent of localtime_r()
 ** using whatever operating-system specific localtime facility that
 ** is available.  This routine returns 0 on success and
@@ -13574,19 +13584,6 @@ static int osLocaltime(time_t *t, struct tm *pTm){
 #endif /* HAVE_LOCALTIME_R || HAVE_LOCALTIME_S */
   return rc;
 }
-#endif /* SQLITE_OMIT_LOCALTIME */
-
-
-#ifndef SQLITE_OMIT_LOCALTIME
-/*
-** Windows CE does not declare the localtime
-** function as it is not defined anywhere.
-** Anyway we need the forward-declaration to be
-** able to define it later on.
-*/
-#if defined(_WIN32_WCE) && (_WIN32_WCE >= 0x600)
-static struct tm *__cdecl localtime(const time_t *t);
-#endif
 
 /*
 ** Compute the difference (in milliseconds) between localtime and UTC
