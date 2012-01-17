@@ -53,12 +53,6 @@
 
 class QWaylandDisplay;
 
-class QWaylandMimeHelper
-{
-public:
-    static QByteArray getByteArray(QMimeData *mimeData, const QString &mimeType);
-};
-
 class QWaylandDataOffer : public QInternalMimeData
 {
 public:
