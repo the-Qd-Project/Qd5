@@ -109,6 +109,12 @@ struct QProximityReadingData
     QDateTime timestamp;
 };
 
+struct QIRProximityReadingData
+{
+    double irProximity;
+    QDateTime timestamp;
+};
+
 void qt_registerSensorTypes();
 
 }
@@ -119,5 +125,6 @@ Q_DECLARE_METATYPE(QtMobility::QAccelerometerReadingData)
 Q_DECLARE_METATYPE(QtMobility::QMagnetometerReadingData)
 Q_DECLARE_METATYPE(QtMobility::QCompassReadingData)
 Q_DECLARE_METATYPE(QtMobility::QProximityReadingData)
+Q_DECLARE_METATYPE(QtMobility::QIRProximityReadingData)
 
 #endif // QSENSORDATA_SIMULATOR_P_H
