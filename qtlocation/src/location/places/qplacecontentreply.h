@@ -50,12 +50,11 @@ QT_BEGIN_HEADER
 
 QT_BEGIN_NAMESPACE
 
-
-
 class QPlaceContentReplyPrivate;
 class Q_LOCATION_EXPORT QPlaceContentReply : public QPlaceReply
 {
     Q_OBJECT
+
 public:
     explicit QPlaceContentReply(QObject *parent = 0);
     virtual ~QPlaceContentReply();
@@ -73,7 +72,6 @@ protected:
     void setTotalCount(int total);
     void setRequest(const QPlaceContentRequest &request);
 
-\
 private:
     Q_DISABLE_COPY(QPlaceContentReply)
     Q_DECLARE_PRIVATE(QPlaceContentReply)
