@@ -65,13 +65,6 @@ public:
     virtual void setFocusMode(QCameraFocus::FocusMode mode) = 0;
     virtual bool isFocusModeSupported(QCameraFocus::FocusMode mode) const = 0;
 
-    virtual qreal maximumOpticalZoom() const = 0;
-    virtual qreal maximumDigitalZoom() const = 0;
-    virtual qreal opticalZoom() const = 0;
-    virtual qreal digitalZoom() const = 0;
-
-    virtual void zoomTo(qreal optical, qreal digital) = 0;
-
     virtual QCameraFocus::FocusPointMode focusPointMode() const = 0;
     virtual void setFocusPointMode(QCameraFocus::FocusPointMode mode) = 0;
     virtual bool isFocusPointModeSupported(QCameraFocus::FocusPointMode mode) const = 0;
@@ -81,17 +74,17 @@ public:
     virtual QCameraFocusZoneList focusZones() const = 0;
 
 Q_SIGNALS:
-    void opticalZoomChanged(qreal opticalZoom);
-    void digitalZoomChanged(qreal digitalZoom);
+    void focusModeChanged(QCameraFocus::FocusMode mode);
+    void focusPointModeChanged(QCameraFocus::FocusPointMode mode);
+    void customFocusPointChanged(const QPointF &point);
+
     void focusZonesChanged();
-    void maximumOpticalZoomChanged(qreal);
-    void maximumDigitalZoomChanged(qreal);
 
 protected:
     QCameraFocusControl(QObject* parent = 0);
 };
 
-#define QCameraFocusControl_iid "com.nokia.Qt.QCameraFocusingControl/1.0"
+#define QCameraFocusControl_iid "com.nokia.Qt.QCameraFocusControl/1.0"
 Q_MEDIA_DECLARE_CONTROL(QCameraFocusControl, QCameraFocusControl_iid)
 
 QT_END_NAMESPACE
