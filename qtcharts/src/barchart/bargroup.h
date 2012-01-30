@@ -47,6 +47,8 @@ private:
     bool mLayoutDirty;
 
     QList<QColor> mColors;  // List of colors for series for now
+
+    PlotDomain mPlotDomain;
 };
 
 QTCOMMERCIALCHART_END_NAMESPACE
