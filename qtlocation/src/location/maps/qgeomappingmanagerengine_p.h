@@ -81,7 +81,7 @@ public:
 
     QList<QGeoMapType> supportedMapTypes;
 //    QList<QGraphicsGeoMap::ConnectivityMode> supportedConnectivityModes;
-    QSize tileSize;
+    int tileSize;
     qreal minimumZoomLevel;
     qreal maximumZoomLevel;
     bool supportsBearing;
