@@ -66,8 +66,10 @@ public:
 
     QList<QObject *> objects() const;
     QGLSceneNode *mainNode() const;
+    QList<QGLSceneAnimation *> animations() const;
 private:
     QGLSceneNode *m_root;
+    QList<QGLSceneAnimation *> m_animations;
 };
 
 QT_END_NAMESPACE
