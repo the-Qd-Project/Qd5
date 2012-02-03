@@ -306,18 +306,11 @@ void tst_QDeclarativeAudio::nullPlayerControl()
     audio.setSource(QUrl("http://example.com"));
     QCOMPARE(audio.source(), QUrl("http://example.com"));
 
-    QCOMPARE(audio.isPlaying(), false);
-    audio.setPlaying(true);
-    QCOMPARE(audio.isPlaying(), true);
-    audio.setPlaying(false);
+    QCOMPARE(audio.playbackState(), audio.StoppedState);
     audio.play();
-    QCOMPARE(audio.isPlaying(), false);
-
-    QCOMPARE(audio.isPaused(), false);
+    QCOMPARE(audio.playbackState(), audio.StoppedState);
     audio.pause();
-    QCOMPARE(audio.isPaused(), false);
-    audio.setPaused(true);
-    QCOMPARE(audio.isPaused(), true);
+    QCOMPARE(audio.playbackState(), audio.StoppedState);
 
     QCOMPARE(audio.duration(), 0);
 
@@ -367,18 +360,11 @@ void tst_QDeclarativeAudio::nullService()
     audio.setSource(QUrl("http://example.com"));
     QCOMPARE(audio.source(), QUrl("http://example.com"));
 
-    QCOMPARE(audio.isPlaying(), false);
-    audio.setPlaying(true);
-    QCOMPARE(audio.isPlaying(), true);
-    audio.setPlaying(false);
+    QCOMPARE(audio.playbackState(), audio.StoppedState);
     audio.play();
-    QCOMPARE(audio.isPlaying(), false);
-
-    QCOMPARE(audio.isPaused(), false);
+    QCOMPARE(audio.playbackState(), audio.StoppedState);
     audio.pause();
-    QCOMPARE(audio.isPaused(), false);
-    audio.setPaused(true);
-    QCOMPARE(audio.isPaused(), true);
+    QCOMPARE(audio.playbackState(), audio.StoppedState);
 
     QCOMPARE(audio.duration(), 0);
 
@@ -454,14 +440,14 @@ void tst_QDeclarativeAudio::autoLoad()
     audio.setSource(QUrl("http://example.com"));
     QCOMPARE(audio.source(), QUrl("http://example.com"));
     audio.play();
-    QCOMPARE(audio.isPlaying(), true);
+    QCOMPARE(audio.playbackState(), audio.PlayingState);
     audio.stop();
 
     audio.setAutoLoad(true);
     audio.setSource(QUrl("http://example.com"));
-    audio.setPaused(true);
+    audio.pause();
     QCOMPARE(spy.count(), 2);
-    QCOMPARE(audio.isPaused(), true);
+    QCOMPARE(audio.playbackState(), audio.PausedState);
 }
 
 void tst_QDeclarativeAudio::playing()
@@ -470,88 +456,56 @@ void tst_QDeclarativeAudio::playing()
     QDeclarativeAudio audio;
     audio.classBegin();
 
-    QSignalSpy playingChangedSpy(&audio, SIGNAL(playingChanged()));
-    QSignalSpy startedSpy(&audio, SIGNAL(started()));
+    QSignalSpy stateChangedSpy(&audio, SIGNAL(playbackStateChanged()));
+    QSignalSpy playingSpy(&audio, SIGNAL(playing()));
     QSignalSpy stoppedSpy(&audio, SIGNAL(stopped()));
 
-    int playingChanged = 0;
-    int started = 0;
+    int stateChanged = 0;
+    int playing = 0;
     int stopped = 0;
 
     audio.componentComplete();
     audio.setSource(QUrl("http://example.com"));
 
-    QCOMPARE(audio.isPlaying(), false);
-
-    // setPlaying(true) when stopped.
-    audio.setPlaying(true);
-    QCOMPARE(audio.isPlaying(), true);
-    QCOMPARE(provider.playerControl()->state(), QMediaPlayer::PlayingState);
-    QCOMPARE(playingChangedSpy.count(), ++playingChanged);
-    QCOMPARE(startedSpy.count(),        ++started);
-    QCOMPARE(stoppedSpy.count(),          stopped);
-
-    // setPlaying(false) when playing.
-    audio.setPlaying(false);
-    QCOMPARE(audio.isPlaying(), false);
-    QCOMPARE(provider.playerControl()->state(), QMediaPlayer::StoppedState);
-    QCOMPARE(playingChangedSpy.count(), ++playingChanged);
-    QCOMPARE(startedSpy.count(),          started);
-    QCOMPARE(stoppedSpy.count(),        ++stopped);
+    QCOMPARE(audio.playbackState(), audio.StoppedState);
 
     // play() when stopped.
     audio.play();
-    QCOMPARE(audio.isPlaying(), true);
+    QCOMPARE(audio.playbackState(), audio.PlayingState);
     QCOMPARE(provider.playerControl()->state(), QMediaPlayer::PlayingState);
-    QCOMPARE(playingChangedSpy.count(), ++playingChanged);
-    QCOMPARE(startedSpy.count(),        ++started);
+    QCOMPARE(stateChangedSpy.count(), ++stateChanged);
+    QCOMPARE(playingSpy.count(),        ++playing);
     QCOMPARE(stoppedSpy.count(),          stopped);
 
     // stop() when playing.
     audio.stop();
-    QCOMPARE(audio.isPlaying(), false);
+    QCOMPARE(audio.playbackState(), audio.StoppedState);
     QCOMPARE(provider.playerControl()->state(), QMediaPlayer::StoppedState);
-    QCOMPARE(playingChangedSpy.count(), ++playingChanged);
-    QCOMPARE(startedSpy.count(),          started);
+    QCOMPARE(stateChangedSpy.count(), ++stateChanged);
+    QCOMPARE(playingSpy.count(),          playing);
     QCOMPARE(stoppedSpy.count(),        ++stopped);
 
     // stop() when stopped.
     audio.stop();
-    QCOMPARE(audio.isPlaying(), false);
+    QCOMPARE(audio.playbackState(), audio.StoppedState);
     QCOMPARE(provider.playerControl()->state(), QMediaPlayer::StoppedState);
-    QCOMPARE(playingChangedSpy.count(),   playingChanged);
-    QCOMPARE(startedSpy.count(),          started);
+    QCOMPARE(stateChangedSpy.count(),   stateChanged);
+    QCOMPARE(playingSpy.count(),          playing);
     QCOMPARE(stoppedSpy.count(),          stopped);
 
-    // setPlaying(false) when stopped.
-    audio.setPlaying(false);
-    QCOMPARE(audio.isPlaying(), false);
-    QCOMPARE(provider.playerControl()->state(), QMediaPlayer::StoppedState);
-    QCOMPARE(playingChangedSpy.count(),   playingChanged);
-    QCOMPARE(startedSpy.count(),          started);
-    QCOMPARE(stoppedSpy.count(),          stopped);
-
-    audio.setPlaying(true);
-    QCOMPARE(audio.isPlaying(), true);
+    audio.play();
+    QCOMPARE(audio.playbackState(), audio.PlayingState);
     QCOMPARE(provider.playerControl()->state(), QMediaPlayer::PlayingState);
-    QCOMPARE(playingChangedSpy.count(), ++playingChanged);
-    QCOMPARE(startedSpy.count(),        ++started);
-    QCOMPARE(stoppedSpy.count(),          stopped);
-
-    // setPlaying(true) when playing.
-    audio.setPlaying(true);
-    QCOMPARE(audio.isPlaying(), true);
-    QCOMPARE(provider.playerControl()->state(), QMediaPlayer::PlayingState);
-    QCOMPARE(playingChangedSpy.count(),   playingChanged);
-    QCOMPARE(startedSpy.count(),          started);
+    QCOMPARE(stateChangedSpy.count(), ++stateChanged);
+    QCOMPARE(playingSpy.count(),        ++playing);
     QCOMPARE(stoppedSpy.count(),          stopped);
 
     // play() when playing.
     audio.play();
-    QCOMPARE(audio.isPlaying(), true);
+    QCOMPARE(audio.playbackState(), audio.PlayingState);
     QCOMPARE(provider.playerControl()->state(), QMediaPlayer::PlayingState);
-    QCOMPARE(playingChangedSpy.count(),   playingChanged);
-    QCOMPARE(startedSpy.count(),          started);
+    QCOMPARE(stateChangedSpy.count(),   stateChanged);
+    QCOMPARE(playingSpy.count(),          playing);
     QCOMPARE(stoppedSpy.count(),          stopped);
 }
 
@@ -561,289 +515,57 @@ void tst_QDeclarativeAudio::paused()
     QDeclarativeAudio audio;
     audio.classBegin();
 
-    QSignalSpy playingChangedSpy(&audio, SIGNAL(playingChanged()));
-    QSignalSpy pausedChangedSpy(&audio, SIGNAL(pausedChanged()));
-    QSignalSpy startedSpy(&audio, SIGNAL(started()));
+    QSignalSpy stateChangedSpy(&audio, SIGNAL(playbackStateChanged()));
     QSignalSpy pausedSpy(&audio, SIGNAL(paused()));
-    QSignalSpy resumedSpy(&audio, SIGNAL(resumed()));
-    QSignalSpy stoppedSpy(&audio, SIGNAL(stopped()));
-
-    int playingChanged = 0;
-    int pausedChanged = 0;
-    int started = 0;
-    int paused = 0;
-    int resumed = 0;
-    int stopped = 0;
+    int stateChanged = 0;
+    int pausedCount = 0;
 
     audio.componentComplete();
     audio.setSource(QUrl("http://example.com"));
 
-    QCOMPARE(audio.isPlaying(), false);
-    QCOMPARE(audio.isPaused(), false);
+    QCOMPARE(audio.playbackState(), audio.StoppedState);
 
-    // setPlaying(true) when stopped.
-    audio.setPlaying(true);
-    QCOMPARE(audio.isPlaying(), true);
-    QCOMPARE(audio.isPaused(), false);
+    // play() when stopped.
+    audio.play();
+    QCOMPARE(audio.playbackState(), audio.PlayingState);
     QCOMPARE(provider.playerControl()->state(), QMediaPlayer::PlayingState);
-    QCOMPARE(playingChangedSpy.count(), ++playingChanged);
-    QCOMPARE(pausedChangedSpy.count(),    pausedChanged);
-    QCOMPARE(startedSpy.count(),        ++started);
-    QCOMPARE(pausedSpy.count(),           paused);
-    QCOMPARE(resumedSpy.count(),          resumed);
-    QCOMPARE(stoppedSpy.count(),          stopped);
-
-    // setPaused(true) when playing.
-    audio.setPaused(true);
-    QCOMPARE(audio.isPlaying(), true);
-    QCOMPARE(audio.isPaused(), true);
-    QCOMPARE(provider.playerControl()->state(), QMediaPlayer::PausedState);
-    QCOMPARE(playingChangedSpy.count(),   playingChanged);
-    QCOMPARE(pausedChangedSpy.count(),  ++pausedChanged);
-    QCOMPARE(startedSpy.count(),          started);
-    QCOMPARE(pausedSpy.count(),         ++paused);
-    QCOMPARE(resumedSpy.count(),          resumed);
-    QCOMPARE(stoppedSpy.count(),          stopped);
-
-    // setPaused(true) when paused.
-    audio.setPaused(true);
-    QCOMPARE(audio.isPlaying(), true);
-    QCOMPARE(audio.isPaused(), true);
-    QCOMPARE(provider.playerControl()->state(), QMediaPlayer::PausedState);
-    QCOMPARE(playingChangedSpy.count(),   playingChanged);
-    QCOMPARE(pausedChangedSpy.count(),    pausedChanged);
-    QCOMPARE(startedSpy.count(),          started);
-    QCOMPARE(pausedSpy.count(),           paused);
-    QCOMPARE(resumedSpy.count(),          resumed);
-    QCOMPARE(stoppedSpy.count(),          stopped);
-
-    // pause() when paused.
-    audio.pause();
-    QCOMPARE(audio.isPlaying(), true);
-    QCOMPARE(audio.isPaused(), true);
-    QCOMPARE(provider.playerControl()->state(), QMediaPlayer::PausedState);
-    QCOMPARE(playingChangedSpy.count(),   playingChanged);
-    QCOMPARE(pausedChangedSpy.count(),    pausedChanged);
-    QCOMPARE(startedSpy.count(),          started);
-    QCOMPARE(pausedSpy.count(),           paused);
-    QCOMPARE(resumedSpy.count(),          resumed);
-    QCOMPARE(stoppedSpy.count(),          stopped);
-
-    // setPaused(false) when paused.
-    audio.setPaused(false);
-    QCOMPARE(audio.isPlaying(), true);
-    QCOMPARE(audio.isPaused(), false);
-    QCOMPARE(provider.playerControl()->state(), QMediaPlayer::PlayingState);
-    QCOMPARE(playingChangedSpy.count(),   playingChanged);
-    QCOMPARE(pausedChangedSpy.count(),  ++pausedChanged);
-    QCOMPARE(startedSpy.count(),          started);
-    QCOMPARE(pausedSpy.count(),           paused);
-    QCOMPARE(resumedSpy.count(),        ++resumed);
-    QCOMPARE(stoppedSpy.count(),          stopped);
-
-    // setPaused(false) when playing.
-    audio.setPaused(false);
-    QCOMPARE(audio.isPlaying(), true);
-    QCOMPARE(audio.isPaused(), false);
-    QCOMPARE(provider.playerControl()->state(), QMediaPlayer::PlayingState);
-    QCOMPARE(playingChangedSpy.count(),   playingChanged);
-    QCOMPARE(pausedChangedSpy.count(),    pausedChanged);
-    QCOMPARE(startedSpy.count(),          started);
-    QCOMPARE(pausedSpy.count(),           paused);
-    QCOMPARE(resumedSpy.count(),          resumed);
-    QCOMPARE(stoppedSpy.count(),          stopped);
+    QCOMPARE(stateChangedSpy.count(), ++stateChanged);
+    QCOMPARE(pausedSpy.count(), pausedCount);
 
     // pause() when playing.
     audio.pause();
-    QCOMPARE(audio.isPlaying(), true);
-    QCOMPARE(audio.isPaused(), true);
+    QCOMPARE(audio.playbackState(), audio.PausedState);
     QCOMPARE(provider.playerControl()->state(), QMediaPlayer::PausedState);
-    QCOMPARE(playingChangedSpy.count(),   playingChanged);
-    QCOMPARE(pausedChangedSpy.count(),  ++pausedChanged);
-    QCOMPARE(startedSpy.count(),          started);
-    QCOMPARE(pausedSpy.count(),         ++paused);
-    QCOMPARE(resumedSpy.count(),          resumed);
-    QCOMPARE(stoppedSpy.count(),          stopped);
+    QCOMPARE(stateChangedSpy.count(), ++stateChanged);
+    QCOMPARE(pausedSpy.count(), ++pausedCount);
 
-    // setPlaying(false) when paused.
-    audio.setPlaying(false);
-    QCOMPARE(audio.isPlaying(), false);
-    QCOMPARE(audio.isPaused(), true);
-    QCOMPARE(provider.playerControl()->state(), QMediaPlayer::StoppedState);
-    QCOMPARE(playingChangedSpy.count(), ++playingChanged);
-    QCOMPARE(pausedChangedSpy.count(),    pausedChanged);
-    QCOMPARE(startedSpy.count(),          started);
-    QCOMPARE(pausedSpy.count(),           paused);
-    QCOMPARE(resumedSpy.count(),          resumed);
-    QCOMPARE(stoppedSpy.count(),        ++stopped);
-
-    // setPaused(true) when stopped and paused.
-    audio.setPaused(true);
-    QCOMPARE(audio.isPlaying(), false);
-    QCOMPARE(audio.isPaused(), true);
-    QCOMPARE(provider.playerControl()->state(), QMediaPlayer::StoppedState);
-    QCOMPARE(playingChangedSpy.count(),   playingChanged);
-    QCOMPARE(pausedChangedSpy.count(),    pausedChanged);
-    QCOMPARE(startedSpy.count(),          started);
-    QCOMPARE(pausedSpy.count(),           paused);
-    QCOMPARE(resumedSpy.count(),          resumed);
-    QCOMPARE(stoppedSpy.count(),          stopped);
-
-    // setPaused(false) when stopped and paused.
-    audio.setPaused(false);
-    QCOMPARE(audio.isPlaying(), false);
-    QCOMPARE(audio.isPaused(), false);
-    QCOMPARE(provider.playerControl()->state(), QMediaPlayer::StoppedState);
-    QCOMPARE(playingChangedSpy.count(),   playingChanged);
-    QCOMPARE(pausedChangedSpy.count(),  ++pausedChanged);
-    QCOMPARE(startedSpy.count(),          started);
-    QCOMPARE(pausedSpy.count(),           paused);
-    QCOMPARE(resumedSpy.count(),          resumed);
-    QCOMPARE(stoppedSpy.count(),          stopped);
-
-    // setPaused(true) when stopped.
-    audio.setPaused(true);
-    QCOMPARE(audio.isPlaying(), false);
-    QCOMPARE(audio.isPaused(), true);
-    QCOMPARE(provider.playerControl()->state(), QMediaPlayer::StoppedState);
-    QCOMPARE(playingChangedSpy.count(),   playingChanged);
-    QCOMPARE(pausedChangedSpy.count(),  ++pausedChanged);
-    QCOMPARE(startedSpy.count(),          started);
-    QCOMPARE(pausedSpy.count(),           paused);
-    QCOMPARE(resumedSpy.count(),          resumed);
-    QCOMPARE(stoppedSpy.count(),          stopped);
-
-    // setPlaying(true) when stopped and paused.
-    audio.setPlaying(true);
-    QCOMPARE(audio.isPlaying(), true);
-    QCOMPARE(audio.isPaused(), true);
+    // pause() when paused.
+    audio.pause();
+    QCOMPARE(audio.playbackState(), audio.PausedState);
     QCOMPARE(provider.playerControl()->state(), QMediaPlayer::PausedState);
-    QCOMPARE(playingChangedSpy.count(), ++playingChanged);
-    QCOMPARE(pausedChangedSpy.count(),    pausedChanged);
-    QCOMPARE(startedSpy.count(),        ++started);
-    QCOMPARE(pausedSpy.count(),         ++paused);
-    QCOMPARE(resumedSpy.count(),          resumed);
-    QCOMPARE(stoppedSpy.count(),          stopped);
-
-    // play() when paused.
-    audio.play();
-    QCOMPARE(audio.isPlaying(), true);
-    QCOMPARE(audio.isPaused(), false);
-    QCOMPARE(provider.playerControl()->state(), QMediaPlayer::PlayingState);
-    QCOMPARE(playingChangedSpy.count(),   playingChanged);
-    QCOMPARE(pausedChangedSpy.count(),  ++pausedChanged);
-    QCOMPARE(startedSpy.count(),          started);
-    QCOMPARE(pausedSpy.count(),           paused);
-    QCOMPARE(resumedSpy.count(),        ++resumed);
-    QCOMPARE(stoppedSpy.count(),          stopped);
-
-    // setPaused(true) when playing.
-    audio.setPaused(true);
-    QCOMPARE(audio.isPlaying(), true);
-    QCOMPARE(audio.isPaused(), true);
-    QCOMPARE(provider.playerControl()->state(), QMediaPlayer::PausedState);
-    QCOMPARE(playingChangedSpy.count(),   playingChanged);
-    QCOMPARE(pausedChangedSpy.count(),  ++pausedChanged);
-    QCOMPARE(startedSpy.count(),          started);
-    QCOMPARE(pausedSpy.count(),         ++paused);
-    QCOMPARE(resumedSpy.count(),          resumed);
-    QCOMPARE(stoppedSpy.count(),          stopped);
+    QCOMPARE(stateChangedSpy.count(),   stateChanged);
+    QCOMPARE(pausedSpy.count(), pausedCount);
 
     // stop() when paused.
     audio.stop();
-    QCOMPARE(audio.isPlaying(), false);
-    QCOMPARE(audio.isPaused(), false);
+    QCOMPARE(audio.playbackState(), audio.StoppedState);
     QCOMPARE(provider.playerControl()->state(), QMediaPlayer::StoppedState);
-    QCOMPARE(playingChangedSpy.count(), ++playingChanged);
-    QCOMPARE(pausedChangedSpy.count(),  ++pausedChanged);
-    QCOMPARE(startedSpy.count(),          started);
-    QCOMPARE(pausedSpy.count(),           paused);
-    QCOMPARE(resumedSpy.count(),          resumed);
-    QCOMPARE(stoppedSpy.count(),        ++stopped);
-
-    // setPaused(true) when stopped.
-    audio.setPaused(true);
-    QCOMPARE(audio.isPlaying(), false);
-    QCOMPARE(audio.isPaused(), true);
-    QCOMPARE(provider.playerControl()->state(), QMediaPlayer::StoppedState);
-    QCOMPARE(playingChangedSpy.count(),   playingChanged);
-    QCOMPARE(pausedChangedSpy.count(),  ++pausedChanged);
-    QCOMPARE(startedSpy.count(),          started);
-    QCOMPARE(pausedSpy.count(),           paused);
-    QCOMPARE(resumedSpy.count(),          resumed);
-    QCOMPARE(stoppedSpy.count(),          stopped);
-
-    // stop() when stopped and paused.
-    audio.stop();
-    QCOMPARE(audio.isPlaying(), false);
-    QCOMPARE(audio.isPaused(), false);
-    QCOMPARE(provider.playerControl()->state(), QMediaPlayer::StoppedState);
-    QCOMPARE(playingChangedSpy.count(),   playingChanged);
-    QCOMPARE(pausedChangedSpy.count(),  ++pausedChanged);
-    QCOMPARE(startedSpy.count(),          started);
-    QCOMPARE(pausedSpy.count(),           paused);
-    QCOMPARE(resumedSpy.count(),          resumed);
-    QCOMPARE(stoppedSpy.count(),          stopped);
+    QCOMPARE(stateChangedSpy.count(), ++stateChanged);
+    QCOMPARE(pausedSpy.count(), pausedCount);
 
     // pause() when stopped.
     audio.pause();
-    QCOMPARE(audio.isPlaying(), true);
-    QCOMPARE(audio.isPaused(), true);
+    QCOMPARE(audio.playbackState(), audio.PausedState);
     QCOMPARE(provider.playerControl()->state(), QMediaPlayer::PausedState);
-    QCOMPARE(playingChangedSpy.count(), ++playingChanged);
-    QCOMPARE(pausedChangedSpy.count(),  ++pausedChanged);
-    QCOMPARE(startedSpy.count(),        ++started);
-    QCOMPARE(pausedSpy.count(),         ++paused);
-    QCOMPARE(resumedSpy.count(),          resumed);
-    QCOMPARE(stoppedSpy.count(),          stopped);
+    QCOMPARE(stateChangedSpy.count(), ++stateChanged);
+    QCOMPARE(pausedSpy.count(), ++pausedCount);
 
-    // setPlaying(false) when paused.
-    audio.setPlaying(false);
-    QCOMPARE(audio.isPlaying(), false);
-    QCOMPARE(audio.isPaused(), true);
-    QCOMPARE(provider.playerControl()->state(), QMediaPlayer::StoppedState);
-    QCOMPARE(playingChangedSpy.count(), ++playingChanged);
-    QCOMPARE(pausedChangedSpy.count(),    pausedChanged);
-    QCOMPARE(startedSpy.count(),          started);
-    QCOMPARE(pausedSpy.count(),           paused);
-    QCOMPARE(resumedSpy.count(),          resumed);
-    QCOMPARE(stoppedSpy.count(),        ++stopped);
-
-    // pause() when stopped and paused.
-    audio.pause();
-    QCOMPARE(audio.isPlaying(), true);
-    QCOMPARE(audio.isPaused(), true);
-    QCOMPARE(provider.playerControl()->state(), QMediaPlayer::PausedState);
-    QCOMPARE(playingChangedSpy.count(), ++playingChanged);
-    QCOMPARE(pausedChangedSpy.count(),    pausedChanged);
-    QCOMPARE(startedSpy.count(),        ++started);
-    QCOMPARE(pausedSpy.count(),         ++paused);
-    QCOMPARE(resumedSpy.count(),          resumed);
-    QCOMPARE(stoppedSpy.count(),          stopped);
-
-    // setPlaying(false) when paused.
-    audio.setPlaying(false);
-    QCOMPARE(audio.isPlaying(), false);
-    QCOMPARE(audio.isPaused(), true);
-    QCOMPARE(provider.playerControl()->state(), QMediaPlayer::StoppedState);
-    QCOMPARE(playingChangedSpy.count(), ++playingChanged);
-    QCOMPARE(pausedChangedSpy.count(),    pausedChanged);
-    QCOMPARE(startedSpy.count(),          started);
-    QCOMPARE(pausedSpy.count(),           paused);
-    QCOMPARE(resumedSpy.count(),          resumed);
-    QCOMPARE(stoppedSpy.count(),        ++stopped);
-
-    // play() when stopped and paused.
+    // play() when paused.
     audio.play();
-    QCOMPARE(audio.isPlaying(), true);
-    QCOMPARE(audio.isPaused(), false);
+    QCOMPARE(audio.playbackState(), audio.PlayingState);
     QCOMPARE(provider.playerControl()->state(), QMediaPlayer::PlayingState);
-    QCOMPARE(playingChangedSpy.count(), ++playingChanged);
-    QCOMPARE(pausedChangedSpy.count(),  ++pausedChanged);
-    QCOMPARE(startedSpy.count(),        ++started);
-    QCOMPARE(pausedSpy.count(),           paused);
-    QCOMPARE(resumedSpy.count(),          resumed);
-    QCOMPARE(stoppedSpy.count(),          stopped);
+    QCOMPARE(stateChangedSpy.count(), ++stateChanged);
+    QCOMPARE(pausedSpy.count(), pausedCount);
 }
 
 void tst_QDeclarativeAudio::duration()
@@ -1210,17 +932,17 @@ void tst_QDeclarativeAudio::loops()
     QDeclarativeAudio audio;
 
     QSignalSpy loopsChangedSpy(&audio, SIGNAL(loopCountChanged()));
-    QSignalSpy playingChangedSpy(&audio, SIGNAL(playingChanged()));
+    QSignalSpy stateChangedSpy(&audio, SIGNAL(playbackStateChanged()));
     QSignalSpy stoppedSpy(&audio, SIGNAL(stopped()));
 
-    int playingChanged = 0;
-    int stopped = 0;
+    int stateChanged = 0;
     int loopsChanged = 0;
+    int stoppedCount = 0;
 
     audio.classBegin();
     audio.componentComplete();
 
-    QCOMPARE(audio.isPlaying(), false);
+    QCOMPARE(audio.playbackState(), audio.StoppedState);
 
     //setLoopCount(3) when stopped.
     audio.setLoopCount(3);
@@ -1229,68 +951,67 @@ void tst_QDeclarativeAudio::loops()
 
     //play till end
     audio.play();
-    QCOMPARE(audio.isPlaying(), true);
+    QCOMPARE(audio.playbackState(), audio.PlayingState);
     QCOMPARE(provider.playerControl()->state(), QMediaPlayer::PlayingState);
-    QCOMPARE(playingChangedSpy.count(), ++playingChanged);
+    QCOMPARE(stateChangedSpy.count(), ++stateChanged);
+    QCOMPARE(stoppedSpy.count(), stoppedCount);
 
-    // setPlaying(true) when playing.
-    audio.setPlaying(true);
-    QCOMPARE(audio.isPlaying(), true);
+    // play() when playing.
+    audio.play();
+    QCOMPARE(audio.playbackState(), audio.PlayingState);
     QCOMPARE(provider.playerControl()->state(), QMediaPlayer::PlayingState);
-    QCOMPARE(playingChangedSpy.count(),   playingChanged);
-    QCOMPARE(stoppedSpy.count(),          stopped);
+    QCOMPARE(stateChangedSpy.count(),   stateChanged);
+    QCOMPARE(stoppedSpy.count(), stoppedCount);
 
     provider.playerControl()->updateMediaStatus(QMediaPlayer::EndOfMedia, QMediaPlayer::StoppedState);
-    QCOMPARE(audio.isPlaying(), true);
+    QCOMPARE(audio.playbackState(), audio.PlayingState);
     QCOMPARE(provider.playerControl()->state(), QMediaPlayer::PlayingState);
-    QCOMPARE(playingChangedSpy.count(),   playingChanged);
+    QCOMPARE(stateChangedSpy.count(),   stateChanged);
+    QCOMPARE(stoppedSpy.count(), stoppedCount);
 
     //play to end
     provider.playerControl()->updateMediaStatus(QMediaPlayer::EndOfMedia, QMediaPlayer::StoppedState);
+    QCOMPARE(stoppedSpy.count(), stoppedCount);
     //play to end
     provider.playerControl()->updateMediaStatus(QMediaPlayer::EndOfMedia, QMediaPlayer::StoppedState);
-    QCOMPARE(audio.isPlaying(), false);
+    QCOMPARE(audio.playbackState(), audio.StoppedState);
     QCOMPARE(provider.playerControl()->state(), QMediaPlayer::StoppedState);
-    QCOMPARE(playingChangedSpy.count(), ++playingChanged);
-    QCOMPARE(stoppedSpy.count(),        ++stopped);
+    QCOMPARE(stateChangedSpy.count(), ++stateChanged);
+    QCOMPARE(stoppedSpy.count(), ++stoppedCount);
 
     // stop when playing
     audio.play();
     QCOMPARE(provider.playerControl()->state(), QMediaPlayer::PlayingState);
-    QCOMPARE(playingChangedSpy.count(), ++playingChanged);
+    QCOMPARE(stateChangedSpy.count(), ++stateChanged);
+    QCOMPARE(stoppedSpy.count(), stoppedCount);
     provider.playerControl()->updateMediaStatus(QMediaPlayer::EndOfMedia, QMediaPlayer::StoppedState);
     audio.stop();
-    QCOMPARE(audio.isPlaying(), false);
+    QCOMPARE(audio.playbackState(), audio.StoppedState);
     QCOMPARE(provider.playerControl()->state(), QMediaPlayer::StoppedState);
-    QCOMPARE(playingChangedSpy.count(), ++playingChanged);
-    QCOMPARE(stoppedSpy.count(),        ++stopped);
+    QCOMPARE(stateChangedSpy.count(), ++stateChanged);
+    QCOMPARE(stoppedSpy.count(), ++stoppedCount);
 
-    //setPlaying(true) with infinite loop
+    //play() with infinite loop
     audio.setLoopCount(-1);
     QCOMPARE(audio.loopCount(), -1);
     QCOMPARE(loopsChangedSpy.count(), ++loopsChanged);
-    audio.setPlaying(true);
-    QCOMPARE(audio.isPlaying(), true);
-    QCOMPARE(playingChangedSpy.count(), ++playingChanged);
+    audio.play();
+    QCOMPARE(audio.playbackState(), audio.PlayingState);
+    QCOMPARE(stateChangedSpy.count(), ++stateChanged);
     QCOMPARE(provider.playerControl()->state(), QMediaPlayer::PlayingState);
     provider.playerControl()->updateMediaStatus(QMediaPlayer::EndOfMedia, QMediaPlayer::StoppedState);
-    QCOMPARE(audio.isPlaying(), true);
+    QCOMPARE(audio.playbackState(), audio.PlayingState);
     QCOMPARE(provider.playerControl()->state(), QMediaPlayer::PlayingState);
-    QCOMPARE(playingChangedSpy.count(), playingChanged);
+    QCOMPARE(stateChangedSpy.count(), stateChanged);
 
-    // play() when playing.
-    audio.play();
-    QCOMPARE(audio.isPlaying(), true);
-    QCOMPARE(provider.playerControl()->state(), QMediaPlayer::PlayingState);
-    QCOMPARE(playingChangedSpy.count(),   playingChanged);
-    QCOMPARE(stoppedSpy.count(),          stopped);
-
-    // setPlaying(false) when playing in infinite loop.
-    audio.setPlaying(false);
-    QCOMPARE(audio.isPlaying(), false);
+    // stop() when playing in infinite loop.
+    audio.stop();
+    QCOMPARE(audio.playbackState(), audio.StoppedState);
     QCOMPARE(provider.playerControl()->state(), QMediaPlayer::StoppedState);
-    QCOMPARE(playingChangedSpy.count(), ++playingChanged);
-    QCOMPARE(stoppedSpy.count(),        ++stopped);
+    QCOMPARE(stateChangedSpy.count(), ++stateChanged);
+    QCOMPARE(stoppedSpy.count(), ++stoppedCount);
+
+    qDebug() << "Testing version 5";
 }
 
 QTEST_MAIN(tst_QDeclarativeAudio)

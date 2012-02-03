@@ -69,10 +69,10 @@ class QDeclarativeAudio : public QObject, public QDeclarativeMediaBase, public Q
 {
     Q_OBJECT
     Q_PROPERTY(QUrl source READ source WRITE setSource NOTIFY sourceChanged)
-    Q_PROPERTY(bool autoLoad READ isAutoLoad WRITE setAutoLoad NOTIFY autoLoadChanged)
-    Q_PROPERTY(bool playing READ isPlaying WRITE setPlaying NOTIFY playingChanged)
     Q_PROPERTY(int loops READ loopCount WRITE setLoopCount NOTIFY loopCountChanged)
-    Q_PROPERTY(bool paused READ isPaused WRITE setPaused NOTIFY pausedChanged)
+    Q_PROPERTY(PlaybackState playbackState READ playbackState NOTIFY playbackStateChanged)
+    Q_PROPERTY(bool autoPlay READ autoPlay WRITE setAutoPlay NOTIFY autoPlayChanged)
+    Q_PROPERTY(bool autoLoad READ isAutoLoad WRITE setAutoLoad NOTIFY autoLoadChanged)
     Q_PROPERTY(Status status READ status NOTIFY statusChanged)
     Q_PROPERTY(int duration READ duration NOTIFY durationChanged)
     Q_PROPERTY(int position READ position WRITE setPosition NOTIFY positionChanged)
@@ -90,6 +90,7 @@ class QDeclarativeAudio : public QObject, public QDeclarativeMediaBase, public Q
     Q_ENUMS(Status)
     Q_ENUMS(Error)
     Q_ENUMS(Loop)
+    Q_ENUMS(PlaybackState)
     Q_INTERFACES(QDeclarativeParserStatus)
 public:
     enum Status
@@ -120,6 +121,13 @@ public:
         Infinite = QDeclarativeMediaBase::INFINITE
     };
 
+    enum PlaybackState
+    {
+        PlayingState = QMediaPlayer::PlayingState,
+        PausedState = QMediaPlayer::PausedState,
+        StoppedState = QMediaPlayer::StoppedState
+    };
+
     QDeclarativeAudio(QObject *parent = 0);
     ~QDeclarativeAudio();
 
@@ -128,6 +136,7 @@ public:
 
     Status status() const;
     Error error() const;
+    PlaybackState playbackState() const;
 
     void classBegin();
     void componentComplete();
@@ -142,14 +151,14 @@ public Q_SLOTS:
 Q_SIGNALS:
     void sourceChanged();
     void autoLoadChanged();
-    void playingChanged();
-    void pausedChanged();
     void loopCountChanged();
 
-    void started();
-    void resumed();
+    void playbackStateChanged();
+    void autoPlayChanged();
+
     void paused();
     void stopped();
+    void playing();
 
     void statusChanged();
 

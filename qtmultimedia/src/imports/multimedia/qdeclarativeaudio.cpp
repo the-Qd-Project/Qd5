@@ -166,7 +166,7 @@ QDeclarativeAudio::~QDeclarativeAudio()
 
     Starts playback of the media.
 
-    Sets the \l playing property to true, and the \l paused property to false.
+    Sets the \l playbackState property to PlayingState.
 */
 
 void QDeclarativeAudio::play()
@@ -174,8 +174,7 @@ void QDeclarativeAudio::play()
     if (!m_complete)
         return;
 
-    setPaused(false);
-    setPlaying(true);
+    setPlaybackState(QMediaPlayer::PlayingState);
 }
 
 /*!
@@ -183,7 +182,7 @@ void QDeclarativeAudio::play()
 
     Pauses playback of the media.
 
-    Sets the \l playing and \l paused properties to true.
+    Sets the \l playbackState property to PausedState.
 */
 
 void QDeclarativeAudio::pause()
@@ -191,8 +190,7 @@ void QDeclarativeAudio::pause()
     if (!m_complete)
         return;
 
-    setPaused(true);
-    setPlaying(true);
+    setPlaybackState(QMediaPlayer::PausedState);
 }
 
 /*!
@@ -200,7 +198,7 @@ void QDeclarativeAudio::pause()
 
     Stops playback of the media.
 
-    Sets the \l playing and \l paused properties to false.
+    Sets the \l playbackState property to StoppedState.
 */
 
 void QDeclarativeAudio::stop()
@@ -208,8 +206,7 @@ void QDeclarativeAudio::stop()
     if (!m_complete)
         return;
 
-    setPlaying(false);
-    setPaused(false);
+    setPlaybackState(QMediaPlayer::StoppedState);
 }
 
 /*!
@@ -227,43 +224,28 @@ void QDeclarativeAudio::stop()
 */
 
 /*!
-    \qmlproperty bool Audio::playing
+    \qmlsignal Audio::playbackStateChanged()
 
-    This property holds whether the media is playing.
-
-    Defaults to false, and can be set to true to start playback.
+    This handler is called when the \l playbackState property is altered.
 */
 
-/*!
-    \qmlproperty bool Audio::paused
-
-    This property holds whether the media is paused.
-
-    Defaults to false, and can be set to true to pause playback.
-*/
 
 /*!
-    \qmlsignal Audio::onStarted()
-
-    This handler is called when playback is started.
-*/
-
-/*!
-    \qmlsignal Audio::onResumed()
-
-    This handler is called when playback is resumed from the paused state.
-*/
-
-/*!
-    \qmlsignal Audio::onPaused()
+    \qmlsignal Audio::paused()
 
     This handler is called when playback is paused.
 */
 
 /*!
-    \qmlsignal Audio::onStopped()
+    \qmlsignal Audio::stopped()
 
     This handler is called when playback is stopped.
+*/
+
+/*!
+    \qmlsignal Audio::playing()
+
+    This handler is called when playback is started or resumed.
 */
 
 /*!
@@ -288,6 +270,32 @@ QDeclarativeAudio::Status QDeclarativeAudio::status() const
 {
     return Status(m_status);
 }
+
+
+/*!
+    \qmlproperty enumeration Audio::playbackState
+
+    This property holds the state of media playback. It can be one of:
+
+    \list
+    \o PlayingState - the media is currently playing.
+    \o PausedState - playback of the media has been suspended.
+    \o StoppedState - playback of the media is yet to begin.
+    \endlist
+*/
+
+QDeclarativeAudio::PlaybackState QDeclarativeAudio::playbackState() const
+{
+    return PlaybackState(m_playbackState);
+}
+
+/*!
+    \qmlproperty int Audio::autoPlay
+
+    This property controls whether the media will begin to play on start up.
+
+    Defaults to false, if set true the value of autoLoad will be overwritten to true.
+*/
 
 /*!
     \qmlproperty int Audio::duration
