@@ -1,6 +1,17 @@
 TEMPLATE = aux
 
-files.files = info.json icon.png images audio shakeit.qml
+app.files = \
+    info.json \
+    notions.json \
+    settings.json \
+    shakeit.qml \
+    icon.png \
+    audio \
+    images
 
-files.path = /opt/mt/applications/com.nokia.mt.shakeit
-INSTALLS = files
+!isEmpty(EXAMPLES_PREFIX) {
+    TARGET_DIR = $$EXAMPLES_PREFIX/com.nokia.mt.shakeit
+    app.path = $$TARGET_DIR
+    INSTALLS = app
+}
+
