@@ -42,7 +42,7 @@
 #ifndef QSGVIDEONODE_I420_H
 #define QSGVIDEONODE_I420_H
 
-#include "qsgvideonode_p.h"
+#include <private/qsgvideonode_p.h>
 #include <QtMultimedia/qvideosurfaceformat.h>
 
 class QSGVideoMaterial_YUV420;
@@ -68,6 +68,7 @@ class QSGVideoNodeFactory_I420 : public QSGVideoNodeFactory {
 public:
     QList<QVideoFrame::PixelFormat> supportedPixelFormats(QAbstractVideoBuffer::HandleType handleType) const;
     QSGVideoNode *createNode(const QVideoSurfaceFormat &format);
+    QStringList keys() const;
 };
 
 
