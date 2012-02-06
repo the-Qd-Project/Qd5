@@ -44,7 +44,7 @@
 #include "audiocaptureserviceplugin.h"
 #include "audiocaptureservice.h"
 
-#include "qmediaserviceprovider.h"
+#include "qmediaserviceproviderplugin.h"
 
 
 QStringList AudioCaptureServicePlugin::keys() const
