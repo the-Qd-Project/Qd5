@@ -91,12 +91,9 @@ private:
     QDeclarativeGeoRoute* route_;
     qreal zoomLevel_;
     QList<QGeoCoordinate> path_;
-    QPolygonF polyline_;
-    bool dirtyGeometry_;
     bool dirtyMaterial_;
     bool dragActive_;
-    QPointF offset_;
-    QPainterPath outline_;
+    QGeoMapPolylineGeometry geometry_;
 };
 
 QT_END_NAMESPACE
