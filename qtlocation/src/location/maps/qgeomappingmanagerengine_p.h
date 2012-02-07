@@ -62,6 +62,7 @@
 #include <QTimer>
 #include "qgeomaptype.h"
 #include "qgeomappingmanager.h"
+#include "qgeocameracapabilities_p.h"
 
 class QGeoTileSpec;
 class QGeoTiledMapReply;
@@ -82,12 +83,7 @@ public:
     QList<QGeoMapType> supportedMapTypes;
 //    QList<QGraphicsGeoMap::ConnectivityMode> supportedConnectivityModes;
     int tileSize;
-    qreal minimumZoomLevel;
-    qreal maximumZoomLevel;
-    bool supportsBearing;
-    bool supportsTilting;
-    qreal minimumTilt;
-    qreal maximumTilt;
+    QGeoCameraCapabilities cameraCapabilities_;
     QGeoMappingManager::CacheAreas cacheHint;
 
     QLocale locale;
