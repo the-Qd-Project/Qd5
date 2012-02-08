@@ -81,6 +81,8 @@ public:
     QPlatformSharedGraphicsCache *createPlatformSharedGraphicsCache(const char *cacheId) const;
 #endif
 
+    QPlatformServices *services() const;
+
 private:
     QList<QXcbConnection *> m_connections;
 
@@ -95,6 +97,8 @@ private:
 #if defined(QT_USE_XCB_SHARED_GRAPHICS_CACHE)
     QScopedPointer<QPlatformSharedGraphicsCache> m_sharedGraphicsCache;
 #endif
+
+    QScopedPointer<QPlatformServices> m_services;
 };
 
 QT_END_NAMESPACE
