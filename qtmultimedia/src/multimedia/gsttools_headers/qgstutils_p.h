@@ -55,6 +55,7 @@
 
 #include <QtCore/qmap.h>
 #include <gst/gst.h>
+#include <qaudioformat.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -67,6 +68,7 @@ namespace QGstUtils {
 
     QSize capsResolution(const GstCaps *caps);
     QSize capsCorrectedResolution(const GstCaps *caps);
+    QAudioFormat audioFormatForCaps(const GstCaps *caps);
 }
 
 QT_END_NAMESPACE
