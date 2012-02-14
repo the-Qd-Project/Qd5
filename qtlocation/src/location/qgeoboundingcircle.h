@@ -60,22 +60,18 @@ class Q_LOCATION_EXPORT QGeoBoundingCircle : public QGeoBoundingArea
 public:
     QGeoBoundingCircle();
     QGeoBoundingCircle(const QGeoCoordinate &center, qreal radius = -1.0);
-
     QGeoBoundingCircle(const QGeoBoundingCircle &other);
+    QGeoBoundingCircle(const QGeoBoundingArea &other);
+
     ~QGeoBoundingCircle();
 
     QGeoBoundingCircle& operator = (const QGeoBoundingCircle &other);
 
-    bool operator == (const QGeoBoundingArea &other) const;
-    bool operator == (const QGeoBoundingCircle &other) const;
+    using QGeoBoundingArea::operator==;
+    bool operator==(const QGeoBoundingCircle &other) const;
 
-    bool operator != (const QGeoBoundingArea &other) const;
-    bool operator != (const QGeoBoundingCircle &other) const;
-
-    QGeoBoundingArea::AreaType type() const;
-
-    bool isValid() const;
-    bool isEmpty() const;
+    using QGeoBoundingArea::operator!=;
+    bool operator!=(const QGeoBoundingCircle &other) const;
 
     void setCenter(const QGeoCoordinate &center);
     QGeoCoordinate center() const;
@@ -83,14 +79,12 @@ public:
     void setRadius(qreal radius);
     qreal radius() const;
 
-    bool contains(const QGeoCoordinate &coordinate) const;
-
     void translate(double degreesLatitude, double degreesLongitude);
     QGeoBoundingCircle translated(double degreesLatitude, double degreesLongitude) const;
 
-    QGeoBoundingArea *clone() const;
 private:
-    QSharedDataPointer<QGeoBoundingCirclePrivate> d_ptr;
+    inline QGeoBoundingCirclePrivate *d_func();
+    inline const QGeoBoundingCirclePrivate *d_func() const;
 };
 
 QT_END_NAMESPACE
