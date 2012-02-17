@@ -49,30 +49,20 @@
 #ifndef QGEOMAPDATA_NOKIA_H
 #define QGEOMAPDATA_NOKIA_H
 
-#include <qgeotiledmapdata.h>
+#include "qgeotiledmapdata_p.h"
 #include <QPixmap>
 #include <QNetworkReply>
 
 QT_BEGIN_NAMESPACE
 
-class QGeoMappingManagerEngineNokia;
-
-struct CopyrightDescriptor
-{
-    qreal maxLevel;
-    QString alt;
-    QString label;
-    qreal minLevel;
-    QList<QGeoBoundingBox> boxes;
-};
+class QGeoTileCache;
 
 class QGeoTiledMapDataNokia: public QGeoTiledMapData
 {
 Q_OBJECT
 public:
-    QGeoTiledMapDataNokia(QGeoMappingManagerEngineNokia *engine);
-    virtual ~QGeoTiledMapDataNokia();
-    void paintProviderNotices(QPainter *painter, const QStyleOptionGraphicsItem *option);
+    QGeoTiledMapDataNokia(QGeoTiledMappingManagerEngine *engine, QObject *parent = 0);
+    ~QGeoTiledMapDataNokia();
 
     QString getViewCopyright();
 
@@ -86,11 +76,6 @@ private:
     QRect lastViewport;
     QRect lastCopyrightRect;
     QNetworkAccessManager *m_networkManager;
-
-    QHash<QString, QList<CopyrightDescriptor> > copyrights;
-
-private slots:
-    void copyrightReplyFinished(QNetworkReply*);
 };
 
 QT_END_NAMESPACE

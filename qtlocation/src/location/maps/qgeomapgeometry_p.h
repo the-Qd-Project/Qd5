@@ -56,8 +56,6 @@
 #include <QSharedPointer>
 #include <QSize>
 
-#include "qgeocoordinateinterpolator_p.h"
-
 QT_BEGIN_NAMESPACE
 
 class QGeoCoordinate;
@@ -97,8 +95,6 @@ public:
     void paintGL(QGLPainter *painter);
 
     bool verticalLock() const;
-
-    QSharedPointer<QGeoCoordinateInterpolator> coordinateInterpolator() const;
 
 private:
     QGeoMapGeometryPrivate *d_ptr;
