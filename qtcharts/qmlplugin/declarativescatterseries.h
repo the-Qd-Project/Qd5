@@ -24,7 +24,6 @@ signals:
 public slots:
     static void appendData(QDeclarativeListProperty<ScatterElement> *list,
                            ScatterElement *element);
-//    void append(ScatterElement element);
 
 private slots:
     void setParentForSeries();
