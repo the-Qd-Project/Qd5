@@ -54,6 +54,8 @@ namespace Ui {
 }
 
 class QAudioRecorder;
+class QAudioProbe;
+class QAudioBuffer;
 QT_END_NAMESPACE
 
 QT_USE_NAMESPACE
@@ -64,6 +66,9 @@ class AudioRecorder : public QMainWindow
 public:
     AudioRecorder(QWidget *parent = 0);
     ~AudioRecorder();
+
+public slots:
+    void processBuffer(const QAudioBuffer&);
 
 private slots:
     void setOutputLocation();
@@ -76,10 +81,16 @@ private slots:
     QUrl generateAudioFilePath();
 
 private:
+    static qreal GetPeakValue(const QAudioFormat& format);
+    static qreal GetBufferLevel(const QAudioBuffer& buffer);
+
+    template <class T>
+    static qreal GetBufferLevel(const T* buffer, int samples);
+
     Ui::AudioRecorder *ui;
 
     QAudioRecorder* audioRecorder;
-    QAudioEncoderSettings  audioSettings;
+    QAudioProbe* probe;
     bool outputLocationSet;
 
 };
