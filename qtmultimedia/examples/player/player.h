@@ -54,6 +54,7 @@ class QLabel;
 class QModelIndex;
 class QSlider;
 class QPushButton;
+class QVideoProbe;
 
 class QMediaPlayer;
 class QVideoWidget;
@@ -62,6 +63,7 @@ QT_END_NAMESPACE
 QT_USE_NAMESPACE
 
 class PlaylistModel;
+class HistogramWidget;
 
 class Player : public QWidget
 {
@@ -113,6 +115,11 @@ private:
     QPushButton *colorButton;
     QDialog *colorDialog;
 #endif
+
+    QLabel *labelHistogram;
+    HistogramWidget *histogram;
+    QVideoProbe *probe;
+
     PlaylistModel *playlistModel;
     QAbstractItemView *playlistView;
     QString trackInfo;
