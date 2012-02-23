@@ -54,18 +54,9 @@
 //
 
 #include "qgeosatelliteinfosource.h"
-#include "qgeosatelliteinfo.h"
-#include <private/jsondb-strings_p.h>
-#include <qlocalsocket.h>
-#include <qeventloop.h>
 #include <qtimer.h>
-#include <QtAddOnJsonStream/jsonstream.h>
+#include <locationdaemonconnection.h>
 
-QT_BEGIN_NAMESPACE_JSONSTREAM
-class JsonStream;
-QT_END_NAMESPACE_JSONSTREAM
-
-Q_USE_JSONDB_NAMESPACE
 
 class QGeoSatelliteInfoSourceNpeBackend: public QGeoSatelliteInfoSource
 {
@@ -76,33 +67,26 @@ public:
     bool init();
     void setUpdateInterval(int interval);
     int minimumUpdateInterval() const;
-    Error error() const;
+    QGeoSatelliteInfoSource::Error error() const;
 
 public Q_SLOTS:
     void startUpdates();
     void stopUpdates();
     void requestUpdate(int timeout = 5000);
 
-Q_SIGNALS:
-    void requestTimeout();
-    void minimumUpdateIntervalReceived();
-
-private Q_SLOTS:
-    void onStreamReceived(const QJsonObject &jsonObject);
-    void onSocketConnected();
-    void onSocketDisconnected();
-    void requestTimerExpired();
-    void shutdownRequestSession();
-    void onSocketError(QLocalSocket::LocalSocketError);
-
 private:
-    QLocalSocket* mSocket;
-    QtAddOn::JsonStream::JsonStream* mStream;
+    void setError(QGeoSatelliteInfoSource::Error satelliteError);
+    void shutdownRequestSession();
+    LocationDaemonConnection* m_locationdConn;
     bool satOngoing;
     QTimer* requestTimer;
-    int minInterval;
     QGeoSatelliteInfoSource::Error mSatelliteError;
-    void setError(QGeoSatelliteInfoSource::Error satelliteError);
+
+
+private Q_SLOTS:
+    void onSatelliteUpdate(const QList<SatelliteData>& satellites);
+    void onConnectionError(LocationDaemonConnection::SocketError socketError);
+    void requestTimerExpired();
 };
 
 #endif // QGEOSATELLITEINFOSOURCE_NPE_BACKEND_H
