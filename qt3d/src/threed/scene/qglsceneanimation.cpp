@@ -56,7 +56,7 @@ public:
 };
 
 QGLSceneAnimationPrivate::QGLSceneAnimationPrivate() :
-    m_name("unnamed")
+    m_name(QLatin1String("unnamed"))
 {
 }
 
