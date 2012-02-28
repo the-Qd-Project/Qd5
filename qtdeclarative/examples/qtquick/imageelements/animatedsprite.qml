@@ -40,15 +40,17 @@
 import QtQuick 2.0
 
 Item {
-    width: 400
-    height: 400
+    width: 320
+    height: 480
     Rectangle {
         anchors.fill: parent
         color: "white"
     }
     AnimatedSprite {
         id: sprite
-        anchors.fill: parent
+        width: 170
+        height: 170
+        anchors.centerIn: parent
         source: "content/speaker.png"
         frameCount: 60
         frameSync: true
