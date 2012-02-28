@@ -43,8 +43,8 @@ import QtQuick 2.0
 Rectangle {
     id: root
 
-    width: 620
-    height: 410
+    width: 320
+    height: 480
 
     color: "black"
 
@@ -53,8 +53,8 @@ Rectangle {
 
         anchors.left: redSource.right; anchors.top: parent.top;
         anchors.margins: 5
-        width: 300
-        height: 300
+        width: 64*3
+        height: 64*3
         opacity: 0.5
         columns: 3
 
@@ -67,8 +67,8 @@ Rectangle {
     Grid {
         anchors.right: blueSource.left; anchors.bottom: parent.bottom;
         anchors.margins: 5
-        width: 300
-        height: 300
+        width: 64*3
+        height: 64*3
 
         opacity: 0.5
 
@@ -85,8 +85,8 @@ Rectangle {
 
         anchors.left: parent.left; anchors.top: parent.top; anchors.bottom: parent.bottom
         anchors.margins: 5
-        width: 100
-        spacing: -60
+        width: 64
+        spacing: -16
 
         Repeater {
             model: 9
@@ -98,8 +98,8 @@ Rectangle {
 
         anchors.right: parent.right; anchors.top: parent.top; anchors.bottom: parent.bottom
         anchors.margins: 5
-        width: 100
-        spacing: -60
+        width: 64
+        spacing: -16
 
         Repeater {
             model: 9
