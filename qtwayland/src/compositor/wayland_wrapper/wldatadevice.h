@@ -69,13 +69,8 @@ private:
                        struct wl_resource *resource,
                        struct wl_resource *source,
                        struct wl_resource *surface,
+                       struct wl_resource *icon,
                        uint32_t time);
-    static void attach(struct wl_client *client,
-                   struct wl_resource *resource,
-                   uint32_t time,
-                   struct wl_resource *buffer,
-                   int32_t x,
-                   int32_t y);
     static void set_selection(struct wl_client *client,
                           struct wl_resource *resource,
                           struct wl_resource *source,
