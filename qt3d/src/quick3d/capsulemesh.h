@@ -78,7 +78,7 @@ Q_SIGNALS:
     void levelOfDetailChanged();
 
 private:
-    void createGeometry();
+    void createGeometry(bool bForce = false);
 
     Q_DISABLE_COPY(CapsuleMesh)
     Q_DECLARE_PRIVATE(CapsuleMesh)
