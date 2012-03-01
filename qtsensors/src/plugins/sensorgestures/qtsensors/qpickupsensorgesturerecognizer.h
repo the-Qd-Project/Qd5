@@ -44,9 +44,10 @@
 #define QPICKUPSENSORGESTURERECOGNIZER_H
 
 #include <qsensorgesturerecognizer.h>
-#include <QtSensors/QSensor>
-#include <QtSensors/QAccelerometer>
 #include <QTimer>
+
+#include "qtsensorgesturesensorhandler.h"
+
 QT_BEGIN_NAMESPACE
 
 class QPickupSensorGestureRecognizer : public QSensorGestureRecognizer
@@ -67,10 +68,10 @@ Q_SIGNALS:
     void pickup();
 
 private slots:
-    void accelChanged();
+    void accelChanged(QAccelerometerReading *reading);
     void timeout();
 private:
-    QAccelerometer *accel;
+    QAccelerometerReading *accelReading;
 
     QTimer *timer;
     bool active;
@@ -90,7 +91,6 @@ private:
     QList <qreal> zList;
 
     void clear();
-
 };
 QT_END_NAMESPACE
 #endif // QPICKUPSENSORGESTURERECOGNIZER_H
