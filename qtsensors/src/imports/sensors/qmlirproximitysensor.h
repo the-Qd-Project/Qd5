@@ -56,7 +56,6 @@ public:
     explicit QmlIRProximitySensor(QObject *parent = 0);
     ~QmlIRProximitySensor();
 
-
 private:
     QSensor *sensor() const Q_DECL_OVERRIDE;
     QIRProximitySensor *m_sensor;
