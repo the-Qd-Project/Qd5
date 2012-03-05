@@ -1,5 +1,5 @@
 TEMPLATE = app
 CONFIG += qt
-QT += declarative
+QT += qml
 
 SOURCES += window.cpp

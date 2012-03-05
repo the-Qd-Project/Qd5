@@ -1,6 +1,6 @@
 TEMPLATE = lib
 CONFIG += qt plugin
-QT += declarative quick
+QT += qml quick
 
 DESTDIR = ChartsPlugin
 TARGET = chartsplugin

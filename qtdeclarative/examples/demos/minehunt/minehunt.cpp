@@ -45,25 +45,25 @@
 
 #include "minehunt.h"
 
-void tilesPropAppend(QDeclarativeListProperty<TileData>* prop, TileData* value)
+void tilesPropAppend(QQmlListProperty<TileData>* prop, TileData* value)
 {
     Q_UNUSED(prop);
     Q_UNUSED(value);
     return; //Append not supported
 }
 
-int tilesPropCount(QDeclarativeListProperty<TileData>* prop)
+int tilesPropCount(QQmlListProperty<TileData>* prop)
 {
     return static_cast<QList<TileData*>*>(prop->data)->count();
 }
 
-TileData* tilesPropAt(QDeclarativeListProperty<TileData>* prop, int index)
+TileData* tilesPropAt(QQmlListProperty<TileData>* prop, int index)
 {
     return static_cast<QList<TileData*>*>(prop->data)->at(index);
 }
 
-QDeclarativeListProperty<TileData> MinehuntGame::tiles(){
-    return QDeclarativeListProperty<TileData>(this, &_tiles, &tilesPropAppend,
+QQmlListProperty<TileData> MinehuntGame::tiles(){
+    return QQmlListProperty<TileData>(this, &_tiles, &tilesPropAppend,
             &tilesPropCount, &tilesPropAt, 0);
 }
 

@@ -41,8 +41,8 @@
 
 #include <QtGui/QGuiApplication>
 #include <QtQuick/qquickview.h>
-#include <QtDeclarative/QDeclarativeContext>
-#include <QtDeclarative/QDeclarativeEngine>
+#include <QtQml/QQmlContext>
+#include <QtQml/QQmlEngine>
 
 #include "minehunt.h"
 

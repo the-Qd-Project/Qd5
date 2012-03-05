@@ -39,16 +39,16 @@
 ****************************************************************************/
 
 #include <QtGui/QGuiApplication>
-#include <QtDeclarative/QDeclarativeEngine>
-#include <QtDeclarative/QDeclarativeComponent>
+#include <QtQml/QQmlEngine>
+#include <QtQml/QQmlComponent>
 #include <QtCore/QUrl>
 #include <QDebug>
 
 int main(int argc, char* argv[])
 {
     QGuiApplication app(argc, argv);
-    QDeclarativeEngine engine;
-    QDeclarativeComponent component(&engine);
+    QQmlEngine engine;
+    QQmlComponent component(&engine);
     component.loadUrl(QUrl::fromLocalFile("Window.qml"));
     if ( component.isReady() )
         component.create();

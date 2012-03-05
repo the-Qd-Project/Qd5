@@ -1,4 +1,4 @@
-QT += declarative quick
+QT += qml quick
 
 HEADERS += minehunt.h
 SOURCES += main.cpp minehunt.cpp

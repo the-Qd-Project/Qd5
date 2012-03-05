@@ -47,7 +47,7 @@ class PieSlice;
 class PieChart : public QQuickItem
 {
     Q_OBJECT
-    Q_PROPERTY(QDeclarativeListProperty<PieSlice> slices READ slices)
+    Q_PROPERTY(QQmlListProperty<PieSlice> slices READ slices)
     Q_PROPERTY(QString name READ name WRITE setName)
 
 public:
@@ -56,10 +56,10 @@ public:
     QString name() const;
     void setName(const QString &name);
 
-    QDeclarativeListProperty<PieSlice> slices();
+    QQmlListProperty<PieSlice> slices();
 
 private:
-    static void append_slice(QDeclarativeListProperty<PieSlice> *list, PieSlice *slice);
+    static void append_slice(QQmlListProperty<PieSlice> *list, PieSlice *slice);
 
     QString m_name;
     QList<PieSlice *> m_slices;
