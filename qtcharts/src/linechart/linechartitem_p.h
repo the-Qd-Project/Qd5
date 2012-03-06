@@ -14,7 +14,7 @@ class LineChartItem :  public XYChartItem
 {
      Q_OBJECT
 public:
-    LineChartItem(QLineSeries* series,QGraphicsItem *parent = 0);
+     explicit LineChartItem(QLineSeries* series,QGraphicsItem *parent = 0);
     ~ LineChartItem(){};
 
     //from QGraphicsItem
@@ -25,14 +25,15 @@ public:
     void setPen(const QPen& pen);
     void setPointsVisible(bool visible);
 
-    void createPoints(int count);
-    void deletePoints(int count);
-
 public slots:
     void handleUpdated();
 
 protected:
     virtual void setGeometry(QVector<QPointF>& points);
+
+private:
+    void createPoints(int count);
+    void deletePoints(int count);
 
 private:
     QLineSeries* m_series;
