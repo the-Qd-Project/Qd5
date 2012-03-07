@@ -63,7 +63,7 @@ private:
     void loadMaterials(QIODevice *device);
     QGLTexture2D *loadTexture(const QString& name);
 
-    QGLMaterialCollection *palette;
+    QSharedPointer<QGLMaterialCollection> palette;
     QGL::Smoothing smoothing;
     bool smoothingForced;
 //! [2]
