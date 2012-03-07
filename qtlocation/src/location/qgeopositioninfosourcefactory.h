@@ -45,29 +45,23 @@
 #include "qgeopositioninfosource.h"
 #include "qgeosatelliteinfosource.h"
 #include <QList>
-#include <QFactoryInterface>
 
 QT_BEGIN_HEADER
 
 QT_BEGIN_NAMESPACE
 
-
-
-class Q_LOCATION_EXPORT QGeoPositionInfoSourceFactory : public QFactoryInterface
+class Q_LOCATION_EXPORT QGeoPositionInfoSourceFactory
 {
 public:
     virtual ~QGeoPositionInfoSourceFactory();
-
-    virtual QString sourceName() const = 0;
-    virtual int sourceVersion() const = 0;
-    virtual int sourcePriority() const;
 
     virtual QGeoPositionInfoSource *positionInfoSource(QObject *parent) = 0;
     virtual QGeoSatelliteInfoSource *satelliteInfoSource(QObject *parent) = 0;
 };
 
-#define QT_POSITION_SOURCE_INTERFACE "com.nokia.qt.position.sourcefactory/1.0"
-Q_DECLARE_INTERFACE(QGeoPositionInfoSourceFactory, QT_POSITION_SOURCE_INTERFACE);
+#define QT_POSITION_SOURCE_INTERFACE
+Q_DECLARE_INTERFACE(QGeoPositionInfoSourceFactory,
+                    "org.qt-project.qt.position.sourcefactory/5.0");
 
 QT_END_NAMESPACE
 
