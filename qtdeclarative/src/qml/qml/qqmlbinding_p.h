@@ -63,102 +63,13 @@
 #include <QtCore/QMetaProperty>
 
 #include <private/qpointervaluepair_p.h>
+#include <private/qqmlabstractbinding_p.h>
 
 QT_BEGIN_NAMESPACE
 
-class Q_QML_PRIVATE_EXPORT QQmlAbstractBinding
-{
-public:
-    typedef QWeakPointer<QQmlAbstractBinding> Pointer;
-
-    QQmlAbstractBinding();
-
-    virtual void destroy();
-
-    virtual QString expression() const;
-
-    enum Type { PropertyBinding, ValueTypeProxy };
-    virtual Type bindingType() const { return PropertyBinding; }
-
-    // Should return the encoded property index for the binding.  Should return this value
-    // even if the binding is not enabled or added to an object.
-    // Encoding is:  coreIndex | (valueTypeIndex << 24)
-    virtual int propertyIndex() const = 0;
-    // Should return the object for the binding.  Should return this object even if the
-    // binding is not enabled or added to the object.
-    virtual QObject *object() const = 0;
-
-    void setEnabled(bool e) { setEnabled(e, QQmlPropertyPrivate::DontRemoveBinding); }
-    virtual void setEnabled(bool, QQmlPropertyPrivate::WriteFlags) = 0;
-
-    void update() { update(QQmlPropertyPrivate::DontRemoveBinding); }
-    virtual void update(QQmlPropertyPrivate::WriteFlags) = 0;
-
-    void addToObject();
-    void removeFromObject();
-
-    static inline Pointer getPointer(QQmlAbstractBinding *p);
-
-protected:
-    virtual ~QQmlAbstractBinding();
-    void clear();
-
-    // Called by QQmlPropertyPrivate to "move" a binding to a different property.
-    // This is only used for alias properties, and only used by QQmlBinding not
-    // V8 or V4 bindings.  The default implementation qFatal()'s to ensure that the
-    // method is never called for V4 or V8 bindings.
-    virtual void retargetBinding(QObject *, int);
-private:
-    Pointer weakPointer();
-
-    friend class QQmlData;
-    friend class QQmlComponentPrivate;
-    friend class QQmlValueTypeProxyBinding;
-    friend class QQmlPropertyPrivate;
-    friend class QQmlVME;
-    friend class QtSharedPointer::ExternalRefCount<QQmlAbstractBinding>;
-
-    typedef QSharedPointer<QQmlAbstractBinding> SharedPointer;
-    // To save memory, we also store the rarely used weakPointer() instance in here
-    QPointerValuePair<QQmlAbstractBinding*, SharedPointer> m_mePtr;
-
-    QQmlAbstractBinding **m_prevBinding;
-    QQmlAbstractBinding  *m_nextBinding;
-};
-
-class QQmlValueTypeProxyBinding : public QQmlAbstractBinding
-{
-public:
-    QQmlValueTypeProxyBinding(QObject *o, int coreIndex);
-
-    virtual Type bindingType() const { return ValueTypeProxy; }
-
-    virtual void setEnabled(bool, QQmlPropertyPrivate::WriteFlags);
-    virtual void update(QQmlPropertyPrivate::WriteFlags);
-    virtual int propertyIndex() const;
-    virtual QObject *object() const;
-
-    QQmlAbstractBinding *binding(int propertyIndex);
-
-    void removeBindings(quint32 mask);
-
-protected:
-    ~QQmlValueTypeProxyBinding();
-
-private:
-    void recursiveEnable(QQmlAbstractBinding *, QQmlPropertyPrivate::WriteFlags);
-    void recursiveDisable(QQmlAbstractBinding *);
-
-    friend class QQmlAbstractBinding;
-    QObject *m_object;
-    int m_index;
-    QQmlAbstractBinding *m_bindings;
-};
-
 class QQmlContext;
 class QQmlBindingPrivate;
-class Q_QML_PRIVATE_EXPORT QQmlBinding : public QQmlExpression,
-                                                         public QQmlAbstractBinding
+class Q_QML_PRIVATE_EXPORT QQmlBinding : public QQmlExpression, public QQmlAbstractBinding
 {
 Q_OBJECT
 public:
@@ -205,12 +116,6 @@ private:
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QQmlBinding::EvaluateFlags)
-
-QQmlAbstractBinding::Pointer
-QQmlAbstractBinding::getPointer(QQmlAbstractBinding *p)
-{
-    return p ? p->weakPointer() : Pointer();
-}
 
 QT_END_NAMESPACE
 
