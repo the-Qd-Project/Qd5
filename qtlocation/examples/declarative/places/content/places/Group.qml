@@ -51,7 +51,6 @@ Item {
         id: heading
         text: '#heading#'
         anchors.left: parent.left
-        y: 5
     }
 
     Rectangle {
