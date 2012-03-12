@@ -50,10 +50,10 @@
 #define QGEOMAPDATA_NOKIA_H
 
 #include "qgeotiledmapdata_p.h"
+#include <QImage>
+#include <QSize>
 
 QT_BEGIN_NAMESPACE
-
-class QGeoTileCache;
 
 class QGeoTiledMapDataNokia: public QGeoTiledMapData
 {
@@ -62,8 +62,18 @@ public:
     QGeoTiledMapDataNokia(QGeoTiledMappingManagerEngine *engine, QObject *parent = 0);
     ~QGeoTiledMapDataNokia();
 
+    QString getViewCopyright();
+    void evaluateCopyrights(const QSet<QGeoTileSpec> &visibleTiles);
+
 private:
     Q_DISABLE_COPY(QGeoTiledMapDataNokia)
+
+    QImage watermark;
+    QPoint lastTopLeft;
+    QPoint lastBottomRight;
+    int lastZoomLevel;
+    int lastMapId;
+    QSize mapSize;
 };
 
 QT_END_NAMESPACE

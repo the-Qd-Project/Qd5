@@ -113,6 +113,7 @@ Q_SIGNALS:
     void cameraDataChanged(const QGeoCameraData &cameraData);
     void updateRequired();
     void activeMapTypeChanged();
+    void copyrightsChanged(const QImage &copyrightsImage, const QPoint &copyrightsPos);
 
 private:
     QGeoMapData *mapData_;
