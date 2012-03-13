@@ -59,7 +59,7 @@ public:
     ~QPlaceCategoryPrivate();
     QPlaceCategoryPrivate &operator= (const QPlaceCategoryPrivate &other);
     bool operator==(const QPlaceCategoryPrivate &other) const;
-
+    bool isEmpty() const;
 
     QString categoryId;
     QString name;
