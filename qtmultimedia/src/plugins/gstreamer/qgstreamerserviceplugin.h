@@ -45,6 +45,7 @@
 
 #include <qmediaserviceproviderplugin.h>
 #include <QtCore/qset.h>
+#include <QtCore/QObject>
 
 QT_BEGIN_NAMESPACE
 
@@ -59,8 +60,8 @@ class QGstreamerServicePlugin
     Q_INTERFACES(QMediaServiceSupportedDevicesInterface)
     Q_INTERFACES(QMediaServiceFeaturesInterface)
     Q_INTERFACES(QMediaServiceSupportedFormatsInterface)
+    Q_PLUGIN_METADATA(IID "com.nokia.Qt.QMediaServiceProviderFactoryInterface/1.0" FILE "gstreamer.json")
 public:
-    QStringList keys() const;
     QMediaService* create(QString const& key);
     void release(QMediaService *service);
 

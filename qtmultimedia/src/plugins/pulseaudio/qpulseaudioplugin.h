@@ -52,11 +52,12 @@ class QPulseAudioPlugin : public QAudioSystemPlugin
 {
     Q_OBJECT
 
+    Q_PLUGIN_METADATA(IID "com.nokia.qt.QAudioSystemFactoryInterface" FILE "pulseaudio.json")
+
 public:
     QPulseAudioPlugin(QObject *parent = 0);
     ~QPulseAudioPlugin() {}
 
-    QStringList keys() const;
     QList<QByteArray> availableDevices(QAudio::Mode mode) const;
     QAbstractAudioInput *createInput(const QByteArray &device);
     QAbstractAudioOutput *createOutput(const QByteArray &device);
