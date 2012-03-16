@@ -55,7 +55,7 @@ class QPlatformOpenGLContext;
 class QEglFSScreen : public QPlatformScreen //huh: FullScreenScreen ;) just to follow namespace
 {
 public:
-    QEglFSScreen(EGLNativeDisplayType display);
+    QEglFSScreen();
     ~QEglFSScreen();
 
     QRect geometry() const;
@@ -76,6 +76,7 @@ private:
     QPlatformOpenGLContext *m_platformContext;
     EGLDisplay m_dpy;
     EGLSurface m_surface;
+    EGLNativeWindowType m_window;
 };
 
 QT_END_NAMESPACE
