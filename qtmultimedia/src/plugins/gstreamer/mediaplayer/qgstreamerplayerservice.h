@@ -61,6 +61,7 @@ class QGstreamerStreamsControl;
 class QGstreamerVideoRenderer;
 class QGstreamerVideoOverlay;
 class QGstreamerVideoWidgetControl;
+class QGStreamerAvailabilityControl;
 
 class QGstreamerPlayerService : public QMediaService
 {
@@ -77,6 +78,7 @@ private:
     QGstreamerPlayerSession *m_session;
     QGstreamerMetaDataProvider *m_metaData;
     QGstreamerStreamsControl *m_streamsControl;
+    QGStreamerAvailabilityControl *m_availabilityControl;
 
     QMediaControl *m_videoOutput;
     QMediaControl *m_videoRenderer;
