@@ -54,6 +54,7 @@
 //
 
 #include <QtCore/qmap.h>
+#include <QtCore/qset.h>
 #include <gst/gst.h>
 #include <qaudioformat.h>
 
@@ -71,6 +72,10 @@ namespace QGstUtils {
     QAudioFormat audioFormatForCaps(const GstCaps *caps);
     QAudioFormat audioFormatForBuffer(GstBuffer *buffer);
     GstCaps *capsForAudioFormat(QAudioFormat format);
+    void initializeGst();
+    QtMultimedia::SupportEstimate hasSupport(const QString &mimeType,
+                                             const QStringList &codecs,
+                                             const QSet<QString> &supportedMimeTypeSet);
 }
 
 QT_END_NAMESPACE
