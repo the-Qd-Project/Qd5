@@ -42,7 +42,7 @@ import QtQuick 2.0
 import QtLocation 5.0
 import QtLocation.examples 5.0
 
-Dialog {
+InputDialog {
     title: "Edit Category"
 
     property Category category
