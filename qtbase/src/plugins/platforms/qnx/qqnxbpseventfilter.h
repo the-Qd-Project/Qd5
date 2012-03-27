@@ -52,13 +52,15 @@ class QAbstractEventDispatcher;
 class QQnxNavigatorEventHandler;
 class QQnxScreen;
 class QQnxScreenEventHandler;
+class QQnxVirtualKeyboardBps;
 
 class QQnxBpsEventFilter : public QObject
 {
     Q_OBJECT
 public:
     QQnxBpsEventFilter(QQnxNavigatorEventHandler *navigatorEventHandler,
-                       QQnxScreenEventHandler *screenEventHandler, QObject *parent = 0);
+                       QQnxScreenEventHandler *screenEventHandler,
+                       QQnxVirtualKeyboardBps *virtualKeyboard, QObject *parent = 0);
     ~QQnxBpsEventFilter();
 
     void installOnEventDispatcher(QAbstractEventDispatcher *dispatcher);
@@ -75,6 +77,7 @@ private:
 private:
     QQnxNavigatorEventHandler *m_navigatorEventHandler;
     QQnxScreenEventHandler *m_screenEventHandler;
+    QQnxVirtualKeyboardBps *m_virtualKeyboard;
 };
 
 QT_END_NAMESPACE
