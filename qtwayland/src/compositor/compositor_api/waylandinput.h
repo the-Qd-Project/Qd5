@@ -48,6 +48,7 @@
 
 class WaylandCompositor;
 class WaylandSurface;
+class QKeyEvent;
 class QTouchEvent;
 
 namespace Wayland {
@@ -67,6 +68,8 @@ public:
 
     void sendKeyPressEvent(uint code);
     void sendKeyReleaseEvent(uint code);
+
+    void sendFullKeyEvent(QKeyEvent *event);
 
     void sendTouchPointEvent(int id, int x, int y, Qt::TouchPointState state);
     void sendTouchFrameEvent();
