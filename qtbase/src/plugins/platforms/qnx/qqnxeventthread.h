@@ -44,9 +44,6 @@
 
 #include <QtCore/QThread>
 
-#include <QtGui/QPlatformScreen>
-#include <QtGui/QWindowSystemInterface>
-
 #include <screen/screen.h>
 
 QT_BEGIN_NAMESPACE
@@ -54,7 +51,7 @@ QT_BEGIN_NAMESPACE
 class QQnxEventThread : public QThread
 {
 public:
-    QQnxEventThread(screen_context_t context, QPlatformScreen& screen);
+    explicit QQnxEventThread(screen_context_t context);
     virtual ~QQnxEventThread();
 
     static void injectKeyboardEvent(int flags, int sym, int mod, int scan, int cap);
@@ -63,26 +60,10 @@ protected:
     virtual void run();
 
 private:
-    enum {
-        MaximumTouchPoints = 10
-    };
-
     void shutdown();
-    void dispatchEvent(screen_event_t event);
-    void handleKeyboardEvent(screen_event_t event);
-    void handlePointerEvent(screen_event_t event);
-    void handleTouchEvent(screen_event_t event, int type);
-    void handleCloseEvent(screen_event_t event);
 
     screen_context_t m_screenContext;
-    QPlatformScreen& m_platformScreen;
     bool m_quit;
-    QPoint m_lastGlobalMousePoint;
-    QPoint m_lastLocalMousePoint;
-    Qt::MouseButtons m_lastButtonState;
-    screen_window_t m_lastMouseWindow;
-    QTouchDevice *m_touchDevice;
-    QWindowSystemInterface::TouchPoint m_touchPoints[MaximumTouchPoints];
 };
 
 QT_END_NAMESPACE
