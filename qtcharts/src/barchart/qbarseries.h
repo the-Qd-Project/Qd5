@@ -33,6 +33,7 @@ typedef QStringList QBarCategories;
 class QBarSet;
 class BarChartModel;
 class BarCategory;
+class QBarSeriesPrivate;
 
 // Container for series
 class QTCOMMERCIALCHART_EXPORT QBarSeries : public QSeries
@@ -58,7 +59,7 @@ public:
     void setLabelsVisible(bool visible = true);
 
     bool setModel(QAbstractItemModel *model);
-    void setModelMapping(int categories, int bottomBoundry, int topBoundry, Qt::Orientation orientation = Qt::Vertical);    
+    void setModelMapping(int categories, int bottomBoundary, int topBoundary, Qt::Orientation orientation = Qt::Vertical);
 
 public:
     // TODO: Functions below this are not part of api and will be moved
@@ -85,7 +86,7 @@ Q_SIGNALS:
 
     // TODO: internal signals, these to private implementation.
     // TODO: TO PIMPL --->
-    void showToolTip(QPoint pos, QString tip);
+//    void showToolTip(QPoint pos, QString tip);
     // <--- TO PIMPL
 
 public Q_SLOTS:
@@ -103,6 +104,11 @@ private Q_SLOTS:
     void barsetChanged();
 
 protected:
+    QBarSeriesPrivate * const d_ptr;
+    Q_DECLARE_PRIVATE(QBarSeries)
+    Q_DISABLE_COPY(QBarSeries)
+
+/*
     BarChartModel *m_internalModel;     // TODO: this may change... current "2 models" situation doesn't look good.
 
 //    QAbstractItemModel* m_model;
@@ -112,6 +118,7 @@ protected:
     int m_mapFirst;
     int m_mapCount;
     Qt::Orientation m_mapOrientation;
+*/
 };
 
 QTCOMMERCIALCHART_END_NAMESPACE
