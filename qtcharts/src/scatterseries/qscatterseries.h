@@ -25,6 +25,7 @@
 #include <qxyseries.h>
 
 QTCOMMERCIALCHART_BEGIN_NAMESPACE
+
 class QScatterSeriesPrivate;
 
 class QTCOMMERCIALCHART_EXPORT QScatterSeries : public QXYSeries
@@ -37,21 +38,21 @@ public:
     };
 
 public:
-    QScatterSeries(QObject *parent = 0);
+    explicit QScatterSeries(QObject *parent = 0);
     ~QScatterSeries();
 
-public: // from QChartSeries
-    QSeriesType type() const { return QSeries::SeriesTypeScatter; }
+    QSeries::QSeriesType type() const;
 
-public:
     MarkerShape shape() const;
     void setShape(MarkerShape shape);
     qreal size() const;
     void setSize(qreal size);
 
 private:
-    MarkerShape m_shape;
-    qreal m_size;
+    Q_DECLARE_PRIVATE(QScatterSeries);
+    Q_DISABLE_COPY(QScatterSeries);
+    friend class ScatterChartItem;
+
 };
 
 QTCOMMERCIALCHART_END_NAMESPACE
