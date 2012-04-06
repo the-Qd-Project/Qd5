@@ -35,9 +35,13 @@
 QTCOMMERCIALCHART_BEGIN_NAMESPACE
 
 
-struct QLineSeriesPrivate: public QXYSeriesPrivate
+class QLineSeriesPrivate: public QXYSeriesPrivate
 {
+public:
     QLineSeriesPrivate(QLineSeries* q);
+    Chart* createGraphics(ChartPresenter* presenter);
+private:
+    Q_DECLARE_PUBLIC(QLineSeries);
 
 };
 
