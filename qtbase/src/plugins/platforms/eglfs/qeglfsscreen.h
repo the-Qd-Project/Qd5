@@ -51,6 +51,7 @@
 QT_BEGIN_NAMESPACE
 
 class QPlatformOpenGLContext;
+class QEglFSCursor;
 
 class QEglFSScreen : public QPlatformScreen //huh: FullScreenScreen ;) just to follow namespace
 {
@@ -61,6 +62,8 @@ public:
     QRect geometry() const;
     int depth() const;
     QImage::Format format() const;
+
+    QPlatformCursor *cursor() const;
 
     QPlatformOpenGLContext *platformContext() const;
 
@@ -77,6 +80,7 @@ private:
     EGLDisplay m_dpy;
     EGLSurface m_surface;
     EGLNativeWindowType m_window;
+    QEglFSCursor *m_cursor;
 };
 
 QT_END_NAMESPACE
