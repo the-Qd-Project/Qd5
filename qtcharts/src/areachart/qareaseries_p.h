@@ -45,6 +45,7 @@ public:
 
     void scaleDomain(Domain& domain);
     Chart* createGraphics(ChartPresenter* presenter);
+    QList<LegendMarker*> createLegendMarker(QLegend* legend);
 
 Q_SIGNALS:
     void updated();
