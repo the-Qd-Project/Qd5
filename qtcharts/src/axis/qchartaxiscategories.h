@@ -26,6 +26,8 @@
 
 QTCOMMERCIALCHART_BEGIN_NAMESPACE
 
+class QChartAxisCategoriesPrivate;
+
 class QTCOMMERCIALCHART_EXPORT QChartAxisCategories : public QObject
 {
     Q_OBJECT
@@ -42,14 +44,10 @@ public:
     void clear();
     int count();
 
-//internal signal
-Q_SIGNALS:
-    void updated();
-
 private:
-    QMap<qreal,QString> m_map;
-
-friend class QChartAxis;
+    QScopedPointer<QChartAxisCategoriesPrivate> d_ptr;
+    friend class QChartAxisPrivate;
+    friend class Axis;
 };
 
 
