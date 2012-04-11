@@ -43,6 +43,7 @@
 #define QPLATFORMINTEGRATION_KMS_H
 
 #include <QtGui/QPlatformIntegration>
+#include <QtGui/QPlatformNativeInterface>
 
 QT_BEGIN_NAMESPACE
 
@@ -66,6 +67,8 @@ public:
 
     void addScreen(QKmsScreen *screen);
 
+    QPlatformNativeInterface *nativeInterface() const;
+
 private:
     QStringList findDrmDevices();
 
@@ -73,6 +76,7 @@ private:
     QList<QKmsDevice *> m_devices;
     QPlatformFontDatabase *m_fontDatabase;
     QAbstractEventDispatcher *m_eventDispatcher;
+    QPlatformNativeInterface *m_nativeInterface;
 };
 
 QT_END_NAMESPACE
