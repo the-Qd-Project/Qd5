@@ -41,21 +41,17 @@
 
 #include "qqnxservices.h"
 
-#include <bps/navigator.h>
-#include <stdbool.h>
-#include <sys/platform.h>
-#include <QUrl>
+#include "qqnxabstractnavigator.h"
 
 QT_BEGIN_NAMESPACE
 
-QQnxServices::QQnxServices()
+QQnxServices::QQnxServices(QQnxAbstractNavigator *navigator)
+    : m_navigator(navigator)
 {
-    bps_initialize();
 }
 
 QQnxServices::~QQnxServices()
 {
-    bps_shutdown();
 }
 
 bool QQnxServices::openUrl(const QUrl &url)
@@ -70,12 +66,7 @@ bool QQnxServices::openDocument(const QUrl &url)
 
 bool QQnxServices::navigatorInvoke(const QUrl &url)
 {
-    if (!url.isValid() || url.isRelative())
-        return false;
-
-    int ret = navigator_invoke(url.toString().toUtf8(), 0);
-
-    return (ret == BPS_SUCCESS);
+    return m_navigator->invokeUrl(url);
 }
 
 QT_END_NAMESPACE
