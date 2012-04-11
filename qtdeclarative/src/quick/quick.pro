@@ -22,7 +22,6 @@ load(qt_module_config)
 include(util/util.pri)
 include(scenegraph/scenegraph.pri)
 include(items/items.pri)
-include(particles/particles.pri)
 include(designer/designer.pri)
 
 HEADERS += \
