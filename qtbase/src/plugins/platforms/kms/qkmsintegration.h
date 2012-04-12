@@ -49,6 +49,8 @@ QT_BEGIN_NAMESPACE
 
 class QKmsScreen;
 class QKmsDevice;
+class QKmsUdevListener;
+class QKmsUdevDRMHandler;
 
 class QKmsIntegration : public QPlatformIntegration
 {
@@ -65,9 +67,10 @@ public:
     QPlatformFontDatabase *fontDatabase() const;
     QAbstractEventDispatcher *guiThreadEventDispatcher() const;
 
-    void addScreen(QKmsScreen *screen);
-
     QPlatformNativeInterface *nativeInterface() const;
+
+    void addScreen(QKmsScreen *screen);
+    QObject *createDevice(const char *);
 
 private:
     QStringList findDrmDevices();
@@ -77,6 +80,8 @@ private:
     QPlatformFontDatabase *m_fontDatabase;
     QAbstractEventDispatcher *m_eventDispatcher;
     QPlatformNativeInterface *m_nativeInterface;
+    QKmsUdevListener *m_udevListener;
+    QKmsUdevDRMHandler *m_drmHandler;
 };
 
 QT_END_NAMESPACE
