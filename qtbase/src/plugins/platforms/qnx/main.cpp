@@ -39,17 +39,10 @@
 **
 ****************************************************************************/
 
-#include <QtGui/QPlatformIntegrationPlugin>
+#include "main.h"
 #include "qqnxintegration.h"
 
 QT_BEGIN_NAMESPACE
-
-class QQnxIntegrationPlugin : public QPlatformIntegrationPlugin
-{
-public:
-    QStringList keys() const;
-    QPlatformIntegration *create(const QString&, const QStringList&);
-};
 
 QStringList QQnxIntegrationPlugin::keys() const
 {
@@ -66,7 +59,5 @@ QPlatformIntegration *QQnxIntegrationPlugin::create(const QString& system, const
 
     return 0;
 }
-
-Q_EXPORT_PLUGIN2(qnx, QQnxIntegrationPlugin)
 
 QT_END_NAMESPACE
