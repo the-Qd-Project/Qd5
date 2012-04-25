@@ -41,18 +41,52 @@
 
 #include "qqnxtheme.h"
 
+#include "qqnxfiledialoghelper.h"
 #include "qqnxsystemsettings.h"
 
 QT_BEGIN_NAMESPACE
 
-QQnxTheme::QQnxTheme(QPlatformFontDatabase *fontDatabase)
-    : m_fontDatabase(fontDatabase)
+QQnxTheme::QQnxTheme(QPlatformFontDatabase *fontDatabase,
+                     QQnxBpsEventFilter *eventFilter)
+    : m_fontDatabase(fontDatabase),
+      m_eventFilter(eventFilter)
 {
 }
 
 QQnxTheme::~QQnxTheme()
 {
     qDeleteAll(m_fonts);
+}
+
+bool QQnxTheme::usePlatformNativeDialog(DialogType type) const
+{
+    if (type == QPlatformTheme::FileDialog)
+        return true;
+#if !defined(QT_NO_COLORDIALOG)
+    if (type == QPlatformTheme::ColorDialog)
+        return false;
+#endif
+#if !defined(QT_NO_FONTDIALOG)
+    if (type == QPlatformTheme::FontDialog)
+        return false;
+#endif
+    return false;
+}
+
+QPlatformDialogHelper *QQnxTheme::createPlatformDialogHelper(DialogType type) const
+{
+    switch (type) {
+    case QPlatformTheme::FileDialog:
+        return new QQnxFileDialogHelper(m_eventFilter);
+#ifndef QT_NO_COLORDIALOG
+    case QPlatformTheme::ColorDialog:
+#endif
+#ifndef QT_NO_FONTDIALOG
+    case QPlatformTheme::FontDialog:
+#endif
+    default:
+        return 0;
+    }
 }
 
 const QFont *QQnxTheme::font(Font type) const
