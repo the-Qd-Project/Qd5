@@ -39,6 +39,8 @@ private slots:
     void qbarseries();
     void type_data();
     void type();
+    void setCategories_data();
+    void setCategories();
     void appendBarSet_data();
     void appendBarSet();
     void removeBarSet_data();
@@ -134,6 +136,27 @@ void tst_QBarSeries::type_data()
 void tst_QBarSeries::type()
 {
     QVERIFY(m_barseries->type() == QAbstractSeries::SeriesTypeBar);
+}
+
+void tst_QBarSeries::setCategories_data()
+{
+    QTest::addColumn<QBarCategories> ("categories");
+    QBarCategories categories;
+    categories << "c1" << "c2" << "c3" << "c4" << "c5" << "c6";
+    QTest::newRow("cat") << categories;
+}
+
+void tst_QBarSeries::setCategories()
+{
+    QVERIFY(m_barseries->categories().count() == m_categories.count());
+
+    QFETCH(QBarCategories, categories);
+    m_barseries->setCategories(categories);
+
+    QVERIFY(m_barseries->categories().count() == categories.count());
+    for (int i=0; i<categories.count(); i++) {
+        QVERIFY(m_barseries->categories().at(i).compare(categories.at(i)) == 0);
+    }
 }
 
 void tst_QBarSeries::appendBarSet_data()
@@ -308,9 +331,6 @@ void tst_QBarSeries::setLabelsVisible()
 }
 
 /*
-
-void setLabelsVisible(bool visible = true);
-
 bool setModel(QAbstractItemModel *model);
 void setModelMapping(int categories, int bottomBoundary, int topBoundary, Qt::Orientation orientation = Qt::Vertical);
 void setModelMappingRange(int first, int count = -1);
