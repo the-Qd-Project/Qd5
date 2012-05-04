@@ -54,6 +54,10 @@ public:
     QCocoaTheme();
     ~QCocoaTheme();
 
+    virtual QPlatformMenuItem* createPlatformMenuItem() const;
+    virtual QPlatformMenu* createPlatformMenu() const;
+    virtual QPlatformMenuBar* createPlatformMenuBar() const;
+
     bool usePlatformNativeDialog(DialogType dialogType) const;
     QPlatformDialogHelper *createPlatformDialogHelper(DialogType dialogType) const;
 

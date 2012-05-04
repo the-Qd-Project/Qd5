@@ -1,9 +1,10 @@
 /****************************************************************************
 **
 ** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** Copyright (C) 2012 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com, author James Turner <james.turner@kdab.com>
 ** Contact: http://www.qt-project.org/
 **
-** This file is part of the QtGui module of the Qt Toolkit.
+** This file is part of the plugins of the Qt Toolkit.
 **
 ** $QT_BEGIN_LICENSE:LGPL$
 ** GNU Lesser General Public License Usage
@@ -39,42 +40,66 @@
 **
 ****************************************************************************/
 
-//
-//  W A R N I N G
-//  -------------
-//
-// This file is not part of the Qt API.  It exists purely as an
-// implementation detail.  This header file may change from version to
-// version without notice, or even be removed.
-//
-// We mean it.
-//
+#ifndef QCOCOAMENU_H
+#define QCOCOAMENU_H
 
-#include "qmacdefines_mac.h"
-#import <Cocoa/Cocoa.h>
+#include <QtCore/QList>
+#include <qpa/qplatformmenu.h>
+#include "qcocoamenuitem.h"
 
-QT_FORWARD_DECLARE_CLASS(QMenu)
-QT_FORWARD_DECLARE_CLASS(QAction)
+@class NSMenuItem;
+@class NSMenu;
+@class NSObject;
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_5
+QT_BEGIN_HEADER
 
-@protocol NSMenuDelegate <NSObject>
-- (void)menu:(NSMenu*)menu willHighlightItem:(NSMenuItem*)item;
-- (void)menuWillOpen:(NSMenu*)menu;
-- (void)menuDidClose:(NSMenu*)menu;
-- (BOOL)hasShortcut:(NSMenu *)menu forKey:(NSString *)key forModifiers:(NSUInteger)modifier
-  whichItem:(NSMenuItem**)outItem;
-@end
+QT_BEGIN_NAMESPACE
+
+class QCocoaMenu : public QPlatformMenu
+{
+public:
+    QCocoaMenu();
+
+    inline virtual void setTag(quintptr tag)
+        { m_tag = tag; }
+    inline virtual quintptr tag() const
+        { return m_tag; }
+
+    void insertMenuItem(QPlatformMenuItem *menuItem, QPlatformMenuItem *before);
+    void removeMenuItem(QPlatformMenuItem *menuItem);
+    void syncMenuItem(QPlatformMenuItem *menuItem);
+    void setEnabled(bool enabled);
+    void syncSeparatorsCollapsible(bool enable);
+
+    void syncModalState(bool modal);
+
+    virtual void setText(const QString &text);
+
+    void setParentItem(QCocoaMenuItem* item);
+
+    inline NSMenu *nsMenu() const
+        { return m_nativeMenu; }
+    inline NSMenuItem *nsMenuItem() const
+        { return m_nativeItem; }
+
+    virtual QPlatformMenuItem *menuItemAt(int position) const;
+    virtual QPlatformMenuItem *menuItemForTag(quintptr tag) const;
+
+    QList<QCocoaMenuItem *> merged() const;
+private:
+    QCocoaMenuItem *itemOrNull(int index) const;
+    void insertNative(QCocoaMenuItem *item, QCocoaMenuItem *beforeItem);
+
+    QList<QCocoaMenuItem *> m_menuItems;
+    NSMenu *m_nativeMenu;
+    NSMenuItem *m_nativeItem;
+    NSObject *m_delegate;
+    bool m_enabled;
+    quintptr m_tag;
+};
+
+QT_END_NAMESPACE
+
+QT_END_HEADER
 
 #endif
-
-@interface QT_MANGLE_NAMESPACE(QNativeCocoaMenu) : NSMenu <NSMenuDelegate>
-{
-    QMenu *qmenu;
-    QAction *previousAction;
-}
-- (id)initWithQMenu:(QMenu*)menu;
-- (BOOL)menuHasKeyEquivalent:(NSMenu *)menu forEvent:(NSEvent *)event target:(id *)target action:(SEL *)action;
-- (NSInteger)indexOfItemWithTarget:(id)anObject andAction:(SEL)actionSelector;
-@end
-
