@@ -54,13 +54,12 @@
 #include <qgeoserviceprovider.h>
 #include <qgeocodingmanagerengine.h>
 
-
 #include <QLocale>
-
 
 QT_BEGIN_NAMESPACE
 
 class QGeoNetworkAccessManager;
+class QGeoUriProvider;
 
 class QGeocodingManagerEngineNokia : public QGeocodingManagerEngine
 {
@@ -93,9 +92,9 @@ private:
     QString getAuthenticationString() const;
 
     QGeoNetworkAccessManager *m_networkManager;
-    QString m_host;
     QString m_token;
     QString m_applicationId;
+    QGeoUriProvider *m_uriProvider;
 };
 
 QT_END_NAMESPACE
