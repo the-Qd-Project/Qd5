@@ -25,6 +25,9 @@
 #include "qpieslice.h"
 #include "qpieseries.h"
 #include <QDeclarativeListProperty>
+#include <QAbstractItemModel>
+#include <QVariant>
+#include "declarativepiemodel.h"
 
 QTCOMMERCIALCHART_BEGIN_NAMESPACE
 
@@ -33,15 +36,16 @@ class QChart;
 class DeclarativePieSeries : public QPieSeries
 {
     Q_OBJECT
-    Q_PROPERTY(QDeclarativeListProperty<QPieSlice> slices READ slices)
+    Q_PROPERTY(DeclarativePieModel *model READ pieModel WRITE setPieModel)
 
 public:
     explicit DeclarativePieSeries(QObject *parent = 0);
-    QDeclarativeListProperty<QPieSlice> slices();
 
 public Q_SLOTS:
-    static void appendSlice(QDeclarativeListProperty<QPieSlice> *list,
-                            QPieSlice *element);
+
+public:
+    bool setPieModel(DeclarativePieModel *model);
+    DeclarativePieModel *pieModel();
 };
 
 QTCOMMERCIALCHART_END_NAMESPACE
