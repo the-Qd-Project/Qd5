@@ -81,8 +81,6 @@ public:
 protected:
      static void setPrinterInfoDefault(QPrinterInfo *p, bool isDefault);
      static bool printerInfoIsDefault(const QPrinterInfo &p);
-     static int printerInfoCupsPrinterIndex(const QPrinterInfo &p);
-     static void setPrinterInfoCupsPrinterIndex(QPrinterInfo *p, int index);
 };
 
 #endif // QT_NO_PRINTER
