@@ -31,13 +31,10 @@ QTCOMMERCIALCHART_BEGIN_NAMESPACE
 class DeclarativeLineSeries : public QLineSeries, public DeclarativeXySeries
 {
     Q_OBJECT
-    Q_PROPERTY(QDeclarativeListProperty<DeclarativeXyPoint> points READ points)
+    Q_PROPERTY(DeclarativeXyModel *model READ declarativeModel WRITE setDeclarativeModel)
 
 public:
     explicit DeclarativeLineSeries(QObject *parent = 0);
-
-public:
-    QDeclarativeListProperty<DeclarativeXyPoint> points();
 };
 
 QTCOMMERCIALCHART_END_NAMESPACE
