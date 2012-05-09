@@ -41,6 +41,7 @@
 #include "qstyleplugin.h"
 #include "qstyleitem.h"
 #include "qrangemodel.h"
+#include "qwindowitem.h"
 #include "qdesktopitem.h"
 #include "qwheelarea.h"
 #include "qcursorarea.h"
@@ -84,6 +85,7 @@ void StylePlugin::registerTypes(const char *uri)
 
     qmlRegisterType<QFileSystemModel>(uri, 0, 2, "FileSystemModel");
     qmlRegisterType<QtSplitterBase>(uri, 0, 2, "Splitter");
+    qmlRegisterType<QWindowItem>("QtQuick", 2, 0, "Window");
 
     qmlRegisterUncreatableType<QDesktopItem>(uri, 0,2,"Desktop", QLatin1String("Do not create objects of type Desktop"));
 }
