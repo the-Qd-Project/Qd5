@@ -58,6 +58,10 @@ public:
     virtual QPlatformMenu* createPlatformMenu() const;
     virtual QPlatformMenuBar* createPlatformMenuBar() const;
 
+#ifndef QT_NO_SYSTEMTRAYICON
+    QPlatformSystemTrayIcon *createPlatformSystemTrayIcon() const;
+#endif
+
     bool usePlatformNativeDialog(DialogType dialogType) const;
     QPlatformDialogHelper *createPlatformDialogHelper(DialogType dialogType) const;
 
