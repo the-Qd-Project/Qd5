@@ -20,6 +20,7 @@
 
 #ifndef CHARTVIEW_H
 #define CHARTVIEW_H
+
 #include <QChartView>
 #include <QRubberBand>
 
@@ -34,6 +35,7 @@ public:
 
 //![2]
 protected:
+    bool viewportEvent(QEvent *event);
     void mousePressEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
@@ -41,9 +43,7 @@ protected:
 //![2]
 
 private:
-    QRubberBand m_rubberBand;
-    QPoint m_origin;
-    QChart* m_chart;
+    bool m_isTouching;
 };
 
 #endif
