@@ -29,6 +29,7 @@ Rectangle {
         anchors.fill: parent
         theme: ChartView.ChartThemeLight
         legend: ChartView.LegendBottom
+        // TODO: labels defined by x-axis, not by bar series
 //        axisXLabels: ["0", "2008", "1", "2009", "2", "2010", "3", "2012"]
         axisX.max: 10
 
@@ -38,21 +39,5 @@ Rectangle {
             BarSet { name: "Susan"; values: [5, 1, 2, 4, 1, 7] }
             BarSet { name: "James"; values: [3, 5, 8, 13, 5, 8] }
         }
-
-        // TODO: optional syntax with ChartModel base model API
-//        BarSeries {
-//            model: chartModel
-//            modelMapping: BarSeriesMapping {
-//                ?
-//                startIndex: 0 // defaults to 0
-//                count: BarSeriesMapping.Undefined // defaults to "Undefined"
-//            }
-//        }
-//        ChartModel {
-//            id: chartModel
-//            ChartModelElement { values: ["Bob", 2, 2, 3, 4, 5, 6] }
-//            ChartModelElement { values: ["Susan", 5, 1, 2, 4, 1, 7] }
-//            ChartModelElement { values: ["James", 3, 5, 8, 13, 5, 8] }
-//        }
     }
 }
