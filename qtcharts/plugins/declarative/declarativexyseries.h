@@ -39,6 +39,8 @@ public:
 public:
     bool setDeclarativeModel(DeclarativeTableModel *model);
     DeclarativeTableModel *declarativeModel();
+    QColor color();
+    void setColor(QColor color);
 };
 
 QTCOMMERCIALCHART_END_NAMESPACE
