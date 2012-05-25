@@ -2,15 +2,12 @@ CONFIG += testcase
 TARGET = tst_qqmlenginedebugservice
 macx:CONFIG -= app_bundle
 
-HEADERS += \
-    qqmlenginedebugclient.h
-
 SOURCES += \
-    tst_qqmlenginedebugservice.cpp \
-    qqmlenginedebugclient.cpp
+    tst_qqmlenginedebugservice.cpp
 
 INCLUDEPATH += ../shared
 include(../../../shared/util.pri)
+include(../shared/qqmlenginedebugclient.pri)
 include(../shared/debugutil.pri)
 
 DEFINES += QT_QML_DEBUG_NO_WARNING
