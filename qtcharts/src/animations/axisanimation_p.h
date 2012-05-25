@@ -21,22 +21,29 @@
 #ifndef AXISANIMATION_H
 #define AXISANIMATION_H
 
-#include "chartaxis_p.h"
 #include "chartanimation_p.h"
-
+#include <QPointF>
 
 QTCOMMERCIALCHART_BEGIN_NAMESPACE
+
+class ChartAxis;
 
 class AxisAnimation: public ChartAnimation
 {
 public:
+    enum Animation { DefaultAnimation, ZoomOutAnimation, ZoomInAnimation, MoveForwardAnimation, MoveBackwordAnimation};
     AxisAnimation(ChartAxis *axis);
     ~AxisAnimation();
+    void setAnimationType(Animation type);
+    void setAnimationPoint(const QPointF& point);
+    void setValues(QVector<qreal> &oldLayout, QVector<qreal> &newLayout);
 protected:
     QVariant interpolated(const QVariant &from, const QVariant &to, qreal progress ) const;
     void updateCurrentValue(const QVariant &value );
 private:
     ChartAxis *m_axis;
+    Animation m_type;
+    QPointF m_point;
 };
 
 QTCOMMERCIALCHART_END_NAMESPACE
