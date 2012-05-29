@@ -1,6 +1,7 @@
 /****************************************************************************
 **
 ** Copyright (C) 2011-2012 Denis Shienkov <scapig2@yandex.ru>
+** Copyright (C) 2012 Laszlo Papp <lpapp@kde.org>
 ** Contact: http://www.qt-project.org/
 **
 ** This file is part of the QtSerialPort module of the Qt Toolkit.
@@ -33,6 +34,7 @@
     \contentspage {Examples} {Contents}
 
     \list
+    \o \l examples/cenumerator
     \o \l examples/enumerator
     \o \l examples/terminal
     \endlist
