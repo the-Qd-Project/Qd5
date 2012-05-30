@@ -24,6 +24,7 @@ import QtCommercial.Chart 1.0
 Flow {
     id: flow
     spacing: 5
+    flow: Flow.TopToBottom
     property variant series
 
     Button {
@@ -39,7 +40,27 @@ Flow {
         onClicked: series.at(0).labelColor = main.nextColor();
     }
     Button {
+        text: "visible"
+        onClicked: series.visible = !series.visible;
+    }
+    Button {
         text: "labels visible"
         onClicked: series.labelsVisible = !series.labelsVisible;
+    }
+    Button {
+        text: "bar margin +"
+        onClicked: series.barMargin += 0.1;
+    }
+    Button {
+        text: "bar margin -"
+        onClicked: series.barMargin -= 0.1;
+    }
+    Button {
+        text: "set 1 font size +"
+        onClicked: series.at(0).labelFont.pixelSize += 1;
+    }
+    Button {
+        text: "set 1 font size -"
+        onClicked: series.at(0).labelFont.pixelSize -= 1;
     }
 }
