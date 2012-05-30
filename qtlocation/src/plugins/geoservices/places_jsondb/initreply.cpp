@@ -40,68 +40,39 @@
 ****************************************************************************/
 
 #include "initreply.h"
-#include "jsondb.h"
-
-#include <QtCore/QStringList>
+#include "traverser.h"
 
 CategoryInitReply::CategoryInitReply(QPlaceManagerEngineJsonDb *engine)
-    : QPlaceReply(engine), m_engine(engine)
+    : QPlaceReply(engine),
+      m_engine(engine),
+      m_traverser(new CategoryTraverser(m_engine->db(), this))
 {
+    Q_ASSERT(m_traverser);
+    connect(m_traverser, SIGNAL(finished()),
+            this, SLOT(requestFinished()));
 }
 
 CategoryInitReply::~CategoryInitReply()
 {
+    delete m_traverser;
 }
 
 void CategoryInitReply::start()
 {
-    CategoryNode rootNode;
-    m_queue.append(rootNode);
-    processNodeQueue();
-}
-
-void CategoryInitReply::processNodeQueue()
-{
-    if (!m_queue.isEmpty()) {
-        QString categoryId = m_queue.first().category.categoryId();
-        db()->getChildCategories(categoryId, this, SLOT(requestFinished()));
-    } else {
-        m_engine->setCategoryTree(m_tree);
-        triggerDone(QPlaceReply::NoError);
-        return;
-    }
+    m_traverser->start();
 }
 
 void CategoryInitReply::requestFinished()
 {
-    Q_ASSERT(!m_queue.isEmpty());
-
-    QJsonDbRequest *request = qobject_cast<QJsonDbRequest *>(sender());
-    Q_ASSERT(request);
-
-    QList<QPlaceCategory> categories = JsonDb::convertJsonObjectsToCategories(request->takeResults(),
-                                                                         m_engine);
-    foreach (const QPlaceCategory &category, categories) {
-        CategoryNode node;
-        node.category = category;
-        node.parentId = m_queue.first().category.categoryId();
-        m_queue.append(node);
+    if (!m_traverser->errorString().isEmpty()) {
+        QString errorString =
+                QString::fromLatin1("Unknown error occurred during initialize catgory operation: %1")
+                .arg(m_traverser->errorString());
+        triggerDone(QPlaceReply::UnknownError, errorString);
+        return;
     }
 
-    CategoryNode node = m_queue.takeFirst();
-    if (m_tree.contains(node.parentId)) {
-        QStringList parentChildIds = m_tree.value(node.parentId).childIds;
-        parentChildIds.append(node.category.categoryId());
-        m_tree[node.parentId].childIds = parentChildIds;
-    }
-
-    m_tree.insert(node.category.categoryId(), node);
-    processNodeQueue();
-}
-
-void CategoryInitReply::requestError(QJsonDbRequest::ErrorCode dbCode, const QString &dbErrorString)
-{
-    QString errorString = QString::fromLatin1("Unknown error occurred operation: jsondb error code =%1, erroString=%2").
-                  arg(dbCode).arg(dbErrorString);
-    triggerDone(QPlaceReply::UnknownError, errorString);
+    CategoryTree tree = CategoryTraverser::convertToTree(m_traverser->results(), m_engine);
+    m_engine->setCategoryTree(tree);
+    triggerDone(QPlaceReply::NoError);
 }
