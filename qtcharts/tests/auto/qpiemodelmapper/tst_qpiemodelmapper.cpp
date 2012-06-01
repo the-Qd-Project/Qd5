@@ -10,12 +10,12 @@
 
 QTCOMMERCIALCHART_USE_NAMESPACE
 
-class tst_piemodelmapper : public QObject
+class tst_qpiemodelmapper : public QObject
 {
     Q_OBJECT
     
     public:
-    tst_piemodelmapper();
+    tst_qpiemodelmapper();
     
     private Q_SLOTS:
     void initTestCase();
@@ -42,27 +42,27 @@ class tst_piemodelmapper : public QObject
     QChart *m_chart;
 };
 
-tst_piemodelmapper::tst_piemodelmapper():
+tst_qpiemodelmapper::tst_qpiemodelmapper():
     m_model(0),
     m_modelRowCount(10),
     m_modelColumnCount(8)
 {
 }
 
-void tst_piemodelmapper::init()
+void tst_qpiemodelmapper::init()
 {
     m_series = new QPieSeries;
     m_chart->addSeries(m_series);
 }
 
-void tst_piemodelmapper::cleanup()
+void tst_qpiemodelmapper::cleanup()
 {
     m_chart->removeSeries(m_series);
     delete m_series;
     m_series = 0;
 }
 
-void tst_piemodelmapper::initTestCase()
+void tst_qpiemodelmapper::initTestCase()
 {
     m_chart = new QChart;
     QChartView *chartView = new QChartView(m_chart);
@@ -77,12 +77,12 @@ void tst_piemodelmapper::initTestCase()
     }
 }
 
-void tst_piemodelmapper::cleanupTestCase()
+void tst_qpiemodelmapper::cleanupTestCase()
 {
     m_model->clear();
 }
 
-void tst_piemodelmapper::verticalMapper_data()
+void tst_qpiemodelmapper::verticalMapper_data()
 {
     QTest::addColumn<int>("valuesColumn");
     QTest::addColumn<int>("labelsColumn");
@@ -91,10 +91,10 @@ void tst_piemodelmapper::verticalMapper_data()
     QTest::newRow("same values and labels columns") << 1 << 1 << m_modelRowCount;
     QTest::newRow("invalid values column and correct labels column") << -3 << 1 << 0;
     QTest::newRow("values column beyond the size of model and correct labels column") << m_modelColumnCount << 1 << 0;
-    QTest::newRow("values column beyond the size of model and correct labels column") << m_modelColumnCount << -1 << 0;
+    QTest::newRow("values column beyond the size of model and invalid labels column") << m_modelColumnCount << -1 << 0;
 }
 
-void tst_piemodelmapper::verticalMapper()
+void tst_qpiemodelmapper::verticalMapper()
 {
     QFETCH(int, valuesColumn);
     QFETCH(int, labelsColumn);
@@ -114,7 +114,7 @@ void tst_piemodelmapper::verticalMapper()
     mapper = 0;
 }
 
-void tst_piemodelmapper::verticalMapperCustomMapping_data()
+void tst_qpiemodelmapper::verticalMapperCustomMapping_data()
 {
     QTest::addColumn<int>("first");
     QTest::addColumn<int>("countLimit");
@@ -132,7 +132,7 @@ void tst_piemodelmapper::verticalMapperCustomMapping_data()
 
 }
 
-void tst_piemodelmapper::verticalMapperCustomMapping()
+void tst_qpiemodelmapper::verticalMapperCustomMapping()
 {
     QFETCH(int, first);
     QFETCH(int, countLimit);
@@ -160,7 +160,7 @@ void tst_piemodelmapper::verticalMapperCustomMapping()
     mapper = 0;
 }
 
-void tst_piemodelmapper::horizontalMapper_data()
+void tst_qpiemodelmapper::horizontalMapper_data()
 {
     QTest::addColumn<int>("valuesRow");
     QTest::addColumn<int>("labelsRow");
@@ -172,7 +172,7 @@ void tst_piemodelmapper::horizontalMapper_data()
     QTest::newRow("values row beyond the size of model and invalid labels row") << m_modelRowCount << -1 << 0;
 }
 
-void tst_piemodelmapper::horizontalMapper()
+void tst_qpiemodelmapper::horizontalMapper()
 {
     QFETCH(int, valuesRow);
     QFETCH(int, labelsRow);
@@ -192,7 +192,7 @@ void tst_piemodelmapper::horizontalMapper()
     mapper = 0;
 }
 
-void tst_piemodelmapper::horizontalMapperCustomMapping_data()
+void tst_qpiemodelmapper::horizontalMapperCustomMapping_data()
 {
     QTest::addColumn<int>("first");
     QTest::addColumn<int>("countLimit");
@@ -209,7 +209,7 @@ void tst_piemodelmapper::horizontalMapperCustomMapping_data()
     QTest::newRow("first: -3(invalid - should default to 0), count: -3 (invalid - shlould default to -1)") << -3 << -3 << m_modelColumnCount;
 }
 
-void tst_piemodelmapper::horizontalMapperCustomMapping()
+void tst_qpiemodelmapper::horizontalMapperCustomMapping()
 {
     QFETCH(int, first);
     QFETCH(int, countLimit);
@@ -237,7 +237,7 @@ void tst_piemodelmapper::horizontalMapperCustomMapping()
     mapper = 0;
 }
 
-void tst_piemodelmapper::seriesUpdated()
+void tst_qpiemodelmapper::seriesUpdated()
 {
     QStandardItemModel *otherModel = new QStandardItemModel;
     for (int row = 0; row < m_modelRowCount; ++row) {
@@ -268,6 +268,6 @@ void tst_piemodelmapper::seriesUpdated()
     otherModel = 0;
 }
 
-QTEST_MAIN(tst_piemodelmapper)
+QTEST_MAIN(tst_qpiemodelmapper)
 
 #include "tst_qpiemodelmapper.moc"
