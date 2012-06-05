@@ -38,8 +38,9 @@
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
-#ifndef QGEOTILESPEC_P_H
-#define QGEOTILESPEC_P_H
+
+#ifndef QGEOTILESPEC_H
+#define QGEOTILESPEC_H
 
 //
 //  W A R N I N G
@@ -52,31 +53,57 @@
 // We mean it.
 //
 
+#include <QtLocation/qlocationglobal.h>
+#include <QtCore/QMetaType>
 #include <QString>
-#include <QSharedData>
+
+#include <QSharedDataPointer>
+
+QT_BEGIN_HEADER
 
 QT_BEGIN_NAMESPACE
 
-class QGeoTileSpecPrivate : public QSharedData
+class QGeoTileSpecPrivate;
+
+class Q_LOCATION_EXPORT QGeoTileSpec
 {
 public:
-    QGeoTileSpecPrivate();
-    QGeoTileSpecPrivate(const QGeoTileSpecPrivate &other);
-    QGeoTileSpecPrivate(const QString &plugin, int mapId, int zoom, int x, int y);
-    ~QGeoTileSpecPrivate();
+    QGeoTileSpec();
+    QGeoTileSpec(const QGeoTileSpec &other);
+    QGeoTileSpec(const QString &plugin, int mapId, int zoom, int x, int y);
+    ~QGeoTileSpec();
 
-    QGeoTileSpecPrivate &operator = (const QGeoTileSpecPrivate &other);
+    QGeoTileSpec &operator = (const QGeoTileSpec &other);
 
-    bool operator == (const QGeoTileSpecPrivate &rhs) const;
-    bool operator < (const QGeoTileSpecPrivate &rhs) const;
+    QString plugin() const;
 
-    QString plugin_;
-    int mapId_;
-    int zoom_;
-    int x_;
-    int y_;
+    void setZoom(int zoom);
+    int zoom() const;
+
+    void setX(int x);
+    int x() const;
+
+    void setY(int y);
+    int y() const;
+
+    void setMapId(int mapId);
+    int mapId() const;
+
+    bool operator == (const QGeoTileSpec &rhs) const;
+    bool operator < (const QGeoTileSpec &rhs) const;
+
+private:
+    QSharedDataPointer<QGeoTileSpecPrivate> d;
 };
+
+Q_LOCATION_EXPORT unsigned int qHash(const QGeoTileSpec &spec);
+
+Q_LOCATION_EXPORT QDebug operator<<(QDebug, const QGeoTileSpec &);
 
 QT_END_NAMESPACE
 
-#endif // QGEOTILESPEC_P_H
+Q_DECLARE_METATYPE(QGeoTileSpec)
+
+QT_END_HEADER
+
+#endif // QGEOTILESPEC_H
