@@ -44,7 +44,7 @@ Item {
     id: container
 
     property string text: "Button"
-    property string subText: "Just a button"
+    property string subText: ""
     signal clicked
 
     width: buttonLabel.width + 20; height: col.height + 12
