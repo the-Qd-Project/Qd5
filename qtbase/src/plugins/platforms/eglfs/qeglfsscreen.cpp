@@ -44,45 +44,10 @@
 #include "qeglfswindow.h"
 #include "qeglfshooks.h"
 
-#include <QtPlatformSupport/private/qeglconvenience_p.h>
-#include <QtPlatformSupport/private/qeglplatformcontext_p.h>
-
 QT_BEGIN_NAMESPACE
-
-// #define QEGL_EXTRA_DEBUG
-
-class QEglFSContext : public QEGLPlatformContext
-{
-public:
-    QEglFSContext(const QSurfaceFormat &format, QPlatformOpenGLContext *share, EGLDisplay display,
-                  EGLenum eglApi = EGL_OPENGL_ES_API)
-        : QEGLPlatformContext(format, share, display, eglApi)
-    {
-    }
-
-    EGLSurface eglSurfaceForPlatformSurface(QPlatformSurface *surface)
-    {
-        QEglFSWindow *window = static_cast<QEglFSWindow *>(surface);
-        QEglFSScreen *screen = static_cast<QEglFSScreen *>(window->screen());
-        return screen->surface();
-    }
-
-    void swapBuffers(QPlatformSurface *surface)
-    {
-        QEglFSWindow *window = static_cast<QEglFSWindow *>(surface);
-        QEglFSScreen *screen = static_cast<QEglFSScreen *>(window->screen());
-        if (QEglFSCursor *cursor = static_cast<QEglFSCursor *>(screen->cursor()))
-            cursor->paintOnScreen();
-
-        QEGLPlatformContext::swapBuffers(surface);
-    }
-};
 
 QEglFSScreen::QEglFSScreen(EGLDisplay dpy)
     : m_dpy(dpy)
-    , m_platformContext(0)
-    , m_surface(0)
-    , m_window(0)
     , m_cursor(0)
 {
 #ifdef QEGL_EXTRA_DEBUG
@@ -101,39 +66,6 @@ QEglFSScreen::QEglFSScreen(EGLDisplay dpy)
 QEglFSScreen::~QEglFSScreen()
 {
     delete m_cursor;
-
-    if (m_surface)
-        eglDestroySurface(m_dpy, m_surface);
-
-    hooks->destroyNativeWindow(m_window);
-}
-
-void QEglFSScreen::createAndSetPlatformContext() const {
-    const_cast<QEglFSScreen *>(this)->createAndSetPlatformContext();
-}
-
-void QEglFSScreen::createAndSetPlatformContext()
-{
-    QSurfaceFormat platformFormat = hooks->defaultSurfaceFormat();
-
-    EGLConfig config = q_configFromGLFormat(m_dpy, platformFormat);
-
-    m_window = hooks->createNativeWindow(hooks->screenSize());
-
-#ifdef QEGL_EXTRA_DEBUG
-    q_printEglConfig(m_dpy, config);
-#endif
-
-    m_surface = eglCreateWindowSurface(m_dpy, config, m_window, NULL);
-    if (m_surface == EGL_NO_SURFACE) {
-        qWarning("Could not create the egl surface: error = 0x%x\n", eglGetError());
-        eglTerminate(m_dpy);
-        qFatal("EGL error");
-    }
-    //    qWarning("Created surface %dx%d\n", w, h);
-
-    QEGLPlatformContext *platformContext = new QEglFSContext(platformFormat, 0, m_dpy);
-    m_platformContext = platformContext;
 }
 
 QRect QEglFSScreen::geometry() const
@@ -154,15 +86,6 @@ QImage::Format QEglFSScreen::format() const
 QPlatformCursor *QEglFSScreen::cursor() const
 {
     return m_cursor;
-}
-
-QPlatformOpenGLContext *QEglFSScreen::platformContext() const
-{
-    if (!m_platformContext) {
-        QEglFSScreen *that = const_cast<QEglFSScreen *>(this);
-        that->createAndSetPlatformContext();
-    }
-    return m_platformContext;
 }
 
 QT_END_NAMESPACE
