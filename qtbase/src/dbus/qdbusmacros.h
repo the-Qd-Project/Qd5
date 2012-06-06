@@ -57,13 +57,24 @@
 #include <QtCore/qvector.h>
 #endif
 
-// prevent syncqt complaints
-#ifndef QT_NO_DBUS
-
 QT_BEGIN_HEADER
 QT_BEGIN_NAMESPACE
+
+#ifndef QT_NO_DBUS
+
+#ifndef QT_STATIC
+#  if defined(QT_BUILD_DBUS_LIB)
+#    define Q_DBUS_EXPORT Q_DECL_EXPORT
+#  else
+#    define Q_DBUS_EXPORT Q_DECL_IMPORT
+#  endif
+#else
+#  define Q_DBUS_EXPORT
+#endif
+
+#endif // QT_NO_DBUS
+
 QT_END_NAMESPACE
 QT_END_HEADER
 
-#endif // QT_NO_DBUS
 #endif
