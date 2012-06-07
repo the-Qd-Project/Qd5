@@ -47,6 +47,8 @@
 
 #include <QtWidgets/qgraphicsitem.h>
 
+#include <QtSvg/qtsvgglobal.h>
+
 QT_BEGIN_HEADER
 
 QT_BEGIN_NAMESPACE
