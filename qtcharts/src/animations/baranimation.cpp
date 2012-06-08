@@ -20,12 +20,9 @@
 
 #include "baranimation_p.h"
 #include "barchartitem_p.h"
-#include <QParallelAnimationGroup>
 #include <QTimer>
 
 Q_DECLARE_METATYPE(QVector<QRectF>)
-//Q_DECLARE_METATYPE(BarLayout)     // TODO?
-
 
 QTCOMMERCIALCHART_BEGIN_NAMESPACE
 
@@ -33,6 +30,7 @@ BarAnimation::BarAnimation(BarChartItem *item)
     :ChartAnimation(item),
     m_item(item)
 {
+    setEasingCurve(QEasingCurve::OutQuart);
 }
 
 BarAnimation::~BarAnimation()
@@ -53,9 +51,7 @@ QVariant BarAnimation::interpolated(const QVariant &from, const QVariant &to, qr
         qreal x = endVector[i].topLeft().x();
         qreal y = endVector[i].topLeft().y() + endVector[i].height() - h;
 
-        QPointF topLeft(x,y);
-        QSizeF size(w,h);
-        QRectF value(topLeft,size);
+        QRectF value(x,y,w,h);
         result << value;
     }
     return qVariantFromValue(result);
@@ -65,6 +61,14 @@ void BarAnimation::updateCurrentValue(const QVariant &value)
 {
     QVector<QRectF> layout = qVariantValue<QVector<QRectF> >(value);
     m_item->setLayout(layout);
+}
+
+void BarAnimation::updateLayout(const QVector<QRectF> &oldLayout, const QVector<QRectF> &newLayout)
+{
+    setDuration(ChartAnimationDuration);
+    setKeyValueAt(0.0, qVariantFromValue(oldLayout));
+    setKeyValueAt(1.0, qVariantFromValue(newLayout));
+    QTimer::singleShot(0, this, SLOT(start()));
 }
 
 #include "moc_baranimation_p.cpp"
