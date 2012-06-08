@@ -49,6 +49,7 @@
 #include "aiScene.h"
 
 #include "qglbuilder.h"
+#include "qglsceneanimation.h"
 
 struct aiMaterial;
 
@@ -58,7 +59,7 @@ class QAiMesh;
 class QAiScene;
 class QGLSceneNode;
 class QAiSceneHandler;
-class QGLSceneAnimation;
+//class QGLSceneAnimation;
 class QGLMaterial;
 
 class QAiLoader
@@ -68,6 +69,7 @@ public:
     ~QAiLoader();
     QGLSceneNode *loadMeshes();
     QList<QGLSceneAnimation *> loadAnimations();
+    QMap<QGLSceneNode*,QGLSceneAnimation::NodeTransform> loadDefaultTransformations();
 
 private:
     friend class QAiScene;
@@ -86,9 +88,12 @@ private:
     QGLSceneNode *m_root;
     QAiSceneHandler *m_handler;
     QList<QGLSceneNode *> m_nodes;
+
+    QMap<QString,aiMatrix4x4> m_defaultTransforms;
+    QMap<QString,QGLSceneAnimation::NodeTransform>   m_AnimatedNodesDefaultTransforms;
+
     QList<QGLMaterial *> m_materials;
     QList<QGLSceneNode *> m_meshes;
-    QMap<aiNode *, QGLSceneNode *> m_nodeMap;
     QMap<QGLSceneNode *, int> m_refCounts;
     QList<QGLSceneAnimation *> m_animations;
     bool m_hasTextures;
