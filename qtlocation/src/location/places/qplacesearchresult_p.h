@@ -45,24 +45,46 @@
 #include "qplacesearchresult.h"
 
 #include <QSharedData>
+#include <QtLocation/QPlaceIcon>
 
 QT_BEGIN_NAMESPACE
+
+#define Q_IMPLEMENT_SEARCHRESULT_D_FUNC(Class) \
+    Class##Private *Class::d_func() { return reinterpret_cast<Class##Private *>(d_ptr.data()); } \
+    const Class##Private *Class::d_func() const { return reinterpret_cast<const Class##Private *>(d_ptr.constData()); } \
+
+#define Q_IMPLEMENT_SEARCHRESULT_COPY_CTOR(Class) \
+    Class::Class(const QPlaceSearchResult &other) : QPlaceSearchResult() { Class##Private::copyIfPossible(d_ptr, other); }
+
+#define Q_DEFINE_SEARCHRESULT_PRIVATE_HELPER(Class, ResultType) \
+    QPlaceSearchResultPrivate *clone() const { return new Class##Private(*this); } \
+    virtual QPlaceSearchResult::SearchResultType type() const {return ResultType;} \
+    static void copyIfPossible(QSharedDataPointer<QPlaceSearchResultPrivate> &d_ptr, const QPlaceSearchResult &other) \
+    { \
+        if (other.type() == ResultType) \
+            d_ptr = extract_d(other); \
+        else \
+            d_ptr = new Class##Private; \
+    }
 
 class QPlaceSearchResultPrivate : public QSharedData
 {
 public:
-    QPlaceSearchResultPrivate();
-    QPlaceSearchResultPrivate(const QPlaceSearchResultPrivate &other);
+    QPlaceSearchResultPrivate() {}
+    virtual ~QPlaceSearchResultPrivate() {}
 
-    ~QPlaceSearchResultPrivate();
+    virtual bool compare(const QPlaceSearchResultPrivate *other) const;
 
-    bool operator==(const QPlaceSearchResultPrivate &other) const;
+    static const QSharedDataPointer<QPlaceSearchResultPrivate>
+            &extract_d(const QPlaceSearchResult &other) { return other.d_ptr; }
 
-    qreal distance;
-    QPlaceSearchResult::SearchResultType type;
-    QPlace place;
-    bool sponsored;
+    Q_DEFINE_SEARCHRESULT_PRIVATE_HELPER(QPlaceSearchResult, QPlaceSearchResult::UnknownSearchResult)
+
+    QString title;
+    QPlaceIcon icon;
 };
+
+template<> QPlaceSearchResultPrivate *QSharedDataPointer<QPlaceSearchResultPrivate>::clone();
 
 QT_END_NAMESPACE
 
