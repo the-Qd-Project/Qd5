@@ -26,116 +26,19 @@ Rectangle {
 
     //![1]
     ChartView {
-        title: "NHL All-Star Team Players"
+        title: "Spline"
         anchors.fill: parent
-        axisXLabels: ["0", "2000", "1", "2001", "2", "2002", "3", "2003", "4", "2004", "5", "2005",
-            "6", "2006", "7", "2007", "8", "2008", "9", "2009", "10", "2010", "11", "2011"]
 
-        AreaSeries {
-            name: "Russian"
-            upperSeries: LineSeries {
-                XyPoint { x: 0; y: 1 }
-                XyPoint { x: 1; y: 1 }
-                XyPoint { x: 2; y: 1 }
-                XyPoint { x: 3; y: 1 }
-                XyPoint { x: 4; y: 1 }
-                XyPoint { x: 5; y: 0 }
-                XyPoint { x: 6; y: 1 }
-                XyPoint { x: 7; y: 1 }
-                XyPoint { x: 8; y: 4 }
-                XyPoint { x: 9; y: 3 }
-                XyPoint { x: 10; y: 2 }
-                XyPoint { x: 11; y: 1 }
-            }
-            lowerSeries: LineSeries {
-                XyPoint { x: 0; y: 0 }
-                XyPoint { x: 1; y: 0 }
-                XyPoint { x: 2; y: 0 }
-                XyPoint { x: 3; y: 0 }
-                XyPoint { x: 4; y: 0 }
-                XyPoint { x: 5; y: 0 }
-                XyPoint { x: 6; y: 0 }
-                XyPoint { x: 7; y: 0 }
-                XyPoint { x: 8; y: 0 }
-                XyPoint { x: 9; y: 0 }
-                XyPoint { x: 10; y: 0 }
-                XyPoint { x: 11; y: 0 }
-            }
-        }
-        // ...
-        //![1]
-
-        AreaSeries {
-            id: swedish
-            name: "Swedish"
-            upperSeries: LineSeries {
-                XyPoint { x: 0; y: 1 }
-                XyPoint { x: 1; y: 1 }
-                XyPoint { x: 2; y: 3 }
-                XyPoint { x: 3; y: 3 }
-                XyPoint { x: 4; y: 2 }
-                XyPoint { x: 5; y: 0 }
-                XyPoint { x: 6; y: 2 }
-                XyPoint { x: 7; y: 1 }
-                XyPoint { x: 8; y: 2 }
-                XyPoint { x: 9; y: 1 }
-                XyPoint { x: 10; y: 3 }
-                XyPoint { x: 11; y: 3 }
-            }
-            lowerSeries: LineSeries {
-                XyPoint { x: 0; y: 0 }
-                XyPoint { x: 1; y: 0 }
-                XyPoint { x: 2; y: 0 }
-                XyPoint { x: 3; y: 0 }
-                XyPoint { x: 4; y: 0 }
-                XyPoint { x: 5; y: 0 }
-                XyPoint { x: 6; y: 0 }
-                XyPoint { x: 7; y: 0 }
-                XyPoint { x: 8; y: 0 }
-                XyPoint { x: 9; y: 0 }
-                XyPoint { x: 10; y: 0 }
-                XyPoint { x: 11; y: 0 }
-            }
-            onClicked: {
-                color = "yellow";
-                borderColor = "blue";
-            }
-        }
-
-        AreaSeries {
-            name: "Finnish"
-            upperSeries: LineSeries {
-                XyPoint { x: 0; y: 0 }
-                XyPoint { x: 1; y: 0 }
-                XyPoint { x: 2; y: 0 }
-                XyPoint { x: 3; y: 0 }
-                XyPoint { x: 4; y: 0 }
-                XyPoint { x: 5; y: 0 }
-                XyPoint { x: 6; y: 1 }
-                XyPoint { x: 7; y: 0 }
-                XyPoint { x: 8; y: 0 }
-                XyPoint { x: 9; y: 0 }
-                XyPoint { x: 10; y: 0 }
-                XyPoint { x: 11; y: 1 }
-            }
-            lowerSeries: LineSeries {
-                XyPoint { x: 0; y: 0 }
-                XyPoint { x: 1; y: 0 }
-                XyPoint { x: 2; y: 0 }
-                XyPoint { x: 3; y: 0 }
-                XyPoint { x: 4; y: 0 }
-                XyPoint { x: 5; y: 0 }
-                XyPoint { x: 6; y: 0 }
-                XyPoint { x: 7; y: 0 }
-                XyPoint { x: 8; y: 0 }
-                XyPoint { x: 9; y: 0 }
-                XyPoint { x: 10; y: 0 }
-                XyPoint { x: 11; y: 0 }
-            }
-            onClicked: {
-                color = "white";
-                borderColor = "blue";
-            }
+        SplineSeries {
+            name: "SplineSeries"
+            XyPoint { x: 0; y: 0.3 }
+            XyPoint { x: 1.1; y: 3.2 }
+            XyPoint { x: 1.9; y: 2.4 }
+            XyPoint { x: 2.1; y: 2.1 }
+            XyPoint { x: 2.9; y: 2.6 }
+            XyPoint { x: 3.4; y: 2.3 }
+            XyPoint { x: 4.1; y: 3.1 }
         }
     }
+    //![1]
 }
