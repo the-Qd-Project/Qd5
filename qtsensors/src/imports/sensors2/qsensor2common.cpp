@@ -86,7 +86,7 @@ void qsensor2common::setEnabled(bool val)
         }
         else
             sensor()->stop();
-        emit enabledChanged();
+        Q_EMIT enabledChanged();
     }
 }
 
@@ -104,7 +104,7 @@ void qsensor2common::setAlwaysOn(bool alwaysOn)
 {
     if (sensor()->isAlwaysOn() == alwaysOn) return;
     sensor()->setAlwaysOn(alwaysOn);
-    emit alwaysOnChanged();
+    Q_EMIT alwaysOnChanged();
 }
 
 QT_END_NAMESPACE
