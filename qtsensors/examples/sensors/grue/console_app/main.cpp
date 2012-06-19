@@ -53,7 +53,7 @@ public:
 
     bool filter(QSensorReading *reading)
     {
-        int percent = reading->property("chanceOfBeingEaten").value<qreal>() * 100;
+        int percent = reading->property("chanceOfBeingEaten").value<int>();
         if (percent == 0) {
             qDebug() << "It is light. You are safe from Grues.";
         } else if (lastPercent == 0) {
