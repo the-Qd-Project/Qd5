@@ -51,12 +51,16 @@
 #include "qt7videooutput.h"
 #include <qvideoframe.h>
 
+#include <QuartzCore/CIContext.h>
+
 QT_BEGIN_NAMESPACE
 
 class QVideoFrame;
 
 class QT7PlayerSession;
 class QT7PlayerService;
+class QGLWidget;
+class QGLFramebufferObject;
 
 class QT7MovieViewRenderer : public QT7VideoRendererControl
 {
@@ -77,12 +81,17 @@ protected:
 
 private:
     void setupVideoOutput();
+    QVideoFrame convertCIImageToGLTexture(const QVideoFrame &frame);
 
     void *m_movie;
     void *m_movieView;
     QSize m_nativeSize;
     QAbstractVideoSurface *m_surface;
     QVideoFrame m_currentFrame;
+    QGLWidget *m_glWidget;
+    QGLFramebufferObject *m_fbo;
+    CIContext *m_ciContext;
+
     bool m_pendingRenderEvent;
     QMutex m_mutex;
 };
