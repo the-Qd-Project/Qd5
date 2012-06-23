@@ -56,12 +56,14 @@
 #include <QtTest/private/qbenchmarkmeasurement_p.h>
 #include <QAbstractEventDispatcher>
 #include <QObject>
+#include <QAbstractNativeEventFilter>
 
 QT_BEGIN_NAMESPACE
 
-class QBenchmarkEvent : public QBenchmarkMeasurerBase
+class QBenchmarkEvent : public QBenchmarkMeasurerBase, public QAbstractNativeEventFilter
 {
 public:
+    QBenchmarkEvent();
     ~QBenchmarkEvent();
     void start();
     qint64 checkpoint();
@@ -71,8 +73,8 @@ public:
     int adjustMedianCount(int suggestion);
     bool repeatCount() { return 1; }
     QTest::QBenchmarkMetric metricType();
-    static bool eventCountingMechanism(void *message);
-    static qint64 eventCounter;
+    virtual bool nativeEventFilter(const QByteArray &eventType, void *message, long *result);
+    qint64 eventCounter;
 };
 
 QT_END_NAMESPACE
