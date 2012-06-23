@@ -41,6 +41,7 @@
 
 #include "qgeoserviceproviderpluginosm.h"
 #include "qgeotiledmappingmanagerengineosm.h"
+#include "qgeocodingmanagerengineosm.h"
 
 #include <QtLocation/private/qgeotiledmappingmanagerengine_p.h>
 
@@ -49,11 +50,7 @@ QT_BEGIN_NAMESPACE
 QGeocodingManagerEngine *QGeoServiceProviderFactoryOsm::createGeocodingManagerEngine(
     const QVariantMap &parameters, QGeoServiceProvider::Error *error, QString *errorString) const
 {
-    Q_UNUSED(parameters)
-    Q_UNUSED(error)
-    Q_UNUSED(errorString)
-
-    return 0;
+    return new QGeocodingManagerEngineOsm(parameters, error, errorString);
 }
 
 QGeoMappingManagerEngine *QGeoServiceProviderFactoryOsm::createMappingManagerEngine(
