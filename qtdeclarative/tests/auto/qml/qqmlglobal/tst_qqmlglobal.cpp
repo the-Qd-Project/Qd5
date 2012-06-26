@@ -53,20 +53,12 @@ public:
 private slots:
     void initTestCase();
 
-    void valueTypeProviderWarning();
     void colorProviderWarning();
     void guiProviderWarning();
 };
 
 void tst_qqmlglobal::initTestCase()
 {
-}
-
-void tst_qqmlglobal::valueTypeProviderWarning()
-{
-    const QLatin1String expected("Warning: QQml_valueTypeProvider: no value type provider has been set! ");
-    QTest::ignoreMessage(QtWarningMsg, expected.data());
-    QQml_valueTypeProvider();
 }
 
 void tst_qqmlglobal::colorProviderWarning()
