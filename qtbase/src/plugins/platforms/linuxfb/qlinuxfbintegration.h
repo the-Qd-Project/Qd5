@@ -39,38 +39,21 @@
 **
 ****************************************************************************/
 
-#ifndef QGRAPHICSSYSTEM_LINUXFB_H
-#define QGRAPHICSSYSTEM_LINUXFB_H
+#ifndef QLINUXFBINTEGRATION_H
+#define QLINUXFBINTEGRATION_H
 
 #include <qpa/qplatformintegration.h>
-#include "../fb_base/fb_base.h"
+
+#include <QtPlatformSupport/private/qfbscreen_p.h>
 
 QT_BEGIN_NAMESPACE
-
-class QLinuxFbScreen : public QFbScreen
-{
-    Q_OBJECT
-public:
-    QLinuxFbScreen(uchar * d, int w, int h, int lstep, QImage::Format screenFormat);
-    void setGeometry(QRect rect);
-    void setFormat(QImage::Format format);
-
-public slots:
-    QRegion doRedraw();
-
-private:
-    QImage * mFbScreenImage;
-    uchar * data;
-    int bytesPerLine;
-
-    QPainter *compositePainter;
-};
 
 class QLinuxFbIntegrationPrivate;
 struct fb_cmap;
 struct fb_var_screeninfo;
 struct fb_fix_screeninfo;
 class QAbstractEventDispatcher;
+class QLinuxFbScreen;
 
 class QLinuxFbIntegration : public QPlatformIntegration
 {
@@ -81,9 +64,9 @@ public:
     bool hasCapability(QPlatformIntegration::Capability cap) const;
 
     QPlatformPixmap *createPlatformPixmap(QPlatformPixmap::PixelType type) const;
-    QPlatformWindow *createPlatformWindow(QWidget *widget, WId WinId) const;
-    QWindowSurface *createWindowSurface(QWidget *widget, WId WinId) const;
-    QAbstractEventDispatcher *createEventDispatcher() const;
+    QPlatformWindow *createPlatformWindow(QWindow *window) const;
+    QPlatformBackingStore *createPlatformBackingStore(QWindow *window) const;
+    QAbstractEventDispatcher *guiThreadEventDispatcher() const;
 
     QList<QPlatformScreen *> screens() const { return mScreens; }
 
@@ -134,4 +117,5 @@ private:
 
 QT_END_NAMESPACE
 
-#endif
+#endif // QLINUXFBINTEGRATION_H
+
