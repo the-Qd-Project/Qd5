@@ -3,7 +3,7 @@
 ** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
 ** Contact: http://www.qt-project.org/
 **
-** This file is part of the Qt Mobility Components.
+** This file is part of the Qt Toolkit.
 **
 ** $QT_BEGIN_LICENSE:LGPL$
 ** GNU Lesser General Public License Usage
@@ -47,6 +47,7 @@
 #ifdef QMEDIA_MEDIAFOUNDATION_PLAYER
 #include "mfplayerservice.h"
 #endif
+#include "mfdecoderservice.h"
 
 #include <mfapi.h>
 
@@ -81,6 +82,10 @@ QMediaService* WMFServicePlugin::create(QString const& key)
         return new MFPlayerService;
     }
 #endif
+    if (key == QLatin1String(Q_MEDIASERVICE_AUDIODECODER)) {
+        addRefCount();
+        return new MFAudioDecoderService;
+    }
     //qDebug() << "unsupported key:" << key;
     return 0;
 }
