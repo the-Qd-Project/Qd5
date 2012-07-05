@@ -39,37 +39,29 @@
 ****************************************************************************/
 
 import QtQuick 2.0
+import QtQuick.Particles 2.0
 
-Rectangle {
-    id: container
-
-    property string text: "Button"
-    property int fontSize: 24
-
+Item {
+    property alias imgSrc: image.source
+    property alias system: emitter.system
+    property alias group: emitter.group
     signal clicked
-
-    width: buttonLabel.width + 20; height: buttonLabel.height + 20
-    smooth: true
-    border { width: 1; color: Qt.darker(activePalette.button) }
-    radius: 8
-    color: activePalette.button
-
-    gradient: Gradient {
-        GradientStop {
-            position: 0.0
-            color: {
-                if (mouseArea.pressed)
-                    return activePalette.dark
-                else
-                    return activePalette.light
-            }
+    property bool rotatedButton: false
+    //Defaults, feel free to override
+    width: image.width
+    height: image.height
+    Image {
+        id: image
+        anchors.centerIn: parent
+        rotation: rotatedButton ? ((Math.random() * 3 + 2) * (Math.random() <= 0.5 ? -1 : 1)) : 0
+        MenuEmitter {
+            id: emitter
+            anchors.fill: parent
+            //shape: MaskShape {source: image.source}
         }
-        GradientStop { position: 1.0; color: activePalette.button }
     }
-
-    MouseArea { id: mouseArea; anchors.fill: parent; onClicked: container.clicked() }
-
-    Text {
-        id: buttonLabel; text: container.text; anchors.centerIn: container; color: activePalette.buttonText; font.pixelSize: container.fontSize
+    MouseArea {
+        anchors.fill: parent
+        onClicked: {parent.clicked(); emitter.burst(400);}
     }
 }

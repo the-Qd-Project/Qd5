@@ -37,29 +37,5 @@
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
-
-#include <QGuiApplication>
-#include <QStringList>
-#include <QQuickView>
-#include <QQmlEngine>
-
-void usage()
-{
-    printf("Pass -desktop to use the Desktop UI. Default is the mobile UI.");
-    exit(0);
-}
-
-int main(int argc, char* argv[])
-{
-    QGuiApplication app(argc,argv);
-    QQuickView view;
-    QUrl launchFile = QUrl::fromLocalFile(QLatin1String("samegame-mobile.qml"));
-    if (app.arguments().contains(QLatin1String("-help")))
-        usage();
-    if (app.arguments().contains(QLatin1String("-desktop")))
-        launchFile =  QUrl::fromLocalFile(QLatin1String("samegame-desktop.qml"));
-    view.setSource(launchFile);
-    view.show();
-    return app.exec();
-}
-
+#include "../../shared/shared.h"
+DECLARATIVE_EXAMPLE_MAIN(samegame)
