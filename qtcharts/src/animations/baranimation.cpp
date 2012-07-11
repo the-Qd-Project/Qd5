@@ -27,9 +27,9 @@ Q_DECLARE_METATYPE(QVector<QRectF>)
 QTCOMMERCIALCHART_BEGIN_NAMESPACE
 
 BarAnimation::BarAnimation(BarChartItem *item)
-    :ChartAnimation(item),
-    m_item(item)
+    :AbstractBarAnimation(item)
 {
+    setDuration(ChartAnimationDuration);
     setEasingCurve(QEasingCurve::OutQuart);
 }
 
@@ -55,20 +55,6 @@ QVariant BarAnimation::interpolated(const QVariant &from, const QVariant &to, qr
         result << value;
     }
     return qVariantFromValue(result);
-}
-
-void BarAnimation::updateCurrentValue(const QVariant &value)
-{
-    QVector<QRectF> layout = qVariantValue<QVector<QRectF> >(value);
-    m_item->setLayout(layout);
-}
-
-void BarAnimation::updateLayout(const QVector<QRectF> &oldLayout, const QVector<QRectF> &newLayout)
-{
-    setDuration(ChartAnimationDuration);
-    setKeyValueAt(0.0, qVariantFromValue(oldLayout));
-    setKeyValueAt(1.0, qVariantFromValue(newLayout));
-    QTimer::singleShot(0, this, SLOT(start()));
 }
 
 #include "moc_baranimation_p.cpp"

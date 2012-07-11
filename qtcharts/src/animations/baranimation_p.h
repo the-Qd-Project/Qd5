@@ -30,16 +30,15 @@
 #ifndef BARANIMATION_P_H
 #define BARANIMATION_P_H
 
+#include "abstractbaranimation_p.h"
 #include "chartanimation_p.h"
 #include "barchartitem_p.h"
 
 QTCOMMERCIALCHART_BEGIN_NAMESPACE
 
 class BarChartItem;
-class QBarSet;
-class BarSetAnimation;
 
-class BarAnimation : public ChartAnimation
+class BarAnimation : public AbstractBarAnimation
 {
     Q_OBJECT
 
@@ -49,12 +48,6 @@ public:
 
 public: // from QVariantAnimation
     virtual QVariant interpolated(const QVariant &from, const QVariant &to, qreal progress) const;
-    virtual void updateCurrentValue(const QVariant &value);
-
-    void updateLayout(const QVector<QRectF> &oldLayout, const QVector<QRectF> &newLayout);
-
-private:
-    BarChartItem *m_item;
 };
 
 QTCOMMERCIALCHART_END_NAMESPACE
