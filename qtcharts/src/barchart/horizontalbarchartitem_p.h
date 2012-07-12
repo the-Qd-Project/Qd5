@@ -31,7 +31,6 @@
 #define HORIZONTALBARCHARTITEM_H
 
 #include "abstractbarchartitem_p.h"
-#include "qstackedbarseries.h"
 #include <QGraphicsItem>
 
 QTCOMMERCIALCHART_BEGIN_NAMESPACE

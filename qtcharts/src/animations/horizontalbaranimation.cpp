@@ -48,8 +48,8 @@ QVariant HorizontalBarAnimation::interpolated(const QVariant &from, const QVaria
     for(int i = 0; i < startVector.count(); i++) {
         qreal h = endVector[i].height();
         qreal w = startVector[i].width() + ((endVector[i].width() - startVector[i].width()) * progress);
-        qreal x = endVector[i].topLeft().x();
-        qreal y = endVector[i].topLeft().y();
+        qreal x = endVector[i].left();
+        qreal y = endVector[i].top();
 
         QRectF value(x,y,w,h);
         result << value;
