@@ -2,7 +2,9 @@
 #define WIDGET_H
 
 #include <QWidget>
-#include <QDonutGroup>
+#include <QPieSeries>
+
+class QTimer;
 
 QTCOMMERCIALCHART_USE_NAMESPACE
 
@@ -16,9 +18,11 @@ public:
 
 public slots:
     void updateRotation();
+    void explodeSlice(bool exploded);
 
 private:
-    QDonutGroup m_donutsGroup;
+    QList<QPieSeries *> m_donuts;
+    QTimer *updateTimer;
 };
 
 #endif // WIDGET_H
