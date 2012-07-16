@@ -48,7 +48,7 @@
 #include <gst/gst.h>
 
 QT_BEGIN_NAMESPACE
-class QAudioEndpointSelectorControl;
+class QAudioInputSelectorControl;
 class QVideoDeviceSelectorControl;
 
 class QGstreamerCaptureSession;
@@ -82,7 +82,7 @@ private:
     QGstreamerV4L2Input *m_videoInput;
     QGstreamerCaptureMetaDataControl *m_metaDataControl;
 
-    QAudioEndpointSelectorControl *m_audioInputEndpointSelector;
+    QAudioInputSelectorControl *m_audioInputSelector;
     QVideoDeviceSelectorControl *m_videoInputDevice;
 
     QMediaControl *m_videoOutput;
