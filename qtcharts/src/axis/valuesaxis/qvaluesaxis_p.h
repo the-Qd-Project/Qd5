@@ -59,7 +59,7 @@ private:
     void looseNiceNumbers(qreal &min, qreal &max, int &ticksCount) const;
     qreal niceNumber(qreal x,bool ceiling) const;
 
-private:
+protected:
     qreal m_min;
     qreal m_max;
     int m_tickCount;
