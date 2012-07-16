@@ -46,7 +46,7 @@
 #include <qcameraimagecapturecontrol.h>
 #include "camerabinsession.h"
 
-QT_USE_NAMESPACE
+QT_BEGIN_NAMESPACE
 
 class CameraBinImageCapture : public QCameraImageCaptureControl, public QGstreamerBusMessageFilter
 {
@@ -79,5 +79,7 @@ private:
     GstElement *m_jpegEncoderElement;
     GstElement *m_metadataMuxerElement;
 };
+
+QT_END_NAMESPACE
 
 #endif // CAMERABINCAPTURECORNTROL_H
