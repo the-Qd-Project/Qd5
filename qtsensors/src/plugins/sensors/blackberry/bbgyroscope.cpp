@@ -43,6 +43,8 @@
 #include "bbutil.h"
 #include <QtCore/qmath.h>
 
+using namespace BbUtil;
+
 BbGyroscope::BbGyroscope(QSensor *sensor)
     : BbSensorBackend<QGyroscopeReading>(devicePath(), SENSOR_TYPE_GYROSCOPE, sensor)
 {
