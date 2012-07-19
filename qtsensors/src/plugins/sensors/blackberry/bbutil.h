@@ -46,7 +46,6 @@
 namespace BbUtil {
 
 void matrixToEulerZXY(const float matrix[3*3], float &thetaX, float &thetaY, float& thetaZ);
-
 qreal radiansToDegrees(qreal radians);
 
 }
