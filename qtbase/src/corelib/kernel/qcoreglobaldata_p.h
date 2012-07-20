@@ -59,6 +59,7 @@
 #include "QtCore/qhash.h"
 #include "QtCore/qbytearray.h"
 #include "QtCore/qtextcodec.h"
+#include "QtCore/qmutex.h"
 
 QT_BEGIN_NAMESPACE
 
