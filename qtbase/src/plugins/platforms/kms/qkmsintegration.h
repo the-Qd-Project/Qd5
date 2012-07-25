@@ -51,6 +51,7 @@ class QKmsScreen;
 class QKmsDevice;
 class QKmsUdevListener;
 class QKmsUdevDRMHandler;
+class QKmsVTHandler;
 
 class QKmsIntegration : public QPlatformIntegration
 {
@@ -82,6 +83,7 @@ private:
     QPlatformNativeInterface *m_nativeInterface;
     QKmsUdevListener *m_udevListener;
     QKmsUdevDRMHandler *m_drmHandler;
+    QKmsVTHandler *m_vtHandler;
 };
 
 QT_END_NAMESPACE
