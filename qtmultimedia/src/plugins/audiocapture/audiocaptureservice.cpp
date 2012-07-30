@@ -45,6 +45,7 @@
 #include "audioencodercontrol.h"
 #include "audiocontainercontrol.h"
 #include "audiomediarecordercontrol.h"
+#include "audiocaptureprobecontrol.h"
 
 AudioCaptureService::AudioCaptureService(QObject *parent):
     QMediaService(parent)
@@ -78,6 +79,12 @@ QMediaControl *AudioCaptureService::requestControl(const char *name)
 
     if (qstrcmp(name,QMediaContainerControl_iid) == 0)
         return m_containerControl;
+
+    if (qstrcmp(name,QMediaAudioProbeControl_iid) == 0) {
+        AudioCaptureProbeControl *probe = new AudioCaptureProbeControl(this);
+        m_session->addProbe(probe);
+        return probe;
+    }
 
     return 0;
 }
