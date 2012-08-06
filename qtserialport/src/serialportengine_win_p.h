@@ -47,67 +47,15 @@
 #include "serialportengine_p.h"
 
 #include <qt_windows.h>
-#ifdef Q_OS_WINCE
-#  include <QtCore/qmutex.h>
-#  include <QtCore/qthread.h>
-#  include <QtCore/qtimer.h>
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+#include <QtCore/qwineventnotifier.h>
 #else
-# if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
-#  include <QtCore/qwineventnotifier.h>
-# else
-#  include "qt4support/qwineventnotifier_p.h"
-# endif
+#include "qt4support/qwineventnotifier_p.h"
 #endif
 
 QT_BEGIN_NAMESPACE_SERIALPORT
 
-#ifdef Q_OS_WINCE
-
-class WinCeWaitCommEventBreaker : public QThread
-{
-    Q_OBJECT
-public:
-    WinCeWaitCommEventBreaker(HANDLE descriptor, int timeout, QObject *parent = 0)
-        : QThread(parent)
-        , m_descriptor(descriptor)
-        , m_timeout(timeout)
-        , m_worked(false) {
-        start();
-    }
-    virtual ~WinCeWaitCommEventBreaker() {
-        stop();
-        wait();
-    }
-    void stop() { exit(0); }
-    bool isWorked() const { return m_worked; }
-
-protected:
-    void run() {
-        QTimer timer;
-        QObject::connect(&timer, SIGNAL(timeout()), this, SLOT(procTimeout()), Qt::DirectConnection);
-        timer.start(m_timeout);
-        exec();
-        m_worked = true;
-    }
-
-private slots:
-    void procTimeout() {
-        ::SetCommMask(m_descriptor, 0);
-        stop();
-    }
-
-private:
-    HANDLE m_descriptor;
-    int m_timeout;
-    volatile bool m_worked;
-};
-#endif
-
-#ifdef Q_OS_WINCE
-class WinSerialPortEngine : public QThread, public SerialPortEngine
-#else
 class WinSerialPortEngine : public QWinEventNotifier, public SerialPortEngine
-#endif
 {
     Q_OBJECT
 public:
@@ -154,28 +102,14 @@ public:
 
     virtual bool processIOErrors();
 
-#ifdef Q_OS_WINCE
-    // FIXME
-    virtual void lockNotification(NotificationLockerType type, bool uselocker);
-    virtual void unlockNotification(NotificationLockerType type);
-#endif
-
 protected:
     virtual void detectDefaultSettings();
     virtual SerialPort::PortError decodeSystemError() const;
-
-#ifdef Q_OS_WINCE
-    virtual void run();
-#else
     virtual bool event(QEvent *e);
-#endif
 
 private:
-
-#ifndef Q_OS_WINCE
     bool createEvents(bool rx, bool tx);
     void closeEvents();
-#endif
 
     bool isNotificationEnabled(DWORD mask) const;
     void setNotificationEnabled(bool enable, DWORD mask);
@@ -193,19 +127,10 @@ private:
     DWORD m_currentMask;
     DWORD m_desiredMask;
 
-#ifdef Q_OS_WINCE
-    QMutex m_readNotificationMutex;
-    QMutex m_writeNotificationMutex;
-    QMutex m_errorNotificationMutex;
-    QMutex m_settingsChangeMutex;
-    QMutex m_setCommMaskMutex;
-    volatile bool m_running;
-#else
     OVERLAPPED m_readOverlapped;
     OVERLAPPED m_writeOverlapped;
     OVERLAPPED m_selectOverlapped;
     OVERLAPPED m_notifyOverlapped;
-#endif
 };
 
 QT_END_NAMESPACE_SERIALPORT

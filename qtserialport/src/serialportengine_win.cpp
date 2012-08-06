@@ -52,8 +52,7 @@
     \ingroup serialport-main
     \inmodule QtSerialPort
 
-    Currently the class supports all Windows NT-based OS (Win 2K/XP/Vista/7),
-    and various embedded Windows CE.
+    Currently the class supports all Windows NT-based OS (Win 2K/XP/Vista/7).
 
     WinSerialPortEngine (as well as other platform-dependent engines)
     is a class with multiple inheritance, which on the one hand,
@@ -72,18 +71,12 @@
     receive buffer, error I/O, and so forth. All events are handled in the
     Qt core event loop, so no additional threads are needed to perform these
     operations.
-
-    However, for Windows CE systems, this approach does not work, because they
-    have another Windows API. In this case, WinSerialPortEngine is derived
-    from QThread and creates an additional thread to track the events.
 */
 
 #include "serialportengine_win_p.h"
 
 #include <QtCore/qregexp.h>
-#ifndef Q_OS_WINCE
-#  include <QtCore/qcoreevent.h>
-#endif
+#include <QtCore/qcoreevent.h>
 
 #ifndef CTL_CODE
 #  define CTL_CODE(DeviceType, Function, Method, Access) ( \
@@ -129,9 +122,6 @@ WinSerialPortEngine::WinSerialPortEngine(SerialPortPrivate *d)
     , m_flagErrorFromCommEvent(false)
     , m_currentMask(0)
     , m_desiredMask(0)
-#ifdef Q_OS_WINCE
-    , m_running(true)
-#endif
 {
     Q_ASSERT(d);
     dptr = d;
@@ -140,12 +130,10 @@ WinSerialPortEngine::WinSerialPortEngine(SerialPortPrivate *d)
     ::memset(&m_currentCommTimeouts, 0, sizeof(m_currentCommTimeouts));
     ::memset(&m_restoredCommTimeouts, 0, sizeof(m_restoredCommTimeouts));
 
-#ifndef Q_OS_WINCE
     ::memset(&m_readOverlapped, 0, sizeof(m_readOverlapped));
     ::memset(&m_writeOverlapped, 0, sizeof(m_writeOverlapped));
     ::memset(&m_selectOverlapped, 0, sizeof(m_selectOverlapped));
     ::memset(&m_notifyOverlapped, 0, sizeof(m_notifyOverlapped));
-#endif
 }
 
 /*!
@@ -153,14 +141,7 @@ WinSerialPortEngine::WinSerialPortEngine(SerialPortPrivate *d)
 */
 WinSerialPortEngine::~WinSerialPortEngine()
 {
-#ifdef Q_OS_WINCE
-    m_running = false;
-    ::SetCommMask(m_descriptor, 0);
-    //terminate();
-    wait();
-#else
     setEnabled(false);
-#endif
 }
 
 /*!
@@ -184,13 +165,9 @@ bool WinSerialPortEngine::open(const QString &location, QIODevice::OpenMode mode
 {
     DWORD desiredAccess = 0;
     DWORD shareMode = 0;
-    DWORD flagsAndAttributes = 0;
+    DWORD flagsAndAttributes = FILE_FLAG_OVERLAPPED;
     bool rxflag = false;
     bool txflag = false;
-
-#ifndef Q_OS_WINCE
-    flagsAndAttributes |= FILE_FLAG_OVERLAPPED;
-#endif
 
     if (mode & QIODevice::ReadOnly) {
         desiredAccess |= GENERIC_READ;
@@ -246,12 +223,10 @@ bool WinSerialPortEngine::open(const QString &location, QIODevice::OpenMode mode
     if (!updateCommTimeouts())
         return false;
 
-#ifndef Q_OS_WINCE
     if (!createEvents(rxflag, txflag)) {
         dptr->setError(decodeSystemError());
         return false;
     }
-#endif
 
     detectDefaultSettings();
     return true;
@@ -265,9 +240,7 @@ void WinSerialPortEngine::close(const QString &location)
 {
     Q_UNUSED(location);
 
-#ifndef Q_OS_WINCE
     ::CancelIo(m_descriptor);
-#endif
 
     if (dptr->options.restoreSettingsOnClose) {
         ::SetCommState(m_descriptor, &m_restoredDcb);
@@ -276,9 +249,7 @@ void WinSerialPortEngine::close(const QString &location)
 
     ::CloseHandle(m_descriptor);
 
-#ifndef Q_OS_WINCE
     closeEvents();
-#endif
     m_descriptor = INVALID_HANDLE_VALUE;
 }
 
@@ -429,7 +400,6 @@ qint64 WinSerialPortEngine::bytesToWrite() const
     return cs.cbOutQue;
 }
 
-#ifndef Q_OS_WINCE
 // Clear overlapped structure, but does not affect the event.
 static void clear_overlapped(OVERLAPPED *overlapped)
 {
@@ -438,7 +408,6 @@ static void clear_overlapped(OVERLAPPED *overlapped)
     overlapped->Offset = 0;
     overlapped->OffsetHigh = 0;
 }
-#endif
 
 /*!
     Reads at most \a len bytes from the serial port into \a data, and returns
@@ -459,9 +428,7 @@ static void clear_overlapped(OVERLAPPED *overlapped)
 */
 qint64 WinSerialPortEngine::read(char *data, qint64 len)
 {
-#ifndef Q_OS_WINCE
     clear_overlapped(&m_readOverlapped);
-#endif
 
     DWORD readBytes = 0;
     bool sucessResult = false;
@@ -470,9 +437,6 @@ qint64 WinSerialPortEngine::read(char *data, qint64 len)
     if (dptr->options.policy != SerialPort::IgnorePolicy)
         len = 1;
 
-#ifdef Q_OS_WINCE
-    sucessResult = ::ReadFile(m_descriptor, data, len, &readBytes, 0);
-#else
     if (::ReadFile(m_descriptor, data, len, &readBytes, &m_readOverlapped)) {
         sucessResult = true;
     } else if (::GetLastError() == ERROR_IO_PENDING
@@ -481,7 +445,6 @@ qint64 WinSerialPortEngine::read(char *data, qint64 len)
              && ::GetOverlappedResult(m_descriptor, &m_readOverlapped, &readBytes, true)) {
         sucessResult = true;
     }
-#endif
 
     if (!sucessResult)
         return -1;
@@ -512,16 +475,11 @@ qint64 WinSerialPortEngine::read(char *data, qint64 len)
 */
 qint64 WinSerialPortEngine::write(const char *data, qint64 len)
 {
-#ifndef Q_OS_WINCE
     clear_overlapped(&m_writeOverlapped);
-#endif
 
     DWORD writeBytes = 0;
     bool sucessResult = false;
 
-#ifdef Q_OS_WINCE
-    sucessResult = ::WriteFile(m_descriptor, data, len, &writeBytes, 0);
-#else
     if (::WriteFile(m_descriptor, data, len, &writeBytes, &m_writeOverlapped)) {
         sucessResult = true;
     } else if (::GetLastError() == ERROR_IO_PENDING) {
@@ -533,7 +491,6 @@ qint64 WinSerialPortEngine::write(const char *data, qint64 len)
         sucessResult = true;
         writeBytes = len;
     }
-#endif
 
     if (!sucessResult)
         return -1;
@@ -576,9 +533,7 @@ bool WinSerialPortEngine::select(int timeout,
         return true;
     }
 
-#ifndef Q_OS_WINCE
     clear_overlapped(&m_selectOverlapped);
-#endif
 
     DWORD oldEventMask = 0;
     DWORD currEventMask = 0;
@@ -603,7 +558,6 @@ bool WinSerialPortEngine::select(int timeout,
     currEventMask = 0;
     bool sucessResult = false;
 
-#ifndef Q_OS_WINCE
     if (::WaitCommEvent(m_descriptor, &currEventMask, &m_selectOverlapped)) {
         sucessResult = true;
     } else if (::GetLastError() == ERROR_IO_PENDING) {
@@ -615,15 +569,6 @@ bool WinSerialPortEngine::select(int timeout,
             // Here there was a timeout or other error.
         }
     }
-#else
-    // FIXME: Here the situation is not properly handled with zero timeout:
-    // breaker can work out before you call a method WaitCommEvent()
-    // and so it will loop forever!
-    WinCeWaitCommEventBreaker breaker(m_descriptor, qMax(timeout, 0));
-    ::WaitCommEvent(m_descriptor, &currEventMask, 0);
-    breaker.stop();
-    sucessResult = !breaker.isWorked();
-#endif
 
     if (sucessResult) {
         // FIXME: Here call the bytesAvailable() to protect against false positives
@@ -870,50 +815,6 @@ bool WinSerialPortEngine::processIOErrors()
     return ret;
 }
 
-#ifdef Q_OS_WINCE
-
-void WinSerialPortEngine::lockNotification(NotificationLockerType type, bool uselocker)
-{
-    QMutex *mutex = 0;
-    switch (type) {
-    case CanReadLocker:
-        mutex = &m_readNotificationMutex;
-        break;
-    case CanWriteLocker:
-        mutex = &m_writeNotificationMutex;
-        break;
-    case CanErrorLocker:
-        mutex = &m_errorNotificationMutex;
-        break;
-    default:
-        break;
-    }
-
-    if (uselocker)
-        QMutexLocker locker(mutex);
-    else
-        mutex->lock();
-}
-
-void WinSerialPortEngine::unlockNotification(NotificationLockerType type)
-{
-    switch (type) {
-    case CanReadLocker:
-        m_readNotificationMutex.unlock();
-        break;
-    case CanWriteLocker:
-        m_writeNotificationMutex.unlock();
-        break;
-    case CanErrorLocker:
-        m_errorNotificationMutex.unlock();
-        break;
-    default:
-        break;
-    }
-}
-
-#endif
-
 /* Protected methods */
 
 /*!
@@ -1016,47 +917,6 @@ SerialPort::PortError WinSerialPortEngine::decodeSystemError() const
     return error;
 }
 
-#ifdef Q_OS_WINCE
-
-/*!
-    Embedded-based (WinCE) event loop for the notification subsystem.
-    The serial port events EV_ERR, EV_RXCHAR, and EV_TXEMPTY are tracked
-    in a separate thread. When a relevant event occurs, the appropriate
-    handler from the parent class SerialPortPrivate is called.
-    At the same time in handlers to capture/release the mutex
-    (see handlers implementation).
-*/
-void WinSerialPortEngine::run()
-{
-    while (m_running) {
-
-        m_setCommMaskMutex.lock();
-        ::SetCommMask(m_descriptor, m_desiredMask);
-        m_setCommMaskMutex.unlock();
-
-        if (::WaitCommEvent(m_descriptor, &m_currentMask, 0) != 0) {
-
-            // Wait until complete the operation changes the port settings,
-            // see updateDcb().
-            m_settingsChangeMutex.lock();
-            m_settingsChangeMutex.unlock();
-
-            if (EV_ERR & m_currentMask & m_desiredMask) {
-                dptr->canErrorNotification();
-            }
-            if (EV_RXCHAR & m_currentMask & m_desiredMask) {
-                dptr->canReadNotification();
-            }
-            //FIXME: This is why it does not work?
-            if (EV_TXEMPTY & m_currentMask & m_desiredMask) {
-                dptr->canWriteNotification();
-            }
-        }
-    }
-}
-
-#else
-
 /*!
     Windows NT-based event loop for the notification subsystem.
     The serial port events EV_ERR, EV_RXCHAR, and EV_TXEMPTY are tracked
@@ -1087,10 +947,6 @@ bool WinSerialPortEngine::event(QEvent *e)
     ::WaitCommEvent(m_descriptor, &m_currentMask, &m_notifyOverlapped);
     return ret;
 }
-
-#endif
-
-#ifndef Q_OS_WINCE
 
 /*!
     For Windows NT-based OS, creates event handles for OVERLAPPED
@@ -1140,18 +996,11 @@ void WinSerialPortEngine::closeEvents()
     ::memset(&m_notifyOverlapped, 0, sizeof(m_notifyOverlapped));
 }
 
-#endif
-
 /*!
 */
 bool WinSerialPortEngine::isNotificationEnabled(DWORD mask) const
 {
-    bool enabled;
-#ifdef Q_OS_WINCE
-    enabled = isRunning();
-#else
-    enabled = isEnabled();
-#endif
+    bool enabled = isEnabled();
     return enabled && (m_desiredMask & mask);
 }
 
@@ -1159,12 +1008,6 @@ bool WinSerialPortEngine::isNotificationEnabled(DWORD mask) const
 */
 void WinSerialPortEngine::setNotificationEnabled(bool enable, DWORD mask)
 {
-
-#ifdef Q_OS_WINCE
-    m_setCommMaskMutex.lock();
-    ::GetCommMask(m_descriptor, &m_currentMask);
-#endif
-
     // Mask only the desired bits without affecting others.
     if (enable)
         m_desiredMask |= mask;
@@ -1173,12 +1016,6 @@ void WinSerialPortEngine::setNotificationEnabled(bool enable, DWORD mask)
 
     ::SetCommMask(m_descriptor, m_desiredMask);
 
-#ifdef Q_OS_WINCE
-    m_setCommMaskMutex.unlock();
-
-    if (enable && !isRunning())
-        start();
-#else
     enable = isEnabled();
 
     // If the desired mask is zero then no needed to restart
@@ -1191,8 +1028,6 @@ void WinSerialPortEngine::setNotificationEnabled(bool enable, DWORD mask)
     } else if (enable) {
         setEnabled(false);
     }
-#endif
-
 }
 
 /*!
@@ -1202,15 +1037,6 @@ void WinSerialPortEngine::setNotificationEnabled(bool enable, DWORD mask)
 */
 bool WinSerialPortEngine::updateDcb()
 {
-#ifdef Q_OS_WINCE
-    // Grab a mutex, in order after exit WaitCommEvent
-    // block the flow of run() notifier until there is a change DCB.
-    QMutexLocker locker(&m_settingsChangeMutex);
-    // This way, we reset in class WaitCommEvent to
-    // be able to change the DCB.
-    // Otherwise WaitCommEvent blocking any change!
-    ::SetCommMask(m_descriptor, 0);
-#endif
     if (::SetCommState(m_descriptor, &m_currentDcb) == 0) {
         dptr->setError(decodeSystemError());
         return false;
@@ -1241,11 +1067,7 @@ SerialPortEngine *SerialPortEngine::create(SerialPortPrivate *d)
 
 /* Public static the SerialPortPrivate methods */
 
-#ifndef Q_OS_WINCE
 static const QLatin1String defaultPathPrefix("\\\\.\\");
-#else
-static const QLatin1String defaultPathPostfix(":");
-#endif
 
 /*!
     Converts a platform specific \a port name to a system location
@@ -1254,13 +1076,8 @@ static const QLatin1String defaultPathPostfix(":");
 QString SerialPortPrivate::portNameToSystemLocation(const QString &port)
 {
     QString ret = port;
-#ifndef Q_OS_WINCE
     if (!ret.contains(defaultPathPrefix))
         ret.prepend(defaultPathPrefix);
-#else
-    if (!ret.contains(defaultPathPostfix))
-        ret.append(defaultPathPostfix);
-#endif
     return ret;
 }
 
@@ -1271,13 +1088,8 @@ QString SerialPortPrivate::portNameToSystemLocation(const QString &port)
 QString SerialPortPrivate::portNameFromSystemLocation(const QString &location)
 {
     QString ret = location;
-#ifndef Q_OS_WINCE
     if (ret.contains(defaultPathPrefix))
         ret.remove(defaultPathPrefix);
-#else
-    if (ret.contains(defaultPathPostfix))
-        ret.remove(defaultPathPostfix);
-#endif
     return ret;
 }
 
