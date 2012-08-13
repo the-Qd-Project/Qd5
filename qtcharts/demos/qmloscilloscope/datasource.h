@@ -24,20 +24,25 @@
 #include <QObject>
 #include <QAbstractSeries>
 
+class QAbstractScrollArea;
+
 QTCOMMERCIALCHART_USE_NAMESPACE
 
 class DataSource : public QObject
 {
     Q_OBJECT
 public:
-    explicit DataSource(QObject *parent = 0);
+    explicit DataSource(QAbstractScrollArea *appViewer, QObject *parent = 0);
     
 signals:
     
 public slots:
+    void generateData(int type, int rowCount, int colCount);
     void update(QAbstractSeries *series);
+    void setOpenGL(bool enabled);
 
 private:
+    QAbstractScrollArea *m_appViewer;
     QList<QList<QPointF> > m_data;
     int m_index;
 };
