@@ -62,10 +62,10 @@ class QSensor2Gesture : public QObject, public QQmlParserStatus
     Q_INTERFACES(QQmlParserStatus)
 
 public:
-    QSensor2Gesture(QObject* parent = 0);
-    virtual ~QSensor2Gesture();
-    void classBegin();
-    void componentComplete();
+    explicit QSensor2Gesture(QObject* parent = 0);
+    ~QSensor2Gesture();
+    void classBegin() Q_DECL_OVERRIDE;
+    void componentComplete() Q_DECL_OVERRIDE;
 
 Q_SIGNALS:
     void detected(const QString &gesture);
@@ -89,14 +89,13 @@ private:
     void createGesture();
 
 private:
-    QStringList _gestureIds;
-    bool _enabled;
-    bool _oldEnabled;
-    bool _init;
-    QStringList _gestures;
+    QStringList gestureIds;
+    bool isEnabled;
+    bool initDone;
+    QStringList gestureList;
 
-    QSensorGesture* _sensorGesture;
-    QSensorGestureManager* _sensorGestureManager;
+    QSensorGesture* sensorGesture;
+    QSensorGestureManager* sensorGestureManager;
 };
 
 QT_END_NAMESPACE

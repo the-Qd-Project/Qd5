@@ -45,8 +45,6 @@
 
 QT_BEGIN_NAMESPACE
 
-//#define LOGGESTURQMLAPI
-
 /*!
     \qmltype SensorGesture
     \instantiates QSensor2Gesture
@@ -58,7 +56,7 @@ QT_BEGIN_NAMESPACE
 
     This type is part of the \b{QtSensors 5} module.
 
-    The following QML code creates a "shake" and "template" SensorGesture QML type, and
+    The following QML code creates a "shake" and "SecondCounter" SensorGesture QML type, and
     displays the detected gesture in a text type.
 
     QtSensors.shake gesture is available with the Qt Sensors API, but the QtSensors.SecondCounter
@@ -90,14 +88,12 @@ QT_BEGIN_NAMESPACE
 */
 QSensor2Gesture::QSensor2Gesture(QObject* parent)
     : QObject(parent)
-    , _enabled(false)
-    , _oldEnabled(false)
-    , _init(true)
-    , _sensorGesture(0)
-    , _sensorGestureManager(0)
+    , isEnabled(false)
+    , initDone(false)
+    , sensorGesture(0)
+    , sensorGestureManager(new QSensorGestureManager(this))
 {
-    _sensorGestureManager = new QSensorGestureManager(this);
-    connect(_sensorGestureManager, SIGNAL(newSensorGestureAvailable()), SIGNAL(availableGesturesChanged()));
+    connect(sensorGestureManager, SIGNAL(newSensorGestureAvailable()), SIGNAL(availableGesturesChanged()));
 }
 
 QSensor2Gesture::~QSensor2Gesture()
@@ -116,8 +112,8 @@ void QSensor2Gesture::componentComplete()
     /*
       this is needed in the case the customer defines the type(s) and set it enabled = true
     */
-    _init = false;
-    setEnabled(_enabled);
+    initDone = true;
+    setEnabled(isEnabled);
 }
 /*
   End of QQmlParserStatus interface implementation
@@ -129,7 +125,7 @@ void QSensor2Gesture::componentComplete()
 */
 QStringList QSensor2Gesture::availableGestures()
 {
-    return _sensorGestureManager->gestureIds();
+    return sensorGestureManager->gestureIds();
 }
 
 /*!
@@ -145,20 +141,20 @@ QStringList QSensor2Gesture::availableGestures()
 */
 QStringList QSensor2Gesture::gestures() const
 {
-    return _gestures;
+    return gestureList;
 }
 
 void QSensor2Gesture::setGestures(const QStringList& value)
 {
-    if (_gestures == value)
+    if (gestureList == value)
         return;
 
-    if (!_init && enabled()){
+    if (initDone && enabled()) {
         qWarning() << "Cannot change gestures while running.";
         return;
     }
-    _gestures.clear();
-    _gestures = value;
+    gestureList.clear();
+    gestureList = value;
     createGesture();
     Q_EMIT gesturesChanged();
 }
@@ -170,8 +166,8 @@ void QSensor2Gesture::setGestures(const QStringList& value)
 */
 QStringList QSensor2Gesture::validGestures() const
 {
-    if (_sensorGesture)
-        return _sensorGesture->validIds();
+    if (sensorGesture)
+        return sensorGesture->validIds();
     return QStringList();
 }
 
@@ -181,8 +177,8 @@ QStringList QSensor2Gesture::validGestures() const
 */
 QStringList QSensor2Gesture::invalidGestures() const
 {
-    if (_sensorGesture)
-        return _sensorGesture->invalidIds();
+    if (sensorGesture)
+        return sensorGesture->invalidIds();
     return QStringList();
 }
 
@@ -194,33 +190,28 @@ QStringList QSensor2Gesture::invalidGestures() const
 */
 bool QSensor2Gesture::enabled() const
 {
-    return _enabled;
+    return isEnabled;
 }
 
 void QSensor2Gesture::setEnabled(bool value)
 {
-    _enabled = value;
-    if (_init)
+    bool hasChanged = false;
+    if (isEnabled != value) {
+        isEnabled = value;
+        hasChanged = true;
+    }
+    if (!initDone)
         return;
 
-    if (_enabled != _oldEnabled){
-        _oldEnabled = _enabled;
-        if (_sensorGesture){
-            if (_enabled){
-#ifdef LOGGESTUREQMLAPI
-                qDebug() << "start detection" << _gestureIds;
-#endif
-                _sensorGesture->startDetection();
-            }
-            else {
-#ifdef LOGGESTUREQMLAPI
-                qDebug() << "stop detection" << _gestureIds;
-#endif
-                _sensorGesture->stopDetection();
-            }
+    if (sensorGesture) {
+        if (value) {
+            sensorGesture->startDetection();
+        } else {
+            sensorGesture->stopDetection();
         }
-        Q_EMIT enabledChanged();
     }
+    if (hasChanged)
+        Q_EMIT enabledChanged();
 }
 
 /*!
@@ -234,20 +225,20 @@ void QSensor2Gesture::setEnabled(bool value)
 */
 void QSensor2Gesture::deleteGesture()
 {
-    if (_sensorGesture){
-        bool emitinvalidchange = !invalidGestures().isEmpty();
-        bool emitvalidchange = !validGestures().isEmpty();
+    if (sensorGesture) {
+        bool emitInvalidChange = !invalidGestures().isEmpty();
+        bool emitValidChange = !validGestures().isEmpty();
 
-        if (_sensorGesture->isActive()) {
-            _sensorGesture->stopDetection();
+        if (sensorGesture->isActive()) {
+            sensorGesture->stopDetection();
         }
-        delete _sensorGesture;
-        _sensorGesture = 0;
+        delete sensorGesture;
+        sensorGesture = 0;
 
-        if (emitinvalidchange){
+        if (emitInvalidChange) {
             Q_EMIT invalidGesturesChanged();
         }
-        if (emitvalidchange){
+        if (emitValidChange) {
             Q_EMIT validGesturesChanged();
         }
     }
@@ -256,15 +247,9 @@ void QSensor2Gesture::deleteGesture()
 void QSensor2Gesture::createGesture()
 {
     deleteGesture();
-#ifdef LOGGESTURQMLAPI
-    qDebug() << "Create Gestrues:";
-    for (int i = 0; i < _gestures.count(); i++){
-        qDebug() << " -" << _gestures[i];
-    }
-#endif
-    _sensorGesture = new QSensorGesture(_gestures, this);
-    if (!validGestures().isEmpty()){
-        QObject::connect(_sensorGesture
+    sensorGesture = new QSensorGesture(gestureList, this);
+    if (!validGestures().isEmpty()) {
+        QObject::connect(sensorGesture
                          , SIGNAL(detected(QString))
                          , this
                          , SIGNAL(detected(QString)));
