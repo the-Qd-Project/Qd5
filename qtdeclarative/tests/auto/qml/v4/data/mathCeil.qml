@@ -22,6 +22,9 @@ Item {
     property real subtest10: Math.ceil(i1.p10)
     property bool test10: subtest10 === 0 && (1/subtest10) === -Infinity
 
+    property real subtest11: Math.ceil(i1.p11)
+    property bool test11: subtest11 === 0 && (1/subtest11) === -Infinity
+
     QtObject {
         id: i1
         property real p1: -3.7
@@ -33,5 +36,6 @@ Item {
         property real p8: Number.POSITIVE_INFINITY
         property real p9: 0
         property real p10: -0
+        property real p11: -0.5
     }
  }
