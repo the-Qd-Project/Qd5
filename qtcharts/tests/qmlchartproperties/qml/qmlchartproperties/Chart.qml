@@ -107,8 +107,4 @@ ChartView {
             NumberAnimation { duration: 800 }
         }
     }
-    
-    Component.onCompleted: {
-        createDefaultAxes();
-    }
 }
