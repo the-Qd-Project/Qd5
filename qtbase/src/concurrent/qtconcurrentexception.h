@@ -46,12 +46,7 @@
 
 #ifndef QT_NO_QFUTURE
 
-#include <QtCore/qatomic.h>
-#include <QtCore/qshareddata.h>
-
-#ifndef QT_NO_EXCEPTIONS
-#  include <exception>
-#endif
+#include <QtCore/qexception.h>
 
 QT_BEGIN_HEADER
 QT_BEGIN_NAMESPACE
@@ -62,59 +57,8 @@ namespace QtConcurrent
 
 #ifndef QT_NO_EXCEPTIONS
 
-class Q_CONCURRENT_EXPORT Exception : public std::exception
-{
-public:
-    virtual void raise() const;
-    virtual Exception *clone() const;
-};
-
-class Q_CONCURRENT_EXPORT UnhandledException : public Exception
-{
-public:
-    void raise() const;
-    Exception *clone() const;
-};
-
-namespace internal {
-
-class Base;
-class ExceptionHolder
-{
-public:
-    ExceptionHolder(Exception *exception = 0);
-    ExceptionHolder(const ExceptionHolder &other);
-    void operator=(const ExceptionHolder &other);
-    ~ExceptionHolder();
-    Exception *exception() const;
-    QExplicitlySharedDataPointer<Base> base;
-};
-
-class Q_CONCURRENT_EXPORT ExceptionStore
-{
-public:
-    void setException(const Exception &e);
-    bool hasException() const;
-    ExceptionHolder exception();
-    void throwPossibleException();
-    bool hasThrown() const;
-    ExceptionHolder exceptionHolder;
-};
-
-} // namespace internal
-
-#else // QT_NO_EXCEPTIONS
-
-namespace internal {
-
-class Q_CONCURRENT_EXPORT ExceptionStore
-{
-public:
-    ExceptionStore() { }
-    inline void throwPossibleException() const {}
-};
-
-} // namespace internal
+typedef Q_DECL_DEPRECATED QException Exception;
+typedef Q_DECL_DEPRECATED QUnhandledException UnhandledException;
 
 #endif
 
@@ -123,6 +67,6 @@ public:
 QT_END_NAMESPACE
 QT_END_HEADER
 
-#endif // QT_NO_CONCURRENT
+#endif // QT_NO_QFUTURE
 
 #endif
