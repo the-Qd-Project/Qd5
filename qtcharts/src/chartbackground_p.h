@@ -50,7 +50,6 @@ public:
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
-
 private:
     int roundness(qreal size) const;
 
