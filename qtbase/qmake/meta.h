@@ -42,6 +42,8 @@
 #ifndef META_H
 #define META_H
 
+#include "project.h"
+
 #include <qhash.h>
 #include <qstringlist.h>
 #include <qstring.h>
@@ -55,9 +57,9 @@ class QMakeMetaInfo
     bool readLibtoolFile(const QString &f);
     bool readPkgCfgFile(const QString &f);
     QMakeProject *conf;
-    QHash<QString, QStringList> vars;
+    ProValueMap vars;
     QString meta_type;
-    static QHash<QString, QHash<QString, QStringList> > cache_vars;
+    static QHash<QString, ProValueMap> cache_vars;
     void clear();
 public:
     QMakeMetaInfo(QMakeProject *_conf);
@@ -67,35 +69,35 @@ public:
     static bool libExists(QString lib);
     QString type() const;
 
-    bool isEmpty(const QString &v);
-    QStringList &values(const QString &v);
-    QString first(const QString &v);
-    QHash<QString, QStringList> &variables();
+    bool isEmpty(const ProKey &v);
+    ProStringList &values(const ProKey &v);
+    ProString first(const ProKey &v);
+    ProValueMap &variables();
 };
 
-inline bool QMakeMetaInfo::isEmpty(const QString &v)
+inline bool QMakeMetaInfo::isEmpty(const ProKey &v)
 { return !vars.contains(v) || vars[v].isEmpty(); }
 
 inline QString QMakeMetaInfo::type() const
 { return meta_type; }
 
-inline QStringList &QMakeMetaInfo::values(const QString &v)
+inline ProStringList &QMakeMetaInfo::values(const ProKey &v)
 { return vars[v]; }
 
-inline QString QMakeMetaInfo::first(const QString &v)
+inline ProString QMakeMetaInfo::first(const ProKey &v)
 {
 #if defined(Q_CC_SUN) && (__SUNPRO_CC == 0x500) || defined(Q_CC_HP)
     // workaround for Sun WorkShop 5.0 bug fixed in Forte 6
     if (isEmpty(v))
-        return QString("");
+        return ProString("");
     else
         return vars[v].first();
 #else
-    return isEmpty(v) ? QString("") : vars[v].first();
+    return isEmpty(v) ? ProString("") : vars[v].first();
 #endif
 }
 
-inline QHash<QString, QStringList> &QMakeMetaInfo::variables()
+inline ProValueMap &QMakeMetaInfo::variables()
 { return vars; }
 
 inline bool QMakeMetaInfo::libExists(QString lib)
