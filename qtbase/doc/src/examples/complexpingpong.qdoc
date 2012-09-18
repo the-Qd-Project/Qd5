@@ -26,7 +26,7 @@
 ****************************************************************************/
 
 /*!
-    \example dbus/complexpingpong
+    \example complexpingpong
     \title Complex Ping Pong Example
 
     The Complex Ping Pong example improves on the \l{D-Bus Ping Pong Example} by providing
