@@ -50,6 +50,7 @@ class QLegend;
 class QPieSeries;
 
 class QLegendMarker;
+class LegendMarkerItem;
 
 class QLegendMarkerPrivate : public QGraphicsObject, public QGraphicsLayoutItem
 {
@@ -90,6 +91,8 @@ public Q_SLOTS:
 
 private:
     QLegendMarker *q_ptr;
+
+    LegendMarkerItem *m_item;
 
 /*
     QLegend* m_legend;
