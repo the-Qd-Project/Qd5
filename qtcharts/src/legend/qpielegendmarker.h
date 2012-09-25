@@ -24,6 +24,7 @@
 #include <QChartGlobal>
 #include <QLegendMarker>
 #include <QPieSlice>
+#include "qpielegendmarker_p.h"
 
 QTCOMMERCIALCHART_BEGIN_NAMESPACE
 
@@ -44,8 +45,7 @@ public:
 //public Q_SLOTS:
 
 private:
-// TODO:
-//    QScopedPointer<QPieLegendMarkerPrivate> d_ptr;
+    QScopedPointer<QPieLegendMarkerPrivate> d_ptr;
     Q_DISABLE_COPY(QPieLegendMarker)
 
 // TODO: PIMPL
