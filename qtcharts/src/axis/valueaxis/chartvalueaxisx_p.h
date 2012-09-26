@@ -30,20 +30,19 @@
 #ifndef CHARTVALUEAXISX_H
 #define CHARTVALUEAXISX_H
 
-#include "chartaxis_p.h"
+#include "horizontalaxis_p.h"
 
 QTCOMMERCIALCHART_BEGIN_NAMESPACE
 
-class QAbstractAxis;
 class ChartPresenter;
+class QValueAxis;
 
-class ChartValueAxisX : public ChartAxis
+class ChartValueAxisX : public HorizontalAxis
 {
 public:
-    ChartValueAxisX(QAbstractAxis *axis, ChartPresenter *presenter);
+    ChartValueAxisX(QValueAxis *axis, ChartPresenter *presenter);
     ~ChartValueAxisX();
 
-    AxisType axisType() const { return X_AXIS;}
     QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint) const;
 
 protected:
@@ -53,7 +52,7 @@ protected:
 
 private:
     int m_tickCount;
-
+    QValueAxis *m_axis;
 };
 
 QTCOMMERCIALCHART_END_NAMESPACE
