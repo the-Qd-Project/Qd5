@@ -57,30 +57,10 @@ class QLegendMarkerPrivate : public QObject
 {
     Q_OBJECT
 public:
-//    explicit QLegendMarkerPrivate(QAbstractSeries *series, QLegendMarker *q);
     explicit QLegendMarkerPrivate(QLegendMarker *q, QLegend *legend);
     virtual ~QLegendMarkerPrivate();
 
-    // TODO: remove temporary setters/getters and use the m_item directly from public class via d_ptr
-    void setPen(const QPen &pen);
-    QPen pen() const;
-
-    void setBrush(const QBrush &brush);
-    QBrush brush() const;
-
-    void setFont(const QFont &font);
-    QFont font() const;
-
-    void setLabel(const QString label);
-    QString label() const;
-
-    void setLabelBrush(const QBrush &brush);
-    QBrush labelBrush() const;
-
-    bool isVisible() const;
-    void setVisible(bool visible);
-
-    // Helper for now.
+    // Helper for now. (or deckare LegendLayout as friend)
     LegendMarkerItem* item() const { return m_item; }
 
     // Item gets the event, logic for event is here
@@ -96,16 +76,6 @@ protected:
 private:
     QLegendMarker *q_ptr;
 
-// New legend marker properties
-// Moved to item.
-/*
-    QString m_label;
-    QBrush m_labelBrush;
-    QFont m_font;
-    QPen m_pen;
-    QBrush m_brush;
-    bool m_visible;
-*/
     friend class QLegendPrivate; // TODO: Is this needed?
     Q_DECLARE_PUBLIC(QLegendMarker)
 };

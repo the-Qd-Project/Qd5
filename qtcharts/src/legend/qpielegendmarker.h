@@ -23,12 +23,15 @@
 
 #include <QChartGlobal>
 #include <QLegendMarker>
+#include <QPieSeries>
 #include <QPieSlice>
-#include "qpielegendmarker_p.h"
+//#include "qpielegendmarker_p.h"
 
 QTCOMMERCIALCHART_BEGIN_NAMESPACE
 
-// TODO: No export, make this private. QLegendMarker should be enough for user of the api (why expose the details?)
+class QPieLegendMarkerPrivate;
+
+// TODO: No export? make this private. QLegendMarker should be enough for user of the api (why expose the details?)
 class QTCOMMERCIALCHART_EXPORT QPieLegendMarker : public QLegendMarker
 {
     Q_OBJECT
@@ -37,8 +40,8 @@ public:
     explicit QPieLegendMarker(QPieSeries* series, QPieSlice* slice, QLegend *legend, QObject *parent = 0);
     virtual ~QPieLegendMarker();
     
-    virtual QAbstractSeries* series();
-    virtual QPieSlice* peerObject();
+    virtual QPieSeries* series();
+    virtual QPieSlice* peerObject();    // TODO: rename to slice and remove these virtuals from base class?
 
 protected:
     QPieLegendMarker(QPieLegendMarkerPrivate &d, QObject *parent = 0);
