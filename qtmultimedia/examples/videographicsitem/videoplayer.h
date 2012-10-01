@@ -49,10 +49,8 @@
 QT_BEGIN_NAMESPACE
 class QAbstractButton;
 class QSlider;
+class QGraphicsVideoItem;
 QT_END_NAMESPACE
-
-
-class VideoItem;
 
 class VideoPlayer : public QWidget
 {
@@ -76,7 +74,7 @@ private slots:
 
 private:
     QMediaPlayer mediaPlayer;
-    VideoItem *videoItem;
+    QGraphicsVideoItem *videoItem;
     QAbstractButton *playButton;
     QSlider *positionSlider;
 };
