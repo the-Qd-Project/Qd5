@@ -28,7 +28,7 @@
 
 \module QtBluetooth
 
-\title Qt Bluetooth C++ API
+\title Qt Bluetooth C++ Classes
 \brief An API enabling basic Bluetooth operations like scanning for devices
 and connecting them.
 

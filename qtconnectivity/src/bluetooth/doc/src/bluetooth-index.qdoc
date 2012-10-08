@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2012 Digia Plc and/or its subsidiary(-ies).
+** Copyright (C) 2013 Digia Plc and/or its subsidiary(-ies).
 ** Contact: http://www.qt-project.org/legal
 **
 ** This file is part of the documentation of the Qt Toolkit.
@@ -26,70 +26,55 @@
 ****************************************************************************/
 
 /*!
-    \page qtbluetooth-index.html
-    \title Qt Bluetooth
-    \brief Qt Bluetooth enables connectivity between Bluetooth enabled devices.
+\page qtbluetooth-index.html
+\title Qt Bluetooth
+\brief Qt Bluetooth enables connectivity between Bluetooth enabled devices.
 
-    Bluetooth is a short-range (less than 100 meters) wireless technology. It
-    has a reasonably high data transfer rate of 2.1 Mbit/s, which makes it ideal
-    for transfering data between devices.
+Bluetooth is a short-range (less than 100 meters) wireless technology. It
+has a reasonably high data transfer rate of 2.1 Mbit/s, which makes it ideal
+for transferring data between devices.
 
-    Bluetooth connectivity is based on basic device management, such as scanning
-    for devices, gathering information about them, and exchaning data between
-    them.
+Bluetooth connectivity is based on basic device management, such as scanning
+for devices, gathering information about them, and exchaning data between
+them.
 
-    \section1 Getting Started
+\section1 Getting started
 
-    To use the C++ library in your application, add the following configuration
-    option to your \c .pro file:
+To use the C++ library in your application, add the following configuration
+option to your \c .pro file:
 
-    \snippet doc_src_qtbluetooth.pro contacts project modification
+\snippet doc_src_qtbluetooth.pro contacts project modification
 
-    To use the classes of the module in your application you need the following
-    import statement in your \c .qml file:
+To use the classes of the module in your application you need the following
+import statement in your \c .qml file:
 
-    \snippet doc_src_qtbluetooth.qml import
+\snippet doc_src_qtbluetooth.qml import
 
-    \section1 References
+\section1 Related information
 
-    \table
-    \header
-        \li {1,4} Reference
-        \li {1,4} Guides
-        \li {4,1} Examples
-    \header
-      \li QML API examples
-      \li C++ API examples
-    \row
-        \li \l{Qt Bluetooth QML API}
-        \li \l{Qt Bluetooth Overview}
-        \li \l{btscanner}{QML Bluetooth Scanner}
+\section2 Guides
+\list
+    \li \l {Qt Bluetooth Overview}
+\endlist
 
-            A QML implementation of the Bluetooth device scanner.
-        \li \l{btscanner}{Bluetooth Scanner}
+\section2 Reference
+\list
+    \li \l {Qt Bluetooth QML Types}{QML Types}
+    \li \l {Qt Bluetooth C++ Classes}{C++ Classes}
+\endlist
 
-            Scan for Bluetooth devices.
-    \row
-        \li \l{Qt Bluetooth C++ API}
-        \li \l{btchat}{Qt Bluetooth Tutorial}
-
-            A chat server and client using bluetooth.
-        \li \l{bttennis}{QML Bluetooth Tennis}
-
-            The tennis game using a QML interface to the Qt Bluetooth QML API.
-            It must connect to an instance of the C++ tennis game to play.
-        \li \l{bttennis}{Bluetooth Tennis}
-
-            The classic game of \l{http://en.wikipedia.org/wiki/Pong}{Pong}.
-            Supports multiplayer over Bluetooth and touch-to-play
-            functionality on devices that support NFC.
-    \row
-        \li
-        \li
-        \li
-        \li \l{btfiletransfer}{Bluetooth File Transfer}
-
-            Transfer files between Bluetooth devices.
-    \endtable
-
+\section2 Examples
+\list
+    \li QML
+    \list
+        \li \l {scanner}{QML Bluetooth Scanner}
+    \endlist
+    \li C++
+    \list
+        \li \l {btchat}{Bluetooth Chat}
+        \li \l {btscanner}{Bluetooth Scanner}
+        \li \l {bttennis}{Bluetooth Tennis}
+        \li \l {btfiletransfer}{Bluetooth File Transfer}
+    \endlist
+\endlist
 */
