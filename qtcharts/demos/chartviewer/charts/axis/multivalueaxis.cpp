@@ -29,7 +29,7 @@ class MultiValueAxis: public Chart
 public:
     QString name()
     {
-        return "MultiValueAxis";
+        return "AxisSet 1";
     }
     QString category()
     {
@@ -37,7 +37,7 @@ public:
     }
     QString subCategory()
     {
-        return QString::null;
+        return "MultiValueAxis";
     }
 
     QChart *createChart(const DataTable &table)
@@ -46,7 +46,7 @@ public:
         QValueAxis *axisX;
         QValueAxis *axisY;
 
-        chart->setTitle("MultiValueAxis");
+        chart->setTitle("MultiValueAxis1");
 
         QString name("Series");
         int nameIndex = 0;
