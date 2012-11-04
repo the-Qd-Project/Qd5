@@ -47,6 +47,7 @@
 #include "qwaylandeglintegration.h"
 
 class QWaylandGLContext;
+class QOpenGLFramebufferObject;
 
 class QWaylandEglWindow : public QWaylandWindow
 {
@@ -56,9 +57,18 @@ public:
     WindowType windowType() const;
     void setGeometry(const QRect &rect);
 
+    QRect contentsRect() const;
+
     EGLSurface eglSurface() const;
+    GLuint contentFBO() const;
+    GLuint contentTexture() const;
 
     QSurfaceFormat format() const;
+
+    void bindContentFBO();
+
+protected:
+    void createDecorationInstance();
 
 private:
     QWaylandEglIntegration *m_eglIntegration;
@@ -68,6 +78,8 @@ private:
 
     mutable EGLSurface m_eglSurface;
     mutable EGLConfig m_eglConfig;
+    mutable QOpenGLFramebufferObject *m_contentFBO;
+    mutable bool m_resize;
 
     QSurfaceFormat m_format;
 };
