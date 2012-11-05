@@ -33,10 +33,10 @@ public:
 
 private:
     void recalculateAngles();
-    QPieSeries *find(QString seriesName) const;
+    void updateLegendMarkers();
 
 private:
-    QPieSeries *mainSeries;
+    QPieSeries *m_mainSeries;
 };
 
 #endif // DONUTBREAKDOWNCHART_H
