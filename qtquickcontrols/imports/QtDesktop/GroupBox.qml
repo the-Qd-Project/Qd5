@@ -40,11 +40,12 @@
 
 import QtQuick 2.0
 import QtDesktop 1.0
+import "Styles/Settings.js" as Settings
 
 Item {
     id: groupbox
-    implicitWidth: Math.max(200, contentWidth + loader.item.implicitWidth)
-    implicitHeight: contentHeight + loader.item.implicitHeight + 4
+    implicitWidth: Math.max(200, contentWidth + (loader.item ? loader.item.implicitWidth: 0) )
+    implicitHeight: contentHeight + (loader.item ? loader.item.implicitHeight : 0) + 4
 
     default property alias data: content.data
 
@@ -58,32 +59,20 @@ Item {
     property alias checked: check.checked
     property bool adjustToContentSize: false // Resizes groupbox to fit contents.
                                              // Note when using this, you cannot anchor children
+    property Component style: Qt.createComponent(Settings.THEME_PATH + "/GroupBoxStyle.qml")
 
     Accessible.role: Accessible.Grouping
     Accessible.name: title
 
-    property Component delegate: StyleItem {
-        id: styleitem
-        elementType: "groupbox"
-        anchors.fill: parent
-        text: groupbox.title
-        hover: checkbox.containsMouse
-        on: checkbox.checked
-        hasFocus: checkbox.activeFocus
-        activeControl: checkable ? "checkbox" : ""
-        sunken: !flat
-        contentHeight:  (title.length > 0 || checkable) ? 24 : 4
-    }
-
     Loader {
         id: loader
+        property alias control: groupbox
         anchors.fill: parent
         property int topMargin: title.length > 0 || checkable ? 22 : 4
         property int bottomMargin: 4
         property int leftMargin: 4
         property int rightMargin: 4
-        property alias styledItem: groupbox
-        sourceComponent: delegate
+        sourceComponent: style
         onLoaded: item.z = -1
     }
 

@@ -40,9 +40,10 @@
 
 import QtQuick 2.0
 import QtDesktop 1.0
+import "Styles/Settings.js" as Settings
 
 Item {
-    id:progressbar
+    id: progressbar
 
     property real value: 0
     property real minimumValue: 0
@@ -54,38 +55,24 @@ Item {
     property int minimumHeight: 0
 
     property int orientation: Qt.Horizontal
-    property string styleHint
+    property Component style: Qt.createComponent(Settings.THEME_PATH + "/ProgressBarStyle.qml")
+    property var styleHints:[]
 
     Accessible.role: Accessible.ProgressBar
     Accessible.name: value
 
-    implicitWidth: orientation === Qt.Horizontal ? 200 : loader.item.implicitHeight
-    implicitHeight: orientation === Qt.Horizontal ? loader.item.implicitHeight : 200
-
-    property Component delegate: StyleItem {
-        anchors.fill: parent
-        elementType: "progressbar"
-        // XXX: since desktop uses int instead of real, the progressbar
-        // range [0..1] must be stretched to a good precision
-        property int factor : 1000
-        value:   indeterminate ? 0 : progressbar.value * factor // does indeterminate value need to be 1 on windows?
-        minimum: indeterminate ? 0 : progressbar.minimumValue * factor
-        maximum: indeterminate ? 0 : progressbar.maximumValue * factor
-        enabled: progressbar.enabled
-        horizontal: progressbar.orientation == Qt.Horizontal
-        hint: progressbar.styleHint
-        contentWidth: 23
-        contentHeight: 23
-    }
+    implicitWidth: orientation === Qt.Horizontal ? 200 : (loader.item ? loader.item.implicitHeight : 0)
+    implicitHeight: orientation === Qt.Horizontal ? (loader.item ? loader.item.implicitHeight : 0) : 200
 
     Loader {
         id: loader
         property alias indeterminate: progressbar.indeterminate
-        property alias value:progressbar.value
-        property alias maximumValue:progressbar.maximumValue
-        property alias minimumValue:progressbar.minimumValue
+        property alias value: progressbar.value
+        property alias maximumValue: progressbar.maximumValue
+        property alias minimumValue: progressbar.minimumValue
 
-        sourceComponent: delegate
+        property alias control: progressbar
+        sourceComponent: style
         anchors.fill: parent
     }
 
