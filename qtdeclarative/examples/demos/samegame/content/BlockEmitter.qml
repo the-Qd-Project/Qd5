@@ -41,6 +41,8 @@
 import QtQuick 2.0
 import QtQuick.Particles 2.0
 
+import "../settings.js" as Settings
+
 Emitter {
     property Item block: parent
     velocity: TargetDirection{targetX: block.width/2; targetY: block.height/2; magnitude: -40; magnitudeVariation: 40}
@@ -50,6 +52,6 @@ Emitter {
     lifeSpan: 700; lifeSpanVariation: 100
     emitRate: 1000
     maximumEmitted: 100 //only fires 0.1s bursts (still 2x old number)
-    size: 28
-    endSize: 14
+    size: Settings.blockSize * 0.85
+    endSize: Settings.blockSize * 0.85 /2
 }
