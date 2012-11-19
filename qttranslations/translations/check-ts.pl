@@ -43,7 +43,11 @@
 
 use strict;
 
-my @groups = ("qt", "assistant", "designer", "linguist", "qt_help", "qtconfig", "qvfb");
+my @groups = (
+    "qtbase", "qtdeclarative", "qtxmlpatterns", "qtmultimedia", "qtscript", "qtquick1",
+#    "qtdocgallery", "qtlocation", "qtpim", "qtsystems",
+    "assistant", "designer", "linguist", "qt_help", "qtconfig", "qmlviewer"
+);
 
 my %scores = ();
 my %langs = ();
