@@ -48,10 +48,10 @@ A list of topics in this topic page:
 \li \l{Signals & Slots}
 \li The meta-object in QML
 \endlist
-\li QString / Unicode
+\li \l{Unicode in Qt}
 \li Text codecs
 \li QPA
-\li Wayland
+\li \l{Wayland Support in Qt}{Wayland}
 \li Platform specific development
 \list
 \li Mac
