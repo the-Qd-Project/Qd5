@@ -43,11 +43,10 @@
 #ifndef QNXNFCMANAGER_H
 #define QNXNFCMANAGER_H
 
-#include <QObject>
 #include "nfc/nfc_types.h"
 #include "nfc/nfc.h"
-#include <QDebug>
 #include <QSocketNotifier>
+#include <QDebug>
 #include "../qndefmessage.h"
 #include "../qndefrecord.h"
 //#include <bb/system/InvokeManager>
@@ -72,6 +71,7 @@ public:
     static QNXNFCManager *instance();
     void registerForNewInstance();
     void unregisterForInstance();
+    void unregisterTargetDetection(QObject *);
     nfc_target_t *getLastTarget();
     bool isAvailable();
 
@@ -99,13 +99,13 @@ public Q_SLOTS:
     void nfcReadWriteEvent(nfc_event_t *nfcEvent);
     void startBTHandover();
     //TODO add a parameter to only detect a special target for now we are detecting all target types
-    bool startTargetDetection();
+    bool startTargetDetection(const QList<QNearFieldTarget::Type> &targetTypes);
     //void handleInvoke(const bb::system::InvokeRequest& request);
 
 Q_SIGNALS:
     //void llcpEvent();
-    //void ndefMessage(const QNdefMessage&);
-    void targetDetected(QNearFieldTarget*, const QList<QNdefMessage>&);
+    void ndefMessage(QNdefMessage, QNearFieldTarget *);
+    void targetDetected(QNearFieldTarget *, const QList<QNdefMessage> &);
     //Not sure if this is implementable
     //void targetLost(); //Not available yet
     //void bluetoothHandover();
