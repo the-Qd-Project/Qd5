@@ -45,7 +45,7 @@ public:
 
 public:
     void initializeGraphics(QGraphicsItem* parent);
-    void initializeDomain(Domain *domain);
+    void initializeDomain(AbstractDomain *domain);
 
     //interface for manipulating range form base class
     void setMin(const QVariant &min);
