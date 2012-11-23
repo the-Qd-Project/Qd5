@@ -81,15 +81,16 @@ Rectangle {
     Row {
         anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter
-        UI.Button {
+        spacing: 4
+        GreyButton {
             text:"dx/dt"
             onClicked: wanderer.affectedParameter = Wander.Position;
         }
-        UI.Button {
+        GreyButton {
             text:"dv/dt"
             onClicked: wanderer.affectedParameter = Wander.Velocity;
         }
-        UI.Button {
+        GreyButton {
             text:"da/dt"
             onClicked: wanderer.affectedParameter = Wander.Acceleration;
         }
