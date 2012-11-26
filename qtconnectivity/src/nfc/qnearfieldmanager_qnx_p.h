@@ -76,7 +76,7 @@ public:
 
 private Q_SLOTS:
     void handleMessage(QNdefMessage, QNearFieldTarget *);
-    void newTarget(NearFieldTarget<QNearFieldTarget> *target, const QList<QNdefMessage> &);
+    void newTarget(QNearFieldTarget *target, const QList<QNdefMessage> &);
 
 private:
     QList<QNearFieldTarget::Type> m_detectTargetTypes;
