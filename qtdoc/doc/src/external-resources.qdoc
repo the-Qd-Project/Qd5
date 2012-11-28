@@ -54,3 +54,13 @@
     \externalpage http://qt.digia.com/licensing/
     \title Qt Licensing Overview
 */
+
+/*!
+    \externalpage http://www.gnu.org/licenses/gpl.html
+    \title GNU General Public License
+*/
+
+/*!
+    \externalpage http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+    \title GNU Lesser General Public License, version 2.1
+*/
