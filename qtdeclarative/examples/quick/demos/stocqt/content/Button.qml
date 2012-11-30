@@ -42,18 +42,21 @@ import QtQuick 2.0
 
 Rectangle {
   id:button
-  property bool buttonEnabled:true
+  signal clicked
+  property alias text: txt.text
+  property bool buttonEnabled:false
   radius:5
-  width:25
-  height:25
-  color:buttonEnabled ? "steelblue" : "gray"
+  width: Math.max(64,txt.width+16);
+  height: 32
+  color: buttonEnabled ? "steelblue" : "gray"
   MouseArea {
     anchors.fill:parent
-    onClicked: {
-      if (buttonEnabled)
-       buttonEnabled = false;
-      else
-       buttonEnabled = true;
-    }
+    onClicked: button.clicked();
+  }
+  Text {
+    anchors.centerIn: parent
+    font.pixelSize: 18
+    color:"#ecc089"
+    id: txt
   }
 }
