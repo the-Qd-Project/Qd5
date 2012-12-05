@@ -53,14 +53,14 @@ QT_BEGIN_NAMESPACE
 
 class QSGContext;
 
-class QQuickWindowManager;
+class QSGRenderLoop;
 
 struct Q_QUICK_PRIVATE_EXPORT QSGContextFactoryInterface : public QFactoryInterface
 {
     virtual QSGContext *create(const QString &key) const = 0;
 
     virtual QQuickTextureFactory *createTextureFactoryFromImage(const QImage &image) = 0;
-    virtual QQuickWindowManager *createWindowManager() = 0;
+    virtual QSGRenderLoop *createWindowManager() = 0;
 };
 
 #define QSGContextFactoryInterface_iid \
@@ -79,7 +79,7 @@ public:
     virtual QSGContext *create(const QString &key) const = 0;
 
     virtual QQuickTextureFactory *createTextureFactoryFromImage(const QImage &) { return 0; }
-    virtual QQuickWindowManager *createWindowManager() { return 0; }
+    virtual QSGRenderLoop *createWindowManager() { return 0; }
 };
 
 QT_END_NAMESPACE
