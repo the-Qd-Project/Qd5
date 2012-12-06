@@ -28,7 +28,7 @@
 /*!
     \example graphicsview/embeddeddialogs
     \title Embedded Dialogs
-    \ingroup examples-graphicsview
+    \ingroup examples-graphicsview-layout
     \brief This example shows how to embed standard dialogs into
     Graphics View.
 
