@@ -59,6 +59,7 @@ public:
     QPlatformOpenGLContext *createPlatformOpenGLContext(QOpenGLContext *context) const;
 
     QPlatformFontDatabase *fontDatabase() const;
+    QPlatformInputContext *inputContext() const;
 
     QVariant styleHint(StyleHint hint) const;
 
@@ -69,6 +70,7 @@ public:
 
 private:
     QPlatformFontDatabase *m_fontDatabase;
+    QPlatformInputContext *m_inputContext;
     QPlatformScreen *m_screen;
 };
 
