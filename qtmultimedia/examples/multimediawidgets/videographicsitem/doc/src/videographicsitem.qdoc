@@ -26,9 +26,9 @@
 ****************************************************************************/
 
 /*!
-\example videographicsitem
+\example multimediawidgets/videographicsitem
 \title Video Graphics Item Example
-\ingroup video_examples
+\ingroup multimedia_examples
 \brief This example demonstrates how to stream video on a graphics scene.
 
     The Video Graphics Item example shows how to implement a QGraphicsItem that displays video on a
