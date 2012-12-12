@@ -63,6 +63,9 @@ public:
 
     QVariant styleHint(StyleHint hint) const;
 
+    QStringList themeNames() const;
+    QPlatformTheme *createPlatformTheme(const QString &name) const;
+
     QAbstractEventDispatcher *guiThreadEventDispatcher() const;
     QPlatformNativeInterface *nativeInterface() const;
 
