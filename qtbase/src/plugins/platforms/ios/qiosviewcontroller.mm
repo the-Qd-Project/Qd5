@@ -44,6 +44,7 @@
 #include <QtGui/QGuiApplication>
 #include <QtGui/QScreen>
 #include "qiosscreen.h"
+#include "qiosglobal.h"
 
 @implementation QIOSViewController
 
