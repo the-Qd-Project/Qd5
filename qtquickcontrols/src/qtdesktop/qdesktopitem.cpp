@@ -38,7 +38,7 @@
 **
 ****************************************************************************/
 
-#include "qdesktopitem.h"
+#include "qdesktopitem_p.h"
 
 QDesktopItem::QDesktopItem(QObject* obj) : QObject(obj) {
     connect(&desktopWidget, SIGNAL(resized(int)), this, SIGNAL(screenGeometryChanged()));
