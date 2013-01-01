@@ -87,6 +87,8 @@ Item {
         sourceComponent: style
         property alias control: button
         property alias position: button.__position
+        height: item ? item.implicitHeight : 0
+        width: item ? item.implicitWidth : 0
     }
 
     ButtonBehavior {
