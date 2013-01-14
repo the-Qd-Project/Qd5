@@ -46,6 +46,14 @@
 #include <mfapi.h>
 #include <mfidl.h>
 
+QT_BEGIN_NAMESPACE
+
+#ifdef QT_OPENGL_ES_2_ANGLE
+class EVRCustomPresenterActivate;
+#endif
+
+QT_END_NAMESPACE
+
 QT_USE_NAMESPACE
 
 class MFVideoRendererControl : public QVideoRendererControl
@@ -74,6 +82,10 @@ private:
     QAbstractVideoSurface *m_surface;
     IMFActivate *m_currentActivate;
     IMFSampleGrabberSinkCallback *m_callback;
+
+#ifdef QT_OPENGL_ES_2_ANGLE
+    EVRCustomPresenterActivate *m_presenterActivate;
+#endif
 };
 
 #endif
