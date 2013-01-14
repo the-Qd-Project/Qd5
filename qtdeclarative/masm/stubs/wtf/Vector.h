@@ -43,6 +43,8 @@
 
 #include <vector>
 #include <wtf/Assertions.h>
+#include <wtf/NotFound.h>
+#include <qalgorithms.h>
 
 namespace WTF {
 
@@ -55,12 +57,39 @@ public:
     inline void append(const T& value)
     { this->push_back(value); }
 
+    inline void append(const Vector<T>& vector)
+    {
+        this->insert(this->end(), vector.begin(), vector.end());
+    }
+
+    using std::vector<T>::insert;
+
+    inline void insert(size_t position, T value)
+    { this->insert(this->begin() + position, value); }
+
     inline void grow(size_t size)
     { this->resize(size); }
+
+    inline void shrink(size_t size)
+    { this->erase(this->begin() + size, this->end()); }
+
+    inline void remove(size_t position)
+    { this->erase(this->begin() + position); }
+
+    inline bool isEmpty() const { return this->empty(); }
+
+    inline T &last() { return *(this->begin() + this->size() - 1); }
 };
+
+template <typename T, int capacity>
+void deleteAllValues(const Vector<T, capacity> &vector)
+{
+    qDeleteAll(vector);
+}
 
 }
 
 using WTF::Vector;
+using WTF::deleteAllValues;
 
 #endif // VECTOR_H
