@@ -63,6 +63,7 @@ Item {
     property color placeholderTextColor: Qt.rgba(0, 0, 0, 0.5)
     property color selectionColor: syspal.highlight
     property color selectedTextColor: syspal.highlightedText
+    property font font
 
     SystemPalette {
         id: syspal
