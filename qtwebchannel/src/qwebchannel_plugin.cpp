@@ -42,12 +42,13 @@
 #include <qqml.h>
 
 #include "qwebchannel.h"
+#include "qtmetaobjectpublisher.h"
 
 #include "qwebchannel_plugin.h"
 
 void QWebChannelPlugin::registerTypes(const char *uri)
 {
-    Q_ASSERT(uri == QLatin1String("Qt.labs.WebChannel"));
     qmlRegisterType<QWebChannel>(uri, 1, 0, "WebChannel");
+    qmlRegisterType<QtMetaObjectPublisher>(uri, 1, 0, "MetaObjectPublisherPrivate");
 }
 
