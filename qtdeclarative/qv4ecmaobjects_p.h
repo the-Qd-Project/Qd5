@@ -88,23 +88,6 @@ struct ObjectPrototype: Object
     static Value fromPropertyDescriptor(ExecutionContext *ctx, const PropertyDescriptor *desc);
 };
 
-struct BooleanCtor: FunctionObject
-{
-    BooleanCtor(ExecutionContext *scope);
-
-    virtual Value construct(ExecutionContext *ctx);
-    virtual Value call(ExecutionContext *ctx);
-};
-
-struct BooleanPrototype: BooleanObject
-{
-    BooleanPrototype(): BooleanObject(Value::fromBoolean(false)) {}
-    void init(ExecutionContext *ctx, const Value &ctor);
-
-    static Value method_toString(ExecutionContext *ctx);
-    static Value method_valueOf(ExecutionContext *ctx);
-};
-
 
 } // end of namespace VM
 } // end of namespace QQmlJS
