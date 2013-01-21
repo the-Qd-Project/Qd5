@@ -88,27 +88,6 @@ struct ObjectPrototype: Object
     static Value fromPropertyDescriptor(ExecutionContext *ctx, const PropertyDescriptor *desc);
 };
 
-struct NumberCtor: FunctionObject
-{
-    NumberCtor(ExecutionContext *scope);
-
-    virtual Value construct(ExecutionContext *ctx);
-    virtual Value call(ExecutionContext *ctx);
-};
-
-struct NumberPrototype: NumberObject
-{
-    NumberPrototype(): NumberObject(Value::fromDouble(0)) {}
-    void init(ExecutionContext *ctx, const Value &ctor);
-
-    static Value method_toString(ExecutionContext *ctx);
-    static Value method_toLocaleString(ExecutionContext *ctx);
-    static Value method_valueOf(ExecutionContext *ctx);
-    static Value method_toFixed(ExecutionContext *ctx);
-    static Value method_toExponential(ExecutionContext *ctx);
-    static Value method_toPrecision(ExecutionContext *ctx);
-};
-
 struct BooleanCtor: FunctionObject
 {
     BooleanCtor(ExecutionContext *scope);
