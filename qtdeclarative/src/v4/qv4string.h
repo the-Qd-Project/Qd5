@@ -47,12 +47,14 @@
 namespace QQmlJS {
 namespace VM {
 
+struct ExecutionEngine;
+
 struct String : public Managed {
     enum StringType {
         StringType_Unknown,
-        StringType_ArrayIndex,
         StringType_Regular,
         StringType_Identifier,
+        StringType_ArrayIndex
     };
 
     String(const QString &text)
@@ -62,12 +64,15 @@ struct String : public Managed {
     inline bool isEqualTo(const String *other) const {
         if (this == other)
             return true;
-        else if (hashValue() == other->hashValue()) {
-            if (subtype == StringType_ArrayIndex && other->subtype == StringType_ArrayIndex)
+        if (hashValue() != other->hashValue())
+            return false;
+        if (subtype == other->subtype) {
+            if (subtype == StringType_ArrayIndex)
                 return true;
-            return toQString() == other->toQString();
+            if (subtype == StringType_Identifier)
+                return stringIdentifier == other->stringIdentifier;
         }
-        return false;
+        return toQString() == other->toQString();
     }
 
     inline const QString &toQString() const {
@@ -93,7 +98,16 @@ struct String : public Managed {
     }
     uint toUInt(bool *ok) const;
 
+    void makeIdentifier(const ExecutionContext *ctx) {
+        if (subtype == StringType_Identifier)
+            return;
+        makeIdentifierImpl(ctx);
+    }
+
+    void makeIdentifierImpl(const ExecutionContext *ctx);
+
 private:
+    friend struct Identifiers;
     void createHashValue() const;
 
     QString _text;
