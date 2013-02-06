@@ -31,7 +31,7 @@
 
     \brief The Qt Desktop Components module is an add-on module of Qt.
 
-    This is just a demo page.
+    \image placeholder.png
 
     \section1 Getting started
 
@@ -41,6 +41,23 @@
      import QtDesktop 1.0
      import QtDesktop.Styles 1.0
     \endcode
+
+    \section1 Components
+
+    \section2 Application
+    \list
+    \li \l{Application Window}{Window}
+    \li \l{Application Menus}{Menus}
+    \li \l{Application Navigation}{Navigation}
+    \endlist
+
+    \section2 Controls and Layout
+    \list
+    \li \l{Buttons and Controls}
+    \li \l{Layout and Containers}
+    \li \l{Tables}
+    \li \l{Status Indicators}
+    \endlist
 
     \section1 Related information
 
