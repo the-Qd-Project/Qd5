@@ -60,6 +60,8 @@ struct ObjectCtor: FunctionObject
 
 struct ObjectPrototype: Object
 {
+    ObjectPrototype(ExecutionEngine *engine) : Object(engine) {}
+
     void init(ExecutionContext *ctx, const Value &ctor);
 
     static Value method_getPrototypeOf(ExecutionContext *ctx);
