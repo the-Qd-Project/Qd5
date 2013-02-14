@@ -42,6 +42,8 @@
 #define BBMETADATA_H
 
 #include <QtCore/qglobal.h>
+#include <QtCore/QSize>
+#include <QtCore/QString>
 
 QT_BEGIN_NAMESPACE
 
@@ -60,6 +62,18 @@ public:
     bool hasVideo() const;
     bool hasAudio() const;
 
+    QString title() const;
+    QString artist() const;
+    QString comment() const;
+    QString genre() const;
+    int year() const;
+    QString mediaType() const;
+    int audioBitRate() const;
+    int sampleRate() const;
+    QString album() const;
+    int track() const;
+    QSize resolution() const;
+
 private:
     qlonglong m_duration;
     int m_height;
@@ -67,6 +81,16 @@ private:
     int m_mediaType;
     float m_pixelWidth;
     float m_pixelHeight;
+
+    QString m_title;
+    QString m_artist;
+    QString m_comment;
+    QString m_genre;
+    int m_year;
+    int m_audioBitRate;
+    int m_sampleRate;
+    QString m_album;
+    int m_track;
 };
 
 QT_END_NAMESPACE
