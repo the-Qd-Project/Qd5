@@ -42,6 +42,7 @@
 #include <QtQml/qqmlextensionplugin.h>
 #include <QtQml/qqml.h>
 #include "qquickqfiledialog_p.h"
+#include "qquickqcolordialog_p.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -75,6 +76,7 @@ public:
         Q_ASSERT(QLatin1String(uri) == QLatin1String("QtQuick.PrivateWidgets"));
 
         qmlRegisterType<QQuickQFileDialog>(uri, 1, 0, "QtFileDialog");
+        qmlRegisterType<QQuickQColorDialog>(uri, 1, 0, "QtColorDialog");
     }
 };
 

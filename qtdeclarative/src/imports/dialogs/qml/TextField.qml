@@ -45,11 +45,20 @@ Item {
 
     property alias textInput: textInput
     property alias text: textInput.text
+    property real implicitWidth: textInput.implicitWidth + rect.radius * 2
+    property real implicitHeight: textInput.implicitHeight + rect.radius * 2
     signal accepted
     signal downPressed
 
+    function copyAll() {
+        textInput.selectAll()
+        textInput.copy()
+    }
+
     SystemPalette { id: palette }
-    height: textInput.implicitHeight + 4
+    height: textInput.implicitHeight + 8
+    clip: true
+
     Rectangle {
         id: rect
         anchors.fill: parent
@@ -62,6 +71,8 @@ Item {
         id: textInput
         color: palette.text
         anchors.fill: parent
+        anchors.leftMargin: rect.radius
+        anchors.rightMargin: rect.radius
         verticalAlignment: Text.AlignVCenter
         onAccepted: root.accepted()
         Keys.onDownPressed: root.downPressed()
