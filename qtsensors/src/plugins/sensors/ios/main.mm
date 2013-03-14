@@ -43,7 +43,9 @@
 #include <qsensorbackend.h>
 #include <qsensormanager.h>
 
+#include "iosmotionmanager.h"
 #include "iosaccelerometer.h"
+#include "iosgyroscope.h"
 
 class IOSSensorPlugin : public QObject, public QSensorPluginInterface, public QSensorBackendFactory
 {
@@ -53,14 +55,17 @@ class IOSSensorPlugin : public QObject, public QSensorPluginInterface, public QS
 public:
     void registerSensors()
     {
-        if (!QSensorManager::isBackendRegistered(QAccelerometer::type, IOSAccelerometer::id))
-            QSensorManager::registerBackend(QAccelerometer::type, IOSAccelerometer::id, this);
+        QSensorManager::registerBackend(QAccelerometer::type, IOSAccelerometer::id, this);
+        if ([QIOSMotionManager sharedManager].gyroAvailable)
+            QSensorManager::registerBackend(QGyroscope::type, IOSGyroscope::id, this);
     }
 
     QSensorBackend *createBackend(QSensor *sensor)
     {
         if (sensor->identifier() == IOSAccelerometer::id)
             return new IOSAccelerometer(sensor);
+        if (sensor->identifier() == IOSGyroscope::id)
+            return new IOSGyroscope(sensor);
 
         return 0;
     }
