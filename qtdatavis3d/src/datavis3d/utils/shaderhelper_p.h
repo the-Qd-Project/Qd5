@@ -46,7 +46,6 @@
 #include <QOpenGLFunctions>
 
 class QOpenGLShaderProgram;
-//class QObject;
 
 QTCOMMERCIALDATAVIS3D_BEGIN_NAMESPACE
 
