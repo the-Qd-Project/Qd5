@@ -44,10 +44,19 @@
 #include "ExecutableAllocator.h"
 #include "WeakRandom.h"
 
+namespace QQmlJS {
+namespace VM {
+class ExecutableAllocator;
+}
+}
+
 namespace JSC {
 
 class JSGlobalData {
 public:
+    JSGlobalData(QQmlJS::VM::ExecutableAllocator *realAllocator)
+        : executableAllocator(realAllocator)
+    {}
     ExecutableAllocator executableAllocator;
 };
 
