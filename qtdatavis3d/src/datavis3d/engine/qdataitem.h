@@ -60,9 +60,10 @@ public:
     void setValue(float value);
 
 private:
-    QDataItemPrivate *d_ptr; // TODO: Why doesn't QScopedPointer work here?
+    QScopedPointer<QDataItemPrivate> d_ptr;
     friend class Q3DBars;
     friend class Q3DBarsPrivate;
+    friend class QDataRowPrivate;
 };
 
 QTCOMMERCIALDATAVIS3D_END_NAMESPACE
