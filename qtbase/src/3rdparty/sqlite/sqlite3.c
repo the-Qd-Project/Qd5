@@ -14238,6 +14238,10 @@ static void clearYMD_HMS_TZ(DateTime *p){
 #define HAVE_LOCALTIME_S 1
 #endif
 
+#if SQLITE_OS_WINCE >= 1
+struct tm *__cdecl localtime(const time_t *t);
+#endif
+
 #ifndef SQLITE_OMIT_LOCALTIME
 /*
 ** The following routine implements the rough equivalent of localtime_r()
