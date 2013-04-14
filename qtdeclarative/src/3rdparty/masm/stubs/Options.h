@@ -44,7 +44,7 @@
 namespace JSC {
 
 struct Options {
-    static bool showDisassembly() { return true; }
+    static bool showDisassembly();
     static bool showDFGDisassembly() { return true; }
 };
 
