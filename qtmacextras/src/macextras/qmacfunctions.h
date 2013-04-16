@@ -49,6 +49,7 @@
 #include "qmacextrasglobal.h"
 
 typedef struct CGImage *CGImageRef;
+typedef struct CGContext *CGContextRef;
 
 #ifdef __OBJC__
 @class NSData;
@@ -86,6 +87,8 @@ Q_MACEXTRAS_EXPORT QByteArray fromNSData(const NSData *data);
 
 Q_MACEXTRAS_EXPORT CGImageRef toCGImageRef(const QPixmap &pixmap);
 Q_MACEXTRAS_EXPORT QPixmap fromCGImageRef(CGImageRef image);
+
+Q_MACEXTRAS_EXPORT CGContextRef currentCGContext();
 
 #ifndef Q_OS_IOS
 Q_MACEXTRAS_EXPORT NSImage* toNSImage(const QPixmap &pixmap);
