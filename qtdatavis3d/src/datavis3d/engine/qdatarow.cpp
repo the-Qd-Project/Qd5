@@ -70,8 +70,8 @@ void QDataRow::addItem(QDataItem *item)
 }
 
 QDataRowPrivate::QDataRowPrivate(QDataRow *q, const QString &label)
-    : q_ptr(q)
-    , m_label(label)
+    : q_ptr(q),
+      m_label(label)
 {
 }
 
