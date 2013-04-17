@@ -54,26 +54,37 @@
 
 #include "qdatavis3dglobal.h"
 #include "qdataset.h"
+#include "drawer_p.h"
+#include "labelitem_p.h"
 #include <QVector>
 #include <QString>
 
 QTCOMMERCIALDATAVIS3D_BEGIN_NAMESPACE
 
-class QDataSetPrivate
+class QDataSetPrivate : public QObject
 {
-    public:
+    Q_OBJECT
+
+public:
     explicit QDataSetPrivate(QDataSet *q);
     ~QDataSetPrivate();
 
+    void setDrawer(Drawer *drawer);
     QVector<QDataRow*> set();
     QDataRow *getRow(int rowIndex);
     QVector<QString> rowLabels();
     QVector<QString> columnLabels();
+    QVector<LabelItem> rowLabelItems();
+    QVector<LabelItem> columnLabelItems();
     void axisLabels(QString *xAxis, QString *zAxis, QString *yAxis);
+    void axisLabelItems(LabelItem *xAxisItem, LabelItem *zAxisItem, LabelItem *yAxisItem);
     void verifySize(int colSize, int rowSize = 0); // If rowSize is 0, don't verify rows
     float highestValue();
 
-    private:
+public Q_SLOTS:
+    void updateTextures();
+
+private:
     QDataSet *q_ptr;
     QVector<QDataRow*> m_set;
     QString m_xAxis;
@@ -81,6 +92,12 @@ class QDataSetPrivate
     QString m_yAxis;
     QVector<QString> m_labelsRow;
     QVector<QString> m_labelsColumn;
+    LabelItem m_xAxisItem;
+    LabelItem m_zAxisItem;
+    LabelItem m_yAxisItem;
+    QVector<LabelItem> m_labelItemsRow;
+    QVector<LabelItem> m_labelItemsColumn;
+    Drawer *m_drawer;
     friend class QDataSet;
 };
 
