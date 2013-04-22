@@ -1,6 +1,6 @@
 /******************************************************************************
 ** This file is an amalgamation of many separate C source files from SQLite
-** version 3.7.16.1.  By combining all the individual C code files into this 
+** version 3.7.16.2.  By combining all the individual C code files into this 
 ** single large file, the entire code can be compiled as a single translation
 ** unit.  This allows many compilers to do optimizations that would not be
 ** possible if the files were compiled separately.  Performance improvements
@@ -678,9 +678,9 @@ extern "C" {
 ** [sqlite3_libversion_number()], [sqlite3_sourceid()],
 ** [sqlite_version()] and [sqlite_source_id()].
 */
-#define SQLITE_VERSION        "3.7.16.1"
+#define SQLITE_VERSION        "3.7.16.2"
 #define SQLITE_VERSION_NUMBER 3007016
-#define SQLITE_SOURCE_ID      "2013-03-29 13:44:34 527231bc67285f01fb18d4451b28f61da3c4e39d"
+#define SQLITE_SOURCE_ID      "2013-04-12 11:52:43 cbea02d93865ce0e06789db95fd9168ebac970c7"
 
 /*
 ** CAPI3REF: Run-Time Library Version Numbers
@@ -14236,6 +14236,10 @@ static void clearYMD_HMS_TZ(DateTime *p){
 #if !defined(HAVE_LOCALTIME_R) && !defined(HAVE_LOCALTIME_S) && \
      defined(_MSC_VER) && defined(_CRT_INSECURE_DEPRECATE)
 #define HAVE_LOCALTIME_S 1
+#endif
+
+#if SQLITE_OS_WINCE >= 1
+struct tm *__cdecl localtime(const time_t *t);
 #endif
 
 #ifndef SQLITE_OMIT_LOCALTIME
@@ -32792,7 +32796,7 @@ static int winCheckReservedLock(sqlite3_file *id, int *pResOut){
     rc = 1;
     OSTRACE(("TEST WR-LOCK %d %d (local)\n", pFile->h, rc));
   }else{
-    rc = winLockFile(&pFile->h, SQLITE_LOCKFILE_FLAGS, RESERVED_BYTE, 0, 1, 0);
+    rc = winLockFile(&pFile->h, SQLITE_LOCKFILEEX_FLAGS,RESERVED_BYTE, 0, 1, 0);
     if( rc ){
       winUnlockFile(&pFile->h, RESERVED_BYTE, 0, 1, 0);
     }
