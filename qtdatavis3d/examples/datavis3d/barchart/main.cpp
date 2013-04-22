@@ -44,6 +44,7 @@
 #include <QGuiApplication>
 #include <QScreen>
 #include <QTimer>
+#include <QFont>
 #include <QDebug>
 
 //#define CYCLE_THROUGH_STYLES
@@ -77,13 +78,13 @@ private:
 };
 
 ChartDataGenerator::ChartDataGenerator(Q3DBars *barchart)
-    : m_chart(barchart)
-    , m_dataTimer(0)
-    , m_styleTimer(0)
-    , m_presetTimer(0)
-    , m_themeTimer(0)
-    , m_columnCount(21)
-    , m_rowCount(21)
+    : m_chart(barchart),
+      m_dataTimer(0),
+      m_styleTimer(0),
+      m_presetTimer(0),
+      m_themeTimer(0),
+      m_columnCount(21),
+      m_rowCount(21)
 {
     // Set up bar specifications; make the bars as wide as they are deep,
     // and add a small space between the bars
@@ -105,12 +106,13 @@ ChartDataGenerator::ChartDataGenerator(Q3DBars *barchart)
 #else
     // Set selection mode to zoom row
     m_chart->setSelectionMode(Q3DBars::ZoomRow);
+    m_chart->setFont(QFont("Courier", 25));
 #endif
-
 
 #ifndef CYCLE_THROUGH_THEMES
     // Set bar colors
     m_chart->setBarColor(QColor(Qt::gray), QColor(Qt::red), QColor(Qt::darkBlue));
+    //m_chart->setTheme(Q3DBars::ThemeSystem);
     m_chart->setLabelTransparency(Q3DBars::TransparencyFromTheme);
 #else
     m_chart->setLabelTransparency(Q3DBars::TransparencyNone);
@@ -167,8 +169,8 @@ void ChartDataGenerator::start()
     m_presetTimer = new QTimer();
     m_presetTimer->setTimerType(Qt::CoarseTimer);
     m_presetTimer->setInterval(5000);
-    QObject::connect(m_presetTimer, &QTimer::timeout, this
-                     , &ChartDataGenerator::changePresetCamera);
+    QObject::connect(m_presetTimer, &QTimer::timeout, this,
+                     &ChartDataGenerator::changePresetCamera);
     m_presetTimer->start(5000);
 #endif
 
@@ -177,8 +179,7 @@ void ChartDataGenerator::start()
     m_themeTimer = new QTimer();
     m_themeTimer->setTimerType(Qt::CoarseTimer);
     m_themeTimer->setInterval(3000);//2000);
-    QObject::connect(m_themeTimer, &QTimer::timeout, this
-                     , &ChartDataGenerator::changeTheme);
+    QObject::connect(m_themeTimer, &QTimer::timeout, this, &ChartDataGenerator::changeTheme);
     m_themeTimer->start(3000);//2000);
 #endif
 }
@@ -193,10 +194,10 @@ void ChartDataGenerator::addDataSet()
     // TODO: Keep here for testing
     for (int j = 0; j < m_rowCount; j++) {
         for (int i = 0; i < m_columnCount; i++) {
-            row.prepend(((float)i / (float)m_columnCount) * 100 + (float)(rand() % 30));
-            //row.prepend(1.0f);
+            //row.prepend(((float)i / (float)m_columnCount) * 100 + (float)(rand() % 30));
+            row.append(1.0f);
         }
-        data.prepend(row);
+        data.append(row);
         row.clear();
     }
     // Set up sample space based on inserted data
@@ -217,11 +218,11 @@ void ChartDataGenerator::addDataSet()
     weeks << "week 1" << "week 2" << "week 3" << "week 4" << "week 5";
 
     // Set up data         Mon  Tue  Wed  Thu  Fri  Sat  Sun
-    float hours[5][7] = { {2.0, 1.0, 3.0, 0.2, 1.0, 5.0, 7.0}       // week 1
-                        , {0.5, 1.0, 3.0, 1.0, 2.0, 2.0, 3.0}       // week 2
-                        , {1.0, 1.0, 2.0, 1.0, 4.0, 4.0, 4.0}       // week 3
-                        , {0.0, 0.0, 0.0, 0.0, 2.0, 2.0, 0.3}       // week 4
-                        , {3.0, 3.0, 6.0, 2.0, 2.0, 1.0, 1.0}};     // week 5
+    float hours[5][7] = {{2.0, 1.0, 3.0, 0.2, 1.0, 5.0, 7.0},      // week 1
+                         {0.5, 1.0, 3.0, 1.0, 2.0, 2.0, 3.0},      // week 2
+                         {1.0, 1.0, 2.0, 1.0, 4.0, 4.0, 4.0},      // week 3
+                         {0.0, 0.0, 0.0, 0.0, 2.0, 2.0, 0.3},      // week 4
+                         {3.0, 3.0, 6.0, 2.0, 2.0, 1.0, 1.0}};     // week 5
 
     // Create data set
     QDataSet *dataSet = new QDataSet();
@@ -255,9 +256,8 @@ void ChartDataGenerator::addDataSet()
 void ChartDataGenerator::addBars()
 {
     QVector<float> data;
-    for (int i = 0; i < m_columnCount; i++) {
+    for (int i = 0; i < m_columnCount; i++)
         data.append(((float)i / (float)m_columnCount) / 2.0f + (float)(rand() % 30) / 100);
-    }
     m_chart->addDataRow(data);
 }
 
