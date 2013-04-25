@@ -51,6 +51,7 @@ protected:
     QVariant interpolated(const QVariant &start, const QVariant &end, qreal progress) const;
     void updateCurrentValue(const QVariant &value);
     void updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState);
+    XYChart *chartItem() { return m_item; }
 protected:
     Animation m_type;
     bool m_dirty;
