@@ -40,6 +40,7 @@
 
 import QtQuick 2.1
 import QtQuick.Controls.Styles 1.0
+import "./style.js" as StyleHelpers
 
 /*!
     \qmltype MenuBarStyle
@@ -52,7 +53,7 @@ Style {
 
     property Component frame: Rectangle {
         width: control.__contentItem.width
-        height: 20
+        height: contentHeight
         color: __backgroundColor
     }
 
@@ -65,7 +66,7 @@ Style {
 
         Text {
             id: text
-            text: menuItem.title
+            text: StyleHelpers.stylizeMnemonics(menuItem.title)
             anchors.centerIn: parent
             renderType: Text.NativeRendering
             color: sunken ? "white" : syspal.windowText
