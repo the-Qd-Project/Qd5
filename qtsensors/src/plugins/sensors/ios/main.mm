@@ -47,6 +47,8 @@
 #include "iosaccelerometer.h"
 #include "iosgyroscope.h"
 #include "iosmagnetometer.h"
+#include "ioscompass.h"
+#include "iosproximitysensor.h"
 
 class IOSSensorPlugin : public QObject, public QSensorPluginInterface, public QSensorBackendFactory
 {
@@ -61,6 +63,10 @@ public:
             QSensorManager::registerBackend(QGyroscope::type, IOSGyroscope::id, this);
         if ([QIOSMotionManager sharedManager].magnetometerAvailable)
             QSensorManager::registerBackend(QMagnetometer::type, IOSMagnetometer::id, this);
+        if ([CLLocationManager headingAvailable])
+            QSensorManager::registerBackend(QCompass::type, IOSCompass::id, this);
+        if (IOSProximitySensor::available())
+            QSensorManager::registerBackend(QProximitySensor::type, IOSProximitySensor::id, this);
     }
 
     QSensorBackend *createBackend(QSensor *sensor)
@@ -71,6 +77,10 @@ public:
             return new IOSGyroscope(sensor);
         if (sensor->identifier() == IOSMagnetometer::id)
             return new IOSMagnetometer(sensor);
+        if (sensor->identifier() == IOSCompass::id)
+            return new IOSCompass(sensor);
+        if (sensor->identifier() == IOSProximitySensor::id)
+            return new IOSProximitySensor(sensor);
 
         return 0;
     }
