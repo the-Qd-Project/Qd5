@@ -58,6 +58,12 @@ inline QV4::Value convertToValue(V4IR::Const *c)
         return QV4::Value::undefinedValue();
     case V4IR::BoolType:
         return QV4::Value::fromBoolean(c->value != 0);
+    case V4IR::SInt32Type:
+        return QV4::Value::fromInt32(int(c->value));
+    case V4IR::UInt32Type:
+        return QV4::Value::fromUInt32(unsigned(c->value));
+    case V4IR::DoubleType:
+        return QV4::Value::fromDouble(c->value);
     case V4IR::NumberType: {
         int ival = (int)c->value;
         // +0 != -0, so we need to convert to double when negating 0
