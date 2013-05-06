@@ -46,6 +46,9 @@ TableView {
     model: [{"text": "text1"}, {"text": "text2"}, {"text": "text3"}]
     property var test: 0
 
+    property bool activatedTest: false
+    onActivated: activatedTest = true
+
     TableViewColumn {
         title: "Text"
         role: "text"
