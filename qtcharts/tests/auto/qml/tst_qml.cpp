@@ -119,13 +119,14 @@ void tst_QML::checkPlugin_data()
     QTest::newRow("BarCategoryAxis") << imports_1_1() + "BarCategoryAxis{}";
 
     QTest::newRow("createPolarChartView") <<  imports_1_3() + "PolarChartView{}";
-    //QTest::newRow("LogValueAxis") <<  imports_1_3() + "LogValueAxis{}";
+    QTest::newRow("LogValueAxis") <<  imports_1_3() + "LogValueAxis{}";
 }
 
 void tst_QML::checkPlugin()
 {
     QFETCH(QString, source);
     QDeclarativeEngine engine;
+    engine.addImportPath(QString::fromLatin1("%1/%2").arg(QCoreApplication::applicationDirPath(), QLatin1String("imports")));
     QDeclarativeComponent component(&engine);
     component.setData(source.toLatin1(), QUrl());
     QVERIFY2(!component.isError(), qPrintable(componentErrors(&component)));
