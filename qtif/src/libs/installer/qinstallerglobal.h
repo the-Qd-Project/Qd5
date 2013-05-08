@@ -48,13 +48,6 @@
 #include <kdupdaterupdateoperation.h>
 #include <kdupdaterpackagesinfo.h>
 
-QT_BEGIN_NAMESPACE
-class QScriptContext;
-class QScriptEngine;
-class QScriptValue;
-QT_END_NAMESPACE
-
-
 namespace QInstaller {
 
 enum INSTALLER_EXPORT JobError
@@ -77,14 +70,6 @@ typedef QList<QInstaller::Package*> PackagesList;
 
 typedef KDUpdater::PackageInfo LocalPackage;
 typedef QHash<QString, LocalPackage> LocalPackagesHash;
-
-QString INSTALLER_EXPORT uncaughtExceptionString(QScriptEngine *scriptEngine, const QString &context = QString());
-QScriptValue qInstallerComponentByName(QScriptContext *context, QScriptEngine *engine);
-
-QScriptValue qDesktopServicesOpenUrl(QScriptContext *context, QScriptEngine *engine);
-QScriptValue qDesktopServicesDisplayName(QScriptContext *context, QScriptEngine *engine);
-QScriptValue qDesktopServicesStorageLocation(QScriptContext *context, QScriptEngine *engine);
-QScriptValue qFileDialogGetExistingDirectory(QScriptContext *context, QScriptEngine *engine);
 
 } // namespace QInstaller
 
