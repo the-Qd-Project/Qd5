@@ -30,6 +30,6 @@ void main() {
         materialAmbientColor +
         materialDiffuseColor * lightStrength * (cosTheta * cosTheta) / distance +
         materialSpecularColor * lightStrength * pow(cosAlpha, 10) / distance;
-    gl_FragColor.a = 1.0;
+    gl_FragColor.a = texture2D(textureSampler, UV).a;
 }
 
