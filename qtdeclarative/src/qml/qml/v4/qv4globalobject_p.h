@@ -44,27 +44,18 @@
 #include "qv4global_p.h"
 #include "qv4functionobject_p.h"
 
-QT_END_NAMESPACE
+QT_BEGIN_NAMESPACE
 
 namespace QV4 {
 
 struct Q_QML_EXPORT EvalFunction : FunctionObject
 {
     EvalFunction(ExecutionContext *scope);
-    EvalFunction(ExecutionContext *scope, Object *qmlActivation);
-
-    static QV4::Function *parseSource(QV4::ExecutionContext *ctx,
-                                             const QString &fileName,
-                                             const QString &source,
-                                             QQmlJS::Codegen::Mode mode, bool strictMode,
-                                             bool inheritContext);
 
     Value evalCall(ExecutionContext *context, Value thisObject, Value *args, int argc, bool directCall);
 
     using Managed::construct;
     static Value call(Managed *that, ExecutionContext *, const Value &, Value *, int);
-
-    Object *qmlActivation;
 
 protected:
     static const ManagedVTable static_vtbl;
