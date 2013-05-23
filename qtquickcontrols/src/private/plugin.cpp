@@ -45,6 +45,7 @@
 #include "qquicktooltip_p.h"
 #include "qquickcontrolsettings_p.h"
 #include "qquickspinboxvalidator_p.h"
+#include "qquickpaddedstyle_p.h"
 
 #ifndef QT_NO_WIDGETS
 #include "qquickstyleitem_p.h"
@@ -80,6 +81,8 @@ public:
 
 void QtQuickControlsPrivatePlugin::registerTypes(const char *uri)
 {
+    qmlRegisterType<QQuickPaddedStyle>(uri, 1, 0, "PaddedStyle");
+    qmlRegisterType<QQuickPadding>();
     qmlRegisterType<QQuickRangeModel>(uri, 1, 0, "RangeModel");
     qmlRegisterType<QQuickWheelArea>(uri, 1, 0, "WheelArea");
     qmlRegisterType<QQuickSpinBoxValidator>(uri, 1, 0, "SpinBoxValidator");
