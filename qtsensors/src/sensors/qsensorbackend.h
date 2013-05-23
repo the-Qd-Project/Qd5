@@ -47,11 +47,13 @@
 
 QT_BEGIN_NAMESPACE
 
+class QSensorBackendPrivate;
+
 class Q_SENSORS_EXPORT QSensorBackend : public QObject
 {
     Q_OBJECT
 public:
-    QSensorBackend(QSensor *sensor);
+    explicit QSensorBackend(QSensor *sensor, QObject *parent = 0);
     virtual ~QSensorBackend();
 
     virtual void start() = 0;
@@ -75,7 +77,7 @@ public:
     }
 
     QSensorReading *reading() const;
-    QSensor *sensor() const { return m_sensor; }
+    QSensor *sensor() const;
 
     // used by the backend to inform us of events
     void newReadingAvailable();
@@ -86,7 +88,7 @@ public:
 private:
     void setReadings(QSensorReading *device, QSensorReading *filter, QSensorReading *cache);
 
-    QSensor *m_sensor;
+    Q_DECLARE_PRIVATE(QSensorBackend)
     Q_DISABLE_COPY(QSensorBackend)
 };
 
