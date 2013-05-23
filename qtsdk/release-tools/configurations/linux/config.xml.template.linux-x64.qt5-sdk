@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<Installer>
+    <Name>Qt SDK</Name>
+    <Version>1.0.0</Version>
+    <Title>Qt SDK</Title>
+    <Publisher>Digia Plc</Publisher>
+    <Logo>logo.png</Logo>
+    <Icon>logo-small</Icon>
+    <Watermark>watermark.png</Watermark>
+    <StartMenuDir>Qt SDK</StartMenuDir>
+    <ProductUrl>http://qt-project.org/</ProductUrl>
+    <!--<Background>background.png</Background>-->
+    <UninstallerName>MaintenanceTool</UninstallerName>
+    <RemoteRepositories>
+        <Repository>
+            <Url>http://download.qt-project.org/online/qt5/linux/x64/online_repository/</Url>
+            <Enabled>1</Enabled>
+            <DisplayName>Qt Linux-x86 online repository</DisplayName>
+        </Repository>
+        <Repository>
+            <Url>http://download.qt-project.org/online/qt5/linux/x64_android/online_repository/</Url>
+            <Enabled>1</Enabled>
+            <DisplayName>Qt Android for Linux-x64 host online repository</DisplayName>
+        </Repository>
+    </RemoteRepositories>
+    <!-- @homeDir@ and @rootDir@ are some of the supported vars -->
+    <TargetDir>@homeDir@/QtSDK</TargetDir>
+    <AdminTargetDir>/opt/QtSDK</AdminTargetDir>
+</Installer>
