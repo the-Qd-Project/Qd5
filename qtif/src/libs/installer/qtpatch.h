@@ -50,6 +50,7 @@
 
 namespace QtPatch {
 
+QHash<QString, QByteArray> INSTALLER_EXPORT readQmakeOutput(const QByteArray &data);
 QHash<QString, QByteArray> INSTALLER_EXPORT qmakeValues(const QString &qmakePath, QByteArray *qmakeOutput);
 
 bool INSTALLER_EXPORT patchBinaryFile(const QString &fileName,
