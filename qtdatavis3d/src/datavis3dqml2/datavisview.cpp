@@ -40,7 +40,11 @@
 ****************************************************************************/
 
 #include "datavisview.h"
+#include "scenerenderernode_p.h"
+
 #include <QDebug>
+
+QTENTERPRISE_DATAVIS3D_BEGIN_NAMESPACE
 
 DataVisView::DataVisView(QQuickItem *parent):
     QQuickItem(parent)
@@ -56,12 +60,17 @@ DataVisView::~DataVisView()
 {
 }
 
-QSGNode *DataVisView::updatePaintNode(QSGNode *node, UpdatePaintNodeData *data)
+QSGNode *DataVisView::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
 {
-    //qDebug() << "updatePaintNode" << node << data;
+    // Delete old node and recreate it. This function gets called when window geometry changes.
+    if (oldNode)
+        delete oldNode;
 
-    // TODO: Do stuff
+    // We need to create a node class that does the rendering (ie. a node that "captures" the rendering we do)
+    SceneRendererNode *node = new SceneRendererNode(window());
+    node->setRect(boundingRect());
 
     return node;
 }
 
+QTENTERPRISE_DATAVIS3D_END_NAMESPACE
