@@ -44,13 +44,12 @@
 
 #include "QtDataVis3D/qdatavis3dglobal.h"
 #include "QtDataVis3D/qdatavis3namespace.h"
-#include "q3dmaps.h"
 #include "qdataitem.h"
 #include "qdatarow.h"
 #include "qdataset.h"
 
 #include "declarativebars.h"
-//#include "declarative3dmaps.h"
+#include "declarativemaps.h"
 //#include "declarativedataitem.h"
 //#include "declarativedatarow.h"
 //#include "declarativedataset.h"
@@ -59,14 +58,13 @@
 
 QTENTERPRISE_DATAVIS3D_USE_NAMESPACE
 
-//Q_DECLARE_METATYPE(Declarative3DMaps *)
 //Q_DECLARE_METATYPE(DeclarativeDataItem *)
 //Q_DECLARE_METATYPE(DeclarativeDataRow *)
 //Q_DECLARE_METATYPE(DeclarativeDataSet *)
 
 Q_DECLARE_METATYPE(DeclarativeBars *)
+Q_DECLARE_METATYPE(DeclarativeMaps *)
 
-Q_DECLARE_METATYPE(Q3DMaps *)
 Q_DECLARE_METATYPE(QDataItem *)
 Q_DECLARE_METATYPE(QDataRow *)
 Q_DECLARE_METATYPE(QDataSet *)
