@@ -44,7 +44,6 @@
 
 #include "QtDataVis3D/qdatavis3dglobal.h"
 
-#include <QtQuick/QQuickItem>
 #include <QQuickItem>
 
 QTENTERPRISE_DATAVIS3D_BEGIN_NAMESPACE
@@ -53,33 +52,6 @@ class DataVisView : public QQuickItem
 {
     Q_OBJECT
     Q_DISABLE_COPY(DataVisView)
-    Q_ENUMS(SelectionMode)
-    Q_ENUMS(ShadowQuality)
-    Q_ENUMS(LabelTransparency)
-
-public:
-    enum SelectionMode {
-        ModeNone = 0,
-        ModeBar,
-        ModeBarAndRow,
-        ModeBarAndColumn,
-        ModeBarRowAndColumn,
-        ModeZoomRow,
-        ModeZoomColumn
-    };
-
-    enum ShadowQuality {
-        ShadowNone = 0,
-        ShadowLow = 1,
-        ShadowMedium = 3,
-        ShadowHigh = 5
-    };
-
-    enum LabelTransparency {
-        TransparencyNone = 0,       // Full solid, using colors from theme
-        TransparencyFromTheme,      // Use colors and transparencies from theme
-        TransparencyNoBackground    // Draw just text on transparent background
-    };
 
 public:
     DataVisView(QQuickItem *parent = 0);
