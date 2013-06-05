@@ -58,7 +58,7 @@ Style {
         id: styleitem
         elementType: "frame"
         sunken: true
-        visible: frameVisible
+        visible: control.frameVisible
     }
 
     property Component corner: StyleItem { elementType: "scrollareacorner" }
