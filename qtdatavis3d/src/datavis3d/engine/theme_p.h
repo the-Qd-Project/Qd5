@@ -70,7 +70,6 @@ public:
 
 private:
     friend class Bars3dShared;
-    friend class Bars3dSharedPrivate;
     friend class Q3DMaps;
     friend class Q3DMapsPrivate;
     friend class Drawer;
