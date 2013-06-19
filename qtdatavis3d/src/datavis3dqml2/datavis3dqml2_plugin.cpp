@@ -58,6 +58,7 @@ void Datavis3dqml2Plugin::registerTypes(const char *uri)
     qmlRegisterType<QDataSet>(uri, 1, 0, "DataSet");
 
     qmlRegisterType<DeclarativeBars>(uri, 1, 0, "Bars3D");
+    qmlRegisterType<DeclarativeMaps>(uri, 1, 0, "Maps3D");
 }
 
 //#include "moc_datavis3dqml2_plugin.cpp"
