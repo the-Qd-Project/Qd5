@@ -48,17 +48,15 @@
 
 #include <QFont>
 
-class QOpenGLShaderProgram;
 class QImage;
 class QRect;
 
 QT_DATAVIS3D_BEGIN_NAMESPACE
 
+class Maps3DController;
 class Q3DMapsPrivate;
 class QDataItem;
 class QDataRow;
-class QDataSet;
-class LabelItem;
 
 class QT_DATAVIS3D_EXPORT Q3DMaps : public Q3DWindow
 {
@@ -68,6 +66,7 @@ class QT_DATAVIS3D_EXPORT Q3DMaps : public Q3DWindow
     Q_PROPERTY(float fontSize READ fontSize WRITE setFontSize)
 
 public:
+
     enum AdjustmentDirection {
         AdjustHeight = 0,   // map value to y
         AdjustWidth,        // map value to x
@@ -82,51 +81,54 @@ public:
 
     // Add data item. New data item is appended to old data.
     // ownership of data is transferred
-    Q_INVOKABLE bool addDataItem(QDataItem *dataItem);
+    bool addDataItem(QDataItem *dataItem);
 
     // Add data set. New data is appended to old data.
     // ownership of data is transferred
-    Q_INVOKABLE bool addData(const QVector<QDataItem*> &data);
+    bool addData(const QVector<QDataItem*> &data);
     // ownership of data is transferred
-    Q_INVOKABLE bool addData(const QDataRow &data);
+    bool addData(const QDataRow &data);
 
     // Add data set. Old data is deleted.
     // ownership of data is transferred
-    Q_INVOKABLE bool setData(const QVector<QDataItem*> &data);
+    bool setData(const QVector<QDataItem*> &data);
     // ownership of data is transferred
-    Q_INVOKABLE bool setData(QDataRow *data);
+    bool setData(QDataRow *data);
+
+    void setWidth(const int width);
+    void setHeight(const int height);
 
     // bar specifications; base thickness in x, y and z, enum to indicate which direction is increased with value
     // TODO: Start using thickness also in adjustment direction; use it as a relative value.
     // For example, in AdjustAll mode setting thickness to (0.1f, 1.0f, 0.5f) would apply value to
     // x at 10%, y at 100% and z at 50%. If a dimension is not included, given thickness states its absolute value.
-    Q_INVOKABLE void setBarSpecs(const QVector3D &thickness = QVector3D(1.0f, 1.0f, 1.0f),
-                                 AdjustmentDirection direction = AdjustHeight);
+    void setBarSpecs(const QVector3D &thickness = QVector3D(1.0f, 1.0f, 1.0f),
+                     AdjustmentDirection direction = AdjustHeight);
 
     // bar type; bars (=cubes), pyramids, cones, cylinders, balls, etc.
-    Q_INVOKABLE void setBarType(BarStyle style, bool smooth = false);
+    void setBarType(BarStyle style, bool smooth = false);
 
     // override bar type with own mesh
-    Q_INVOKABLE void setMeshFileName(const QString &objFileName);
+    void setMeshFileName(const QString &objFileName);
 
     // Select preset camera placement
-    Q_INVOKABLE void setCameraPreset(CameraPreset preset);
+    void setCameraPreset(CameraPreset preset);
 
     // Set camera rotation if you don't want to use the presets (in horizontal (-180...180) and
     // vertical (0...90) angles and distance in percentage (10...500))
-    Q_INVOKABLE void setCameraPosition(GLfloat horizontal, GLfloat vertical, GLint distance = 100);
+    void setCameraPosition(GLfloat horizontal, GLfloat vertical, GLint distance = 100);
 
     // Set theme (bar colors, shaders, window color, background colors, light intensity and text colors are affected)
-    Q_INVOKABLE void setTheme(ColorTheme theme);
+    void setTheme(ColorTheme theme);
 
     // Set color if you don't want to use themes. Set uniform to false if you want the (height) color to change from bottom to top
-    Q_INVOKABLE void setBarColor(QColor baseColor, QColor heightColor, bool uniform = true);
+    void setBarColor(QColor baseColor, QColor heightColor, bool uniform = true);
 
     // Set area specs
-    Q_INVOKABLE void setAreaSpecs(const QRect &areaRect, const QImage &image);
+    void setAreaSpecs(const QRect &areaRect, const QImage &image);
 
     // Set area image
-    Q_INVOKABLE void setImage(const QImage &image);
+    void setImage(const QImage &image);
 
     // TODO: light placement API
 
@@ -169,7 +171,6 @@ protected:
     void resizeEvent(QResizeEvent *event);
 
 private:
-    void drawScene();
     QScopedPointer<Q3DMapsPrivate> d_ptr;
     Q_DISABLE_COPY(Q3DMaps);
 };
