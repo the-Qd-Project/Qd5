@@ -95,7 +95,6 @@ public:
     mutable QQmlValueType *type;
 
     static void initProto(ExecutionEngine *v4);
-    static PersistentValue proto;
 };
 
 }
