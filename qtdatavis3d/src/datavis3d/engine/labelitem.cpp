@@ -51,6 +51,8 @@ LabelItem::LabelItem()
 
 LabelItem::~LabelItem()
 {
+    // Note: Cannot delete texture here, unless we also implement
+    // reference counting for created textures.
 }
 
 void LabelItem::setSize(const QSize &size)
@@ -71,6 +73,15 @@ void LabelItem::setTextureId(GLuint textureId)
 GLuint LabelItem::textureId()
 {
     return m_textureId;
+}
+
+void LabelItem::clear()
+{
+    if (m_textureId) {
+        glDeleteTextures(1, &m_textureId);
+        m_textureId = 0;
+    }
+    m_size = QSize(0, 0);
 }
 
 QT_DATAVIS3D_END_NAMESPACE
