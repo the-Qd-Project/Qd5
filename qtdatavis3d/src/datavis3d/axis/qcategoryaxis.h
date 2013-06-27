@@ -52,7 +52,7 @@ class QT_DATAVIS3D_EXPORT QCategoryAxis : public QAbstractAxis
 {
     Q_OBJECT
 public:
-    explicit QCategoryAxis(QObject *parent = 0);
+    explicit QCategoryAxis();
     ~QCategoryAxis();
 
     void setLabels(const QVector<QString> &labels);
