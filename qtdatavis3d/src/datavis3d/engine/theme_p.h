@@ -71,6 +71,8 @@ private:
     friend class Bars3dRenderer;
     friend class Bars3dController;
     friend class Maps3DController;
+    friend class Surface3dRenderer;
+    friend class Surface3dController;
     friend class Drawer;
 
     QColor m_baseColor;
