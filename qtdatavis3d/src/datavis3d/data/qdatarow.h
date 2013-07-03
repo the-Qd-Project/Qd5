@@ -69,6 +69,7 @@ private:
     friend class DeclarativeBars;
     friend class DeclarativeMaps;
     friend class QDataSetPrivate;
+    friend class QOldDataProxy;
 };
 
 QT_DATAVIS3D_END_NAMESPACE
