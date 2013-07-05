@@ -52,7 +52,6 @@
 #include "qbardataproxy.h"
 #include "qabstractdataproxy_p.h"
 #include "qbardataitem.h"
-#include <QVector>
 
 #ifndef QBARDATAPROXY_P_H
 #define QBARDATAPROXY_P_H
@@ -66,7 +65,7 @@ public:
     QBarDataProxyPrivate(QBarDataProxy *q);
     virtual ~QBarDataProxyPrivate();
 
-    void resetArray(QBarDataArray *newArray);
+    bool resetArray(QBarDataArray *newArray);
     void setRow(int rowIndex, QBarDataRow *row);
     int addRow(QBarDataRow *row);
     int addRows(QBarDataArray *rows);
@@ -75,7 +74,7 @@ public:
 
     QPair<GLfloat, GLfloat> limitValues(int startRow, int startColumn, int rowCount, int columnCount);
 
-protected:
+private:
     void clearRow(int rowIndex);
     void clearArray();
 
