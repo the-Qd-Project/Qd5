@@ -56,7 +56,7 @@
 #include "q3dbars.h"
 #include "theme_p.h"
 #include "labelitem_p.h"
-#include "qabstractdataitem.h"
+#include "abstractrenderitem_p.h"
 #include <QFont>
 
 QT_DATAVIS3D_BEGIN_NAMESPACE
@@ -82,7 +82,7 @@ public:
 
     void drawObject(ShaderHelper *shader, ObjectHelper *object, GLuint textureId = 0,
                     GLuint depthTextureId = 0);
-    void drawLabel(const QAbstractDataItem &item, const LabelItem &label,
+    void drawLabel(const AbstractRenderItem &item, const LabelItem &label,
                    const QMatrix4x4 &viewmatrix, const QMatrix4x4 &projectionmatrix,
                    const QVector3D &positionComp, const QVector3D &rotation, GLfloat maxHeight,
                    SelectionMode mode, ShaderHelper *shader, ObjectHelper *object,
@@ -91,7 +91,7 @@ public:
                    LabelPosition position = LabelOver,
                    Qt::AlignmentFlag alignment = Qt::AlignCenter);
 
-    void generateLabelTexture(QAbstractDataItem *item);
+    void generateLabelTexture(AbstractRenderItem *item);
     void generateLabelItem(LabelItem &item, const QString &text);
 
 Q_SIGNALS:
