@@ -67,11 +67,12 @@ public:
     virtual ~QVariantBarDataProxyPrivate();
 
     void setDataSet(QVariantDataSet *newSet);
-    void setMappings(const QVariantBarMapping &mappings);
+    void setMapping(QVariantBarDataMapping *mapping);
 
 public slots:
     void handleItemsAdded(int index, int count);
     void handleDataCleared();
+    void handleMappingChanged();
 
 private:
     void connectDataSet();
@@ -79,11 +80,11 @@ private:
     QVariantBarDataProxy *qptr();
 
     QVariantDataSet *m_dataSet;
-    QVariantBarMapping m_mappings;
+    QVariantBarDataMapping *m_mapping;
 
     friend class QVariantBarDataProxy;
 };
 
 QT_DATAVIS3D_END_NAMESPACE
 
-#endif // QBARDATAPROXY_P_H
+#endif
