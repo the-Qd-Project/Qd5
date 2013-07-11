@@ -49,6 +49,13 @@ QVariantBarDataMapping::QVariantBarDataMapping()
 {
 }
 
+QVariantBarDataMapping::QVariantBarDataMapping(const QVariantBarDataMapping &other)
+    : QObject(0),
+      d_ptr(new QVariantBarDataMappingPrivate(this))
+{
+    operator=(other);
+}
+
 QVariantBarDataMapping::QVariantBarDataMapping(int rowIndex, int columnIndex, int valueIndex,
                                                const QStringList &rowCategories,
                                                const QStringList &columnCategories)
@@ -64,6 +71,17 @@ QVariantBarDataMapping::QVariantBarDataMapping(int rowIndex, int columnIndex, in
 
 QVariantBarDataMapping::~QVariantBarDataMapping()
 {
+}
+
+QVariantBarDataMapping &QVariantBarDataMapping::operator=(const QVariantBarDataMapping &other)
+{
+    d_ptr->m_rowIndex = other.d_ptr->m_rowIndex;
+    d_ptr->m_columnIndex = other.d_ptr->m_columnIndex;
+    d_ptr->m_valueIndex = other.d_ptr->m_valueIndex;
+    d_ptr->m_rowCategories = other.d_ptr->m_rowCategories;
+    d_ptr->m_columnCategories = other.d_ptr->m_columnCategories;
+
+    return *this;
 }
 
 void QVariantBarDataMapping::setRowIndex(int index)
@@ -147,5 +165,6 @@ QVariantBarDataMappingPrivate::QVariantBarDataMappingPrivate(QVariantBarDataMapp
 QVariantBarDataMappingPrivate::~QVariantBarDataMappingPrivate()
 {
 }
+
 
 QT_DATAVIS3D_END_NAMESPACE

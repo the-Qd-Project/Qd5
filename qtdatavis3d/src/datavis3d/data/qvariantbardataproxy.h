@@ -61,11 +61,12 @@ public:
     explicit QVariantBarDataProxy(QVariantDataSet *newSet, QVariantBarDataMapping *mapping);
     virtual ~QVariantBarDataProxy();
 
-    void setDataSet(QVariantDataSet *newSet); // Gains ownership
+    // Doesn't gain ownership of the dataset, but does connect to it to listen for data changes.
+    void setDataSet(QVariantDataSet *newSet);
     QVariantDataSet *dataSet();
 
     // Map key (row, column, value) to value index in data item (QVariantItem).
-    // Ownership of the mapping item transfers to proxy.
+    // Doesn't gain ownership of mapping, but does connect to it to listen for mapping changes.
     // Modifying mapping that is set to proxy will trigger dataset re-resolving.
     void setMapping(QVariantBarDataMapping *mapping);
     QVariantBarDataMapping *mapping();
