@@ -65,16 +65,16 @@ public:
     virtual ~BarRenderItem();
 
     // Position relative to data window (for bar label generation)
-    inline const QPoint &position() { return m_position; }
     inline void setPosition(const QPoint &pos) { m_position = pos; }
+    inline const QPoint &position() const { return m_position; }
 
     // Actual cached data value of the bar (needed to trigger label reformats)
     inline void setValue(qreal value);
-    inline qreal value() { return m_value; }
+    inline qreal value() const { return m_value; }
 
     // Normalized bar height
     inline void setHeight(GLfloat height) { m_height = height; }
-    inline GLfloat height() { return m_height; }
+    inline GLfloat height() const { return m_height; }
 
     // TODO should be in abstract, but currently there is no abstract renderer
     inline void setRenderer(Bars3dRenderer *renderer) { m_renderer = renderer; }
