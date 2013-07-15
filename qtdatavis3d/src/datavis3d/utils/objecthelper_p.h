@@ -53,13 +53,14 @@
 #define OBJECTHELPER_P_H
 
 #include "datavis3dglobal_p.h"
+#include "abstractobjecthelper_p.h"
 #include <QOpenGLFunctions>
 
 QT_DATAVIS3D_BEGIN_NAMESPACE
 
-class ObjectHelper: protected QOpenGLFunctions
+class ObjectHelper : public AbstractObjectHelper
 {
-    public:
+public:
     ObjectHelper(const QString &objectFile = QString());
     ~ObjectHelper();
 
@@ -67,23 +68,8 @@ class ObjectHelper: protected QOpenGLFunctions
 
     void load();
 
-    GLuint vertexBuf();
-    GLuint normalBuf();
-    GLuint uvBuf();
-    GLuint elementBuf();
-    GLuint indexCount();
-
-    private:
+private:
     QString m_objectFile;
-
-    GLuint m_vertexbuffer;
-    GLuint m_normalbuffer;
-    GLuint m_uvbuffer;
-    GLuint m_elementbuffer;
-
-    GLuint m_indexCount;
-
-    GLboolean m_meshDataLoaded;
 };
 
 QT_DATAVIS3D_END_NAMESPACE

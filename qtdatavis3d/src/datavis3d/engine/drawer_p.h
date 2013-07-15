@@ -63,6 +63,8 @@ QT_DATAVIS3D_BEGIN_NAMESPACE
 
 class ShaderHelper;
 class ObjectHelper;
+class AbstractObjectHelper;
+class SurfaceObject;
 class TextureHelper;
 class CameraHelper;
 
@@ -80,9 +82,10 @@ public:
     void setFont(const QFont &font);
     void setTransparency(LabelTransparency transparency);
 
-    void drawObject(ShaderHelper *shader, ObjectHelper *object, GLuint textureId = 0,
+    void drawObject(ShaderHelper *shader, AbstractObjectHelper *object, GLuint textureId = 0,
                     GLuint depthTextureId = 0);
-    void drawLabel(const AbstractRenderItem &item, const LabelItem &label,
+    void drawSurfaceGrid(ShaderHelper *shader, SurfaceObject *object);
+    void drawLabel(const AbstractRenderItem &item, const LabelItem &labelItem,
                    const QMatrix4x4 &viewmatrix, const QMatrix4x4 &projectionmatrix,
                    const QVector3D &positionComp, const QVector3D &rotation, GLfloat itemHeight,
                    SelectionMode mode, ShaderHelper *shader, ObjectHelper *object,
