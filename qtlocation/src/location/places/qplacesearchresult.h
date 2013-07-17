@@ -57,7 +57,9 @@ QT_BEGIN_NAMESPACE
 #define Q_DECLARE_SEARCHRESULT_COPY_CTOR(Class) \
     Class(const QPlaceSearchResult &other);
 
+class QPlaceSearchRequest;
 class QPlaceSearchResultPrivate;
+class QPlaceIcon;
 
 class Q_LOCATION_EXPORT QPlaceSearchResult
 {
@@ -76,7 +78,8 @@ public:
 
     enum SearchResultType {
         UnknownSearchResult = 0,
-        PlaceResult
+        PlaceResult,
+        ProposedSearchResult
     };
 
     SearchResultType type() const;
