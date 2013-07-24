@@ -1,6 +1,7 @@
 /****************************************************************************
 **
 ** Copyright (C) 2012 Digia Plc and/or its subsidiary(-ies).
+** Copyright (C) 2013 Klarälvdalens Datakonsult AB (KDAB).
 ** Contact: http://www.qt-project.org/legal
 **
 ** This file is part of the Qt Compositor.
@@ -38,48 +39,43 @@
 **
 ****************************************************************************/
 
-#ifndef WLTOUCH_H
-#define WLTOUCH_H
+#ifndef QTWAYLAND_QWLTOUCH_P_H
+#define QTWAYLAND_QWLTOUCH_P_H
 
-#include <private/qwlcompositor_p.h>
-#include "wayland-touch-extension-server-protocol.h"
-#include "wayland-util.h"
+#include <QtCore/QPoint>
+
+#include <qwayland-server-wayland.h>
 
 QT_BEGIN_NAMESPACE
 
-class Compositor;
-class Surface;
-class QTouchEvent;
-
 namespace QtWayland {
 
-class TouchExtensionGlobal
+class Compositor;
+class Surface;
+
+class Touch : public QtWaylandServer::wl_touch
 {
 public:
-    TouchExtensionGlobal(Compositor *compositor);
-    ~TouchExtensionGlobal();
+    explicit Touch(Compositor *compositor);
 
-    bool postTouchEvent(QTouchEvent *event, Surface *surface);
+    void setFocus(Surface *surface);
 
-    void setFlags(int flags) { m_flags = flags; }
+    void sendCancel();
+    void sendFrame();
+
+    void sendDown(int touch_id, const QPointF &position);
+    void sendMotion(int touch_id, const QPointF &position);
+    void sendUp(int touch_id);
 
 private:
-    static void bind_func(struct wl_client *client, void *data,
-                          uint32_t version, uint32_t id);
-
-    static void destroy_resource(wl_resource *resource);
-
-    static const struct qt_touch_extension_interface touch_interface;
-
     Compositor *m_compositor;
-    int m_flags;
-    QList<wl_resource *> m_resources;
-    wl_array m_rawdata_array;
-    float *m_rawdata_ptr;
+
+    Surface *m_focus;
+    Resource *m_focusResource;
 };
 
-}
+} // namespace QtWayland
 
 QT_END_NAMESPACE
 
-#endif // WLTOUCH_H
+#endif // QTWAYLAND_QWLTOUCH_P_H
