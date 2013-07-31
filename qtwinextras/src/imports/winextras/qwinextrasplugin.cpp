@@ -43,6 +43,8 @@
 #include "qquickwindwmfeatures.h"
 #include "qquickwintaskbarbutton.h"
 #include "qquickjumplist.h"
+#include "qquickwinthumbnailtoolbar.h"
+#include "qquickwinthumbnailtoolbutton.h"
 
 #include <QtQml/QtQml>
 
@@ -61,7 +63,8 @@ void QWinExtrasQmlPlugin::registerTypes(const char *uri)
     qmlRegisterType<QQuickJumpList>(uri, 1, 0, "JumpList");
     qmlRegisterType<QQuickJumpListItem>(uri, 1, 0, "JumpListItem");
     qmlRegisterType<QQuickJumpListCategory>(uri, 1, 0, "JumpListCategory");
+    qmlRegisterType<QQuickWinThumbnailToolBar>(uri, 1, 0, "ThumbnailToolBar");
+    qmlRegisterType<QQuickWinThumbnailToolButton>(uri, 1, 0, "ThumbnailToolButton");
 }
-
 
 QT_END_NAMESPACE
