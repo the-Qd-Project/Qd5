@@ -76,6 +76,7 @@ private:
     friend class Maps3DController;
     friend class Surface3dRenderer;
     friend class Surface3dController;
+    friend class Scatter3DRenderer;
     friend class Drawer;
 
     ColorTheme m_colorTheme;
