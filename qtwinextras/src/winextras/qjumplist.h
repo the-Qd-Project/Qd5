@@ -39,51 +39,18 @@
  **
  ****************************************************************************/
 
-#ifndef QJUMPLIST2_H
-#define QJUMPLIST2_H
+#ifndef QJUMPLIST_H
+#define QJUMPLIST_H
 
+#include <QtCore/qobject.h>
+#include <QtCore/qstringlist.h>
+#include <QtCore/qscopedpointer.h>
 #include <QtWinExtras/qwinextrasglobal.h>
-#include <QObject>
-#include <QStringList>
 
 QT_BEGIN_NAMESPACE
 
-class QJumpListItemPrivate;
-
-class Q_WINEXTRAS_EXPORT QJumpListItem
-{
-public:
-    enum Type {
-        Unknown,
-        Destination,
-        Link,
-        Separator
-    };
-
-    explicit QJumpListItem(Type type = Unknown);
-    ~QJumpListItem();
-
-    void setType(Type type);
-    Type type() const;
-    void setFilePath(const QString &filePath);
-    QString filePath() const;
-    void setWorkingDirectory(const QString &workingDirectory);
-    QString workingDirectory() const;
-    void setIcon(const QIcon &icon);
-    QIcon icon() const;
-    void setTitle(const QString &title);
-    QString title() const;
-    void setDescription(const QString &description);
-    QString description() const;
-    void setArguments(const QStringList &arguments);
-    QStringList arguments() const;
-
-private:
-    QScopedPointer<QJumpListItemPrivate> d_ptr;
-
-    Q_DECLARE_PRIVATE(QJumpListItem)
-};
-
+class QIcon;
+class QJumpListItem;
 class QJumpListPrivate;
 
 class Q_WINEXTRAS_EXPORT QJumpList : public QObject
@@ -125,11 +92,11 @@ public:
     void addSeparator();
 
 private:
-    QScopedPointer<QJumpListPrivate> d_ptr;
-
+    Q_DISABLE_COPY(QJumpList)
     Q_DECLARE_PRIVATE(QJumpList)
+    QScopedPointer<QJumpListPrivate> d_ptr;
 };
 
 QT_END_NAMESPACE
 
-#endif // QJUMPLIST2_H
+#endif // QJUMPLIST_H
