@@ -61,16 +61,24 @@ QT_BEGIN_NAMESPACE
   \fn QGeoPositionInfoSource *QGeoPositionInfoSourceFactory::positionInfoSource(QObject *parent)
 
   Returns a new QGeoPositionInfoSource associated with this plugin
-  with parent \a parent . Can also return 0, in which case the factory
-  with the next highest priority will be used instead.
+  with parent \a parent. Can also return 0, in which case the plugin
+  loader will use the factory with the next highest priority.
   */
 
 /*!
   \fn QGeoSatelliteInfoSource *QGeoPositionInfoSourceFactory::satelliteInfoSource(QObject *parent)
 
   Returns a new QGeoSatelliteInfoSource associated with this plugin
-  with parent \a parent. Can also return 0, in which case the factory
-  with the next highest priority will be used instead.
+  with parent \a parent. Can also return 0, in which case the plugin
+  loader will use the factory with the next highest priority.
+  */
+
+/*!
+  \fn QGeoAreaMonitor *QGeoPositionInfoSourceFactory::areaMonitor(QObject *parent);
+
+  Returns a new QGeoAreaMonitor associated with this plugin with parent \a parent.
+  Can also return 0, in which case the plugin loader will use the factory with the
+  next highest priority.
   */
 
 /*!
