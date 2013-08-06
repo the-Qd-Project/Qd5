@@ -64,10 +64,7 @@ class QCategoryAxisPrivate : public QAbstractAxisPrivate
 
 public:
     QCategoryAxisPrivate(QCategoryAxis *q);
-    ~QCategoryAxisPrivate();
-
-protected:
-    void updateLabels();
+    virtual ~QCategoryAxisPrivate();
 };
 
 QT_DATAVIS3D_END_NAMESPACE
