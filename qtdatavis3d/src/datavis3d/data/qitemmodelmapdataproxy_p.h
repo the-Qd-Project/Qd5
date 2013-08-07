@@ -70,15 +70,19 @@ public:
     void setMapping(QItemModelMapDataMapping *mapping);
 
 public slots:
-    void handleColumnsInserted(const QModelIndex & parent, int start, int end);
-    void handleColumnsMoved(const QModelIndex & sourceParent, int sourceStart, int sourceEnd, const QModelIndex & destinationParent, int destinationColumn);
-    void handleColumnsRemoved(const QModelIndex & parent, int start, int end);
-    void handleDataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight, const QVector<int> & roles = QVector<int> ());
-    void handleLayoutChanged(const QList<QPersistentModelIndex> & parents = QList<QPersistentModelIndex> (), QAbstractItemModel::LayoutChangeHint hint = QAbstractItemModel::NoLayoutChangeHint);
+    void handleColumnsInserted(const QModelIndex &parent, int start, int end);
+    void handleColumnsMoved(const QModelIndex &sourceParent, int sourceStart, int sourceEnd,
+                            const QModelIndex &destinationParent, int destinationColumn);
+    void handleColumnsRemoved(const QModelIndex &parent, int start, int end);
+    void handleDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight,
+                           const QVector<int> &roles = QVector<int> ());
+    void handleLayoutChanged(const QList<QPersistentModelIndex> &parents = QList<QPersistentModelIndex> (),
+                             QAbstractItemModel::LayoutChangeHint hint = QAbstractItemModel::NoLayoutChangeHint);
     void handleModelReset();
-    void handleRowsInserted(const QModelIndex & parent, int start, int end);
-    void handleRowsMoved(const QModelIndex & sourceParent, int sourceStart, int sourceEnd, const QModelIndex & destinationParent, int destinationRow);
-    void handleRowsRemoved(const QModelIndex & parent, int start, int end);
+    void handleRowsInserted(const QModelIndex &parent, int start, int end);
+    void handleRowsMoved(const QModelIndex &sourceParent, int sourceStart, int sourceEnd,
+                         const QModelIndex &destinationParent, int destinationRow);
+    void handleRowsRemoved(const QModelIndex &parent, int start, int end);
 
     void handleMappingChanged();
     void handlePendingResolve();

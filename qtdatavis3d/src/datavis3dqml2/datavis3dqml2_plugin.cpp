@@ -43,6 +43,7 @@
 
 #include <qqml.h>
 #include <QDebug>
+
 QT_DATAVIS3D_BEGIN_NAMESPACE
 
 void Datavis3dqml2Plugin::registerTypes(const char *uri)
@@ -55,12 +56,12 @@ void Datavis3dqml2Plugin::registerTypes(const char *uri)
 
     qmlRegisterType<QItemModelBarDataMapping>(uri, 1, 0, "BarDataMapping");
     qmlRegisterType<QItemModelMapDataMapping>(uri, 1, 0, "MapDataMapping");
+    qmlRegisterType<QItemModelScatterDataMapping>(uri, 1, 0, "ScatterDataMapping");
 
     qmlRegisterType<DeclarativeBars>(uri, 1, 0, "Bars3D");
     qmlRegisterType<DeclarativeMaps>(uri, 1, 0, "Maps3D");
+    qmlRegisterType<DeclarativeScatter>(uri, 1, 0, "Scatter3D");
 }
-
-//#include "moc_datavis3dqml2_plugin.cpp"
 
 QT_DATAVIS3D_END_NAMESPACE
 
