@@ -1,6 +1,9 @@
 bin/qmake
 bin/lrelease
 bin/qdoc
+host-bin/qmake
+host-bin/lrelease
+host-bin/qdoc
 %%
 *.la
 *.prl
