@@ -43,7 +43,7 @@
 #define DATAVIS3DQML2_PLUGIN_H
 
 #include "datavis3dglobal_p.h"
-#include "declarativebars.h"
+#include "declarativebars_p.h"
 #include "declarativemaps.h"
 #include "declarativescatter_p.h"
 #include "qitemmodelbardatamapping.h"
