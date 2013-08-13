@@ -42,14 +42,11 @@
 #include "datavis3dqml2_plugin.h"
 
 #include <qqml.h>
-#include <QDebug>
 
 QT_DATAVIS3D_BEGIN_NAMESPACE
 
 void Datavis3dqml2Plugin::registerTypes(const char *uri)
 {
-    qDebug() << "Datavis3dqml2Plugin::registerTypes()";
-
     // @uri com.digia.QtDataVis3D
     qmlRegisterUncreatableType<QAbstractItemModel>(uri, 1, 0, "AbstractItemModel",
                                                    QLatin1String("Trying to create uncreatable: AbstractItemModel."));
