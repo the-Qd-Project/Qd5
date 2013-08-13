@@ -45,7 +45,7 @@
 #include "datavis3dglobal_p.h"
 #include "declarativebars.h"
 #include "declarativemaps.h"
-#include "declarativescatter.h"
+#include "declarativescatter_p.h"
 #include "qitemmodelbardatamapping.h"
 #include "qitemmodelmapdatamapping.h"
 #include "qitemmodelscatterdatamapping.h"
