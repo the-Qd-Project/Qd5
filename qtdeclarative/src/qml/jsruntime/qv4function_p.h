@@ -48,8 +48,8 @@
 #include <QtCore/qurl.h>
 
 #include <config.h>
-#include <assembler/MacroAssemblerCodeRef.h>
 #include "qv4value_def_p.h"
+#include <private/qv4compileddata_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -80,66 +80,30 @@ struct URIErrorPrototype;
 struct InternalClass;
 struct Lookup;
 
-struct LineNumberMapping
-{
-    quint32 codeOffset;
-    int lineNumber;
-};
-
 struct Function {
-    int refCount;
     String *name;
 
+    const CompiledData::Function *compiledFunction;
+    CompiledData::CompilationUnit *compilationUnit;
     Value (*code)(ExecutionContext *, const uchar *);
     const uchar *codeData;
-    JSC::MacroAssemblerCodeRef codeRef;
     quint32 codeSize;
 
     QVector<String *> formals;
     QVector<String *> locals;
-    QVector<Value> generatedValues;
-    QVector<String *> identifiers;
-    QVector<Function *> nestedFunctions;
 
-    Lookup *lookups;
-
-    bool hasNestedFunctions;
-    bool hasDirectEval;
-    bool usesArgumentsObject;
-    bool isStrict;
-    bool isNamedExpression;
-
-    QString sourceFile;
-    QVector<LineNumberMapping> lineNumberMappings;
-
-    ExecutionEngine *engine;
-
-    Function(ExecutionEngine *engine, String *name)
-        : refCount(0)
-        , name(name)
-        , code(0)
-        , codeData(0)
-        , codeSize(0)
-        , lookups(0)
-        , hasNestedFunctions(0)
-        , hasDirectEval(false)
-        , usesArgumentsObject(false)
-        , isStrict(false)
-        , isNamedExpression(false)
-        , engine(engine)
-    {}
+    Function(ExecutionEngine *engine, CompiledData::CompilationUnit *unit, const CompiledData::Function *function,
+             Value (*codePtr)(ExecutionContext *, const uchar *), quint32 _codeSize);
     ~Function();
 
-    void ref() { ++refCount; }
-    void deref() { if (!--refCount) delete this; }
+    inline QString sourceFile() const { return compilationUnit->fileName(); }
 
-    void addNestedFunction(Function *f)
-    {
-        f->ref();
-        nestedFunctions.append(f);
-    }
+    inline bool usesArgumentsObject() const { return compiledFunction->flags & CompiledData::Function::UsesArgumentsObject; }
+    inline bool isStrict() const { return compiledFunction->flags & CompiledData::Function::IsStrict; }
+    inline bool isNamedExpression() const { return compiledFunction->flags & CompiledData::Function::IsNamedExpression; }
 
-    inline bool needsActivation() const { return hasNestedFunctions || hasDirectEval || usesArgumentsObject; }
+    inline bool needsActivation() const
+    { return compiledFunction->nInnerFunctions > 0 || (compiledFunction->flags & (CompiledData::Function::HasDirectEval | CompiledData::Function::UsesArgumentsObject)); }
 
     void mark();
 
@@ -147,7 +111,6 @@ struct Function {
 };
 
 }
-Q_DECLARE_TYPEINFO(QV4::LineNumberMapping, Q_PRIMITIVE_TYPE);
 
 QT_END_NAMESPACE
 
