@@ -23,17 +23,21 @@
 
 QT_DATAVIS3D_BEGIN_NAMESPACE
 
-class QTouch3DInputHandler : public Q3DInputHandler
+class QT_DATAVIS3D_EXPORT QTouch3DInputHandler : public Q3DInputHandler
 {
     Q_OBJECT
 
 public:
-    explicit QTouch3DInputHandler();
+    explicit QTouch3DInputHandler(QObject *parent = 0);
+    virtual ~QTouch3DInputHandler();
 
     // Input event listeners
     virtual void mouseDoubleClickEvent(QMouseEvent *event);
     virtual void touchEvent(QTouchEvent *event);
     virtual void mousePressEvent(QMouseEvent *event, const QPoint &mousePos);
+
+private:
+    Q_DISABLE_COPY(QTouch3DInputHandler)
 };
 
 QT_DATAVIS3D_END_NAMESPACE
