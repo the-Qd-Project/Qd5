@@ -8,13 +8,13 @@
 #define QWEBSOCKETSERVER_H
 
 #include <QObject>
-#include <QQueue>
 #include <QString>
 #include <QHostAddress>
 #include "qwebsocketsglobal.h"
-#include "qwebsocket.h"
+#include "qwebsocketprotocol.h"
 
-class QTcpServer;
+class QWebSocketServerPrivate;
+class QWebSocket;
 
 class Q_WEBSOCKETS_EXPORT QWebSocketServer : public QObject
 {
@@ -51,19 +51,10 @@ protected:
 Q_SIGNALS:
 	void newConnection();
 
-private Q_SLOTS:
-	void onNewConnection();
-	void onCloseConnection();
-	void handshakeReceived();
-
 private:
 	Q_DISABLE_COPY(QWebSocketServer)
-
-	QTcpServer *m_pTcpServer;
-	QString m_serverName;
-	QQueue<QWebSocket *> m_pendingConnections;
-
-	void addPendingConnection(QWebSocket *pWebSocket);
+	QWebSocketServerPrivate * const d_ptr;
+	friend class QWebSocketServerPrivate;
 };
 
 #endif // QWEBSOCKETSERVER_H
