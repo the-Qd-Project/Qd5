@@ -62,4 +62,10 @@ TabSet {
         anchors.fill: parent
         color: "#e3e3e3" // to match tab.png
     }
+
+    MessageDialogs {
+        property string title: "Message Dialog"
+        anchors.fill: parent
+        color: "#e3e3e3" // to match tab.png
+    }
 }
