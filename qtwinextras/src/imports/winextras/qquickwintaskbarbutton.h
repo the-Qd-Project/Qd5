@@ -44,6 +44,7 @@
 
 #include <QQuickItem>
 #include <QWinTaskbarButton>
+#include <QWinTaskbarProgress>
 
 QT_BEGIN_NAMESPACE
 
@@ -57,7 +58,7 @@ class QQuickWinTaskbarButton : public QQuickItem
     Q_PROPERTY(int progressValue   READ progressValue   WRITE setProgressValue)
     Q_PROPERTY(QString overlayIcon READ overlayIcon WRITE setOverlayIcon)
     Q_PROPERTY(QString iconDescription READ iconDescription WRITE setIconDescription)
-    Q_PROPERTY(QWinTaskbarButton::ProgressState progressState READ progressState WRITE setProgressState)
+    Q_PROPERTY(QWinTaskbarProgress::ProgressState progressState READ progressState WRITE setProgressState)
 
 public:
     Q_ENUMS(QWinTaskbarButton::ProgressState)
@@ -75,8 +76,8 @@ public:
     QString iconDescription() const;
     void setIconDescription(const QString &descr);
 
-    QWinTaskbarButton::ProgressState progressState() const;
-    void setProgressState(QWinTaskbarButton::ProgressState state);
+    QWinTaskbarProgress::ProgressState progressState() const;
+    void setProgressState(QWinTaskbarProgress::ProgressState state);
 
 protected:
     void itemChange(ItemChange, const ItemChangeData &) Q_DECL_OVERRIDE;
