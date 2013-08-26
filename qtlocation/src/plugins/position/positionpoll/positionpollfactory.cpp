@@ -54,10 +54,9 @@ QGeoSatelliteInfoSource *PositionPollFactory::satelliteInfoSource(QObject *paren
     return 0;
 }
 
-QGeoAreaMonitor *PositionPollFactory::areaMonitor(QObject *parent)
+QGeoAreaMonitorSource *PositionPollFactory::areaMonitor(QObject *parent)
 {
-    QGeoAreaMonitorPolling *ret = 0;
-    ret = new QGeoAreaMonitorPolling(parent);
+    QGeoAreaMonitorPolling *ret = new QGeoAreaMonitorPolling(parent);
     if (ret && ret->isValid())
         return ret;
     delete ret;
