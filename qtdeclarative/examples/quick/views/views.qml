@@ -58,6 +58,7 @@ Item {
             addExample("Packages", "Transitions between a ListView and GridView", Qt.resolvedUrl("package/view.qml"))
             addExample("PathView", "A simple PathView", Qt.resolvedUrl("pathview/pathview-example.qml"))
             addExample("ObjectModel", "Using a ObjectModel", Qt.resolvedUrl("objectmodel/objectmodel.qml"))
+            addExample("Display Margins", "A ListView with display margins", Qt.resolvedUrl("listview/displaymargin.qml"))
         }
     }
 }
