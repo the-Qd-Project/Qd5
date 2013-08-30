@@ -38,7 +38,14 @@
 **
 ****************************************************************************/
 
+#include <QCommandLineOption>
+
+int main()
+{
+
 //! [0]
 QCommandLineOption verboseOption("verbose", "Verbose mode. Prints out more information.");
 QCommandLineOption outputOption(QStringList() << "o" << "output", "Write generated data into <file>.", "file");
 //! [0]
+
+}
