@@ -27,13 +27,14 @@
 // We mean it.
 
 #include "qitemmodelscatterdatamapping.h"
+#include "qabstractdatamapping_p.h"
 
 #ifndef QITEMMODELSCATTERDATAMAPPING_P_H
 #define QITEMMODELSCATTERDATAMAPPING_P_H
 
 QT_DATAVIS3D_BEGIN_NAMESPACE
 
-class QItemModelScatterDataMappingPrivate : public QObject
+class QItemModelScatterDataMappingPrivate : public QAbstractDataMappingPrivate
 {
     Q_OBJECT
 public:
@@ -46,8 +47,6 @@ private:
     QString m_yPosRole;
     QString m_zPosRole;
     //QString m_valueRole;
-
-    QItemModelScatterDataMapping *q_ptr;
 
     friend class QItemModelScatterDataMapping;
 };

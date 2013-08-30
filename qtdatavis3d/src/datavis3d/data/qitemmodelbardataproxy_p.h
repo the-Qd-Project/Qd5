@@ -36,6 +36,8 @@
 
 QT_DATAVIS3D_BEGIN_NAMESPACE
 
+class BarItemModelHandler;
+
 class QItemModelBarDataProxyPrivate : public QBarDataProxyPrivate
 {
     Q_OBJECT
@@ -43,31 +45,10 @@ public:
     QItemModelBarDataProxyPrivate(QItemModelBarDataProxy *q);
     virtual ~QItemModelBarDataProxyPrivate();
 
-    void setItemModel(QAbstractItemModel *itemModel);
-    void setMapping(QItemModelBarDataMapping *mapping);
-
-public slots:
-    void handleColumnsInserted(const QModelIndex & parent, int start, int end);
-    void handleColumnsMoved(const QModelIndex & sourceParent, int sourceStart, int sourceEnd, const QModelIndex & destinationParent, int destinationColumn);
-    void handleColumnsRemoved(const QModelIndex & parent, int start, int end);
-    void handleDataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight, const QVector<int> & roles = QVector<int> ());
-    void handleLayoutChanged(const QList<QPersistentModelIndex> & parents = QList<QPersistentModelIndex> (), QAbstractItemModel::LayoutChangeHint hint = QAbstractItemModel::NoLayoutChangeHint);
-    void handleModelReset();
-    void handleRowsInserted(const QModelIndex & parent, int start, int end);
-    void handleRowsMoved(const QModelIndex & sourceParent, int sourceStart, int sourceEnd, const QModelIndex & destinationParent, int destinationRow);
-    void handleRowsRemoved(const QModelIndex & parent, int start, int end);
-
-    void handleMappingChanged();
-    void handlePendingResolve();
-
 private:
-    void resolveModel();
     QItemModelBarDataProxy *qptr();
 
-    QPointer<QAbstractItemModel> m_itemModel;  // Not owned
-    QPointer<QItemModelBarDataMapping> m_mapping; // Not owned
-    bool resolvePending;
-    QTimer m_resolveTimer;
+    BarItemModelHandler *m_itemModelHandler;
 
     friend class QItemModelBarDataProxy;
 };
