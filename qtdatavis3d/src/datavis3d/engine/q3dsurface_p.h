@@ -44,16 +44,8 @@ public:
     Q3DSurfacePrivate(Q3DSurface *q, QRect rect);
     ~Q3DSurfacePrivate();
 
-    // TODO
-    void appendSeries(QList<qreal> series);
-    QList<qreal> seriesAt(int i);
-    int numOfSeries();
-    // TODO
-
     Q3DSurface *q_ptr;
     Surface3DController *m_shared;
-
-    QList<QList<qreal> > m_seriesList; // Temp to be replaced by dataset
 };
 
 QT_DATAVIS3D_END_NAMESPACE
