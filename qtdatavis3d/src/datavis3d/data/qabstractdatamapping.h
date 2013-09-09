@@ -44,6 +44,7 @@ private:
 
     friend class QItemModelBarDataMapping;
     friend class QItemModelScatterDataMapping;
+    friend class QItemModelSurfaceDataMapping;
 };
 
 
