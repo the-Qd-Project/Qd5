@@ -45,7 +45,7 @@
 #include <QtCore/QObject>
 
 #include <qnearfieldmanager.h>
-#include <qllcpsocket.h>
+#include <qllcpsocket_p.h>
 
 QT_USE_NAMESPACE
 
