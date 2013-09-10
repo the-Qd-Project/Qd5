@@ -60,7 +60,7 @@ public:
     ~QCollatorSortKey();
     QCollatorSortKey &operator=(const QCollatorSortKey &other);
 #ifdef Q_COMPILER_RVALUE_REFS
-    QCollatorSortKey &operator=(QCollatorSortKey &&other)
+    inline QCollatorSortKey &operator=(QCollatorSortKey &&other)
     { qSwap(d, other.d); return *this; }
 #endif
 
