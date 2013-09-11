@@ -1,6 +1,7 @@
 /****************************************************************************
 **
 ** Copyright (C) 2013 Samuel Gaist <samuel.gaist@edeltech.ch>
+** Copyright (C) 2013 Teo Mrnjavac <teo@kde.org>
 ** Copyright (C) 2013 Digia Plc and/or its subsidiary(-ies).
 ** Contact: http://www.qt-project.org/legal
 **
@@ -57,6 +58,8 @@
 
 #include <QtGui/qsessionmanager.h>
 
+#ifndef QT_NO_SESSIONMANAGER
+
 QT_BEGIN_NAMESPACE
 
 class Q_GUI_EXPORT QPlatformSessionManager
@@ -82,21 +85,29 @@ public:
     virtual void setDiscardCommand(const QStringList &command);
     virtual QStringList discardCommand() const;
 
+    virtual void setManagerProperty(const QString &name, const QString &value);
     virtual void setManagerProperty(const QString &name, const QStringList &value);
 
     virtual bool isPhase2() const;
     virtual void requestPhase2();
 
+protected:
+    virtual void appCommitData();
+    virtual void appSaveState();
+
+    QString m_sessionId;
+    QString m_sessionKey;
+
 private:
     QStringList m_restartCommand;
     QStringList m_discardCommand;
-    const QString m_sessionId;
-    const QString m_sessionKey;
     QSessionManager::RestartHint m_restartHint;
 
     Q_DISABLE_COPY(QPlatformSessionManager)
 };
 
 QT_END_NAMESPACE
+
+#endif // QT_NO_SESSIONMANAGER
 
 #endif // QPLATFORMSESSIONMANAGER_H
