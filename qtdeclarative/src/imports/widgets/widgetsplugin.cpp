@@ -43,6 +43,7 @@
 #include <QtQml/qqml.h>
 #include "qquickqfiledialog_p.h"
 #include "qquickqcolordialog_p.h"
+#include "qquickqfontdialog_p.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -77,6 +78,7 @@ public:
 
         qmlRegisterType<QQuickQFileDialog>(uri, 1, 0, "QtFileDialog");
         qmlRegisterType<QQuickQColorDialog>(uri, 1, 0, "QtColorDialog");
+        qmlRegisterType<QQuickQFontDialog>(uri, 1, 1, "QtFontDialog");
     }
 };
 
