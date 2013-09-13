@@ -1,6 +1,7 @@
 /****************************************************************************
  **
  ** Copyright (C) 2013 Ivan Vizir <define-true-false@yandex.com>
+ ** Copyright (C) 2013 Digia Plc and/or its subsidiary(-ies).
  ** Contact: http://www.qt-project.org/legal
  **
  ** This file is part of the QtWinExtras module of the Qt Toolkit.
@@ -56,13 +57,12 @@ class Q_WINEXTRAS_EXPORT QWinJumpListItem
 {
 public:
     enum Type {
-        Unknown,
         Destination,
         Link,
         Separator
     };
 
-    explicit QWinJumpListItem(Type type = Unknown);
+    explicit QWinJumpListItem(Type type);
     ~QWinJumpListItem();
 
     void setType(Type type);
