@@ -23,6 +23,8 @@
 
 QT_DATAVISUALIZATION_BEGIN_NAMESPACE
 
+class QTouch3DInputHandlerPrivate;
+
 class QT_DATAVISUALIZATION_EXPORT QTouch3DInputHandler : public Q3DInputHandler
 {
     Q_OBJECT
@@ -38,6 +40,8 @@ public:
 
 private:
     Q_DISABLE_COPY(QTouch3DInputHandler)
+
+    QScopedPointer<QTouch3DInputHandlerPrivate> d_ptr;
 };
 
 QT_DATAVISUALIZATION_END_NAMESPACE
