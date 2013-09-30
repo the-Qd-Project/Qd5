@@ -36,8 +36,14 @@ public:
 
     QScatterDataItem &operator=(const QScatterDataItem &other);
 
-    void setPosition(const QVector3D &position);
-    QVector3D position() const;
+    inline void setPosition(const QVector3D &position) { m_position = position; }
+    inline QVector3D position() const { return m_position; }
+    inline void setX(float value) { m_position.setX(value); }
+    inline void setY(float value) { m_position.setY(value); }
+    inline void setZ(float value) { m_position.setZ(value); }
+    inline float x() const { return m_position.x(); }
+    inline float y() const { return m_position.y(); }
+    inline float z() const { return m_position.z(); }
 
     //void setSize(qreal size);
     //qreal size() const;

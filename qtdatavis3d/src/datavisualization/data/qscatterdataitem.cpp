@@ -84,20 +84,14 @@ QScatterDataItem &QScatterDataItem::operator=(const QScatterDataItem &other)
 }
 
 /*!
+ * \fn void QScatterDataItem::setPosition(const QVector3D &position)
  * Sets \a position to this data item.
  */
-void QScatterDataItem::setPosition(const QVector3D &position)
-{
-    m_position = position;
-}
 
 /*!
+ * \fn QVector3D QScatterDataItem::position() const
  * \return position of this data item.
  */
-QVector3D QScatterDataItem::position() const
-{
-    return m_position;
-}
 
 //void QScatterDataItem::setSize(qreal size)
 //{

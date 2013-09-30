@@ -43,6 +43,11 @@ public:
     QHeightMapSurfaceDataProxyPrivate(QHeightMapSurfaceDataProxy *q);
     virtual ~QHeightMapSurfaceDataProxyPrivate();
 
+    void setValueRanges(float minX, float maxX, float minZ, float maxZ);
+    void setMinXValue(float min);
+    void setMaxXValue(float max);
+    void setMinZValue(float min);
+    void setMaxZValue(float max);
 private:
     QHeightMapSurfaceDataProxy *qptr();
     void handlePendingResolve();
@@ -50,6 +55,11 @@ private:
     QImage m_heightMap;
     QString m_heightMapFile;
     QTimer m_resolveTimer;
+
+    float m_minXValue;
+    float m_maxXValue;
+    float m_minZValue;
+    float m_maxZValue;
 
     friend class QHeightMapSurfaceDataProxy;
 };
