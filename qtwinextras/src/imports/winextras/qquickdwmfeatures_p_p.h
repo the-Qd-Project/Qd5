@@ -58,7 +58,7 @@ public:
 
     bool peekDisallowed;
     bool peekExcluded;
-    QtWin::WindowFlip3DPolicy flipPolicy;
+    QQuickWin::WindowFlip3DPolicy flipPolicy;
 
     void update();
 
