@@ -16,7 +16,7 @@
 **
 ****************************************************************************/
 
-#include "rainfallchart.h"
+#include "rainfallgraph.h"
 #include <QGuiApplication>
 
 using namespace QtDataVisualization;
@@ -30,8 +30,8 @@ int main(int argc, char **argv)
     rainfall->setPosition(QPoint(10, 30));
     rainfall->show();
 
-    RainfallChart rainfallchart(rainfall);
-    rainfallchart.start();
+    RainfallGraph rainfallgraph(rainfall);
+    rainfallgraph.start();
 
     return app.exec();
 }

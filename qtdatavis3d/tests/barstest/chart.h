@@ -28,12 +28,12 @@
 
 using namespace QtDataVisualization;
 
-class ChartModifier : public QObject
+class GraphModifier : public QObject
 {
     Q_OBJECT
 public:
-    explicit ChartModifier(Q3DBars *barchart);
-    ~ChartModifier();
+    explicit GraphModifier(Q3DBars *barchart);
+    ~GraphModifier();
 
     void resetTemperatureData();
     void addRow();

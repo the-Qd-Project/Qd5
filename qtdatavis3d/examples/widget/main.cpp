@@ -16,7 +16,7 @@
 **
 ****************************************************************************/
 
-#include "chart.h"
+#include "graphmodifier.h"
 
 #include <QApplication>
 #include <QWidget>
@@ -38,10 +38,10 @@ int main(int argc, char **argv)
     QHBoxLayout *hLayout = new QHBoxLayout(widget);
     QVBoxLayout *vLayout = new QVBoxLayout();
 
-    Q3DBars *widgetchart = new Q3DBars();
-    QSize screenSize = widgetchart->screen()->size();
+    Q3DBars *widgetgraph = new Q3DBars();
+    QSize screenSize = widgetgraph->screen()->size();
 
-    QWidget *container = QWidget::createWindowContainer(widgetchart);
+    QWidget *container = QWidget::createWindowContainer(widgetgraph);
     container->setMinimumSize(QSize(screenSize.width() / 2, screenSize.height() / 1.5));
     container->setMaximumSize(screenSize);
     container->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -153,22 +153,22 @@ int main(int argc, char **argv)
 
     widget->show();
 
-    ChartModifier *modifier = new ChartModifier(widgetchart);
+    GraphModifier *modifier = new GraphModifier(widgetgraph);
 
-    QObject::connect(rotationSliderX, &QSlider::valueChanged, modifier, &ChartModifier::rotateX);
-    QObject::connect(rotationSliderY, &QSlider::valueChanged, modifier, &ChartModifier::rotateY);
+    QObject::connect(rotationSliderX, &QSlider::valueChanged, modifier, &GraphModifier::rotateX);
+    QObject::connect(rotationSliderY, &QSlider::valueChanged, modifier, &GraphModifier::rotateY);
 
     QObject::connect(labelButton, &QPushButton::clicked, modifier,
-                     &ChartModifier::changeLabelStyle);
+                     &GraphModifier::changeLabelStyle);
     QObject::connect(cameraButton, &QPushButton::clicked, modifier,
-                     &ChartModifier::changePresetCamera);
+                     &GraphModifier::changePresetCamera);
 
     QObject::connect(backgroundCheckBox, &QCheckBox::stateChanged, modifier,
-                     &ChartModifier::setBackgroundEnabled);
+                     &GraphModifier::setBackgroundEnabled);
     QObject::connect(gridCheckBox, &QCheckBox::stateChanged, modifier,
-                     &ChartModifier::setGridEnabled);
+                     &GraphModifier::setGridEnabled);
     QObject::connect(smoothCheckBox, &QCheckBox::stateChanged, modifier,
-                     &ChartModifier::setSmoothBars);
+                     &GraphModifier::setSmoothBars);
 
     QObject::connect(barStyleList, SIGNAL(currentIndexChanged(int)), modifier,
                      SLOT(changeStyle(int)));
@@ -182,15 +182,15 @@ int main(int argc, char **argv)
     QObject::connect(shadowQuality, SIGNAL(currentIndexChanged(int)), modifier,
                      SLOT(changeShadowQuality(int)));
 
-    QObject::connect(modifier, &ChartModifier::shadowQualityChanged, shadowQuality,
+    QObject::connect(modifier, &GraphModifier::shadowQualityChanged, shadowQuality,
                      &QComboBox::setCurrentIndex);
-    QObject::connect(widgetchart, &Q3DBars::shadowQualityChanged, modifier,
-                     &ChartModifier::shadowQualityUpdatedByVisual);
+    QObject::connect(widgetgraph, &Q3DBars::shadowQualityChanged, modifier,
+                     &GraphModifier::shadowQualityUpdatedByVisual);
 
     QObject::connect(fontSizeSlider, &QSlider::valueChanged, modifier,
-                     &ChartModifier::changeFontSize);
+                     &GraphModifier::changeFontSize);
     QObject::connect(fontList, &QFontComboBox::currentFontChanged, modifier,
-                     &ChartModifier::changeFont);
+                     &GraphModifier::changeFont);
 
     modifier->start();
 
