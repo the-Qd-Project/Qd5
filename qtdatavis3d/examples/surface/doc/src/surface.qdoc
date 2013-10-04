@@ -1,0 +1,31 @@
+/****************************************************************************
+**
+** Copyright (C) 2013 Digia Plc
+** All rights reserved.
+** For any questions to Digia, please use contact form at http://qt.digia.com
+**
+** This file is part of the QtDataVisualization module.
+**
+** Licensees holding valid Qt Enterprise licenses may use this file in
+** accordance with the Qt Enterprise License Agreement provided with the
+** Software or, alternatively, in accordance with the terms contained in
+** a written agreement between you and Digia.
+**
+** If you have questions regarding the use of this file, please use
+** contact form at http://qt.digia.com
+**
+****************************************************************************/
+
+/*!
+    \example surface
+    \title Surface Example
+    \ingroup qtdatavisualization_examples
+    \brief Using Q3DSurface in a widget application.
+
+    The surface example shows how to make a simple 3D surface graph using Q3DSurface and
+    combining the use of widgets for adjusting several adjustable qualities.
+
+    \image surface-example.png
+
+    TODO
+*/

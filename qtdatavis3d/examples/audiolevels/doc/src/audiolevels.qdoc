@@ -19,6 +19,8 @@
 /*!
     \example audiolevels
     \title Audiolevels Example
+    \ingroup qtdatavisualization_examples
+    \brief Simple application showing real time audio data.
 
     The audiolevels example shows how feed dynamic data to a graph using Q3DBars.
 
