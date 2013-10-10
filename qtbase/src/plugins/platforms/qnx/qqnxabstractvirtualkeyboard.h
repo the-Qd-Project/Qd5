@@ -1,6 +1,6 @@
 /***************************************************************************
 **
-** Copyright (C) 2011 - 2012 Research In Motion
+** Copyright (C) 2013 BlackBerry Limited. All rights reserved.
 ** Contact: http://www.qt-project.org/legal
 **
 ** This file is part of the plugins of the Qt Toolkit.
@@ -59,10 +59,11 @@ public:
     // Symbol - All symbols, alternate to NumPunc, currently unused.
     // Phone - Phone enhanced keyboard - currently unused as no alternate keyboard available to access a-zA-Z
     // Pin - Keyboard for entering Pins (Hex values) currently unused.
+    // Password - Keyboard for entering passwords.
     //
     // SPECIAL NOTE: Usage of NumPunc may have to be removed, ABC button is non-functional.
     //
-    enum KeyboardMode { Default, Url, Email, Web, NumPunc, Symbol, Phone, Pin };
+    enum KeyboardMode { Default, Url, Email, Web, NumPunc, Symbol, Phone, Pin, Password };
 
     explicit QQnxAbstractVirtualKeyboard(QObject *parent = 0);
 
@@ -74,7 +75,7 @@ public:
     QLocale locale() const { return m_locale; }
 
     void setKeyboardMode(KeyboardMode mode);
-    void setInputHintsFromObject(QObject *focusObject);
+    void setInputHints(int inputHints);
     KeyboardMode keyboardMode() const { return m_keyboardMode; }
 
 Q_SIGNALS:
