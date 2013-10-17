@@ -18,9 +18,9 @@
 **
 ****************************************************************************/
 
-import QtQuick 1.0
-import QtQuickTest 1.0
-import QtCommercial.Chart 1.2
+import QtQuick 2.0
+import QtTest 1.0
+import QtCommercial.Chart 1.3
 
 Rectangle {
     width: 400
@@ -34,10 +34,6 @@ Rectangle {
         function test_chartViewProperties() {
             compare(chartView.animationOptions, ChartView.NoAnimation, "ChartView.animationOptions");
             verify(chartView.backgroundColor != undefined);
-            verify(chartView.bottomMargin > 0, "ChartView.bottomMargin");
-            verify(chartView.topMargin > 0, "ChartView.topMargin");
-            verify(chartView.leftMargin > 0, "ChartView.leftMargin");
-            verify(chartView.rightMargin > 0, "ChartView.rightMargin");
             verify(chartView.margins.bottom > 0, "ChartView.margins.bottom");
             verify(chartView.margins.top > 0, "ChartView.margins.top");
             verify(chartView.margins.left > 0, "ChartView.margins.left");
@@ -73,7 +69,6 @@ Rectangle {
             compare(chartView.legend.font.underline, false, "ChartView.legend.font.underline");
             compare(chartView.legend.font.weight, Font.Normal, "ChartView.legend.font.weight");
             compare(chartView.legend.font.wordSpacing, 0.0, "ChartView.legend.font.wordSpacing");
-            compare(chartView.axes.length, 0, "ChartView.axes.length");
         }
     }
 

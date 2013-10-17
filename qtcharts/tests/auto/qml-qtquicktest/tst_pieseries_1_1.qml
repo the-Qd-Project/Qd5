@@ -18,8 +18,8 @@
 **
 ****************************************************************************/
 
-import QtQuick 1.0
-import QtQuickTest 1.0
+import QtQuick 2.0
+import QtTest 1.0
 import QtCommercial.Chart 1.1
 
 Rectangle {
@@ -45,7 +45,7 @@ Rectangle {
             var slice = pieSeries.append("slice", 10);
             compare(slice.angleSpan, 360.0);
             verify(slice.borderColor != undefined);
-            compare(slice.borderWidth, 0);
+            compare(slice.borderWidth, 1);
             verify(slice.color != undefined);
             compare(slice.explodeDistanceFactor, 0.15);
             compare(slice.exploded, false);

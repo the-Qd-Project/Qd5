@@ -18,9 +18,9 @@
 **
 ****************************************************************************/
 
-import QtQuick 1.0
-import QtQuickTest 1.0
-import QtCommercial.Chart 1.2
+import QtQuick 2.0
+import QtTest 1.0
+import QtCommercial.Chart 1.3
 
 Rectangle {
     width: 400
@@ -31,31 +31,30 @@ Rectangle {
         name: "tst_qml-qtquicktest ValueAxis"
         when: windowShown
 
-        function test_properties() {
+        // test functions are run in alphabetical order, the name has 'a' so that it
+        // will be the first function to execute.
+        function test_a_properties() {
             // Default properties
             verify(axisX.min < 0, "AxisX min");
             verify(axisX.max > 0, "AxisX max");
             verify(axisY.min < 0, "AxisY min");
             verify(axisY.max > 0, "AxisY max");
-            verify(axisX.tickCount > 0, "AxisX tick count");
-            verify(axisY.tickCount > 0, "AxisX tick count");
-            compare(axisX.niceNumbersEnabled, false, "nice numbers");
-            compare(axisX.labelFormat, "", "label format");
+            verify(axisX.tickCount == 5, "AxisX tick count");
+            verify(axisY.tickCount == 5, "AxisY tick count");
+            verify(axisX.labelFormat == "", "label format");
 
             // Modify properties
             axisX.tickCount = 3;
-            compare(axisX.tickCount, 3, "set tick count");
-            axisX.niceNumbersEnabled = true;
-            compare(axisX.niceNumbersEnabled, true, "nice numbers");
+            verify(axisX.tickCount == 3, "set tick count");
         }
 
         function test_functions() {
             // Set the axis ranges to not "nice" ones...
             var min = 0.032456456;
             var max = 10.67845634;
-            axisX.max = min;
+            axisX.min = min;
             axisX.max = max;
-            axisY.max = min;
+            axisY.min = min;
             axisY.max = max;
 
             // ...And then apply nice numbers and verify the range was changed

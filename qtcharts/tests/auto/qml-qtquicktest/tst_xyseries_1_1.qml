@@ -18,8 +18,8 @@
 **
 ****************************************************************************/
 
-import QtQuick 1.0
-import QtQuickTest 1.0
+import QtQuick 2.0
+import QtTest 1.0
 import QtCommercial.Chart 1.1
 
 Rectangle {
@@ -63,9 +63,9 @@ Rectangle {
             compare(lineSeries.count, count);
             compare(splineSeries.count, count);
             compare(scatterSeries.count, count);
-            tryCompare(lineSeriesPointAddedSpy.count, count);
-            tryCompare(splineSeriesPointAddedSpy.count, count);
-            tryCompare(scatterSeriesPointAddedSpy.count, count);
+            compare(lineSeriesPointAddedSpy.count, count);
+            compare(splineSeriesPointAddedSpy.count, count);
+            compare(scatterSeriesPointAddedSpy.count, count);
             clear();
             compare(lineSeries.count, 0);
             compare(splineSeries.count, 0);
@@ -82,9 +82,9 @@ Rectangle {
             compare(lineSeries.count, count);
             compare(splineSeries.count, count);
             compare(scatterSeries.count, count);
-            tryCompare(lineSeriesPointReplacedSpy.count, count);
-            tryCompare(splineSeriesPointReplacedSpy.count, count);
-            tryCompare(scatterSeriesPointReplacedSpy.count, count);
+            compare(lineSeriesPointReplacedSpy.count, count);
+            compare(splineSeriesPointReplacedSpy.count, count);
+            compare(scatterSeriesPointReplacedSpy.count, count);
             clear();
         }
 
@@ -101,9 +101,9 @@ Rectangle {
             compare(lineSeries.count, count * 2);
             compare(splineSeries.count, count * 2);
             compare(scatterSeries.count, count * 2);
-            tryCompare(lineSeriesPointAddedSpy.count, count);
-            tryCompare(splineSeriesPointAddedSpy.count, count);
-            tryCompare(scatterSeriesPointAddedSpy.count, count);
+            compare(lineSeriesPointAddedSpy.count, count);
+            compare(splineSeriesPointAddedSpy.count, count);
+            compare(scatterSeriesPointAddedSpy.count, count);
             clear();
         }
 
@@ -120,9 +120,9 @@ Rectangle {
             compare(lineSeries.count, 0);
             compare(splineSeries.count, 0);
             compare(scatterSeries.count, 0);
-            tryCompare(lineSeriesPointRemovedSpy.count, count);
-            tryCompare(splineSeriesPointRemovedSpy.count, count);
-            tryCompare(scatterSeriesPointRemovedSpy.count, count);
+            compare(lineSeriesPointRemovedSpy.count, count);
+            compare(splineSeriesPointRemovedSpy.count, count);
+            compare(scatterSeriesPointRemovedSpy.count, count);
         }
 
         // Not a test function, called from test functions
