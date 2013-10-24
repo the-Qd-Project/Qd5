@@ -39,6 +39,7 @@
     \li \l blockingslave
     \li \l cenumerator
     \li \l cwritersync
+    \li \l creadersync
     \li \l enumerator
     \li \l terminal
     \endlist
