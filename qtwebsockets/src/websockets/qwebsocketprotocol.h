@@ -48,7 +48,6 @@
 QT_BEGIN_NAMESPACE
 
 class QString;
-class QByteArray;
 
 namespace QWebSocketProtocol
 {
@@ -104,23 +103,6 @@ enum OpCode
     OC_RESERVED_E	= 0xE,
     OC_RESERVED_F	= 0xF
 };
-
-
-inline bool isOpCodeReserved(OpCode code)
-{
-    return ((code > OC_BINARY) && (code < OC_CLOSE)) || (code > OC_PONG);
-}
-inline bool isCloseCodeValid(int closeCode)
-{
-    return  (closeCode > 999) && (closeCode < 5000) &&
-            (closeCode != CC_RESERVED_1004) &&          //see RFC6455 7.4.1
-            (closeCode != CC_MISSING_STATUS_CODE) &&
-            (closeCode != CC_ABNORMAL_DISCONNECTION) &&
-            ((closeCode >= 3000) || (closeCode < 1012));
-}
-
-void Q_AUTOTEST_EXPORT mask(QByteArray *payload, quint32 maskingKey);
-void Q_AUTOTEST_EXPORT mask(char *payload, quint64 size, quint32 maskingKey);
 
 inline Version currentVersion() { return V_LATEST; }
 
