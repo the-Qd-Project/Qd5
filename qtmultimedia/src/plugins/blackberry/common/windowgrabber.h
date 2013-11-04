@@ -69,6 +69,8 @@ public:
 
     bool nativeEventFilter(const QByteArray &eventType, void *message, long *result) Q_DECL_OVERRIDE;
 
+    bool handleScreenEvent(screen_event_t event);
+
     QByteArray windowGroupId() const;
 
 signals:
