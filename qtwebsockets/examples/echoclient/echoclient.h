@@ -41,10 +41,10 @@
 #ifndef ECHOCLIENT_H
 #define ECHOCLIENT_H
 
-#include <QObject>
+#include <QtCore/QObject>
 #include <QtWebSockets/QWebSocket>
 
-QT_FORWARD_DECLARE_CLASS(QWebSocket);
+QT_FORWARD_DECLARE_CLASS(QWebSocket)
 
 class EchoClient : public QObject
 {

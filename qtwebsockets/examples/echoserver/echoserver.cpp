@@ -39,9 +39,9 @@
 **
 ****************************************************************************/
 #include "echoserver.h"
-#include "qwebsocketserver.h"
-#include "qwebsocket.h"
-#include <QDebug>
+#include "QtWebSockets/qwebsocketserver.h"
+#include "QtWebSockets/qwebsocket.h"
+#include <QtCore/QDebug>
 
 QT_USE_NAMESPACE
 
@@ -51,7 +51,7 @@ EchoServer::EchoServer(quint16 port, QObject *parent) :
     m_pWebSocketServer(Q_NULLPTR),
     m_clients()
 {
-    m_pWebSocketServer = new QWebSocketServer("Echo Server", this);
+    m_pWebSocketServer = new QWebSocketServer("Echo Server", QWebSocketServer::NON_SECURE_MODE, this);
     if (m_pWebSocketServer->listen(QHostAddress::Any, port))
     {
         qDebug() << "Echoserver listening on port" << port;
