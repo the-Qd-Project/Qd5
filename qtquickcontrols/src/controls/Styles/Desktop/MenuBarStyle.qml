@@ -41,13 +41,11 @@
 import QtQuick 2.1
 import QtQuick.Controls 1.1
 import QtQuick.Controls.Private 1.0
-
+import "." as Desktop
 
 Style {
-    property Component frame: StyleItem {
+    property Component background: StyleItem {
         elementType: "menubar"
-        contentWidth: control.__contentItem.width
-        contentHeight: parent ? parent.contentHeight : 0
         width: implicitWidth + 2 * (pixelMetric("menubarhmargin") + pixelMetric("menubarpanelwidth"))
         height: implicitHeight + 2 * (pixelMetric("menubarvmargin") + pixelMetric("menubarpanelwidth"))
                 + pixelMetric("spacebelowmenubar")
@@ -55,23 +53,22 @@ Style {
         Accessible.role: Accessible.MenuBar
     }
 
-    property Component menuItem: StyleItem {
+    property Component itemDelegate: StyleItem {
         elementType: "menubaritem"
-        x: pixelMetric("menubarhmargin") + pixelMetric("menubarpanelwidth")
-        y: pixelMetric("menubarvmargin") + pixelMetric("menubarpanelwidth")
 
-        text: menuItem.title
+        text: styleData.text
         contentWidth: textWidth(text)
         contentHeight: textHeight(text)
         width: implicitWidth + pixelMetric("menubaritemspacing")
 
-        enabled: menuItem.enabled
-        selected: (parent && parent.selected) || sunken
-        sunken: parent && parent.sunken
+        enabled: styleData.enabled
+        sunken: styleData.open
 
-        hints: { "showUnderlined": showUnderlined }
+        hints: { "showUnderlined": styleData.underlineMnemonic }
 
         Accessible.role: Accessible.MenuItem
         Accessible.name: StyleHelpers.removeMnemonics(text)
     }
+
+    property Component menuStyle: Desktop.MenuStyle { }
 }
