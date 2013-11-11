@@ -45,7 +45,9 @@ public:
 
     void resetArray(QSurfaceDataArray *newArray);
 
-    void limitValues(QVector3D &minValues, QVector3D &maxValues);
+    void limitValues(QVector3D &minValues, QVector3D &maxValues) const;
+
+    virtual void setSeries(QAbstract3DSeries *series);
 
 protected:
     QSurfaceDataArray *m_dataArray;
