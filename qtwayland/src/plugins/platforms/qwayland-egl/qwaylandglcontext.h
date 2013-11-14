@@ -42,7 +42,7 @@
 #ifndef QWAYLANDGLCONTEXT_H
 #define QWAYLANDGLCONTEXT_H
 
-#include "qwaylanddisplay.h"
+#include <QtWaylandClient/qwaylanddisplay.h>
 
 #include <qpa/qplatformopenglcontext.h>
 #include <QtGui/QOpenGLFunctions>
