@@ -56,15 +56,15 @@ public:
 QStringList QWaylandIntegrationPlugin::keys() const
 {
     QStringList list;
-    list << "wayland-xcomposite";
+    list << "wayland-xcomposite-glx";
     return list;
 }
 
 QPlatformIntegration *QWaylandIntegrationPlugin::create(const QString& system, const QStringList& paramList)
 {
     Q_UNUSED(paramList);
-    if (system.toLower() == "wayland-xcomposite")
-        return new QWaylandIntegration();
+    if (system.toLower() == "wayland-xcomposite-glx")
+        return new QWaylandXCompositeGlxPlatformIntegration();
 
     return 0;
 }
