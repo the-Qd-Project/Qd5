@@ -40,6 +40,7 @@
     \li \l cenumerator
     \li \l cwriterasync
     \li \l cwritersync
+    \li \l creaderasync
     \li \l creadersync
     \li \l enumerator
     \li \l terminal
