@@ -41,6 +41,7 @@
 
 #include "positionfactory_android.h"
 #include "qgeopositioninfosource_android_p.h"
+#include "qgeosatelliteinfosource_android_p.h"
 
 QGeoPositionInfoSource *QGeoPositionInfoSourceFactoryAndroid::positionInfoSource(QObject *parent)
 {
@@ -50,8 +51,8 @@ QGeoPositionInfoSource *QGeoPositionInfoSourceFactoryAndroid::positionInfoSource
 
 QGeoSatelliteInfoSource *QGeoPositionInfoSourceFactoryAndroid::satelliteInfoSource(QObject *parent)
 {
-    Q_UNUSED(parent);
-    return 0;
+    QGeoSatelliteInfoSourceAndroid *src = new QGeoSatelliteInfoSourceAndroid(parent);
+    return src;
 }
 
 QGeoAreaMonitorSource *QGeoPositionInfoSourceFactoryAndroid::areaMonitor(QObject *parent)
