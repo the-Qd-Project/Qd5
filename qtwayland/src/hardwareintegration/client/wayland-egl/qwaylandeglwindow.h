@@ -44,7 +44,7 @@
 
 #include <QtWaylandClient/qwaylandwindow.h>
 #include "qwaylandeglinclude.h"
-#include "qwaylandeglintegration.h"
+#include "qwaylandeglclientbufferintegration.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -70,7 +70,7 @@ public:
     void bindContentFBO();
 
 private:
-    QWaylandEglIntegration *m_eglIntegration;
+    QWaylandEglClientBufferIntegration *m_clientBufferIntegration;
     mutable struct wl_egl_window *m_waylandEglWindow;
 
     const QWaylandWindow *m_parentWindow;
