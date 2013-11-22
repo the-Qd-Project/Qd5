@@ -46,23 +46,19 @@
 
 #include <QtCore/QHash>
 
-template <typename T_Product, typename T_Identifier = QString>
+template <typename T_Product, typename T_Identifier = QString, typename T_Argument = QString>
 class KDGenericFactory
 {
 public:
     virtual ~KDGenericFactory() {}
 
     typedef T_Product *(*FactoryFunction)();
+    typedef T_Product *(*FactoryFunctionWithArg)(const T_Argument &arg);
 
     template <typename T>
     void registerProduct(const T_Identifier &name)
     {
-#ifdef Q_CC_MSVC
-        FactoryFunction function = &KDGenericFactory::create<T>;
-#else // compile fix for old gcc
-        FactoryFunction function = &create<T>;
-#endif
-        map.insert(name, function);
+        map.insert(name, &KDGenericFactory::create<T>);
     }
 
     T_Product *create(const T_Identifier &name) const
@@ -73,6 +69,20 @@ public:
         return (*it)();
     }
 
+    template <typename T>
+    void registerProductWithArg(const T_Identifier &name)
+    {
+        map2.insert(name, &KDGenericFactory::create<T>);
+    }
+
+    T_Product *createWithArg(const T_Identifier &name, const T_Argument &arg) const
+    {
+        const typename QHash<T_Identifier, FactoryFunctionWithArg>::const_iterator it = map2.find(name);
+        if (it == map2.end())
+            return 0;
+        return (*it)(arg);
+    }
+
 private:
     template <typename T>
     static T_Product *create()
@@ -80,7 +90,14 @@ private:
         return new T;
     }
 
+    template <typename T>
+    static T_Product *create(const T_Argument &arg)
+    {
+        return new T(arg);
+    }
+
     QHash<T_Identifier, FactoryFunction> map;
+    QHash<T_Identifier, FactoryFunctionWithArg> map2;
 };
 
 #endif

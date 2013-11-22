@@ -64,6 +64,8 @@ public:
     // to filter repositories not matching the license
     bool isValidRepository(const QInstaller::Repository &repository) const;
 
+    QList<int> registeredPages() const;
+
 private:
     ProductKeyCheck();
     ProductKeyCheckPrivate *const d;
