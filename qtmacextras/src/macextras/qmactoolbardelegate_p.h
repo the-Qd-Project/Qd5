@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2012 Digia Plc and/or its subsidiary(-ies).
+** Copyright (C) 2014 Digia Plc and/or its subsidiary(-ies).
 ** Contact: http://www.qt-project.org/legal
 **
 ** This file is part of the QtMacExtras module of the Qt Toolkit.
@@ -43,32 +43,22 @@
 #define QMACTOOLBARDELEGATE_H
 
 #import <AppKit/AppKit.h>
-#include "qmactoolbutton_p.h"
+#include "qmactoolbar.h"
+#include "qmactoolbar_p.h"
 
 #include <QtCore/qglobal.h>
 #include <private/qcore_mac_p.h>
-#include <QtGui/QIcon>
 
 @interface QT_MANGLE_NAMESPACE(QMacToolbarDelegate) : NSObject <NSToolbarDelegate>
 {
 @public
-    QList<QMacToolButton *> items;
-    QList<QMacToolButton *> allowedItems;
+    QMacToolBarPrivate *toolbarPrivate;
 }
 
-- (NSToolbarItem *) toolbar: (NSToolbar *)toolbar itemForItemIdentifier: (NSString *) itemIdent willBeInsertedIntoToolbar:(BOOL) willBeInserted;
+- (NSToolbarItem *) toolbar:(NSToolbar *)toolbar itemForItemIdentifier:(NSString *) itemIdent willBeInsertedIntoToolbar:(BOOL) willBeInserted;
 - (NSArray *)toolbarDefaultItemIdentifiers:(NSToolbar*)toolbar;
 - (NSArray *)toolbarAllowedItemIdentifiers:(NSToolbar*)toolbar;
 - (NSArray *)toolbarSelectableItemIdentifiers:(NSToolbar *)toolbar;
-
-- (QMacToolButton *)addActionWithText:(const QString *)text;
-- (QMacToolButton *)addActionWithText:(const QString *)text icon:(const QIcon *)icon;
-- (QMacToolButton *)addStandardItem:(QMacToolButton::StandardItem)standardItem;
-
-- (QMacToolButton *)addAllowedActionWithText:(const QString *)text;
-- (QMacToolButton *)addAllowedActionWithText:(const QString *)text icon:(const QIcon *)icon;
-- (QMacToolButton *)addAllowedStandardItem:(QMacToolButton::StandardItem)standardItem;
-
 - (IBAction)itemClicked:(id)sender;
 @end
 
