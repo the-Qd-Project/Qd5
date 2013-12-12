@@ -1,6 +1,7 @@
 /****************************************************************************
 **
 ** Copyright (C) 2013 Digia Plc and/or its subsidiary(-ies).
+** Copyright (C) 2014 John Layt <jlayt@kde.org>
 ** Contact: http://www.qt-project.org/legal
 **
 ** This file is part of the plugins of the Qt Toolkit.
@@ -66,8 +67,14 @@ public:
 
     virtual QPrintEngine *createNativePrintEngine(QPrinter::PrinterMode printerMode);
     virtual QPaintEngine *createPaintEngine(QPrintEngine *printEngine, QPrinter::PrinterMode);
+
+    QPrintDevice createPrintDevice(const QString &id) Q_DECL_OVERRIDE;
+    QStringList availablePrintDeviceIds() const Q_DECL_OVERRIDE;
+    QString defaultPrintDeviceId() const Q_DECL_OVERRIDE;
+
     virtual QList<QPrinter::PaperSize> supportedPaperSizes(const QPrinterInfo &) const;
     virtual QList<QPair<QString, QSizeF> > supportedSizesWithNames(const QPrinterInfo &) const;
+
     virtual QList<QPrinterInfo> availablePrinters();
     virtual QString printerOption(const QPrinterInfo &printer, const QString &key) const;
     virtual PrinterOptions printerOptions(const QPrinterInfo &printer) const;
