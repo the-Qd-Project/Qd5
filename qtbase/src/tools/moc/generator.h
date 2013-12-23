@@ -52,7 +52,7 @@ class Generator
     ClassDef *cdef;
     QVector<uint> meta_data;
 public:
-    Generator(ClassDef *classDef, const QList<QByteArray> &metaTypes, const QHash<QByteArray, QByteArray> &knownQObjectClasses, FILE *outfile = 0);
+    Generator(ClassDef *classDef, const QList<QByteArray> &metaTypes, const QHash<QByteArray, QByteArray> &knownQObjectClasses, const QHash<QByteArray, QByteArray> &knownGadgets, FILE *outfile = 0);
     void generateCode();
 private:
     bool registerableMetaType(const QByteArray &propertyType);
@@ -80,6 +80,7 @@ private:
     QByteArray purestSuperClass;
     QList<QByteArray> metaTypes;
     QHash<QByteArray, QByteArray> knownQObjectClasses;
+    QHash<QByteArray, QByteArray> knownGadgets;
 };
 
 QT_END_NAMESPACE
