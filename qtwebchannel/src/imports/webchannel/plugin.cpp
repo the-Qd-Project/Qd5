@@ -43,8 +43,7 @@
 #include <qqml.h>
 #include <QtQml/QQmlExtensionPlugin>
 
-#include "qwebchannel.h"
-#include "qmetaobjectpublisher.h"
+#include "qmlwebchannel.h"
 
 QT_USE_NAMESPACE
 
@@ -61,8 +60,7 @@ void QWebChannelPlugin::registerTypes(const char *uri)
 {
     int major = 1;
     int minor = 0;
-    qmlRegisterType<QWebChannel>(uri, major, minor, "WebChannel");
-    qmlRegisterType<QMetaObjectPublisher>(uri, major, minor, "MetaObjectPublisher");
+    qmlRegisterType<QmlWebChannel>(uri, major, minor, "WebChannel");
 
 }
 
