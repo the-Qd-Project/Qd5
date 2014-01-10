@@ -66,12 +66,4 @@ WebChannelTest {
         webChannel.respond(msg.id, "barfoo");
         compare(awaitRawMessage(), "received:barfoo");
     }
-
-    function test_ping()
-    {
-        loadUrl("respond.html");
-        webChannel.ping();
-        pongSpy.wait(500);
-        compare(pongSpy.count, 1);
-    }
 }
