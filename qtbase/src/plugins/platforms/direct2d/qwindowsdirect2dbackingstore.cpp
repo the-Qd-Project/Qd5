@@ -45,107 +45,14 @@
 #include "qwindowsdirect2dpaintdevice.h"
 #include "qwindowsdirect2dbitmap.h"
 #include "qwindowsdirect2ddevicecontext.h"
+#include "qwindowsdirect2dwindow.h"
 
-#include "qwindowswindow.h"
 #include "qwindowscontext.h"
 
 #include <QtGui/QWindow>
 #include <QtCore/QDebug>
 
-#include <dxgi1_2.h>
-#include <d3d11.h>
-#include <wrl.h>
-
-using Microsoft::WRL::ComPtr;
-
 QT_BEGIN_NAMESPACE
-
-class QWindowsDirect2DBackingStorePrivate
-{
-public:
-    QWindowsDirect2DBackingStorePrivate() {}
-
-    ComPtr<IDXGISwapChain1> swapChain;
-    QSharedPointer<QWindowsDirect2DBitmap> backingStore;
-    QScopedPointer<QWindowsDirect2DPaintDevice> nativePaintDevice;
-
-    bool init(HWND hwnd)
-    {
-        DXGI_SWAP_CHAIN_DESC1 desc = {};
-
-        desc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
-        desc.SampleDesc.Count = 1;
-        desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-        desc.BufferCount = 1;
-        desc.SwapEffect = DXGI_SWAP_EFFECT_SEQUENTIAL;
-
-        HRESULT hr = QWindowsDirect2DContext::instance()->dxgiFactory()->CreateSwapChainForHwnd(
-                    QWindowsDirect2DContext::instance()->d3dDevice(), // [in]   IUnknown *pDevice
-                    hwnd,                                             // [in]   HWND hWnd
-                    &desc,                                            // [in]   const DXGI_SWAP_CHAIN_DESC1 *pDesc
-                    NULL,                                             // [in]   const DXGI_SWAP_CHAIN_FULLSCREEN_DESC *pFullscreenDesc
-                    NULL,                                             // [in]   IDXGIOutput *pRestrictToOutput
-                    swapChain.ReleaseAndGetAddressOf());              // [out]  IDXGISwapChain1 **ppSwapChain
-
-        if (FAILED(hr))
-            qWarning("%s: Could not create swap chain: %#x", __FUNCTION__, hr);
-
-        return SUCCEEDED(hr);
-    }
-
-    bool setupPaintDevice()
-    {
-        if (!backingStore) {
-            ComPtr<ID2D1DeviceContext> deviceContext;
-            ComPtr<IDXGISurface1> backBufferSurface;
-            ComPtr<ID2D1Bitmap1> backBufferBitmap;
-
-            HRESULT hr = QWindowsDirect2DContext::instance()->d2dDevice()->CreateDeviceContext(
-                        D2D1_DEVICE_CONTEXT_OPTIONS_NONE,
-                        deviceContext.ReleaseAndGetAddressOf());
-            if (FAILED(hr)) {
-                qWarning("%s: Couldn't create Direct2D Device context: %#x", __FUNCTION__, hr);
-                return false;
-            }
-
-            hr = swapChain->GetBuffer(0, IID_PPV_ARGS(&backBufferSurface));
-            if (FAILED(hr)) {
-                qWarning("%s: Could not query backbuffer for DXGI Surface: %#x", __FUNCTION__, hr);
-                return false;
-            }
-
-            hr = deviceContext->CreateBitmapFromDxgiSurface(backBufferSurface.Get(), NULL, backBufferBitmap.ReleaseAndGetAddressOf());
-            if (FAILED(hr)) {
-                qWarning("%s: Could not create Direct2D Bitmap from DXGI Surface: %#x", __FUNCTION__, hr);
-                return false;
-            }
-
-            backingStore.reset(new QWindowsDirect2DBitmap(backBufferBitmap.Get(), deviceContext.Get()));
-        }
-
-        if (!nativePaintDevice)
-            nativePaintDevice.reset(new QWindowsDirect2DPaintDevice(backingStore.data(), QInternal::Widget));
-
-        return true;
-    }
-
-    void releaseBackingStore()
-    {
-        nativePaintDevice.reset();
-        backingStore.reset();
-    }
-
-    QPaintDevice *paintDevice()
-    {
-        setupPaintDevice();
-        return nativePaintDevice.data();
-    }
-
-    void flush()
-    {
-        swapChain->Present(1, 0);
-    }
-};
 
 /*!
     \class QWindowsDirect2DBackingStore
@@ -154,86 +61,43 @@ public:
     \ingroup qt-lighthouse-win
 */
 
+static inline QWindowsDirect2DPlatformPixmap *platformPixmap(QPixmap *p)
+{
+    return static_cast<QWindowsDirect2DPlatformPixmap *>(p->handle());
+}
+
 QWindowsDirect2DBackingStore::QWindowsDirect2DBackingStore(QWindow *window)
     : QPlatformBackingStore(window)
-    , d_ptr(new QWindowsDirect2DBackingStorePrivate)
 {
-}
-
-bool QWindowsDirect2DBackingStore::init()
-{
-    if (window()->surfaceType() == QSurface::RasterSurface) {
-        Q_D(QWindowsDirect2DBackingStore);
-        return d->init(windowsWindow()->handle());
-    }
-
-    return true;
-}
-
-QWindowsDirect2DBackingStore *QWindowsDirect2DBackingStore::create(QWindow *window)
-{
-    QWindowsDirect2DBackingStore *result = new QWindowsDirect2DBackingStore(window);
-
-    if (!result->init()) {
-        delete result;
-        result = 0;
-    }
-
-    return result;
 }
 
 QWindowsDirect2DBackingStore::~QWindowsDirect2DBackingStore()
 {
-    Q_D(QWindowsDirect2DBackingStore);
-    d->releaseBackingStore();
-    d->swapChain.Reset();
 }
 
 QPaintDevice *QWindowsDirect2DBackingStore::paintDevice()
 {
-    QPaintDevice *result = 0;
-
-    if (window()->surfaceType() == QSurface::RasterSurface) {
-        Q_D(QWindowsDirect2DBackingStore);
-        result = d->paintDevice();
-    }
-
-    return result;
+    return m_pixmap.data();
 }
 
-void QWindowsDirect2DBackingStore::flush(QWindow *, const QRegion &, const QPoint &)
+void QWindowsDirect2DBackingStore::flush(QWindow *window, const QRegion &region, const QPoint &offset)
 {
-    if (window()->surfaceType() == QSurface::RasterSurface) {
-        Q_D(QWindowsDirect2DBackingStore);
-        d->flush();
-    }
+    QPlatformWindow *pw = window->handle();
+    if (pw && m_pixmap)
+        static_cast<QWindowsDirect2DWindow *>(pw)->flush(platformPixmap(m_pixmap.data())->bitmap(), region, offset);
 }
 
 void QWindowsDirect2DBackingStore::resize(const QSize &size, const QRegion &region)
 {
     Q_UNUSED(region);
 
-    if (window()->surfaceType() != QSurface::RasterSurface)
-        return;
+    QScopedPointer<QPixmap> oldPixmap(m_pixmap.take());
+    m_pixmap.reset(new QPixmap(size.width(), size.height()));
 
-    Q_D(QWindowsDirect2DBackingStore);
-    d->releaseBackingStore();
-    QWindowsDirect2DContext::instance()->d3dDeviceContext()->ClearState();
-
-    HRESULT hr = d->swapChain->ResizeBuffers(0,
-                                             size.width(), size.height(),
-                                             DXGI_FORMAT_UNKNOWN,
-                                             0);
-    if (FAILED(hr))
-        qWarning("%s: Could not resize buffers: %#x", __FUNCTION__, hr);
-}
-
-QWindowsWindow *QWindowsDirect2DBackingStore::windowsWindow() const
-{
-    if (const QWindow *w = window())
-        if (QPlatformWindow *pw = w->handle())
-            return static_cast<QWindowsWindow *>(pw);
-    return 0;
+    if (oldPixmap) {
+        foreach (const QRect &rect, region.rects())
+            platformPixmap(m_pixmap.data())->copy(oldPixmap->handle(), rect);
+    }
 }
 
 QT_END_NAMESPACE
