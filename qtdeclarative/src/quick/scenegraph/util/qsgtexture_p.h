@@ -85,8 +85,7 @@ public:
     void setHasAlphaChannel(bool alpha) { m_has_alpha = alpha; }
     bool hasAlphaChannel() const { return m_has_alpha; }
 
-    void setHasMipmaps(bool mm);
-    bool hasMipmaps() const { return m_has_mipmaps; }
+    bool hasMipmaps() const { return mipmapFiltering() != QSGTexture::None; }
 
     void setImage(const QImage &image);
     const QImage &image() { return m_image; }
@@ -107,7 +106,6 @@ protected:
     QRectF m_texture_rect;
 
     uint m_has_alpha : 1;
-    uint m_has_mipmaps : 1;
     uint m_dirty_texture : 1;
     uint m_dirty_bind_options : 1;
     uint m_owns_texture : 1;
