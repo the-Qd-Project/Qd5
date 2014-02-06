@@ -87,6 +87,9 @@ public:
 
     void sendMessages(QQmlDebugService *service, const QList<QByteArray> &messages);
 
+private slots:
+    void wakeEngine(QQmlEngine *engine);
+
 private:
     friend class QQmlDebugService;
     friend class QQmlDebugServicePrivate;
