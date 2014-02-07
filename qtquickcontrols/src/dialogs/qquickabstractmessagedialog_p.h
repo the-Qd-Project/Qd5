@@ -66,16 +66,14 @@ class QQuickAbstractMessageDialog : public QQuickAbstractDialog
     Q_OBJECT
 
     Q_ENUMS(Icon)
-    Q_ENUMS(StandardButton)
-    Q_FLAGS(StandardButtons)
 
     Q_PROPERTY(QString text READ text WRITE setText NOTIFY textChanged)
     Q_PROPERTY(QString informativeText READ informativeText WRITE setInformativeText NOTIFY informativeTextChanged)
     Q_PROPERTY(QString detailedText READ detailedText WRITE setDetailedText NOTIFY detailedTextChanged)
     Q_PROPERTY(Icon icon READ icon WRITE setIcon NOTIFY iconChanged)
     Q_PROPERTY(QUrl standardIconSource READ standardIconSource NOTIFY iconChanged)
-    Q_PROPERTY(StandardButtons standardButtons READ standardButtons WRITE setStandardButtons NOTIFY standardButtonsChanged)
-    Q_PROPERTY(StandardButton clickedButton READ clickedButton NOTIFY buttonClicked)
+    Q_PROPERTY(QQuickAbstractDialog::StandardButtons standardButtons READ standardButtons WRITE setStandardButtons NOTIFY standardButtonsChanged)
+    Q_PROPERTY(QQuickAbstractDialog::StandardButton clickedButton READ clickedButton NOTIFY buttonClicked)
 
 public:
     QQuickAbstractMessageDialog(QObject *parent = 0);
@@ -98,29 +96,6 @@ public:
 
     QUrl standardIconSource();
 
-    enum StandardButton {
-        NoButton           = QPlatformDialogHelper::NoButton,
-        Ok                 = QPlatformDialogHelper::Ok,
-        Save               = QPlatformDialogHelper::Save,
-        SaveAll            = QPlatformDialogHelper::SaveAll,
-        Open               = QPlatformDialogHelper::Open,
-        Yes                = QPlatformDialogHelper::Yes,
-        YesToAll           = QPlatformDialogHelper::YesToAll,
-        No                 = QPlatformDialogHelper::No,
-        NoToAll            = QPlatformDialogHelper::NoToAll,
-        Abort              = QPlatformDialogHelper::Abort,
-        Retry              = QPlatformDialogHelper::Retry,
-        Ignore             = QPlatformDialogHelper::Ignore,
-        Close              = QPlatformDialogHelper::Close,
-        Cancel             = QPlatformDialogHelper::Cancel,
-        Discard            = QPlatformDialogHelper::Discard,
-        Help               = QPlatformDialogHelper::Help,
-        Apply              = QPlatformDialogHelper::Apply,
-        Reset              = QPlatformDialogHelper::Reset,
-        RestoreDefaults    = QPlatformDialogHelper::RestoreDefaults
-    };
-    Q_DECLARE_FLAGS(StandardButtons, StandardButton)
-
     StandardButtons standardButtons() const { return static_cast<StandardButtons>(static_cast<int>(m_options->standardButtons())); }
 
     StandardButton clickedButton() const { return m_clickedButton; }
@@ -133,8 +108,7 @@ public Q_SLOTS:
     void setDetailedText(const QString &arg);
     void setIcon(Icon icon);
     void setStandardButtons(StandardButtons buttons);
-    void click(QPlatformDialogHelper::StandardButton button, QPlatformDialogHelper::ButtonRole);
-    void click(QQuickAbstractMessageDialog::StandardButton button);
+    void click(QQuickAbstractDialog::StandardButton button);
 
 Q_SIGNALS:
     void textChanged();
@@ -151,14 +125,15 @@ Q_SIGNALS:
     void reset();
 
 protected:
+    void click(QPlatformDialogHelper::StandardButton button, QPlatformDialogHelper::ButtonRole);
+
+protected:
     QPlatformMessageDialogHelper *m_dlgHelper;
     QSharedPointer<QMessageDialogOptions> m_options;
     StandardButton m_clickedButton;
 
     Q_DISABLE_COPY(QQuickAbstractMessageDialog)
 };
-
-Q_DECLARE_OPERATORS_FOR_FLAGS(QQuickAbstractMessageDialog::StandardButtons)
 
 QT_END_NAMESPACE
 
