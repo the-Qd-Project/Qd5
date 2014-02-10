@@ -49,7 +49,7 @@
 
 namespace Qt3D {
 
-class LookAtTransform : public Qt3D::AbstractTransform
+class QT3DCORESHARED_EXPORT LookAtTransform : public Qt3D::AbstractTransform
 {
     Q_OBJECT
     Q_PROPERTY(QVector3D position READ position WRITE setPosition)
