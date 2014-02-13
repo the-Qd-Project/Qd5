@@ -28,8 +28,3 @@ qtcAddDeployment()
 RESOURCES += \
     qmlcamera.qrc
 
-OTHER_FILES += \
-    qml/qmlcamera/Data.qml \
-    qml/qmlcamera/Axes.qml \
-    qml/qmlcamera/main.qml \
-    qml/qmlcamera/ControlSurface.qml
