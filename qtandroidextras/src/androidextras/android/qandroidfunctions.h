@@ -51,10 +51,19 @@
 
 QT_BEGIN_NAMESPACE
 
+class QAndroidActivityResultReceiver;
 namespace QtAndroid
 {
     Q_ANDROIDEXTRAS_EXPORT QAndroidJniObject androidActivity();
     Q_ANDROIDEXTRAS_EXPORT int androidSdkVersion();
+
+    Q_ANDROIDEXTRAS_EXPORT void startIntentSender(const QAndroidJniObject &intentSender,
+                                                  int receiverRequestCode,
+                                                  QAndroidActivityResultReceiver *resultReceiver = 0);
+    Q_ANDROIDEXTRAS_EXPORT void startActivity(const QAndroidJniObject &intent,
+                                              int receiverRequestCode,
+                                              QAndroidActivityResultReceiver *resultReceiver = 0);
+
 }
 
 QT_END_NAMESPACE
