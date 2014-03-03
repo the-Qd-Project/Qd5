@@ -58,7 +58,7 @@ public:
     AndroidBroadcastReceiver(QObject* parent = 0);
     virtual ~AndroidBroadcastReceiver();
 
-    void addAction(const QString &filter);
+    void addAction(const QAndroidJniObject &filter);
     bool isValid() const;
 
 protected:
