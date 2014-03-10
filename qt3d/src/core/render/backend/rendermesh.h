@@ -50,8 +50,6 @@
 #include <QOpenGLVertexArrayObject>
 #include <QMatrix4x4>
 
-class QOpenGLFunctions_3_2_Core;
-
 namespace Qt3D {
 
 class Mesh;
@@ -114,8 +112,6 @@ private:
     unsigned int m_instanceCount;
 
     QOpenGLVertexArrayObject m_vao;
-
-    QOpenGLFunctions_3_2_Core *m_funcs;
 
     QMatrix4x4 m_modelMatrix;
 };
