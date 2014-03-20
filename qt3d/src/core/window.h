@@ -66,6 +66,7 @@ public:
     ~Window();
 
     void setSource( const QUrl& url );
+    void setRootObject( QObject* obj );
 
     enum Status { Null, Ready, Loading, Error };
     Status status() const;
@@ -90,7 +91,6 @@ private slots:
     void onUpdate();
 
 private:
-    void setRootObject( QObject* obj );
 
     QScopedPointer<QQmlEngine> m_engine;
     QSharedPointer<QObject> m_root;
