@@ -64,6 +64,7 @@ class QQmlWebSocket : public QObject, public QQmlParserStatus
 
 public:
     explicit QQmlWebSocket(QObject *parent = Q_NULLPTR);
+    explicit QQmlWebSocket(QWebSocket *socket, QObject *parent = Q_NULLPTR);
     virtual ~QQmlWebSocket();
 
     enum Status
@@ -109,6 +110,8 @@ private:
     bool m_componentCompleted;
     QString m_errorString;
 
+    // takes ownership of the socket
+    void setSocket(QWebSocket *socket);
     void setStatus(Status status);
     void open();
     void close();

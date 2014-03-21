@@ -43,6 +43,9 @@
 
 #include <QtQml>
 
+#include "qqmlwebsocket.h"
+#include "qqmlwebsocketserver.h"
+
 QT_BEGIN_NAMESPACE
 
 void QtWebSocketsDeclarativeModule::registerTypes(const char *uri)
@@ -51,6 +54,7 @@ void QtWebSocketsDeclarativeModule::registerTypes(const char *uri)
 
     // @uri Qt.WebSockets
     qmlRegisterType<QQmlWebSocket>(uri, 1 /*major*/, 0 /*minor*/, "WebSocket");
+    qmlRegisterType<QQmlWebSocketServer>(uri, 1 /*major*/, 0 /*minor*/, "WebSocketServer");
 }
 
 QT_END_NAMESPACE
