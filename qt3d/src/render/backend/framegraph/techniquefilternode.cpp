@@ -46,8 +46,8 @@
 namespace Qt3D {
 namespace Render {
 
-TechniqueFilter::TechniqueFilter(FrameGraphNode *parent)
-    : FrameGraphNode(parent)
+TechniqueFilter::TechniqueFilter(Qt3D::Render::FrameGraphNode *parent)
+    : Qt3D::Render::FrameGraphNode(parent)
 {
 }
 
