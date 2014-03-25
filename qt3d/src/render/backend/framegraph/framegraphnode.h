@@ -56,6 +56,17 @@ public:
     FrameGraphNode(FrameGraphNode *parent = 0);
     virtual ~FrameGraphNode();
 
+    enum FrameGraphNodeType {
+        InvalidNodeType,
+        CameraSelector,
+        LayerFilter,    // TODO: Add class
+        RenderPassFilter,
+        RenderTarget,   // TODO: Add class
+        TechniqueFilter,
+        Viewport
+    };
+    FrameGraphNodeType nodeType() const { return m_nodeType; }
+
     FrameGraphNode *parent() const { return m_parent; }
     void setParent(FrameGraphNode *parent) { m_parent = parent; }
 
@@ -67,6 +78,8 @@ public:
     bool isEnabled() const { return m_enabled; }
 
 protected:
+    FrameGraphNode(FrameGraphNodeType nodeType, FrameGraphNode *parent = 0);
+
     virtual void apply();
     virtual void revert();
 
@@ -74,6 +87,7 @@ private:
     FrameGraphNode *m_parent;
     QVector<FrameGraphNode *> m_children;
 
+    FrameGraphNodeType m_nodeType;
     bool m_enabled;
 
     friend class FrameGraphVisitor;
