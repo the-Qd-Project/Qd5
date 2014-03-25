@@ -51,14 +51,17 @@ public:
     void populateCopy(QValue3DAxisFormatter &copy);
     void doPopulateCopy(QValue3DAxisFormatterPrivate &copy);
 
+    QString labelForIndex(int index) const;
     QString stringForValue(float value, const QString &format);
     float positionAt(float value) const;
     float valueAt(float position) const;
 
     void setAxis(QValue3DAxis *axis);
+    void resetPositionArrays();
+    void markDirty(bool labelsChange);
 
 public slots:
-    void markDirty();
+    void markDirtyNoLabelChange();
 
 protected:
     QValue3DAxisFormatter *q_ptr;
