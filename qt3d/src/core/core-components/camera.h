@@ -39,10 +39,10 @@
 **
 ****************************************************************************/
 
-#ifndef CAMERA_H
-#define CAMERA_H
+#ifndef QT3D_CAMERA_H
+#define QT3D_CAMERA_H
 
-#include "component.h"
+#include <entity.h>
 #include <qt3dcore_global.h>
 
 #include <QMatrix4x4>
@@ -52,98 +52,38 @@
 namespace Qt3D {
 
 class CameraPrivate;
+class CameraLens;
+class Transform;
+class LookAtTransform;
 
-class QT3DCORESHARED_EXPORT Camera : public Component
+class QT3DCORESHARED_EXPORT Camera : public Entity
 {
     Q_OBJECT
 
     // TODO Move view matrix out of the camera and use Transform component (once it exists)
-    Q_PROPERTY(QVector3D position READ position WRITE setPosition)
-    Q_PROPERTY(QVector3D upVector READ upVector WRITE setUpVector)
-    Q_PROPERTY(QVector3D viewCenter READ viewCenter WRITE setViewCenter)
-
-    Q_PROPERTY(ProjectionType projectionType READ projectionType WRITE setProjectionType NOTIFY projectionTypeChanged)
-    Q_PROPERTY(float nearPlane READ nearPlane WRITE setNearPlane NOTIFY nearPlaneChanged)
-    Q_PROPERTY(float farPlane READ farPlane WRITE setFarPlane NOTIFY farPlaneChanged)
-
-    Q_PROPERTY(float fieldOfView READ fieldOfView WRITE setFieldOfView NOTIFY fieldOfViewChanged)
-    Q_PROPERTY(float aspectRatio READ aspectRatio WRITE setAspectRatio NOTIFY aspectRatioChanged)
-
-    Q_PROPERTY(float left READ left WRITE setLeft NOTIFY leftChanged)
-    Q_PROPERTY(float right READ right WRITE setRight NOTIFY rightChanged)
-    Q_PROPERTY(float bottom READ bottom WRITE setBottom NOTIFY bottomChanged)
-    Q_PROPERTY(float top READ top WRITE setTop NOTIFY topChanged)
-
-    Q_ENUMS( ProjectionType )
+    Q_PROPERTY(Qt3D::CameraLens* lens READ lens WRITE setLens NOTIFY lensChanged)
+    Q_PROPERTY(Qt3D::LookAtTransform* lookAt READ lookAt WRITE setLookAt NOTIFY lookAtChanged)
 
 public:
     explicit Camera(Node *parent = 0);
 
-    enum ProjectionType {
-        OrthogonalProjection,
-        PerspectiveProjection
-    };
 
     enum CameraTranslationOption {
         TranslateViewCenter,
         DontTranslateViewCenter
     };
 
-    void setViewMatrix(const QMatrix4x4& m);
+    CameraLens* lens() const;
+    void setLens(CameraLens *lens);
 
-    QVector3D position() const;
-    QVector3D upVector() const;
-    QVector3D viewCenter() const;
-
-    QVector3D viewVector() const;
-
-    void setProjectionType(ProjectionType projectioType);
-    ProjectionType projectionType() const;
-
-    void setNearPlane(float nearPlane);
-    float nearPlane() const;
-
-    void setFarPlane(float nearPlane);
-    float farPlane() const;
-
-    void setFieldOfView(float fieldOfView);
-    float fieldOfView() const;
-
-    void setAspectRatio(float aspectRatio);
-    float aspectRatio() const;
-
-    void setLeft(float left);
-    float left() const;
-
-    void setRight(float right);
-    float right() const;
-
-    void setBottom(float bottom);
-    float bottom() const;
-
-    void setTop(float top);
-    float top() const;
-
-    QMatrix4x4 viewMatrix() const;
-    QMatrix4x4 projectionMatrix() const;
-    QMatrix4x4 viewProjectionMatrix() const;
+    LookAtTransform *lookAt() const;
+    void setLookAt(LookAtTransform* lookAt);
 
     QQuaternion tiltRotation(float angle) const;
     QQuaternion panRotation(float angle) const;
     QQuaternion rollRotation(float angle) const;
 
 public slots:
-    void setOrthographicProjection(float left, float right,
-                                   float bottom, float top,
-                                   float nearPlane, float farPlane);
-
-    void setPerspectiveProjection(float fieldOfView, float aspect,
-                                  float nearPlane, float farPlane);
-
-    // TODO These slots should likely be on a modifier one layer up
-    void setPosition( const QVector3D& position );
-    void setUpVector( const QVector3D& upVector );
-    void setViewCenter( const QVector3D& viewCenter );
 
     // Translate relative to camera orientation axes
     void translate( const QVector3D& vLocal, CameraTranslationOption option = TranslateViewCenter );
@@ -163,15 +103,8 @@ public slots:
     void rotateAboutViewCenter( const QQuaternion& q );
 
 signals:
-    void projectionTypeChanged();
-    void nearPlaneChanged();
-    void farPlaneChanged();
-    void fieldOfViewChanged();
-    void aspectRatioChanged();
-    void leftChanged();
-    void rightChanged();
-    void bottomChanged();
-    void topChanged();
+    void lensChanged();
+    void lookAtChanged();
 
 protected:
     Q_DECLARE_PRIVATE(Camera)
@@ -182,4 +115,4 @@ private:
 
 }
 
-#endif // CAMERA_H
+#endif // QT3D_CAMERA_H
