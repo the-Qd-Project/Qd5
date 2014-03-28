@@ -41,6 +41,10 @@
 
 #include "testcompositor.h"
 
+TestCompositor::TestCompositor(QWaylandCompositor::ExtensionFlag flags) : QWaylandCompositor(0, 0, flags)
+{
+}
+
 void TestCompositor::surfaceCreated(QWaylandSurface *surface)
 {
     surfaces << surface;
