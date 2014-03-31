@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2013 Digia Plc and/or its subsidiary(-ies).
+** Copyright (C) 2014 Digia Plc and/or its subsidiary(-ies).
 ** Contact: http://www.qt-project.org/legal
 **
 ** This file is part of the QtQuick module of the Qt Toolkit.
@@ -42,55 +42,45 @@
 #ifndef QQUICKRENDERCONTROL_P_H
 #define QQUICKRENDERCONTROL_P_H
 
-#include <QtGui/QImage>
-#include <private/qtquickglobal_p.h>
+//
+//  W A R N I N G
+//  -------------
+//
+// This file is not part of the Qt API.  It exists purely as an
+// implementation detail.  This header file may change from version to
+// version without notice, or even be removed.
+//
+// We mean it.
+//
+
+#include "qquickrendercontrol.h"
+#include <QtQuick/private/qsgcontext_p.h>
 
 QT_BEGIN_NAMESPACE
 
-class QQuickWindow;
-class QSGContext;
-class QSGRenderContext;
-class QAnimationDriver;
-class QOpenGLContext;
-class QQuickRenderControlPrivate;
-
-class Q_QUICK_PRIVATE_EXPORT QQuickRenderControl : public QObject
+class QQuickRenderControlPrivate : public QObjectPrivate
 {
-    Q_OBJECT
-    Q_DECLARE_PRIVATE(QQuickRenderControl)
 public:
-    QQuickRenderControl();
-    ~QQuickRenderControl();
+    Q_DECLARE_PUBLIC(QQuickRenderControl)
 
-    QQuickWindow *window() const;
-    QQuickWindow *createOffscreenWindow();
-    virtual QWindow *renderWindow(QPoint *offset) { Q_UNUSED(offset); return 0; }
-    static QWindow *renderWindowFor(QQuickWindow *win, QPoint *offset = 0);
+    QQuickRenderControlPrivate();
+    ~QQuickRenderControlPrivate();
+
+    static QQuickRenderControlPrivate *get(QQuickRenderControl *renderControl) {
+        return renderControl->d_func();
+    }
+
+    static void cleanup();
 
     void windowDestroyed();
 
-    void initialize(QOpenGLContext *gl);
-    void invalidate();
-    void polishItems();
-    void render();
-    bool sync();
-    void stop();
+    void update();
+    void maybeUpdate();
 
-    QImage grab();
-
-Q_SIGNALS:
-    void renderRequested();
-    void sceneChanged();
-
-private:
-    friend class QQuickWindowPrivate;
-    friend class QQuickWindow;
-    void setWindow(QQuickWindow *window);
-    inline void update() { /*emit*/ renderRequested(); }
-    inline void maybeUpdate() { /*emit*/ sceneChanged(); }
-
-    QSGContext *sceneGraphContext() const;
-    QSGRenderContext *renderContext(QSGContext *) const;
+    bool initialized;
+    QQuickWindow *window;
+    static QSGContext *sg;
+    QSGRenderContext *rc;
 };
 
 QT_END_NAMESPACE
