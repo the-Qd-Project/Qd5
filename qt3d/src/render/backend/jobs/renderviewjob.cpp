@@ -42,6 +42,7 @@
 #include "renderviewjob.h"
 
 #include <renderview.h>
+#include <renderer.h>
 
 #include <QDebug>
 
@@ -52,7 +53,7 @@ namespace Render {
 
 void RenderViewJob::run()
 {
-    qDebug() << Q_FUNC_INFO;
+    qDebug() << Q_FUNC_INFO << m_index;
 
     // Create a RenderView object
     RenderView *renderView = new RenderView;
@@ -68,7 +69,12 @@ void RenderViewJob::run()
     // list of RenderCommands
     //buildRenderCommands(renderView, m_renderer);
 
+
+
+
+
     // Enqueue our fully populated RenderView with the RenderThread
+    m_renderer->enqueueRenderView(renderView, m_index);
 }
 
 } // namespace Render
