@@ -29,10 +29,10 @@ ScatterRenderItem::ScatterRenderItem()
 }
 
 ScatterRenderItem::ScatterRenderItem(const ScatterRenderItem &other)
-    : AbstractRenderItem(other),
-      m_visible(false)
+    : AbstractRenderItem(other)
 {
     m_position = other.m_position;
+    m_visible = other.m_visible;
 }
 
 ScatterRenderItem::~ScatterRenderItem()
