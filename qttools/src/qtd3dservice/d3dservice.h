@@ -45,6 +45,7 @@
 #include <QtCore/qt_windows.h>
 #include <QtCore/QPair>
 #include <QtCore/QString>
+#include <QtCore/QStringList>
 #include <QtCore/QLoggingCategory>
 
 QT_USE_NAMESPACE
@@ -55,6 +56,11 @@ namespace D3DService
     HRESULT compileShader(const QString &source, const QString &destination);
 
     bool start();
+
+    QStringList devices();
+    QStringList apps(const QString &device);
+    QStringList sources(const QString &device, const QString &app);
+    QStringList binaries(const QString &device, const QString &app);
 }
 
 Q_DECLARE_LOGGING_CATEGORY(lcD3DService)
