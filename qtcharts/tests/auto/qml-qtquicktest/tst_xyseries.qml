@@ -20,7 +20,7 @@
 
 import QtQuick 2.0
 import QtTest 1.0
-import QtCommercial.Chart 1.3
+import QtCommercial.Chart 1.4
 
 Rectangle {
     width: 400
@@ -49,10 +49,12 @@ Rectangle {
             compare(scatterSeries.borderWidth, 2.0);
             compare(scatterSeries.markerShape, ScatterSeries.MarkerShapeCircle);
             compare(scatterSeries.markerSize, 15.0);
+            compare(scatterSeries.brushFilename, "");
 
             verify(areaSeries.color != undefined);
             verify(areaSeries.borderColor != undefined);
             compare(areaSeries.borderWidth, 2.0);
+            compare(areaSeries.brushFilename, "");
         }
 
         function test_axes() {

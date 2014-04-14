@@ -20,7 +20,7 @@
 
 import QtQuick 2.0
 import QtTest 1.0
-import QtCommercial.Chart 1.3
+import QtCommercial.Chart 1.4
 
 Rectangle {
     width: 400
@@ -34,6 +34,11 @@ Rectangle {
         function test_properties() {
             compare(barSeries.barWidth, 0.5);
             compare(barSeries.labelsVisible, false);
+        }
+
+        function test_setproperties() {
+            var set = barSeries.append("property", [1, 2, 3])
+            compare(set.brushFilename, "");
         }
 
         function test_axes() {
