@@ -74,17 +74,6 @@ QVariant TechniqueFilter::filter(const QString &name) const
     return QVariant();
 }
 
-
-void TechniqueFilter::apply()
-{
-    qDebug() << Q_FUNC_INFO;
-}
-
-void TechniqueFilter::revert()
-{
-    qDebug() << Q_FUNC_INFO;
-}
-
 }
 }
 
