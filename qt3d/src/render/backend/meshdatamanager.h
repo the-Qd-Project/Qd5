@@ -58,27 +58,23 @@ namespace Render {
 
 typedef QHandle<MeshData, 16> HMeshData;
 
-class MeshDataManager : public QArrayResourcesManager<MeshData, Mesh *, 16>
+class MeshDataManager : public QArrayResourcesManager<MeshData, QString, 16>
 {
 public:
     MeshDataManager();
 
-    HMeshData addMesh(Qt3D::Mesh *frontEndMesh);
-    void linkMeshToEntity(const QUuid &id, HMeshData handle);
-    MeshData *meshForEntityUuid(const QUuid &id);
+    inline bool hasMeshData(const QString &source) { return contains(source); }
+    inline MeshData* getOrCreateMeshData(const QString &source) { return getOrCreateResource(source); }
+    inline MeshData* meshData(const QString &source) { return lookupResource(source); }
+    void addMeshData(const QString &source);
 
-    QList< QPair<QString, HMeshData> > meshesPending() const { return m_meshesPending; }
+    QList<QString> meshesPending() const { return m_meshesPending; }
     void clearMeshesPending() { m_meshesPending.clear(); }
 
 private:
-    // TODO What unique id do we want to index by?
-    QHash<QString, HMeshData> m_meshesBySource;
-    QHash<Qt3D::Mesh *, HMeshData> m_meshesByPeer;
-    QHash<QUuid, HMeshData> m_meshesByEntityUuid;
-
     // List of meshes that we need to schedule jobs to load
     // and calculate bounds for.
-    QList< QPair<QString, HMeshData> > m_meshesPending;
+    QList<QString> m_meshesPending;
 };
 
 } // namespace Render
