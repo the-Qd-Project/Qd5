@@ -42,7 +42,6 @@
 #include "qeglfscontext.h"
 #include "qeglfswindow.h"
 #include "qeglfshooks.h"
-#include "qeglfsintegration.h"
 
 #include <QtPlatformSupport/private/qeglconvenience_p.h>
 #include <QtPlatformSupport/private/qeglpbuffer_p.h>
@@ -52,9 +51,9 @@
 
 QT_BEGIN_NAMESPACE
 
-QEglFSContext::QEglFSContext(const QSurfaceFormat &format, QPlatformOpenGLContext *share, EGLDisplay display)
-    : QEGLPlatformContext(format, share, display,
-                          QEglFSIntegration::chooseConfig(display, format))
+QEglFSContext::QEglFSContext(const QSurfaceFormat &format, QPlatformOpenGLContext *share, EGLDisplay display,
+                             EGLConfig *config, const QVariant &nativeHandle)
+    : QEGLPlatformContext(format, share, display, config, nativeHandle)
 {
 }
 
