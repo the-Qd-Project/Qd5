@@ -66,11 +66,13 @@ class QWindowsNativeInterface : public QPlatformNativeInterface
 {
     Q_OBJECT
     Q_PROPERTY(bool asyncExpose READ asyncExpose WRITE setAsyncExpose)
+
 public:
+    void *nativeResourceForIntegration(const QByteArray &resource) Q_DECL_OVERRIDE;
 #ifndef QT_NO_OPENGL
-    virtual void *nativeResourceForContext(const QByteArray &resource, QOpenGLContext *context);
+    void *nativeResourceForContext(const QByteArray &resource, QOpenGLContext *context) Q_DECL_OVERRIDE;
 #endif
-    virtual void *nativeResourceForWindow(const QByteArray &resource, QWindow *window);
+    void *nativeResourceForWindow(const QByteArray &resource, QWindow *window) Q_DECL_OVERRIDE;
 
     Q_INVOKABLE void *createMessageWindow(const QString &classNameTemplate,
                                           const QString &windowName,
@@ -83,10 +85,10 @@ public:
     bool asyncExpose() const;
     void setAsyncExpose(bool value);
 
-    QVariantMap windowProperties(QPlatformWindow *window) const;
-    QVariant windowProperty(QPlatformWindow *window, const QString &name) const;
-    QVariant windowProperty(QPlatformWindow *window, const QString &name, const QVariant &defaultValue) const;
-    void setWindowProperty(QPlatformWindow *window, const QString &name, const QVariant &value);
+    QVariantMap windowProperties(QPlatformWindow *window) const Q_DECL_OVERRIDE;
+    QVariant windowProperty(QPlatformWindow *window, const QString &name) const Q_DECL_OVERRIDE;
+    QVariant windowProperty(QPlatformWindow *window, const QString &name, const QVariant &defaultValue) const Q_DECL_OVERRIDE;
+    void setWindowProperty(QPlatformWindow *window, const QString &name, const QVariant &value) Q_DECL_OVERRIDE;
 };
 
 QT_END_NAMESPACE
