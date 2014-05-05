@@ -55,8 +55,6 @@ class AbstractTransform;
 class QT3DCORESHARED_EXPORT Transform : public Qt3D::Component
 {
     Q_OBJECT
-    Q_PROPERTY(QQmlListProperty<Qt3D::AbstractTransform> transforms READ transformList)
-    Q_CLASSINFO("DefaultProperty", "transforms")
 
 public:
     explicit Transform(Node *parent = 0);
@@ -79,22 +77,14 @@ public:
         return transform;
     }
 
-    // void insertTransformAt(...)
-    Q_INVOKABLE void appendTransform(AbstractTransform *xform);
-    Q_INVOKABLE void removeTransform(AbstractTransform *xform);
-
-    QQmlListProperty<Qt3D::AbstractTransform> transformList();
+    void appendTransform(AbstractTransform *xform);
+    void removeTransform(AbstractTransform *xform);
 
 private Q_SLOTS:
     void setTransformsDirty();
 
 private:
     QMatrix4x4 applyTransforms() const;
-
-    static void qmlAppendTransform(QQmlListProperty<Qt3D::AbstractTransform> *list, Qt3D::AbstractTransform *bar);
-    static AbstractTransform* transformAt(QQmlListProperty<Qt3D::AbstractTransform> *list, int index);
-    static int transformCount(QQmlListProperty<Qt3D::AbstractTransform> *list);
-    static void qmlClearTransforms(QQmlListProperty<Qt3D::AbstractTransform> *list);
 
     mutable bool m_transformsDirty;
     bool m_visible;
