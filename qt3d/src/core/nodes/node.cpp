@@ -63,24 +63,6 @@ Node::~Node()
 {
 }
 
-QQmlListProperty<QObject> Node::data()
-{
-    return QQmlListProperty<QObject>(this, 0,
-                                     Node::appendData,
-                                     Node::dataCount,
-                                     Node::dataAt,
-                                     Node::clearData);
-}
-
-QQmlListProperty<Node> Node::childNodes()
-{
-    return QQmlListProperty<Node>(this, 0,
-                                  Node::appendChild,
-                                  Node::childCount,
-                                  Node::childAt,
-                                  Node::clearChildren);
-}
-
 void Node::dump()
 {
     const QMetaObject *meta = metaObject();
@@ -154,74 +136,6 @@ bool Node::event(QEvent *e)
         qDebug() << "*** Dynamic Property Change ***";
     }
     return QObject::event(e);
-}
-
-void Node::appendData(QQmlListProperty<QObject> *list, QObject *obj)
-{
-    if (!obj)
-        return;
-
-    QObject *self = static_cast<QObject *>(list->object);
-    if (obj->parent() == self)
-        obj->setParent(0);
-    obj->setParent(self);
-
-    Node *parentNode = qobject_cast<Qt3D::Node *>(self);
-    Node *node = qobject_cast<Qt3D::Node *>(obj);
-    if (node && parentNode)
-        parentNode->m_children.append(node);
-}
-
-QObject *Node::dataAt(QQmlListProperty<QObject> *list, int index)
-{
-    QObject *self = static_cast<QObject *>(list->object);
-    return self->children().at(index);
-}
-
-int Node::dataCount(QQmlListProperty<QObject> *list)
-{
-    QObject *self = static_cast<QObject *>(list->object);
-    return self->children().count();
-}
-
-void Node::clearData(QQmlListProperty<QObject> *list)
-{
-    QObject *self = static_cast<QObject *>(list->object);
-    Q_FOREACH (QObject *const child, self->children())
-        child->setParent(0);
-}
-
-void Node::appendChild(QQmlListProperty<Qt3D::Node> *list, Qt3D::Node *obj)
-{
-    if (!obj)
-        return;
-
-    Node *self = static_cast<Node *>(list->object);
-    Q_ASSERT(!self->m_children.contains(obj));
-    if (obj->parent() == self)
-        obj->setParent(0);
-    self->m_children.append(obj);
-    obj->setParent(self);
-}
-
-Qt3D::Node *Node::childAt(QQmlListProperty<Qt3D::Node> *list, int index)
-{
-    Node *self = static_cast<Node *>(list->object);
-    return self->m_children.at(index);
-}
-
-int Node::childCount(QQmlListProperty<Qt3D::Node> *list)
-{
-    Node *self = static_cast<Node *>(list->object);
-    return self->m_children.count();
-}
-
-void Node::clearChildren(QQmlListProperty<Qt3D::Node> *list)
-{
-    Node *self = static_cast<Node *>(list->object);
-    Q_FOREACH (Node *const child, self->m_children)
-        child->setParent(0);
-    self->m_children.clear();
 }
 
 } // namespace Qt3D
