@@ -43,6 +43,7 @@
 #define QT3D_QUICK_QUICK3DENTITY_H
 
 #include <Qt3DCore/entity.h>
+#include <Qt3DCore/quick3dnode.h>
 #include <QQmlListProperty>
 
 QT_BEGIN_NAMESPACE
@@ -53,14 +54,20 @@ class Component;
 
 namespace Quick {
 
-class Quick3DEntity : public Entity
+class Quick3DEntity : public Quick3DNode, public Entity
 {
     Q_OBJECT
+    Q_INTERFACES(Qt3D::Entity)
     Q_PROPERTY(QQmlListProperty<Qt3D::Component> components READ componentList)
 
 public:
     explicit Quick3DEntity(Node *parent = 0);
     QQmlListProperty<Qt3D::Component> componentList();
+    Entity *parentEntity() Q_DECL_OVERRIDE;
+    Entity *asEntity() Q_DECL_OVERRIDE;
+
+Q_SIGNALS:
+    void enabledChanged() Q_DECL_OVERRIDE;
 
 private:
     static void qmlAppendComponent(QQmlListProperty<Qt3D::Component> *list, Qt3D::Component *comp);
