@@ -96,65 +96,9 @@ void Material::setTextureParameter(QString name, Texture *tex)
     m_textures[name] = tex;
 }
 
-void Material::onTagValueChanged()
+void Material::cleanParameters()
 {
-    Tag* t = qobject_cast<Tag*>(sender());
-    Q_ASSERT(m_tagList.contains(t));
-
-    QVariant v = t->value();
-    QmlTexture* qmlTex = v.value<QmlTexture*>();
-    if (qmlTex) {
-        qCDebug(Render::Frontend) << "got texture parameter" << t->name();
-        setTextureParameter(t->name(), qmlTex->texture());
-    } else {
-        setParameter(t->name(), t->value());
-    }
-}
-
-QQmlListProperty<Tag> Material::qmlParameters()
-{
-    return QQmlListProperty<Tag>(this, 0,
-                                       &Material::appendTag,
-                                       &Material::tagCount,
-                                       &Material::tagAt,
-                                       &Material::clearTags );
-}
-
-void Material::appendTag(QQmlListProperty<Tag> *list, Tag *tag)
-{
-    Material *mat = qobject_cast<Material *>(list->object);
-    if (mat) {
-        tag->setParent(mat);
-        connect(tag, SIGNAL(valueChanged()), mat, SLOT(onTagValueChanged()));
-        mat->m_tagList.append(tag);
-        emit mat->parametersChanged();
-    }
-}
-
-Tag *Material::tagAt(QQmlListProperty<Tag> *list, int index)
-{
-    Material *mat = qobject_cast<Material *>(list->object);
-    if (mat)
-        return mat->m_tagList.value(index);
-    return 0;
-}
-
-int Material::tagCount(QQmlListProperty<Tag> *list)
-{
-    Material *mat = qobject_cast<Material *>(list->object);
-    if (mat)
-        return mat->m_tagList.size();
-    return 0;
-}
-
-void Material::clearTags(QQmlListProperty<Tag> *list)
-{
-    Material *mat = qobject_cast<Material *>(list->object);
-    if (mat) {
-        mat->m_parameters.clear();
-        mat->m_tagList.clear();
-        emit mat->parametersChanged();
-    }
+    m_parameters.clear();
 }
 
 } // namespace Qt3D
