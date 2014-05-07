@@ -43,7 +43,7 @@
 
 #include <qchangearbiter.h>
 #include <texture.h>
-
+#include "effect.h"
 #include "renderlogging.h"
 
 QT_BEGIN_NAMESPACE
@@ -56,18 +56,23 @@ Material::Material(Node *parent)
 {
 }
 
-Qt3D::Effect *Material::effect() const
+Qt3D::Node *Material::effect() const
 {
     return m_effect;
 }
 
-void Material::setEffect(Qt3D::Effect *effect)
+void Material::setEffect(Qt3D::Node *effect)
 {
     if (effect == m_effect)
         return;
 
-    m_effect = effect;
-    emit effectChanged();
+    if (qobject_cast<Effect*>(effect) != Q_NULLPTR) {
+        m_effect = effect;
+        emit effectChanged();
+    }
+    else {
+        qCWarning(Render::Frontend) << Q_FUNC_INFO << "Trying to set an Effect which isn't one";
+    }
 }
 
 void Material::setParameter(QString name, QVariant val)
