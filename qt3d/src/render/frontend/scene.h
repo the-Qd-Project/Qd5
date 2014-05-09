@@ -50,18 +50,44 @@ QT_BEGIN_NAMESPACE
 namespace Qt3D
 {
 
-class QT3DRENDERERSHARED_EXPORT Scene : public EntityNode
-{
-    Q_OBJECT
+class Scene;
+class AbstractSceneParser;
 
-    Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged)
-    Q_PROPERTY(QString sceneId READ sceneId WRITE setSceneId NOTIFY sceneIdChanged)
+class ScenePrivate
+{
 public:
-    explicit Scene(Node *parent = 0);
+
+    ScenePrivate(Scene *qq)
+        : q_ptr(qq)
+        , m_sceneChild(Q_NULLPTR)
+        , m_currentParser(Q_NULLPTR)
+    {}
+
+    Q_DECLARE_PUBLIC(Scene)
+    Scene *q_ptr;
+
+    QString m_source;
+    QString m_sceneId;
+    Node *m_sceneNode;
+    Node *m_sceneChild;
+    AbstractSceneParser *m_currentParser;
+};
+
+class QT3DRENDERERSHARED_EXPORT Scene
+{
+public:
+    explicit Scene(Node *sceneNode);
 
     QString source() const;
+    void setSource(QString arg);
 
     QString sceneId() const;
+    void setSceneId(QString arg);
+
+    virtual Node *node(QString id);
+    virtual Node *scene(QString id);
+
+    void clear();
 
     /**
      * @brief findInTree - given a Node* object rooting a tree, find
@@ -72,28 +98,19 @@ public:
     static Scene* findInTree(Node* root);
 Q_SIGNALS:
 
-    void sourceChanged(QString arg);
-
-    void sceneIdChanged(QString arg);
-
-public slots:
-    void clear();
-
-    void setSource(QString arg);
-
-    void setSceneId(QString arg);
+    virtual void sourceChanged(QString arg) = 0;
+    virtual void sceneIdChanged(QString arg) = 0;
 
 private:
     void rebuild();
-
-    QString m_source;
-    QString m_sceneId;
-
-    Node* m_sceneChild;
+    Q_DECLARE_PRIVATE(Scene)
+    ScenePrivate *d_ptr;
 
 };
 
 } // namespace Qt3D
+
+Q_DECLARE_INTERFACE(Qt3D::Scene, "org.qt-project.org.Qt3D.Scene/2.0")
 
 QT_END_NAMESPACE
 
