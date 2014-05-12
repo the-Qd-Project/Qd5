@@ -20,8 +20,6 @@
 
 QT_BEGIN_NAMESPACE_DATAVISUALIZATION
 
-// TODO: Docs missing?
-
 DeclarativeColor::DeclarativeColor(QObject *parent)
     : QObject(parent)
 {
