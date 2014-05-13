@@ -51,6 +51,9 @@ QT_BEGIN_NAMESPACE
 class QOpenGLTexture;
 
 namespace Qt3D {
+
+class Texture;
+
 namespace Render {
 
 class RenderTexture
