@@ -46,7 +46,7 @@
 #include <QEvent>
 #include <QMetaObject>
 #include <QMetaProperty>
-#include <QDebug>
+#include "corelogging.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -76,7 +76,7 @@ void Node::dump()
             .arg(value.toString());
     }
 
-    qDebug() << result.join(QStringLiteral("\n"));
+    qCDebug(Nodes) << result.join(QStringLiteral("\n"));
 
     foreach (QObject *child, children()) {
         Node *node = qobject_cast<Node *>(child);
@@ -105,7 +105,7 @@ void Node::removeChild(Node *childNode)
 {
     Q_CHECK_PTR( childNode );
     if (childNode->parent() != this)
-        qWarning() << Q_FUNC_INFO << "not a child";
+        qCWarning(Nodes) << Q_FUNC_INFO << "not a child";
 
     m_children.removeOne(childNode);
     childNode->setParent(NULL);
@@ -133,7 +133,7 @@ Node *Node::parentNode() const
 bool Node::event(QEvent *e)
 {
     if (e->type() == QEvent::DynamicPropertyChange) {
-        qDebug() << "*** Dynamic Property Change ***";
+        qCDebug(Nodes) << "*** Dynamic Property Change ***";
     }
     return QObject::event(e);
 }
