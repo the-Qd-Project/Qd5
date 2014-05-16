@@ -163,6 +163,7 @@ KeyboardLayout {
                 Key {
                     key: Qt.Key_Period
                     text: "."
+                    alternativeKeys: ".,"
                 }
                 EnterKey {}
             }
