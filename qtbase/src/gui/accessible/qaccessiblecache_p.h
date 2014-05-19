@@ -59,7 +59,9 @@
 
 #include "qaccessible.h"
 
-Q_FORWARD_DECLARE_OBJC_CLASS(QCocoaAccessibleElement);
+#ifdef Q_OS_MAC
+    Q_FORWARD_DECLARE_OBJC_CLASS(QMacAccessibilityElement);
+#endif
 
 QT_BEGIN_NAMESPACE
 
@@ -73,9 +75,9 @@ public:
     QAccessible::Id insert(QObject *object, QAccessibleInterface *iface) const;
     void deleteInterface(QAccessible::Id id, QObject *obj = 0);
 
-#ifdef Q_OS_OSX
-    QCocoaAccessibleElement *elementForId(QAccessible::Id axid) const;
-    void insertElement(QAccessible::Id axid, QCocoaAccessibleElement *element) const;
+#ifdef Q_OS_MAC
+    QMacAccessibilityElement *elementForId(QAccessible::Id axid) const;
+    void insertElement(QAccessible::Id axid, QMacAccessibilityElement *element) const;
 #endif
 
 private Q_SLOTS:
@@ -87,9 +89,9 @@ private:
     mutable QHash<QAccessible::Id, QAccessibleInterface *> idToInterface;
     mutable QHash<QObject *, QAccessible::Id> objectToId;
 
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MAC
     void removeCocoaElement(QAccessible::Id axid);
-    mutable QHash<QAccessible::Id, QCocoaAccessibleElement *> cocoaElements;
+    mutable QHash<QAccessible::Id, QMacAccessibilityElement *> cocoaElements;
 #endif
 
     friend class QAccessible;
