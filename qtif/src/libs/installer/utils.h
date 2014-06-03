@@ -1,6 +1,6 @@
 /**************************************************************************
 **
-** Copyright (C) 2012-2013 Digia Plc and/or its subsidiary(-ies).
+** Copyright (C) 2014 Digia Plc and/or its subsidiary(-ies).
 ** Contact: http://www.qt-project.org/legal
 **
 ** This file is part of the Qt Installer Framework.
@@ -58,6 +58,8 @@ QT_END_NAMESPACE
 
 namespace QInstaller {
     void INSTALLER_EXPORT uiDetachedWait(int ms);
+    bool INSTALLER_EXPORT startDetached(const QString &program, const QStringList &arguments,
+        const QString &workingDirectory, qint64 *pid = 0);
 
     QByteArray INSTALLER_EXPORT calculateHash(QIODevice *device, QCryptographicHash::Algorithm algo);
     QByteArray INSTALLER_EXPORT calculateHash(const QString &path, QCryptographicHash::Algorithm algo);
@@ -65,6 +67,7 @@ namespace QInstaller {
     QString INSTALLER_EXPORT replaceVariables(const QHash<QString,QString> &vars, const QString &str);
     QString INSTALLER_EXPORT replaceWindowsEnvironmentVariables(const QString &str);
     QStringList INSTALLER_EXPORT parseCommandLineArgs(int argc, char **argv);
+
 #ifdef Q_OS_WIN
     QString createCommandline(const QString &program, const QStringList &arguments);
 #endif
