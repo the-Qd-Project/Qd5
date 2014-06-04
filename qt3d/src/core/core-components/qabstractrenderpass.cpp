@@ -81,12 +81,21 @@ QString QAbstractRenderPass::name() const
     return d->m_name;
 }
 
+/*!
+ * Sets the pass's \a shaderProgram. This posts a ComponentUpdated
+ * QScenePropertyChange to the QChangeArbiter. The value is set to
+ * the \a ShaderProgram and the property name to "shaderProgram".
+ */
 void QAbstractRenderPass::setShaderProgram(QAbstractShader *shaderProgram)
 {
     Q_D(QAbstractRenderPass);
     if (d->m_shader != shaderProgram) {
         d->m_shader = shaderProgram;
         emit shaderProgramChanged();
+        QScenePropertyChangePtr e(new QScenePropertyChange(ComponentUpdated, this));
+        e->m_propertyName = QByteArrayLiteral("shaderProgram");
+        e->m_value = QVariant::fromValue(shaderProgram);
+        notifyObservers(e);
     }
 }
 
