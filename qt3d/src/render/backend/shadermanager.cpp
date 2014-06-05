@@ -40,6 +40,7 @@
 ****************************************************************************/
 
 #include "shadermanager.h"
+#include <QUuid>
 
 QT_BEGIN_NAMESPACE
 
