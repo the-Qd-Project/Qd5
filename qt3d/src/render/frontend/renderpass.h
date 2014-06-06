@@ -47,8 +47,10 @@
 
 #include <Qt3DRenderer/shaderprogram.h>
 #include <Qt3DRenderer/drawstate.h>
+#include <Qt3DRenderer/renderpasscriterion.h>
 
 #include <QHash>
+#include <QList>
 
 QT_BEGIN_NAMESPACE
 
@@ -76,6 +78,9 @@ public:
     void setStateSet(Render::DrawStateSet* ss);
     Render::DrawStateSet* stateSet() const;
 
+    void addCriterion(RenderPassCriterion *criterion);
+    void removeCriterion(RenderPassCriterion *criterion);
+    QList<RenderPassCriterion *> criteria() const;
 
 
 protected:
@@ -84,6 +89,7 @@ protected:
 
     // map Parameter names to GLSL names
     QHash<QString, QString> m_parameterNameDict;
+    QList<RenderPassCriterion *> m_criteria;
 
     Render::DrawStateSet* m_stateSet;
 };
