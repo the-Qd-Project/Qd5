@@ -40,6 +40,7 @@
 ****************************************************************************/
 
 #include "qabstractmaterial.h"
+#include "qabstractmaterial_p.h"
 
 /*!
  * \class QAbstractMaterial
@@ -62,18 +63,10 @@ QT_BEGIN_NAMESPACE
 
 namespace Qt3D {
 
-class QAbstractMaterialPrivate
-{
-public :
-    QAbstractMaterialPrivate(QAbstractMaterial *qq)
-        : q_ptr(qq)
-        , m_effect(Q_NULLPTR)
-    {}
-
-    Q_DECLARE_PUBLIC(QAbstractMaterial)
-    QAbstractMaterial *q_ptr;
-    QAbstractEffect *m_effect;
-};
+QAbstractMaterialPrivate::QAbstractMaterialPrivate(QAbstractMaterial *qq)
+    : q_ptr(qq)
+    , m_effect(Q_NULLPTR)
+{}
 
 QAbstractMaterial::QAbstractMaterial(Node *parent)
     : Component(parent)
@@ -100,6 +93,12 @@ QAbstractEffect *QAbstractMaterial::effect() const
 {
     Q_D(const QAbstractMaterial);
     return d->m_effect;
+}
+
+QAbstractMaterial::QAbstractMaterial(Node *parent, QAbstractMaterialPrivate *d)
+    : Component(parent)
+    , d_ptr(d)
+{
 }
 
 } // Qt3D
