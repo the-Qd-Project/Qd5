@@ -40,6 +40,7 @@
 ****************************************************************************/
 
 #include "entity.h"
+#include "entity_p.h"
 #include "component.h"
 #include "abstracttransform.h"
 #include "matrixtransform.h"
@@ -54,11 +55,13 @@ QT_BEGIN_NAMESPACE
 namespace Qt3D {
 
 Entity::Entity(Node *parent)
-    : Node(parent)
-    , d_ptr(new EntityPrivate(this))
+    : Node(*new EntityPrivate(this), parent)
 {
-    Q_D(Entity);
-    d->m_enabled = true;
+}
+
+Entity::Entity(EntityPrivate &dd, Node *parent)
+    : Node(dd, parent)
+{
 }
 
 const QUuid Entity::uuid() const
