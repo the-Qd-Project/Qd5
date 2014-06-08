@@ -54,7 +54,7 @@ QT_BEGIN_NAMESPACE
 namespace Qt3D {
 
 class Node;
-class Component;
+class NodePrivate;
 class Entity;
 
 typedef QList<Node *> NodeList;
@@ -70,14 +70,14 @@ public:
     void dump();
 
     NodeList children() const;
-    void addChild( Node* childNode );
-    void removeChild( Node* childNode );
+    void addChild(Node *childNode);
+    void removeChild(Node *childNode);
 
     void removeAllChildren();
 
     virtual Entity* asEntity();
 
-    Node* parentNode() const;
+    Node *parentNode() const;
 
     void registerObserver(QObserverInterface *observer) Q_DECL_OVERRIDE;
     void unregisterObserver(QObserverInterface *observer) Q_DECL_OVERRIDE;
@@ -85,13 +85,8 @@ public:
 protected:
     virtual void notifyObservers(const QSceneChangePtr &change);
 
-private:
-    NodeList m_children;
-
-    // For now this just protects access to the m_changeArbiter.
-    // Later on we may decide to extend support for multiple observers.
-    QReadWriteLock m_observerLock;
-    QChangeArbiter *m_changeArbiter;
+    Q_DECLARE_PRIVATE(Node)
+    Node(NodePrivate &dd, Node *parent = 0);
 };
 
 } // namespace Qt3D
