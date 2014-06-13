@@ -49,11 +49,27 @@ QT_BEGIN_NAMESPACE
 
 namespace Qt3D {
 
+class ComponentPrivate;
+
 class QT3DCORESHARED_EXPORT Component : public Node
 {
     Q_OBJECT
+
+    Q_PROPERTY(bool enabled READ isEnabled WRITE setEnabled NOTIFY enabledChanged)
+
 public:
     explicit Component(Node *parent = 0);
+
+    void setEnabled(bool enabled);
+    bool isEnabled() const;
+
+Q_SIGNALS:
+    void enabledChanged();
+
+protected:
+    Q_DECLARE_PRIVATE(Component)
+    // TODO: Use usual protected ctor
+    ComponentPrivate *d_ptr;
 };
 
 } // namespace Qt3D
