@@ -52,8 +52,9 @@ QT_BEGIN_NAMESPACE
 namespace Qt3D {
 
 class AbstractTransform;
+class TransformPrivate;
 
-class QT3DCORESHARED_EXPORT Transform : public Qt3D::Component
+class QT3DCORESHARED_EXPORT Transform : public Component
 {
     Q_OBJECT
 
@@ -71,8 +72,8 @@ public:
     template <class T>
     T *findFirstTransform() const
     {
-        T* transform = Q_NULLPTR;
-        Q_FOREACH (AbstractTransform *trans, m_transforms)
+        T *transform = Q_NULLPTR;
+        Q_FOREACH (AbstractTransform *trans, transformList())
             if ((transform = qobject_cast<T*>(trans)) != Q_NULLPTR)
                 break;
         return transform;
@@ -84,15 +85,12 @@ public:
 private Q_SLOTS:
     void setTransformsDirty();
 
-private:
+protected:
     QMatrix4x4 applyTransforms() const;
+    QList<AbstractTransform *> transformList() const;
 
-    mutable QAtomicInt m_transformsDirty;
-    bool m_visible;
-    QList<AbstractTransform*> m_transforms;
-
-    mutable QMatrix4x4 m_matrix;
-    QMatrix4x4 m_sceneMatrix;
+    Q_DECLARE_PRIVATE(Transform)
+    Transform(TransformPrivate &dd, Node *parent = 0);
 };
 
 } // namespace Qt3D
