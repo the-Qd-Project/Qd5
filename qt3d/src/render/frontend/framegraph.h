@@ -49,6 +49,8 @@ QT_BEGIN_NAMESPACE
 
 namespace Qt3D {
 
+class FrameGraphPrivate;
+
 class QT3DRENDERERSHARED_EXPORT FrameGraph : public Qt3D::Component
 {
     Q_OBJECT
@@ -66,8 +68,9 @@ public:
 Q_SIGNALS:
     void activeFrameGraphChanged();
 
-private:
-    Node *m_activeFrameGraph;
+protected:
+    Q_DECLARE_PRIVATE(FrameGraph)
+    FrameGraph(FrameGraphPrivate &dd, Node *parent = 0);
 };
 
 } //Qt3D
