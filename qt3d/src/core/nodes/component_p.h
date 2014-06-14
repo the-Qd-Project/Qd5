@@ -42,13 +42,14 @@
 #ifndef QT3D_COMPONENT_P_H
 #define QT3D_COMPONENT_P_H
 
+#include <Qt3DCore/qt3dcore_global.h>
 #include <private/node_p.h>
 
 QT_BEGIN_NAMESPACE
 
 namespace Qt3D {
 
-class ComponentPrivate : public NodePrivate
+class QT3DCORESHARED_EXPORT ComponentPrivate : public NodePrivate
 {
 public:
     explicit ComponentPrivate(Component *qq);
