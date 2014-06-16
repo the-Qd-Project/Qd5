@@ -67,7 +67,7 @@ public:
     QLowEnergyServiceInfo::ServiceType serviceType;
     bool connected;
     QBluetoothDeviceInfo deviceInfo;
-#ifdef QT_BLUEZ_BLUETOOTH
+#if defined(QT_BLUEZ_BLUETOOTH) && !defined(QT_BLUEZ_NO_BTLE)
     QString startingHandle;
     QString endingHandle;
 #endif
@@ -77,7 +77,7 @@ public:
 #endif
 
 private:
-#ifdef QT_BLUEZ_BLUETOOTH
+#if defined(QT_BLUEZ_BLUETOOTH) && !defined(QT_BLUEZ_NO_BTLE)
     int m_step;
     int m_valueCounter;
     int m_readCounter;
