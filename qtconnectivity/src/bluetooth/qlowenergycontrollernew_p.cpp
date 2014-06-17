@@ -58,4 +58,9 @@ void QLowEnergyControllerNewPrivate::discoverServices()
 
 }
 
+void QLowEnergyControllerNewPrivate::discoverServiceDetails(const QBluetoothUuid &/*service*/)
+{
+
+}
+
 QT_END_NAMESPACE
