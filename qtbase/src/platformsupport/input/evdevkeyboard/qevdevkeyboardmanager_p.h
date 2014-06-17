@@ -59,6 +59,8 @@ public:
     QEvdevKeyboardManager(const QString &key, const QString &specification, QObject *parent = 0);
     ~QEvdevKeyboardManager();
 
+    void loadKeymap(const QString &file);
+
 private slots:
     void addKeyboard(const QString &deviceNode = QString());
     void removeKeyboard(const QString &deviceNode);
@@ -67,6 +69,7 @@ private:
     QString m_spec;
     QHash<QString,QEvdevKeyboardHandler*> m_keyboards;
     QDeviceDiscovery *m_deviceDiscovery;
+    QString m_defaultKeymapFile;
 };
 
 QT_END_NAMESPACE
