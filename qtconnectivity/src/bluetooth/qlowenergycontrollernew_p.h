@@ -45,6 +45,7 @@
 #include <qglobal.h>
 #include <QtBluetooth/qbluetooth.h>
 #include "qlowenergycontrollernew.h"
+#include "qlowenergyserviceprivate_p.h"
 
 #if defined(QT_BLUEZ_BLUETOOTH) && !defined(QT_BLUEZ_NO_BTLE)
 #include <QtBluetooth/QBluetoothSocket>
@@ -52,12 +53,7 @@
 
 QT_BEGIN_NAMESPACE
 
-typedef QPair<QLowEnergyHandle,QLowEnergyHandle> HandlePair;
-
-struct ServiceDetails {
-    QLowEnergyHandle startHandle, endHandle;
-    QSharedPointer<QLowEnergyService> service;
-};
+typedef QMap<QBluetoothUuid, QSharedPointer<QLowEnergyServicePrivate> > ServiceDataMap;
 
 class QLowEnergyControllerNewPrivate : public QObject
 {
@@ -96,7 +92,7 @@ public:
 
 private:
     // list of all found service uuids
-    QMap<QBluetoothUuid, ServiceDetails> serviceList;
+    ServiceDataMap serviceList;
 
 #if defined(QT_BLUEZ_BLUETOOTH) && !defined(QT_BLUEZ_NO_BTLE)
     QBluetoothSocket *l2cpSocket;
