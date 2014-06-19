@@ -45,7 +45,8 @@ enum Compiler {
     CC_MSVC2008 = 0x90,
     CC_MSVC2010 = 0xA0,
     CC_MSVC2012 = 0xB0,
-    CC_MSVC2013 = 0xC0
+    CC_MSVC2013 = 0xC0,
+    CC_MSVC2015 = 0xD0
 };
 
 struct CompilerInfo;
