@@ -46,6 +46,7 @@
 #include <QtCore/QPointer>
 #include <QtBluetooth/qbluetooth.h>
 #include <QtBluetooth/QLowEnergyService>
+#include <QtBluetooth/QLowEnergyCharacteristic>
 
 #include "qlowenergycontrollernew_p.h"
 
@@ -58,6 +59,13 @@ public:
     explicit QLowEnergyServicePrivate(QObject *parent = 0);
     ~QLowEnergyServicePrivate();
 
+    struct CharData {
+        QLowEnergyHandle valueHandle;
+        QBluetoothUuid uuid;
+        QLowEnergyCharacteristic::PropertyTypes properties;
+        QByteArray value;
+    };
+
     void setController(QLowEnergyControllerNewPrivate* control);
     void setError(QLowEnergyService::ServiceError newError);
     void setState(QLowEnergyService::ServiceState newState);
@@ -65,8 +73,6 @@ public:
 signals:
     void stateChanged(QLowEnergyService::ServiceState newState);
     void error(QLowEnergyService::ServiceError error);
-
-public slots:
 
 public:
     QLowEnergyHandle startHandle;
@@ -76,6 +82,8 @@ public:
     QLowEnergyService::ServiceType type;
     QLowEnergyService::ServiceState state;
     QLowEnergyService::ServiceError lastError;
+
+    QHash<QLowEnergyHandle, CharData> characteristicList;
 
     QPointer<QLowEnergyControllerNewPrivate> controller;
 };
