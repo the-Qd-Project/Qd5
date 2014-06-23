@@ -48,7 +48,7 @@
 #include <QFile>
 #include <QString>
 
-class KDTOOLS_EXPORT KDSaveFile : public QIODevice
+class KDTOOLS_EXPORT KDSaveFile : public QFileDevice
 {
     Q_OBJECT
 
