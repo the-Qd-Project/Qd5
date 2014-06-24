@@ -46,7 +46,7 @@
 #include <QtCore/QObject>
 #include <QtBluetooth/qbluetooth.h>
 #include <QtBluetooth/QBluetoothUuid>
-#include <QtBluetooth/QLowEnergyDescriptorInfo>
+#include <QtBluetooth/QLowEnergyDescriptor>
 
 QT_BEGIN_NAMESPACE
 
@@ -86,7 +86,7 @@ public:
     QLowEnergyCharacteristic::PropertyTypes properties() const;
     QLowEnergyHandle handle() const;
 
-    QList<QLowEnergyDescriptorInfo> descriptors() const;
+    QList<QLowEnergyDescriptor> descriptors() const;
 
     bool isValid() const;
 
