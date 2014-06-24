@@ -42,16 +42,72 @@
 #ifndef QT3D_QFRAMEALLOCATOR_H
 #define QT3D_QFRAMEALLOCATOR_H
 
-#include <QtGlobal>
+#include <QDebug>
+#include <QVector>
+#include <Qt3DCore/qt3dcore_global.h>
 
 QT_BEGIN_NAMESPACE
 
 namespace Qt3D {
 
-class QFrameAllocator
+class QFrameAllocatorPrivate;
+
+class QT3DCORESHARED_EXPORT QFrameAllocator
 {
 public:
-    QFrameAllocator();
+    explicit QFrameAllocator(uint maxObjectSize, uint alignment = 16, uint pageSize = 128);
+    ~QFrameAllocator();
+
+    template<typename T>
+    T* allocate()
+    {
+#ifndef QFRAMEALLOCATOR_DEBUG
+        uint allocatorIndex = allocatorIndexFromSize(sizeof(T)) - 1;
+        if (allocatorIndex < allocatorIndexFromSize(maxObjectSize())) {
+            T *ptr = static_cast<T*>(allocateAtChunk(allocatorIndex));
+            new (ptr) T(); // Don't forget to call the constructor of the object using the placement new operator
+            return ptr;
+        }
+        else {
+            qWarning() << "Trying to allocate an object larger (" << sizeof(T) << ") than maxObjectSize (" << maxObjectSize() << ") Using operator new";
+            return new T();
+        }
+#else
+        return new T();
+#endif
+    }
+
+    template<typename T>
+    void deallocate(T *ptr)
+    {
+#ifndef QFRAMEALLOCATOR_DEBUG
+        uint allocatorIndex = allocatorIndexFromSize(sizeof(T)) - 1;
+        if (allocatorIndex < allocatorIndexFromSize(maxObjectSize())) {
+            ptr->~T(); // Call destructor
+            deallocateAtChunck(ptr, allocatorIndex);
+        }
+        else {
+            qWarning() << "Trying to deallocate an object larger (" << sizeof(T) << ") than maxObjectSize (" << maxObjectSize() << ") Using operator delete";
+            delete ptr;
+        }
+#else
+        delete ptr;
+#endif
+    }
+
+    void clear();
+    void trim();
+    uint maxObjectSize() const;
+    uint totalChunkCount() const;
+    int allocatorPoolSize() const;
+
+private:
+    void *allocateAtChunk(uint allocatorIndex);
+    void deallocateAtChunck(void *ptr, uint allocatorIndex);
+    uint allocatorIndexFromSize(uint targetSize) const;
+
+    Q_DECLARE_PRIVATE(QFrameAllocator)
+    QFrameAllocatorPrivate *d_ptr;
 };
 
 } // Qt3D
