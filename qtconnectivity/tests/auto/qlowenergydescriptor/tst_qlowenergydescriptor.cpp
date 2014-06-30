@@ -72,7 +72,6 @@ private slots:
 private:
     QBluetoothServiceDiscoveryAgent *agent;
     QSet<QString> remoteLeDevices;
-    QList<QLowEnergyServiceInfo> foundServices;
     QLowEnergyControllerNew *globalControl;
     QLowEnergyService *globalService;
 };
@@ -224,7 +223,6 @@ void tst_QLowEnergyDescriptor::tst_assignCompare()
     QCOMPARE(target.uuid(), QBluetoothUuid());
     QCOMPARE(target.value(), QByteArray());
 
-    QLowEnergyCharacteristic targetChar;
     QList<QLowEnergyDescriptor> targets;
     const QList<QLowEnergyCharacteristic> chars = globalService->characteristics();
     foreach (const QLowEnergyCharacteristic &ch, chars) {
@@ -252,6 +250,25 @@ void tst_QLowEnergyDescriptor::tst_assignCompare()
     QCOMPARE(target.handle(), targets.first().handle());
     QCOMPARE(target.uuid(), targets.first().uuid());
     QCOMPARE(target.value(), targets.first().value());
+
+    // test copy constructor
+    QLowEnergyDescriptor copyConstructed(target);
+    QCOMPARE(copyConstructed.isValid(), targets.first().isValid());
+    QCOMPARE(copyConstructed.type(), targets.first().type());
+    QCOMPARE(copyConstructed.name(), targets.first().name());
+    QCOMPARE(copyConstructed.handle(), targets.first().handle());
+    QCOMPARE(copyConstructed.uuid(), targets.first().uuid());
+    QCOMPARE(copyConstructed.value(), targets.first().value());
+
+    // test invalidation
+    QLowEnergyDescriptor invalid;
+    target = invalid;
+    QVERIFY(!target.isValid());
+    QCOMPARE(target.value(), QByteArray());
+    QVERIFY(target.uuid().isNull());
+    QVERIFY(target.handle() == 0);
+    QCOMPARE(target.name(), QString());
+    QCOMPARE(target.type(), QBluetoothUuid::UnknownDescriptorType);
 }
 
 QTEST_MAIN(tst_QLowEnergyDescriptor)
