@@ -84,9 +84,8 @@ Entity {
 
     components: [external_forward_renderer]
 
-    Shape {
+    TorusMesh {
         id: mesh
-        type: Shape.ShapeTorus
         radius: 5
         minorRadius: 1
         rings: 100
