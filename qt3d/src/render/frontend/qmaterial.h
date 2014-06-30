@@ -77,9 +77,9 @@ public:
 
     void setTextureParameter(QString name, Texture* tex);
 
-private:
+protected:
     Q_DECLARE_PRIVATE(QMaterial)
-    QMaterialPrivate *d_ptr;
+    QMaterial(QMaterialPrivate &dd, Node *parent = 0);
 };
 
 }
