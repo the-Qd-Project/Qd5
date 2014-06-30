@@ -67,9 +67,9 @@ public:
     void removeParameter(Parameter *parameter);
     QList<Parameter *> parameters() const;
 
-private:
+protected:
     Q_DECLARE_PRIVATE(QEffect)
-    QEffectPrivate *d_ptr;
+    QEffect(QEffectPrivate &dd, Node *parent = 0);
 };
 
 } // Qt3D
