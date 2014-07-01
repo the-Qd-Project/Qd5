@@ -47,6 +47,7 @@
 #include <Qt3DCore/qaspectmanager.h>
 #include <Qt3DCore/qchangearbiter.h>
 #include <Qt3DCore/entity.h>
+#include <Qt3DCore/qscenepropertychange.h>
 #include "renderlogging.h"
 
 QT_BEGIN_NAMESPACE
