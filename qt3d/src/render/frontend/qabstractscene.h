@@ -54,31 +54,15 @@ class AbstractSceneParser;
 namespace Render {
 
 class QAbstractScene;
+class QAbstractScenePrivate;
 
-class QAbstractScenePrivate
+class QT3DRENDERERSHARED_EXPORT QAbstractScene : public Entity
 {
+    Q_OBJECT
+    Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged)
+    Q_PROPERTY(QString sceneId READ sceneId WRITE setSceneId NOTIFY sceneIdChanged)
 public:
-
-    QAbstractScenePrivate(QAbstractScene *qq)
-        : q_ptr(qq)
-        , m_sceneChild(Q_NULLPTR)
-        , m_currentParser(Q_NULLPTR)
-    {}
-
-    Q_DECLARE_PUBLIC(QAbstractScene)
-    QAbstractScene *q_ptr;
-
-    QString m_source;
-    QString m_sceneId;
-    Node *m_sceneNode;
-    Node *m_sceneChild;
-    AbstractSceneParser *m_currentParser;
-};
-
-class QT3DRENDERERSHARED_EXPORT QAbstractScene
-{
-public:
-    explicit QAbstractScene(Node *sceneNode);
+    explicit QAbstractScene(Node *parent = 0);
 
     QString source() const;
     void setSource(QString arg);
@@ -100,21 +84,18 @@ public:
     static QAbstractScene* findInTree(Node* root);
 Q_SIGNALS:
 
-    virtual void sourceChanged(QString arg) = 0;
-    virtual void sceneIdChanged(QString arg) = 0;
+    void sourceChanged(QString arg);
+    void sceneIdChanged(QString arg);
 
-private:
+protected:
     void rebuild();
     Q_DECLARE_PRIVATE(QAbstractScene)
-    QAbstractScenePrivate *d_ptr;
-
+    QAbstractScene(QAbstractScenePrivate &dd, Node *parent = 0);
 };
 
 } // Render
 
 } // namespace Qt3D
-
-Q_DECLARE_INTERFACE(Qt3D::Render::QAbstractScene, "org.qt-project.org.Qt3D.QAbstractScene/2.0")
 
 QT_END_NAMESPACE
 
