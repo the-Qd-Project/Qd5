@@ -82,9 +82,9 @@ public:
 
     Parameter* parameterByName(QString name) const;
 
-private:
+protected:
     Q_DECLARE_PRIVATE(QTechnique)
-    QTechniquePrivate *d_ptr;
+    QTechnique(QTechniquePrivate &dd, Node *parent = 0);
 };
 
 }
