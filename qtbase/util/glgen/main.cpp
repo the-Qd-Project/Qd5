@@ -40,22 +40,39 @@
 ****************************************************************************/
 
 #include "codegenerator.h"
-#include "specparser.h"
+#include "legacyspecparser.h"
+#include "xmlspecparser.h"
+
+#include <QCommandLineParser>
 
 int main(int argc, char *argv[])
 {
-    Q_UNUSED(argc);
-    Q_UNUSED(argv);
+    QCoreApplication app(argc, argv);
+    QCommandLineParser cmdParser;
 
-    SpecParser parser;
-    parser.setTypeMapFileName(QStringLiteral("gl.tm"));
-    parser.setSpecFileName(QStringLiteral("gl.spec"));
-    parser.parse();
+    // flag whether to use legacy or not
+    QCommandLineOption legacyOption(QStringList() << "l" << "legacy", "Use legacy parser.");
+    cmdParser.addOption(legacyOption);
+    cmdParser.process(app);
+
+    SpecParser *parser;
+
+    if (cmdParser.isSet(legacyOption)) {
+        parser = new LegacySpecParser();
+        parser->setTypeMapFileName(QStringLiteral("gl.tm"));
+        parser->setSpecFileName(QStringLiteral("gl.spec"));
+    } else {
+        parser = new XmlSpecParser();
+        parser->setSpecFileName(QStringLiteral("gl.xml"));
+    }
+
+    parser->parse();
 
     CodeGenerator generator;
-    generator.setParser(&parser);
+    generator.setParser(parser);
     generator.generateCoreClasses(QStringLiteral("qopenglversionfunctions"));
     generator.generateExtensionClasses(QStringLiteral("qopenglextensions"));
 
+    delete parser;
     return 0;
 }
