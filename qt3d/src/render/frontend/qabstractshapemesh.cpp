@@ -65,7 +65,7 @@ QAbstractShapeMesh::QAbstractShapeMesh(QAbstractShapeMeshPrivate &dd, Node *pare
 {
 }
 
-MeshDataPtr QAbstractShapeMesh::data()
+QAbstractMeshDataPtr QAbstractShapeMesh::data()
 {
     Q_D(const QAbstractShapeMesh);
     if (!d->m_loaded) {
