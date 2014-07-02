@@ -61,7 +61,7 @@ public:
     enum FrameGraphNodeType {
         InvalidNodeType = 0,
         CameraSelector,
-        LayerFilter,    // TODO: Add class
+        LayerFilter,
         RenderPassFilter,
         RenderTarget,   // TODO: Add class
         TechniqueFilter,
