@@ -40,11 +40,23 @@
 ****************************************************************************/
 
 #import <UIKit/UIKit.h>
-#include "qioswindow.h"
+
+#include <qhash.h>
+#include <qstring.h>
+
+#include <qpa/qwindowsysteminterface.h>
+
+class QIOSWindow;
 
 @interface QUIView : UIView
 {
-@public
+  @public
+    QIOSWindow *m_qioswindow;
+  @private
+    QHash<UITouch *, QWindowSystemInterface::TouchPoint> m_activeTouches;
+    int m_nextTouchId;
+
+  @public
     UITextAutocapitalizationType autocapitalizationType;
     UITextAutocorrectionType autocorrectionType;
     BOOL enablesReturnKeyAutomatically;
@@ -52,12 +64,10 @@
     UIKeyboardType keyboardType;
     UIReturnKeyType returnKeyType;
     BOOL secureTextEntry;
-    QIOSWindow *m_qioswindow;
-    QHash<UITouch *, QWindowSystemInterface::TouchPoint> m_activeTouches;
-    int m_nextTouchId;
     QString m_markedText;
     BOOL m_inSendEventToFocusObject;
 
+  @private
     NSMutableArray *m_accessibleElements;
 }
 
@@ -71,6 +81,8 @@
 @property(nonatomic) UIReturnKeyType returnKeyType;
 @property(nonatomic, getter=isSecureTextEntry) BOOL secureTextEntry;
 
+- (id)initWithQIOSWindow:(QIOSWindow *)window;
+- (void)sendUpdatedExposeEvent;
 @end
 
 @interface QUIView (TextInput) <UITextInput>
@@ -78,4 +90,8 @@
 - (void)reset;
 - (void)commit;
 + (bool)inUpdateKeyboardLayout;
+@end
+
+@interface QUIView (Accessibility)
+- (void)clearAccessibleCache;
 @end
