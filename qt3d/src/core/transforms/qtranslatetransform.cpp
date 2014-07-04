@@ -40,47 +40,67 @@
 ****************************************************************************/
 
 #include "qtranslatetransform.h"
+#include "qtranslatetransform_p.h"
 
 QT_BEGIN_NAMESPACE
 
 namespace Qt3D {
 
-QTranslateTransform::QTranslateTransform(QNode *parent)
-    : QAbstractTransform(parent)
+
+QTranslateTransformPrivate::QTranslateTransformPrivate(QTranslateTransform *qq)
+    : QAbstractTransformPrivate(qq)
 {
 }
 
+QTranslateTransform::QTranslateTransform(QNode *parent)
+    : QAbstractTransform(*new QTranslateTransformPrivate(this), parent)
+{
+}
+
+
+QTranslateTransform::QTranslateTransform(QTranslateTransformPrivate &dd, QNode *parent)
+    : QAbstractTransform(dd, parent)
+{
+}
+
+
 float QTranslateTransform::dx() const
 {
-    return m_translation.x();
+    Q_D(const QTranslateTransform);
+    return d->m_translation.x();
 }
 
 float QTranslateTransform::dy() const
 {
-    return m_translation.y();
+    Q_D(const QTranslateTransform);
+    return d->m_translation.y();
 }
 
 float QTranslateTransform::dz() const
 {
-    return m_translation.z();
+    Q_D(const QTranslateTransform);
+    return d->m_translation.z();
 }
 
 QVector3D QTranslateTransform::translation() const
 {
-    return m_translation;
+    Q_D(const QTranslateTransform);
+    return d->m_translation;
 }
 
 QMatrix4x4 QTranslateTransform::matrix() const
 {
+    Q_D(const QTranslateTransform);
     QMatrix4x4 r;
-    r.translate(m_translation);
+    r.translate(d->m_translation);
     return r;
 }
 
 void QTranslateTransform::setDx(float arg)
 {
-    if (arg != m_translation.x()) {
-        m_translation.setX(arg);
+    Q_D(QTranslateTransform);
+    if (arg != d->m_translation.x()) {
+        d->m_translation.setX(arg);
         emit translateChanged();
         emit transformUpdated();
     }
@@ -88,8 +108,9 @@ void QTranslateTransform::setDx(float arg)
 
 void QTranslateTransform::setDy(float arg)
 {
-    if (arg != m_translation.y()) {
-        m_translation.setY(arg);
+    Q_D(QTranslateTransform);
+    if (arg != d->m_translation.y()) {
+        d->m_translation.setY(arg);
         emit translateChanged();
         emit transformUpdated();
     }
@@ -97,8 +118,9 @@ void QTranslateTransform::setDy(float arg)
 
 void QTranslateTransform::setDz(float arg)
 {
-    if (arg != m_translation.z()) {
-        m_translation.setZ(arg);
+    Q_D(QTranslateTransform);
+    if (arg != d->m_translation.z()) {
+        d->m_translation.setZ(arg);
         emit translateChanged();
         emit transformUpdated();
     }
@@ -106,8 +128,9 @@ void QTranslateTransform::setDz(float arg)
 
 void QTranslateTransform::setTranslation(QVector3D arg)
 {
-    if (m_translation != arg) {
-        m_translation = arg;
+    Q_D(QTranslateTransform);
+    if (d->m_translation != arg) {
+        d->m_translation = arg;
         emit translateChanged();
     }
 }
