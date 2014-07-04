@@ -51,6 +51,8 @@ QT_BEGIN_NAMESPACE
 
 namespace Qt3D {
 
+class QLookAtTransformPrivate;
+
 class QT3DCORESHARED_EXPORT QLookAtTransform : public Qt3D::QAbstractTransform
 {
     Q_OBJECT
@@ -82,13 +84,9 @@ Q_SIGNALS:
     void viewCenterChanged();
     void viewVectorChanged();
 
-private:
-    mutable QMatrix4x4 m_matrix;
-    QVector3D m_position;
-    QVector3D m_upVector;
-    QVector3D m_viewCenter;
-    QVector3D m_viewVector; // From "camera" position to view center
-    mutable bool m_matrixDirty;
+protected:
+    Q_DECLARE_PRIVATE(QLookAtTransform)
+    QLookAtTransform(QLookAtTransformPrivate &dd, QNode *parent = 0);
 };
 
 } // namespace Qt3D
