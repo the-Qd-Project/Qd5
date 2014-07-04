@@ -51,16 +51,25 @@ QT_BEGIN_NAMESPACE
 
 namespace Qt3D {
 
-class QT3DCORESHARED_EXPORT QMatrixTransform : public QAbstractTransform
+class QMatrixTransformPrivate;
+
+class QT3DCORESHARED_EXPORT QMatrixTransform : public Qt3D::QAbstractTransform
 {
+    Q_OBJECT
+    Q_PROPERTY(QMatrix4x4 matrix READ matrix WRITE setMatrix NOTIFY matrixChanged)
 public:
-    QMatrixTransform();
+    explicit QMatrixTransform(QNode *parent = 0);
+    QMatrixTransform(const QMatrix4x4& m, QNode *parent = 0);
 
-    QMatrixTransform( const QMatrix4x4& m );
+    QMatrix4x4 matrix() const Q_DECL_OVERRIDE;
+    void setMatrix(const QMatrix4x4 &matrix);
 
-    virtual QMatrix4x4 matrix() const;
-private:
-    QMatrix4x4 m_matrix;
+Q_SIGNALS:
+    void matrixChanged();
+
+protected:
+    Q_DECLARE_PRIVATE(QMatrixTransform)
+    QMatrixTransform(QMatrixTransformPrivate &dd, QNode *parent = 0);
 };
 
 } // namespace Qt3D
