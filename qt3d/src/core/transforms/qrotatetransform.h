@@ -51,31 +51,25 @@ QT_BEGIN_NAMESPACE
 
 namespace Qt3D {
 
+class QRotateTransformPrivate;
+
 class QT3DCORESHARED_EXPORT QRotateTransform : public QAbstractTransform
 {
     Q_OBJECT
-
     Q_PROPERTY(float angle READ angleDeg WRITE setAngleDeg NOTIFY angleChanged)
     Q_PROPERTY(float angleRad READ angleRad WRITE setAngleRad NOTIFY angleChanged)
-
     Q_PROPERTY(QVector3D axis READ axis WRITE setAxis NOTIFY axisChanged)
 
 public:
     explicit QRotateTransform(QNode *parent = 0);
 
     float angleDeg() const;
-
     float angleRad() const;
-
     QVector3D axis() const;
+    QMatrix4x4 matrix() const Q_DECL_OVERRIDE;
 
-    virtual QMatrix4x4 matrix() const;
-
-public slots:
     void setAngleDeg(float arg);
-
     void setAngleRad(float arg);
-
     void setAxis(const QVector3D& arg);
 
 Q_SIGNALS:
@@ -83,9 +77,10 @@ Q_SIGNALS:
     void axisChanged();
     void angleChanged();
 
-private:
-    float m_angleDeg;
-    QVector3D m_axis;
+protected:
+    Q_DECLARE_PRIVATE(QRotateTransform)
+    QRotateTransform(QRotateTransformPrivate &dd, QNode *parent = 0);
+
 };
 
 } // namespace Qt3D
