@@ -40,26 +40,40 @@
 ****************************************************************************/
 
 #include "qscaletransform.h"
+#include "qscaletransform_p.h"
 
 QT_BEGIN_NAMESPACE
 
 namespace Qt3D
 {
 
+QScaleTransformPrivate::QScaleTransformPrivate(QScaleTransform *qq)
+    : QAbstractTransformPrivate(qq)
+{
+}
+
 QScaleTransform::QScaleTransform(QNode *parent) :
-    QAbstractTransform(parent)
+    QAbstractTransform(*new QScaleTransformPrivate(this), parent)
+{
+}
+
+
+QScaleTransform::QScaleTransform(QScaleTransformPrivate &dd, QNode *parent)
+    : QAbstractTransform(dd, parent)
 {
 }
 
 QVector3D QScaleTransform::scale3D() const
 {
-    return m_scale3D;
+    Q_D(const QScaleTransform);
+    return d->m_scale3D;
 }
 
 void QScaleTransform::setScale3D(const QVector3D &scale3D)
 {
-    if (scale3D != m_scale3D) {
-        m_scale3D = scale3D;
+    Q_D(QScaleTransform);
+    if (scale3D != d->m_scale3D) {
+        d->m_scale3D = scale3D;
         emit scale3DChanged();
         emit transformUpdated();
     }
@@ -67,12 +81,14 @@ void QScaleTransform::setScale3D(const QVector3D &scale3D)
 
 float QScaleTransform::scale() const
 {
-    return m_scale3D.x();
+    Q_D(const QScaleTransform);
+    return d->m_scale3D.x();
 }
 
 void QScaleTransform::setScale(float scale)
 {
-    if (scale != m_scale3D.x()) {
+    Q_D(QScaleTransform);
+    if (scale != d->m_scale3D.x()) {
         setScale3D(QVector3D(scale, scale, scale));
         emit scaleChanged();
     }
@@ -80,8 +96,9 @@ void QScaleTransform::setScale(float scale)
 
 QMatrix4x4 QScaleTransform::matrix() const
 {
+    Q_D(const QScaleTransform);
     QMatrix4x4 mat;
-    mat.scale(m_scale3D);
+    mat.scale(d->m_scale3D);
     return mat;
 }
 
