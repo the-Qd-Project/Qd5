@@ -51,7 +51,7 @@ QT_BEGIN_NAMESPACE
 
 namespace Qt3D {
 
-class AbstractTransform;
+class QAbstractTransform;
 class QTransformPrivate;
 
 class QT3DCORESHARED_EXPORT QTransform : public QComponent
@@ -67,27 +67,27 @@ public:
     QVector3D rotationCenter() const;
     void setRotationCenter(const QVector3D &rc);
 
-    QList<AbstractTransform*> transforms() const;
+    QList<QAbstractTransform*> transforms() const;
 
     template <class T>
     T *findFirstTransform() const
     {
         T *transform = Q_NULLPTR;
-        Q_FOREACH (AbstractTransform *trans, transformList())
+        Q_FOREACH (QAbstractTransform *trans, transformList())
             if ((transform = qobject_cast<T*>(trans)) != Q_NULLPTR)
                 break;
         return transform;
     }
 
-    void appendTransform(AbstractTransform *xform);
-    void removeTransform(AbstractTransform *xform);
+    void appendTransform(QAbstractTransform *xform);
+    void removeTransform(QAbstractTransform *xform);
 
 private Q_SLOTS:
     void setTransformsDirty();
 
 protected:
     QMatrix4x4 applyTransforms() const;
-    QList<AbstractTransform *> transformList() const;
+    QList<QAbstractTransform *> transformList() const;
 
     Q_DECLARE_PRIVATE(QTransform)
     QTransform(QTransformPrivate &dd, QNode *parent = 0);
