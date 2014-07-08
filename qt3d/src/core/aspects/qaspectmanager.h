@@ -54,13 +54,12 @@ class QWindow;
 namespace Qt3D {
 
 class QAbstractAspect;
-class QNode;
 class QChangeArbiter;
 class QJobManagerInterface;
-class QScheduler;
-class QEntity;
 
-class QAspectManager : public QObject
+class QAspectManagerPrivate;
+
+class QT3DCORESHARED_EXPORT QAspectManager : public QObject
 {
     Q_OBJECT
 public:
@@ -73,22 +72,17 @@ public slots:
     void setRoot(QObject *rootObject, QWaitCondition *waitCondition);
     void setWindow(QWindow* window);
     void registerAspect(QObject *aspect);
-    QWindow *window() const { return m_window; }
+    QWindow *window() const;
 
     void exec();
 
-    const QList<QAbstractAspect *> &aspects() const { return m_aspects; }
-    QJobManagerInterface *jobManager() const { return m_jobManager; }
-    QChangeArbiter *changeArbiter() const { return m_changeArbiter; }
+    const QList<QAbstractAspect *> &aspects() const;
+    QJobManagerInterface *jobManager() const;
+    QChangeArbiter *changeArbiter() const;
 
-private:
-    QList<QAbstractAspect *> m_aspects;
-    QEntity *m_root;
-    QWindow *m_window;
-    QScheduler *m_scheduler;
-    QJobManagerInterface *m_jobManager;
-    QChangeArbiter *m_changeArbiter;
-    bool m_runMainLoop;
+protected:
+    Q_DECLARE_PRIVATE(QAspectManager)
+    QAspectManager(QAspectManagerPrivate &dd, QObject *parent = 0);
 };
 
 } // namespace Qt3D
