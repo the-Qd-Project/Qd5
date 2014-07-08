@@ -50,6 +50,8 @@ QT_BEGIN_NAMESPACE
 
 namespace Qt3D {
 
+class QShaderProgramPrivate;
+
 class QT3DRENDERERSHARED_EXPORT QShaderProgram : public QAbstractShader
 {
     Q_OBJECT
@@ -87,13 +89,9 @@ Q_SIGNALS:
     void vertexShaderChanged();
     void fragmentShaderChanged();
 
-private:
-    QString m_vertexSourceFile;
-    QString m_fragmentSourceFile;
-
-    bool m_sourcesDirty, m_isLoaded;
-    QByteArray m_cachedVertexCode,
-        m_cachedFragmentCode;
+protected:
+    Q_DECLARE_PRIVATE(QShaderProgram)
+    QShaderProgram(QShaderProgramPrivate &dd, QNode *parent = 0);
 };
 
 }
