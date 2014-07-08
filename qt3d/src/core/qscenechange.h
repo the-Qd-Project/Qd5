@@ -99,6 +99,8 @@ protected:
     Q_DECLARE_PRIVATE(QSceneChange)
     QSceneChangePrivate *d_ptr;
     QSceneChange(QSceneChangePrivate &dd);
+    QSceneChange(QSceneChangePrivate &dd, ChangeFlag type, QObservableInterface *observable, Priority priority = Standard);
+    QSceneChange(QSceneChangePrivate &dd, ChangeFlag type, QNode *node, Priority priority = Standard);
 
     // TODO: add timestamp from central clock and priority level
     // These can be used to resolve any conflicts between events
