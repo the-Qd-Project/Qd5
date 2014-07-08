@@ -50,6 +50,8 @@ QT_BEGIN_NAMESPACE
 
 namespace Qt3D {
 
+class QParameterPrivate;
+
 class QT3DRENDERERSHARED_EXPORT QParameter : public QNode
 {
     Q_OBJECT
@@ -89,12 +91,10 @@ public:
     };
 
     explicit QParameter(QNode *parent = 0);
-    QParameter(QNode* parent, const QString& name, const QVariant& value);
-    QParameter(QNode* parent, const QString& name, const QVariant& value, OpenGLTypes ty);
+    QParameter(QNode* parent, const QString& name, const QVariant& value, OpenGLTypes ty = Undefined);
 
     void setName(const QString &name);
-    QString name() const
-    { return m_name; }
+    QString name() const;
 
     /**
      * @brief setDefaultValue - for non-texture uniform parameters
@@ -103,8 +103,7 @@ public:
     void setValue(const QVariant& dv);
     QVariant value() const;
 
-    OpenGLTypes datatype() const
-    { return m_type; }
+    OpenGLTypes datatype() const;
     void setDatatype(OpenGLTypes type);
 
     bool isTextureType() const;
@@ -119,11 +118,10 @@ Q_SIGNALS:
     void nameChanged();
     void datatypeChanged();
 
-private:
-    QString m_name;
-    OpenGLTypes m_type;
-    QVariant m_value;
-    QString m_meshName;
+protected:
+    Q_DECLARE_PRIVATE(QParameter)
+    QParameter(QParameterPrivate &dd, QNode *parent = 0);
+
 };
 
 } // Qt3D
