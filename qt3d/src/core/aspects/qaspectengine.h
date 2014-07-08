@@ -39,14 +39,12 @@
 **
 ****************************************************************************/
 
-#ifndef QASPECTENGINE_H
-#define QASPECTENGINE_H
+#ifndef QT3D_QASPECTENGINE_H
+#define QT3D_QASPECTENGINE_H
 
 #include <QObject>
 #include <Qt3DCore/qt3dcore_global.h>
 #include <QList>
-#include <QMutex>
-#include <QWaitCondition>
 
 QT_BEGIN_NAMESPACE
 
@@ -56,6 +54,7 @@ namespace Qt3D {
 
 class QAbstractAspect;
 class QAspectThread;
+class QAspectEnginePrivate;
 
 class QT3DCORESHARED_EXPORT QAspectEngine : public QObject
 {
@@ -69,16 +68,15 @@ public:
     void setRoot(QObject *rootObject);
     void setWindow(QWindow *window);
     void registerAspect(QAbstractAspect *aspect);
-private:
-    QAspectThread *m_aspectThread;
-    QMutex m_mutex;
-    QWaitCondition m_waitCondition;
+
+protected:
+    Q_DECLARE_PRIVATE(QAspectEngine)
+    QAspectEngine(QAspectEnginePrivate &dd, QObject *parent = 0);
 };
 
 } // namespace Qt3D
 
 QT_END_NAMESPACE
 
-Q_DECLARE_METATYPE(QWaitCondition *)
 
-#endif // QASPECTENGINE_H
+#endif // QT3D_QASPECTENGINE_H
