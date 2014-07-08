@@ -40,6 +40,7 @@
 ****************************************************************************/
 
 #include "qabstractshader.h"
+#include "qabstractshader_p.h"
 
 /*!
  * \class QAbstractShader
@@ -55,23 +56,19 @@ QT_BEGIN_NAMESPACE
 
 namespace Qt3D {
 
-class QAbstractShaderPrivate
+QAbstractShaderPrivate::QAbstractShaderPrivate(QAbstractShader *qq)
+    : QNodePrivate(qq)
 {
-public:
-    QAbstractShaderPrivate(QAbstractShader *qq)
-        : q_ptr(qq)
-    {
-        m_uuid = QUuid::createUuid();
-    }
-
-    QUuid m_uuid;
-    Q_DECLARE_PUBLIC(QAbstractShader)
-    QAbstractShader *q_ptr;
-};
+    m_uuid = QUuid::createUuid();
+}
 
 QAbstractShader::QAbstractShader(QNode *parent)
-    : QNode(parent)
-    , d_ptr(new QAbstractShaderPrivate(this))
+    : QNode(*new QAbstractShaderPrivate(this), parent)
+{
+}
+
+QAbstractShader::QAbstractShader(QAbstractShaderPrivate &dd, QNode *parent)
+    : QNode(dd, parent)
 {
 }
 
