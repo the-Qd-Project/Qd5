@@ -95,7 +95,7 @@ QHash<QString, QVariant> RenderLight::lightProperties() const
 
 void RenderLight::sceneChangeEvent(const QSceneChangePtr &e)
 {
-    if (e->m_type == ComponentUpdated && e->m_subject.m_observable == m_peer) {
+    if (e->type() == ComponentUpdated && e->subject().m_observable == m_peer) {
         QScenePropertyChangePtr propertyChange = qSharedPointerCast<QScenePropertyChange>(e);
         m_lightProperties[QString::fromUtf8(propertyChange->m_propertyName)] = propertyChange->m_value;
     }
