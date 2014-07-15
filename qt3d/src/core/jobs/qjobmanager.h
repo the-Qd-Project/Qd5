@@ -47,17 +47,13 @@
 
 #include <Qt3DCore/qjob.h>
 
-#include <job.h>
-
 #include <QVector>
-
-namespace ThreadWeaver {
-class Queue;
-}
 
 QT_BEGIN_NAMESPACE
 
 namespace Qt3D {
+
+class QJobManagerPrivate;
 
 class QJobManager : public QJobManagerInterface
 {
@@ -74,28 +70,9 @@ public:
     void waitForPerThreadFunction(JobFunction func, void *arg) Q_DECL_OVERRIDE;
 
 protected:
-    class SynchronizedJob : public ThreadWeaver::Job
-    {
-    public:
-        SynchronizedJob(JobFunction func, void *arg, QAtomicInt *atomicCount)
-            : m_func(func)
-            , m_arg(arg)
-            , m_atomicCount(atomicCount)
-        {}
-
-    protected:
-        void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread *thread) Q_DECL_OVERRIDE;
-
-    private:
-        JobFunction m_func;
-        void *m_arg;
-        QAtomicInt *m_atomicCount;
-    };
-
-    typedef QSharedPointer<SynchronizedJob> SynchronizedJobPtr;
-
-private:
-    ThreadWeaver::Queue *m_weaver;
+    QJobManager(QJobManagerPrivate &dd, QObject *parent);
+    Q_DECLARE_PRIVATE(QJobManager)
+    QJobManagerPrivate *d_ptr;
 };
 
 } // namespace Qt3D
