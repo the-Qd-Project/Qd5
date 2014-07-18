@@ -42,80 +42,18 @@
 #ifndef CONSOLE_H
 #define CONSOLE_H
 
-#include <QtCore/QtGlobal>
+#include <QtGlobal>
 
 #ifdef Q_OS_WIN
-# include <qt_windows.h>
-# include <wincon.h>
 
-# include <fstream>
-# include <iostream>
-
-# ifndef ENABLE_INSERT_MODE
-#  define ENABLE_INSERT_MODE 0x0020
-# endif
-
-# ifndef ENABLE_QUICK_EDIT_MODE
-#  define ENABLE_QUICK_EDIT_MODE 0x0040
-# endif
-
-# ifndef ENABLE_EXTENDED_FLAGS
-#  define ENABLE_EXTENDED_FLAGS 0x0080
-# endif
+#include <fstream>
+#include <iostream>
 
 class Console
 {
 public:
-    Console()
-    {
-        parentConsole = AttachConsole(ATTACH_PARENT_PROCESS);
-        if (parentConsole)
-            return;
-
-        AllocConsole();
-        HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
-        if (handle != INVALID_HANDLE_VALUE) {
-            COORD largestConsoleWindowSize = GetLargestConsoleWindowSize(handle);
-            largestConsoleWindowSize.X -= 3;
-            largestConsoleWindowSize.Y = 5000;
-            SetConsoleScreenBufferSize(handle, largestConsoleWindowSize);
-        }
-
-        handle = GetStdHandle(STD_INPUT_HANDLE);
-        if (handle != INVALID_HANDLE_VALUE)
-            SetConsoleMode(handle, ENABLE_INSERT_MODE | ENABLE_QUICK_EDIT_MODE | ENABLE_EXTENDED_FLAGS);
-
-        m_oldCin = std::cin.rdbuf();
-        m_newCin.open("CONIN$");
-        std::cin.rdbuf(m_newCin.rdbuf());
-
-        m_oldCout = std::cout.rdbuf();
-        m_newCout.open("CONOUT$");
-        std::cout.rdbuf(m_newCout.rdbuf());
-
-        m_oldCerr = std::cerr.rdbuf();
-        m_newCerr.open("CONOUT$");
-        std::cerr.rdbuf(m_newCerr.rdbuf());
-# ifndef Q_CC_MINGW
-        HMENU systemMenu = GetSystemMenu(GetConsoleWindow(), FALSE);
-        if (systemMenu != NULL)
-            RemoveMenu(systemMenu, SC_CLOSE, MF_BYCOMMAND);
-        DrawMenuBar(GetConsoleWindow());
-# endif
-    }
-
-    ~Console()
-    {
-        if (!parentConsole) {
-            system("PAUSE");
-
-            std::cin.rdbuf(m_oldCin);
-            std::cerr.rdbuf(m_oldCerr);
-            std::cout.rdbuf(m_oldCout);
-        }
-
-        FreeConsole();
-    }
+    Console();
+    ~Console();
 
 private:
     bool parentConsole;
@@ -128,12 +66,15 @@ private:
     std::streambuf* m_oldCout;
     std::streambuf* m_oldCerr;
 };
-#else
+
+#else // Q_OS_WIN
+
 class Console
 {
 public:
     Console() {}
 };
-#endif
+
+#endif // Q_OS_WIN
 
 #endif  // CONSOLE_H
