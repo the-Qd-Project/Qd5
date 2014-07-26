@@ -53,7 +53,7 @@ Entity {
     id: root
 
     property real x: 0.0
-    property real y: 0.0
+    property real y: 1.0
     property real z: 0.0
     property real scale: 1.0
     property Material material
