@@ -53,6 +53,10 @@ Camera {
     id: mainCamera
     objectName: "mainCamera"
 
+    property alias position: lookAtTransform.position
+    property alias viewCenter: lookAtTransform.viewCenter
+    property alias upVector: lookAtTransform.upVector
+
     lens: CameraLens {
         projectionType: CameraLens.PerspectiveProjection
         fieldOfView: 22.5
@@ -64,7 +68,7 @@ Camera {
 
     transform: Transform {
         LookAt {
-            position:   Qt.vector3d( 0.0, 20.0, 50.0 )
+            id: lookAtTransform
             viewCenter: Qt.vector3d( 0.0, 0.0, 0.0 )
             upVector:   Qt.vector3d( 0.0, 1.0, 0.0 )
         }
