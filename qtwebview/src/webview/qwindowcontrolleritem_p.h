@@ -50,6 +50,10 @@
 
 #include <QtQuick/QQuickItem>
 
+#ifdef Q_OS_IOS
+Q_FORWARD_DECLARE_OBJC_CLASS(UIView);
+#endif
+
 class Q_DECL_EXPORT QWindowControllerItem : public QQuickItem
 {
     Q_OBJECT
@@ -64,7 +68,11 @@ public slots:
     void onVisibleChanged();
 
 private:
+#ifdef Q_OS_IOS
+    UIView *m_controlledUIView;
+#else
     QWindow *m_controlledWindow;
+#endif
 };
 
 #endif // QTWINDOWCONTROLLERITEM_H
