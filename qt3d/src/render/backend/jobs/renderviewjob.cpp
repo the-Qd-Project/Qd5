@@ -41,19 +41,9 @@
 
 #include "renderviewjob.h"
 
-#include <Qt3DRenderer/sphere.h>
-
-#include <Qt3DRenderer/private/clearbuffer_p.h>
 #include <Qt3DRenderer/private/renderview_p.h>
 #include <Qt3DRenderer/private/renderer_p.h>
-#include <Qt3DRenderer/private/cameraselectornode_p.h>
-#include <Qt3DRenderer/private/managers_p.h>
-#include <Qt3DRenderer/private/layerfilternode_p.h>
-#include <Qt3DRenderer/private/renderpassfilternode_p.h>
-#include <Qt3DRenderer/private/rendertargetselectornode_p.h>
-#include <Qt3DRenderer/private/sortmethod_p.h>
-#include <Qt3DRenderer/private/techniquefilternode_p.h>
-#include <Qt3DRenderer/private/viewportnode_p.h>
+#include <Qt3DRenderer/private/renderviewjobutils_p.h>
 
 #include "renderlogging.h"
 
@@ -61,138 +51,6 @@ QT_BEGIN_NAMESPACE
 
 namespace Qt3D {
 namespace Render {
-
-/*!
-    \internal
-    Walks up the framegraph tree from \p fgLeaf and builds up as much state
-    as possible and populates \p rv. For cases where we can't get the specific state
-    (e.g. because it depends upon more than just the framegraph) we store the data from
-    the framegraph that will be needed to later when the rest of the data becomes available
-*/
-void setRenderViewConfigFromFrameGraphLeafNode(RenderView *rv, const FrameGraphNode *fgLeaf)
-{
-    // The specific RenderPass to be used is also dependent upon the Effect and TechniqueFilter
-    // which is referenced by the Material which is referenced by the RenderMesh. So we can
-    // only store the filter info in the RenderView structure and use it to do the resolving
-    // when we build the RenderCommand list.
-    const Renderer *renderer = rv->renderer();
-    const FrameGraphNode *node = fgLeaf;
-
-    while (node) {
-        FrameGraphNode::FrameGraphNodeType type = node->nodeType();
-        switch (type) {
-        case FrameGraphNode::CameraSelector:
-            // Can be set only once and we take camera nearest to the leaf node
-            if (!rv->renderCamera()) {
-                const CameraSelector *cameraSelector = static_cast<const CameraSelector *>(node);
-                RenderEntity *camNode = renderer->renderNodesManager()->lookupResource(cameraSelector->cameraUuid());
-                if (camNode) {
-                    rv->setRenderCamera(camNode->renderComponent<RenderCameraLens>());
-                    rv->setViewMatrix(*camNode->worldTransform());
-
-                    // TODO: We can extract camera pos from the modelview matrix
-                    rv->setEyePosition(camNode->worldBoundingVolume()->center());
-                }
-                break;
-            }
-
-        case FrameGraphNode::LayerFilter: // Can be set multiple times in the tree
-            rv->appendLayerFilter(static_cast<const LayerFilterNode *>(node)->layers());
-            break;
-
-        case FrameGraphNode::RenderPassFilter:
-            // Can be set once
-            // TODO: Amalgamate all render pass filters from leaf to root
-            if (!rv->renderPassFilter())
-                rv->setRenderPassFilter(static_cast<const RenderPassFilter *>(node));
-            break;
-
-        case FrameGraphNode::RenderTarget: {
-            // Can be set once and we take render target nearest to the leaf node
-            QNodeUuid renderTargetUid = static_cast<const RenderTargetSelector *>(node)->renderTargetUuid();
-            HTarget renderTargetHandle = renderer->renderTargetManager()->lookupHandle(renderTargetUid);
-            if (rv->renderTargetHandle().isNull()) {
-                rv->setRenderTargetHandle(renderTargetHandle);
-
-                RenderTarget *renderTarget = renderer->renderTargetManager()->data(renderTargetHandle);
-                if (renderTarget) {
-                    // Add renderTarget Handle and build renderCommand AttachmentPack
-                    Q_FOREACH (const QNodeUuid &attachmentId, renderTarget->renderAttachments()) {
-                        RenderAttachment *attachment = renderer->attachmentManager()->lookupResource(attachmentId);
-                        if (attachment)
-                            rv->addRenderAttachment(attachment->attachment());
-                    }
-                }
-            }
-            break;
-        }
-
-        case FrameGraphNode::ClearBuffer:
-            rv->setClearBuffer(static_cast<const ClearBuffer *>(node)->type());
-            break;
-
-        case FrameGraphNode::TechniqueFilter:
-            // Can be set once
-            // TODO Amalgamate all technique filters from leaf to root
-            if (rv->techniqueFilter())
-                rv->setTechniqueFilter(static_cast<const TechniqueFilter *>(node));
-            break;
-
-        case FrameGraphNode::Viewport: {
-            // If the Viewport has already been set in a lower node
-            // Make it so that the new viewport is actually
-            // a subregion relative to that of the parent viewport
-            const ViewportNode *vpNode = static_cast<const ViewportNode *>(node);
-            rv->setViewport(computeViewport(rv->viewport(), vpNode));
-
-            // We take the clear color from the viewport node nearest the leaf
-            if (!rv->clearColor().isValid())
-                rv->setClearColor(vpNode->clearColor());
-            break;
-        }
-
-        case FrameGraphNode::SortMethod: {
-            const Render::SortMethod *sortMethod = static_cast<const Render::SortMethod *>(node);
-            rv->addSortCriteria(sortMethod->criteria());
-            break;
-        }
-
-        default:
-            // Should never get here
-            qCWarning(Backend) << "Unhandled FrameGraphNode type";
-        }
-
-        node = node->parent();
-    }
-}
-
-/*!
-    \internal
-    Walks the scene graph of RenderEntities rooted at \p node and collects
-    together any resources needed by the \p rv.
-*/
-void preprocessRenderTree(RenderView *rv, const RenderEntity *node)
-{
-    // TODO: Reimplement this without any reference to lights. At the lowest common
-    // level this boils down to assembling uniform arrays or uniform buffers to pass
-    // into the shader programs. Qt3D may provide some default light types but they
-    // should use the same generic methods as any user data that needs to get into
-    // uniforms.
-
-    // Retrieve light for the currentNode and append it to list of current lights
-    // As only light components of an Entity are considered active
-    // Note : Layer filtering isn't applied there
-    //
-    // TODO: Perhaps make this block of code configurable by allowing the Technique
-    // or similar to provide a functor?
-    HLight lightHandle = node->componentHandle<RenderLight, 16>();
-    if (!lightHandle.isNull())
-        rv->appendLight(lightHandle, *node->worldTransform());
-
-    // Traverse children
-    Q_FOREACH (RenderEntity *child, node->children())
-        preprocessRenderTree(rv, child);
-}
 
 void RenderViewJob::run()
 {
