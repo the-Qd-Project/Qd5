@@ -45,12 +45,13 @@
 #include <QOpenGLTexture>
 #include <QImage>
 #include <QSharedPointer>
+#include <Qt3DRenderer/qt3drenderer_global.h>
 
 QT_BEGIN_NAMESPACE
 
 namespace Qt3D {
 
-class TexImageData
+class QT3DRENDERERSHARED_EXPORT TexImageData
 {
 public:
     TexImageData(int level, int layer);
