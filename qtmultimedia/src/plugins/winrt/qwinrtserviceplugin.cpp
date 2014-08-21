@@ -43,9 +43,15 @@
 #include <QtCore/QFile>
 
 #include "qwinrtserviceplugin.h"
+#include "qwinrtmediaplayerservice.h"
+
+QT_USE_NAMESPACE
 
 QMediaService *QWinRTServicePlugin::create(QString const &key)
 {
+    if (key == QLatin1String(Q_MEDIASERVICE_MEDIAPLAYER))
+        return new QWinRTMediaPlayerService(this);
+
     return Q_NULLPTR;
 }
 
@@ -57,5 +63,8 @@ void QWinRTServicePlugin::release(QMediaService *service)
 QMediaServiceProviderHint::Features QWinRTServicePlugin::supportedFeatures(
         const QByteArray &service) const
 {
+    if (service == Q_MEDIASERVICE_MEDIAPLAYER)
+       return QMediaServiceProviderHint::StreamPlayback | QMediaServiceProviderHint::VideoSurface;
+
     return QMediaServiceProviderHint::Features();
 }
