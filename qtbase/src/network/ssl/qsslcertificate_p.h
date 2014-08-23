@@ -99,9 +99,18 @@ public:
     QDateTime notValidAfter;
     QDateTime notValidBefore;
 
+#ifdef QT_NO_OPENSSL
+    bool subjectMatchesIssuer;
+    QSsl::KeyAlgorithm publicKeyAlgorithm;
+    QByteArray publicKeyDerData;
+    QMultiMap<QSsl::AlternativeNameEntryType, QString> subjectAlternativeNames;
+
+    QByteArray derData;
+#endif
     X509 *x509;
 
     void init(const QByteArray &data, QSsl::EncodingFormat format);
+    bool parse(const QByteArray &data);
 
     static QByteArray asn1ObjectId(ASN1_OBJECT *object);
     static QByteArray asn1ObjectName(ASN1_OBJECT *object);
