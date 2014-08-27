@@ -42,7 +42,7 @@
 #ifndef BINARYREPLACE_H
 #define BINARYREPLACE_H
 
-#include <binarycontent.h>
+#include <binarylayout.h>
 
 class BinaryReplace
 {
