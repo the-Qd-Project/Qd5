@@ -48,13 +48,15 @@
 // We mean it.
 //
 
+#include "qwebview_global.h"
+
 #include <QtQuick/QQuickItem>
 
 #ifdef Q_OS_IOS
 Q_FORWARD_DECLARE_OBJC_CLASS(UIView);
 #endif
 
-class Q_DECL_EXPORT QWindowControllerItem : public QQuickItem
+class Q_WEBVIEW_EXPORT QWindowControllerItem : public QQuickItem
 {
     Q_OBJECT
 public:
