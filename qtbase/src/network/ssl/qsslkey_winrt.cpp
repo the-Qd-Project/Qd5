@@ -41,6 +41,7 @@
 
 #include "qsslkey.h"
 #include "qsslkey_p.h"
+#include "qsslcertificate_p.h"
 
 #include <QtCore/qfunctions_winrt.h>
 
