@@ -1,6 +1,6 @@
 /**************************************************************************
 **
-** Copyright (c) 2013 Digia Plc and/or its subsidiary(-ies).
+** Copyright (c) 2013-2014 Digia Plc and/or its subsidiary(-ies).
 ** Contact: http://www.qt-project.org/legal
 **
 ** This file is part of Installer Framework
@@ -35,18 +35,18 @@
 #include <QString>
 
 namespace QInstaller{
-    class PackageManagerCore;
-    class Repository;
-}
-
+class PackageManagerCore;
 class ProductKeyCheckPrivate;
+class Repository;
 
 class INSTALLER_EXPORT ProductKeyCheck
 {
+    Q_DISABLE_COPY(ProductKeyCheck)
+
 public:
     ~ProductKeyCheck();
     static ProductKeyCheck *instance();
-    void init(QInstaller::PackageManagerCore *core);
+    void init(PackageManagerCore *core);
 
     // was validLicense
     bool hasValidKey();
@@ -67,7 +67,8 @@ public:
 private:
     ProductKeyCheck();
     ProductKeyCheckPrivate *const d;
-    Q_DISABLE_COPY(ProductKeyCheck)
 };
+
+} // namespace QInstaller
 
 #endif // PRODUCTKEYCHECK_H
