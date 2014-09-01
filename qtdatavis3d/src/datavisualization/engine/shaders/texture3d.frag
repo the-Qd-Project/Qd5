@@ -74,9 +74,8 @@ void main() {
 
     highp vec4 destColor = vec4(0, 0, 0, 0);
     highp float totalOpacity = 1.0;
-    highp float nextOpacity = 1.0;
 
-    highp float extraAlphaMultiplier = fullDist * alphaThicknesses;
+    highp float extraAlphaMultiplier = fullDist * alphaThicknesses * alphaMultiplier;
 
     // nextEdges vector indicates the next edges of the texel boundaries along each axis that
     // the ray is about to cross. The first edges are offset by a fraction of a texel to
@@ -134,11 +133,10 @@ void main() {
         curLen += stepSize;
 
         if (curColor.a >= 0.0) {
-            curAlpha = alphaMultiplier * curColor.a;
-            if (curAlpha >= 1.0 || (curColor.a == 1.0 && preserveOpacity == 1))
+            if (curColor.a == 1.0 && (preserveOpacity == 1 || alphaMultiplier >= 1.0))
                 curAlpha = 1.0;
             else
-                curAlpha = curAlpha * extraAlphaMultiplier * stepSize;
+                curAlpha = curColor.a * extraAlphaMultiplier * stepSize;
             highp float nextOpacity = totalOpacity - curAlpha;
             // If opacity goes beyond full opacity, we need to adjust current alpha according
             // to the fraction of the distance the material is visible, so that we don't get
