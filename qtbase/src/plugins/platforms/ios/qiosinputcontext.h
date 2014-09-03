@@ -44,13 +44,21 @@
 
 #include <UIKit/UIKit.h>
 
+#include <QtGui/qevent.h>
 #include <QtGui/qtransform.h>
 #include <qpa/qplatforminputcontext.h>
 
 QT_BEGIN_NAMESPACE
 
 @class QIOSKeyboardListener;
-@class QUIView;
+@class QIOSTextInputResponder;
+
+struct ImeState
+{
+    ImeState() : currentState(0) {}
+    Qt::InputMethodQueries update(Qt::InputMethodQueries properties);
+    QInputMethodQueryEvent currentState;
+};
 
 class QIOSInputContext : public QPlatformInputContext
 {
@@ -59,8 +67,11 @@ public:
     ~QIOSInputContext();
 
     QRectF keyboardRect() const;
+
     void showInputPanel();
     void hideInputPanel();
+    void hideVirtualKeyboard();
+
     bool isInputPanelVisible() const;
     void setFocusObject(QObject *object);
 
@@ -73,10 +84,12 @@ public:
     void reset();
     void commit();
 
+    const ImeState &imeState() { return m_imeState; };
+
 private:
     QIOSKeyboardListener *m_keyboardListener;
-    QUIView *m_focusView;
-    bool m_hasPendingHideRequest;
+    QIOSTextInputResponder *m_textResponder;
+    ImeState m_imeState;
 };
 
 QT_END_NAMESPACE
