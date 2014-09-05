@@ -73,9 +73,10 @@ public:
         CameraSelector,
         LayerFilter,
         RenderPassFilter,
-        RenderTarget,   // TODO: Add class
+        RenderTarget,
         TechniqueFilter,
-        Viewport
+        Viewport,
+        ClearBuffer
     };
     FrameGraphNodeType nodeType() const { return m_nodeType; }
 
