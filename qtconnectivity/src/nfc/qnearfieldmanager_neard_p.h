@@ -1,6 +1,7 @@
 /***************************************************************************
 **
 ** Copyright (C) 2014 BlackBerry Limited. All rights reserved.
+** Copyright (C) 2014 BasysKom GmbH.
 ** Contact: http://www.qt-project.org/legal
 **
 ** This file is part of the QtNfc module of the Qt Toolkit.
@@ -45,6 +46,7 @@
 #include "qnearfieldmanager_p.h"
 #include "qnearfieldmanager.h"
 #include "qnearfieldtarget.h"
+#include "neard/neard_helper_p.h"
 
 #include <QDBusObjectPath>
 #include <QDBusVariant>
@@ -52,6 +54,7 @@
 
 class OrgNeardAdapterInterface;
 class OrgNeardManagerInterface;
+class OrgFreedesktopDBusPropertiesInterface;
 
 QT_BEGIN_NAMESPACE
 
@@ -69,6 +72,7 @@ public:
 
     void stopTargetDetection();
 
+    // not implemented
     int registerNdefMessageHandler(QObject *object, const QMetaMethod &method);
 
     int registerNdefMessageHandler(const QNdefFilter &filter, QObject *object, const QMetaMethod &method);
@@ -80,15 +84,15 @@ public:
     void releaseAccess(QNearFieldManager::TargetAccessModes accessModes);
 
 private Q_SLOTS:
-    void tagFound(const QDBusObjectPath&);
-    void propertyChanged(QString,QDBusVariant);
-    void tagDeleted(QObject*);
+    void handleTagFound(const QDBusObjectPath&);
+    void handleTagRemoved(const QDBusObjectPath&);
 
 private:
     QString m_adapterPath;
     OrgNeardAdapterInterface *m_adapter;
-    OrgNeardManagerInterface *m_manager;
+    OrgFreedesktopDBusPropertiesInterface *m_dbusProperties;
     QMap<QString, QNearFieldTarget*> m_activeTags;
+    NeardHelper *m_neardHelper;
 };
 
 QT_END_NAMESPACE
