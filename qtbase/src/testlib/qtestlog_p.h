@@ -72,6 +72,8 @@ public:
     static void addFail(const char *msg, const char *file, int line);
     static void addXFail(const char *msg, const char *file, int line);
     static void addXPass(const char *msg, const char *file, int line);
+    static void addBPass(const char *msg);
+    static void addBFail(const char *msg, const char *file, int line);
     static void addSkip(const char *msg, const char *file, int line);
     static void addBenchmarkResult(const QBenchmarkResult &result);
 
@@ -102,6 +104,7 @@ public:
     static int passCount();
     static int failCount();
     static int skipCount();
+    static int blacklistCount();
 
     static void resetCounters();
 
