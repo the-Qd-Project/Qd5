@@ -76,7 +76,7 @@ public:
 
     virtual void    setFilePath(const QString &path) = 0;
     virtual bool    isPathExtensionSupported(const QString &path) = 0;
-    virtual QEntity *scene(QString id) = 0;
+    virtual QEntity *scene(QString id = QString()) = 0;
     virtual QEntity *node(QString id) = 0;
 
     ParserStatus parserStatus() const;
