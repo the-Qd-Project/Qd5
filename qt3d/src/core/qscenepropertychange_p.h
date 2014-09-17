@@ -53,7 +53,7 @@ namespace Qt3D {
 class QScenePropertyChange;
 class QFrameAllocator;
 
-class QScenePropertyChangePrivate : QSceneChangePrivate
+class QScenePropertyChangePrivate : public QSceneChangePrivate
 {
 public:
     QScenePropertyChangePrivate(QScenePropertyChange *qq);
