@@ -49,5 +49,5 @@ Loader {
     property Flickable flickable
     property Menu defaultMenu: item && item.defaultMenu ? item.defaultMenu : null
 
-    source: Qt.platform.os === "ios"  ? Qt.resolvedUrl("EditMenu_ios.qml") : ""
+    source: Qt.resolvedUrl("EditMenu_" + (Qt.platform.os === "ios"  ? "ios" : "base") + ".qml")
 }
