@@ -75,9 +75,10 @@ QMeshData::QMeshData(int primitiveType)
 void QMeshData::setPrimitiveType(int primitiveType)
 {
     Q_D(QMeshData);
-    Q_ASSERT((d->m_primitiveType == GL_TRIANGLES) ||
-             (d->m_primitiveType == GL_LINES) ||
-             (d->m_primitiveType == GL_POINTS));
+    Q_ASSERT((primitiveType == GL_TRIANGLES) ||
+             (primitiveType == GL_LINES) ||
+             (primitiveType == GL_POINTS) ||
+             (primitiveType == GL_PATCHES));
     d->m_primitiveType = primitiveType;
 }
 
