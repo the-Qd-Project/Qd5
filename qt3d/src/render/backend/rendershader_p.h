@@ -48,6 +48,7 @@
 // somewhere common to avoid this include?
 #include <Qt3DRenderer/qparameter.h>
 #include <Qt3DRenderer/private/quniformvalue_p.h>
+#include <Qt3DRenderer/private/shadervariables_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -72,7 +73,7 @@ public:
 
     void setPeer(QShaderProgram* peer);
     void setRenderer(Renderer *renderer);
-    void updateUniforms(const QUniformPack &pack);
+    void updateUniforms(QGraphicsContext *ctx, const QUniformPack &pack);
     void setFragOutputs(const QHash<QString, int> &fragOutputs);
 
     QStringList uniformsNames() const;
@@ -90,8 +91,8 @@ private:
     QOpenGLShaderProgram *createProgram(QGraphicsContext *context);
     QOpenGLShaderProgram *createDefaultProgram();
 
-    QHash<QString, int> m_uniforms;
-    QHash<QString, int> m_attributes;
+    QHash<QString, ShaderUniform> m_uniforms;
+    QHash<QString, ShaderAttribute> m_attributes;
     QHash<QString, int> m_fragOutputs;
 
     QVector<QByteArray> m_shaderCode;
@@ -102,8 +103,8 @@ private:
     bool m_isLoaded;
 
     // Private so that only GraphicContext can call it
-    void initializeUniforms(const QVector<QPair<QString, int> > &uniformsNameAndLocation);
-    void initializeAttributes(const QVector<QPair<QString, int> > &attributesNameAndLocation);
+    void initializeUniforms(const QVector<ShaderUniform> &uniformsDescription);
+    void initializeAttributes(const QVector<ShaderAttribute> &attributesDescription);
     QOpenGLShaderProgram *getOrCreateProgram(QGraphicsContext *ctx);
     friend class QGraphicsContext;
 };
