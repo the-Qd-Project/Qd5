@@ -55,43 +55,12 @@ class QTexture;
 class QT3DRENDERERSHARED_EXPORT QParameter : public QNode
 {
     Q_OBJECT
-    Q_ENUMS(OpenGLTypes)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
-    Q_PROPERTY(OpenGLTypes datatype READ datatype WRITE setDatatype NOTIFY datatypeChanged)
     Q_PROPERTY(QVariant value READ value WRITE setValue NOTIFY valueChanged)
 
 public:
-
-    enum OpenGLTypes
-    {
-        Undefined = 0,
-        Sampler1D,
-        Sampler2D,
-        Sampler3D,
-        SamplerCube,
-        Bool,
-        BoolVec2,
-        BoolVec3,
-        BoolVec4,
-        Double,
-        DoubleVec2,
-        DoubleVec3,
-        DoubleVec4,
-        Float,
-        FloatVec2,
-        FloatVec3,
-        FloatVec4,
-        FloatMat2,
-        FloatMat3,
-        FloatMat4,
-        Int,
-        IntVec2,
-        IntVec3,
-        IntVec4
-    };
-
     explicit QParameter(QNode *parent = 0);
-    QParameter(const QString& name, const QVariant& value, QNode* parent = 0, OpenGLTypes ty = Undefined);
+    QParameter(const QString& name, const QVariant& value, QNode* parent = 0);
     QParameter(const QString &name, QTexture *texture, QNode *parent = 0);
 
     void copy(const QNode *ref) Q_DECL_OVERRIDE;
@@ -106,15 +75,11 @@ public:
     void setValue(const QVariant& dv);
     QVariant value() const;
 
-    OpenGLTypes datatype() const;
-    void setDatatype(OpenGLTypes type);
-
     bool isTextureType() const;
 
 Q_SIGNALS:
     void valueChanged();
     void nameChanged();
-    void datatypeChanged();
 
 protected:
     Q_DECLARE_PRIVATE(QParameter)
