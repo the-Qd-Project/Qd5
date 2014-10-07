@@ -27,12 +27,12 @@
 
 /*!
     \contentspage {index.html}{Qt Installer Framework}
-    \previouspage ifw-tools.html
+    \previouspage scripting-qmlmodule.html
     \page ifw-cpp-classes.html
     \nextpage ifw-knownissues.html
 
     \title C++ Classes
 
-    \generatelist annotatedclasses
-
+    \generatelist{classesbymodule QtInstallerFramework}
+    \generatelist{classesbymodule kdupdater}
 */
