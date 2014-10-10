@@ -60,6 +60,9 @@ class QEntity;
 class QAbstractAspectPrivate;
 class QSceneObserverInterface;
 class QJobManagerInterface;
+class QBackendNodeFunctor;
+
+typedef QSharedPointer<QBackendNodeFunctor> QBackendNodeFunctorPtr;
 
 class QT3DCORESHARED_EXPORT QAbstractAspect : public QObject, public QJobProviderInterface
 {
@@ -90,6 +93,10 @@ public:
 protected:
     QAbstractAspect(QAbstractAspectPrivate &dd, QObject *parent = 0);
 
+    template<class Frontend>
+    void registerBackendType(QBackendNodeFunctorPtr);
+    void registerBackendType(const std::type_info &info, QBackendNodeFunctorPtr functor);
+
 private:
     virtual void setRootEntity(QEntity *rootObject) = 0;
     virtual void onInitialize(QSurface *surface) = 0;
@@ -99,6 +106,12 @@ private:
     // These are only called by the aspect manager
     friend class QAspectManager;
 };
+
+template<class Frontend>
+void QAbstractAspect::registerBackendType(QBackendNodeFunctorPtr functor)
+{
+    registerBackendType(typeid(Frontend), functor);
+}
 
 } // namespace Qt3D
 
