@@ -44,10 +44,11 @@
 
 #include <EGL/egl.h>
 #include <qpa/qplatformoffscreensurface.h>
+#include "qeglfsglobal.h"
 
 QT_BEGIN_NAMESPACE
 
-class QEglFSOffscreenWindow : public QPlatformOffscreenSurface
+class Q_EGLFS_EXPORT QEglFSOffscreenWindow : public QPlatformOffscreenSurface
 {
 public:
     QEglFSOffscreenWindow(EGLDisplay display, const QSurfaceFormat &format, QOffscreenSurface *offscreenSurface);

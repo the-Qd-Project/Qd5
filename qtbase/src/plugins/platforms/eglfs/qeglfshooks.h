@@ -34,62 +34,16 @@
 #ifndef QEGLFSHOOKS_H
 #define QEGLFSHOOKS_H
 
-#include <qpa/qplatformintegration.h>
-#include <qpa/qplatformscreen.h>
-#include <QtGui/QSurfaceFormat>
-#include <QtGui/QImage>
-#include <EGL/egl.h>
+#include "qeglfsdeviceintegration.h"
+#include "qeglfsglobal.h"
 
 QT_BEGIN_NAMESPACE
 
-class QEglFSScreen;
-class QEglFSIntegration;
-class QPlatformSurface;
-
-class QEglFSHooks
+class QEglFSHooks : public QEGLDeviceIntegration
 {
-public:
-    virtual ~QEglFSHooks() {}
-    virtual void platformInit();
-    virtual void platformDestroy();
-    virtual EGLNativeDisplayType platformDisplay() const;
-    virtual void screenInit();
-    virtual void screenDestroy();
-    virtual QSizeF physicalScreenSize() const;
-    virtual QSize screenSize() const;
-    virtual QDpi logicalDpi() const;
-    virtual Qt::ScreenOrientation nativeOrientation() const;
-    virtual Qt::ScreenOrientation orientation() const;
-    virtual int screenDepth() const;
-    virtual QImage::Format screenFormat() const;
-    virtual QSurfaceFormat surfaceFormatFor(const QSurfaceFormat &inputFormat) const;
-    virtual EGLNativeWindowType createNativeWindow(QPlatformWindow *platformWindow,
-                                                   const QSize &size,
-                                                   const QSurfaceFormat &format);
-    virtual EGLNativeWindowType createNativeOffscreenWindow(const QSurfaceFormat &format);
-    virtual void destroyNativeWindow(EGLNativeWindowType window);
-    virtual bool hasCapability(QPlatformIntegration::Capability cap) const;
-    virtual QPlatformCursor *createCursor(QPlatformScreen *screen) const;
-    virtual bool filterConfig(EGLDisplay display, EGLConfig config) const;
-    virtual void waitForVSync(QPlatformSurface *surface) const;
-    virtual void presentBuffer(QPlatformSurface *surface);
-
-    virtual QByteArray fbDeviceName() const;
-    virtual int framebufferIndex() const;
-
-    virtual bool supportsPBuffers() const;
-
-    static QEglFSHooks *hooks()
-    {
-#ifdef EGLFS_PLATFORM_HOOKS
-        extern QEglFSHooks *platformHooks;
-        return platformHooks;
-#else
-        extern QEglFSHooks stubHooks;
-        return &stubHooks;
-#endif
-    }
 };
+
+Q_EGLFS_EXPORT QEGLDeviceIntegration *qt_egl_device_integration();
 
 QT_END_NAMESPACE
 
