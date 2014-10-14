@@ -44,7 +44,6 @@
 
 QT_BEGIN_NAMESPACE
 
-
 class QOpenGLPaintDevicePrivate;
 
 class Q_GUI_EXPORT QOpenGLPaintDevice : public QPaintDevice
@@ -54,6 +53,7 @@ public:
     QOpenGLPaintDevice();
     explicit QOpenGLPaintDevice(const QSize &size);
     QOpenGLPaintDevice(int width, int height);
+    QOpenGLPaintDevice(QOpenGLPaintDevicePrivate *dd);
     virtual ~QOpenGLPaintDevice();
 
     int devType() const { return QInternal::OpenGL; }
@@ -73,9 +73,7 @@ public:
     void setPaintFlipped(bool flipped);
     bool paintFlipped() const;
 
-    virtual void beginPaint();
     virtual void ensureActiveTarget();
-    virtual void endPaint();
 
 protected:
     int metric(QPaintDevice::PaintDeviceMetric metric) const;
