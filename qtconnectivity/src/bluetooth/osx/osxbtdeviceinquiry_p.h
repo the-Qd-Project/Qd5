@@ -50,12 +50,16 @@
 #include <Foundation/Foundation.h>
 #include <IOKit/IOReturn.h>
 
+@class QT_MANGLE_NAMESPACE(OSXBTDeviceInquiry);
+
 QT_BEGIN_NAMESPACE
 
 namespace OSXBluetooth {
 
 class DeviceInquiryDelegate {
 public:
+    typedef QT_MANGLE_NAMESPACE(OSXBTDeviceInquiry) DeviceInquiryObjC;
+
     virtual ~DeviceInquiryDelegate();
 
     virtual void inquiryFinished(IOBluetoothDeviceInquiry *inq) = 0;
@@ -88,13 +92,7 @@ QT_END_NAMESPACE
 - (void)deviceInquiryDeviceFound:(IOBluetoothDeviceInquiry *)sender
         device:(IOBluetoothDevice *)device;
 
-- (void)deviceInquiryDeviceNameUpdated:(IOBluetoothDeviceInquiry *)sender
-        device:(IOBluetoothDevice*)device devicesRemaining:(uint32_t)devicesRemaining;
-
 - (void)deviceInquiryStarted:(IOBluetoothDeviceInquiry *)sender;
-
-- (void)deviceInquiryUpdatingDeviceNamesStarted:(IOBluetoothDeviceInquiry *)sender
-        devicesRemaining:(uint32_t)devicesRemaining;
 
 @end
 
