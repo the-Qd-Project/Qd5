@@ -43,8 +43,7 @@
 #define QT3D_RENDER_RENDERMESH_H
 
 #include <Qt3DCore/axisalignedboundingbox.h>
-#include <Qt3DCore/qhandle.h>
-#include <Qt3DCore/private/qobserverinterface_p.h>
+#include <Qt3DRenderer/private/handle_types_p.h>
 #include <Qt3DCore/qbackendnode.h>
 #include <QUuid>
 
@@ -60,7 +59,6 @@ class QRenderPass;
 class QMeshData;
 
 typedef QSharedPointer<QAbstractMeshFunctor> QAbstractMeshFunctorPtr;
-typedef QHandle<QMeshData, 16> HMeshData;
 
 namespace Render {
 
