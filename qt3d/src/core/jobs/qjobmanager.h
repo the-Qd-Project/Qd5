@@ -45,7 +45,7 @@
 #include <Qt3DCore/qjobmanagerinterface.h>
 #include <Qt3DCore/qt3dcore_global.h>
 
-#include <Qt3DCore/qjob.h>
+#include <Qt3DCore/qaspectjob.h>
 
 #include <QVector>
 
@@ -63,7 +63,7 @@ public:
 
     void initialize() Q_DECL_OVERRIDE;
 
-    void enqueueJobs(const QVector<QJobPtr> &jobQueue) Q_DECL_OVERRIDE;
+    void enqueueJobs(const QVector<QAspectJobPtr> &jobQueue) Q_DECL_OVERRIDE;
 
     void waitForAllJobs() Q_DECL_OVERRIDE;
 
