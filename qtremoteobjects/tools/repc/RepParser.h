@@ -114,6 +114,7 @@ class AST
 public:
     QVector<ASTClass> classes;
     QVector<POD> pods;
+    QVector<QString> enumUses;
     QStringList includes;
 };
 Q_DECLARE_TYPEINFO(AST, Q_MOVABLE_TYPE);
