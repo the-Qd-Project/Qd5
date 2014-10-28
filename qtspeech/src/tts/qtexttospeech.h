@@ -50,8 +50,9 @@
 #include <QtCore/QSharedDataPointer>
 #include <QtCore/qlocale.h>
 
-QT_BEGIN_NAMESPACE
+#include <QtTextToSpeech/qvoice.h>
 
+QT_BEGIN_NAMESPACE
 
 class QTextToSpeechPrivate;
 class QTEXTTOSPEECH_EXPORT QTextToSpeech : public QObject
@@ -63,6 +64,7 @@ class QTEXTTOSPEECH_EXPORT QTextToSpeech : public QObject
     Q_PROPERTY(double rate READ rate WRITE setRate NOTIFY rateChanged)
     Q_PROPERTY(double pitch READ pitch WRITE setPitch NOTIFY pitchChanged)
     Q_PROPERTY(QLocale locale READ locale WRITE setLocale NOTIFY localeChanged)
+    Q_PROPERTY(QVoice voice READ voice WRITE setVoice NOTIFY voiceChanged)
     Q_DECLARE_PRIVATE(QTextToSpeech)
 public:
     enum State {
@@ -78,6 +80,9 @@ public:
     QVector<QLocale> availableLocales() const;
     QLocale locale() const;
 
+    QVoice voice() const;
+    QVector<QVoice> availableVoices() const;
+
 public Q_SLOTS:
     void say(const QString &text);
     void stop();
@@ -92,12 +97,7 @@ public Q_SLOTS:
     void setPitch(double pitch);
     int volume() const;
     void setVolume(int volume);
-
-    // FIXME is qstring really good enough here?
-    // also it uses localized strings... uhm???
-//    QVector<QString> availableVoiceTypes() const;
-//    void setVoiceType(const QString &type);
-//    QString currentVoiceType() const;
+    void setVoice(const QVoice &voice);
 
 Q_SIGNALS:
     void stateChanged(QTextToSpeech::State state);
@@ -105,6 +105,7 @@ Q_SIGNALS:
     void rateChanged(double rate);
     void pitchChanged(double pitch);
     void volumeChanged(int volume);
+    void voiceChanged(const QVoice &voice);
 
 private:
     Q_DISABLE_COPY(QTextToSpeech)

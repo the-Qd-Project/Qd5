@@ -60,13 +60,8 @@ class QTextToSpeechPrivate : public QObjectPrivate
 public:
     QTextToSpeechPrivate(QTextToSpeech *speech);
 
-    // system specific initialization, sets up a backend
-
-//    QVector<QString> availableVoiceTypes() const;
-//    void setVoiceType(const QString& type);
-//    QString currentVoiceType() const;
-
     virtual QVector<QLocale> availableLocales() const = 0;
+    virtual QVector<QVoice> availableVoices() const = 0;
 
     virtual void say(const QString &text) = 0;
     virtual void stop() = 0;
@@ -81,6 +76,8 @@ public:
     virtual QLocale locale() const = 0;
     virtual int volume() const = 0;
     virtual void setVolume(int volume) = 0;
+    virtual void setVoice(const QVoice &voiceName) = 0;
+    virtual QVoice voice() const = 0;
     virtual QTextToSpeech::State state() const = 0;
 
 protected:
@@ -107,6 +104,11 @@ protected:
     void emitLocaleChanged(const QLocale &locale)
     {
         emit m_speech->localeChanged(locale);
+    }
+
+    void emitVoiceChanged(const QVoice &voice)
+    {
+        emit m_speech->voiceChanged(voice);
     }
 
     QTextToSpeech *m_speech;
