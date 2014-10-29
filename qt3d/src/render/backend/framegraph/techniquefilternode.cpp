@@ -91,7 +91,7 @@ void TechniqueFilter::sceneChangeEvent(const QSceneChangePtr &e)
     case NodeRemoved: {
         QScenePropertyChangePtr propertyChange = qSharedPointerCast<QScenePropertyChange>(e);
         if (propertyChange->propertyName() == QByteArrayLiteral("require"))
-            removeFilter(propertyChange->value().toUuid());
+            removeFilter(propertyChange->value().value<QNodeUuid>());
     }
         break;
     default:
