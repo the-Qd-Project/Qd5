@@ -42,7 +42,7 @@
 #ifndef QT3D_QASPECTJOBMANAGER_H
 #define QT3D_QASPECTJOBMANAGER_H
 
-#include <Qt3DCore/qaspectjobmanagerinterface.h>
+#include <Qt3DCore/qabstractaspectjobmanager.h>
 #include <Qt3DCore/qt3dcore_global.h>
 
 #include <Qt3DCore/qaspectjob.h>
@@ -55,7 +55,7 @@ namespace Qt3D {
 
 class QAspectJobManagerPrivate;
 
-class QAspectJobManager : public QAspectJobManagerInterface
+class QAspectJobManager : public QAbstractAspectJobManager
 {
     Q_OBJECT
 public:
@@ -72,7 +72,6 @@ public:
 protected:
     QAspectJobManager(QAspectJobManagerPrivate &dd, QObject *parent);
     Q_DECLARE_PRIVATE(QAspectJobManager)
-    QAspectJobManagerPrivate *d_ptr;
 };
 
 } // namespace Qt3D
