@@ -40,13 +40,22 @@
 ****************************************************************************/
 
 #include "qinputaspect.h"
+#include "qinputaspect_p.h"
+#include "inputhandler_p.h"
 
 QT_BEGIN_NAMESPACE
 
 namespace Qt3D {
 
+QInputAspectPrivate::QInputAspectPrivate(QInputAspect *qq)
+    : QAbstractAspectPrivate(qq)
+    , m_inputHandler(new Input::InputHandler())
+{
+    m_aspectType = QAbstractAspect::AspectOther;
+}
+
 QInputAspect::QInputAspect(QObject *parent)
-    : QAbstractAspect(QAbstractAspect::AspectOther, parent)
+    : QAbstractAspect(*new QInputAspectPrivate(this), parent)
 {
 }
 
