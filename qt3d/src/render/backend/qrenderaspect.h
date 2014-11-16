@@ -47,14 +47,13 @@
 
 QT_BEGIN_NAMESPACE
 
-class QWindow;
-
 namespace Qt3D {
 
 namespace Render {
 class Renderer;
-class RenderSceneObserver;
 }
+
+class QRenderAspectPrivate;
 
 class QT3DRENDERERSHARED_EXPORT QRenderAspect : public QAbstractAspect
 {
@@ -67,6 +66,9 @@ public:
     void sceneNodeAdded(QSceneChangePtr &e) Q_DECL_OVERRIDE;
     void sceneNodeRemoved(QSceneChangePtr &e) Q_DECL_OVERRIDE;
 
+protected:
+    void registerBackendTypes();
+
 private:
     void setRootEntity(QEntity *rootObject) Q_DECL_OVERRIDE;
     void onInitialize(const QVariantMap &data) Q_DECL_OVERRIDE;
@@ -74,7 +76,9 @@ private:
 
     void visitNode(QNode *node);
 
-    Render::Renderer *m_renderer;
+    Q_DECLARE_PRIVATE(QRenderAspect)
+    QRenderAspect(QRenderAspectPrivate &dd, QObject *parent);
+
     friend class Render::Renderer;
 };
 
