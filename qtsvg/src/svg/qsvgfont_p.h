@@ -49,10 +49,11 @@
 #include "qhash.h"
 #include "qstring.h"
 #include "qsvgstyle_p.h"
+#include "qtsvgglobal_p.h"
 
 QT_BEGIN_NAMESPACE
 
-class QSvgGlyph
+class Q_SVG_PRIVATE_EXPORT QSvgGlyph
 {
 public:
     QSvgGlyph(QChar unicode, const QPainterPath &path, qreal horizAdvX);
@@ -64,7 +65,7 @@ public:
 };
 
 
-class QSvgFont : public QSvgRefCounted
+class Q_SVG_PRIVATE_EXPORT QSvgFont : public QSvgRefCounted
 {
 public:
     QSvgFont(qreal horizAdvX);
