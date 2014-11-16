@@ -48,8 +48,6 @@
 
 QT_BEGIN_NAMESPACE
 
-class QSurface;
-
 namespace Qt3D {
 
 class QAbstractAspect;
