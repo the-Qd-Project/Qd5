@@ -41,6 +41,13 @@ namespace QInstaller {
 
 class PackageManagerCore;
 
+struct ProxyCredential {
+    QString host;
+    QString user;
+    QString password;
+    int port;
+};
+
 class PackageManagerProxyFactory : public KDUpdater::FileDownloaderProxyFactory
 {
 public:
@@ -49,7 +56,11 @@ public:
     PackageManagerProxyFactory *clone() const;
     QList<QNetworkProxy> queryProxy(const QNetworkProxyQuery &query = QNetworkProxyQuery());
 
+    void setProxyCredentials(const QNetworkProxy &proxy, const QString &user, const QString &password);
+
 private:
+
+    QList<ProxyCredential> m_proxyCredentials;
     const PackageManagerCore *const m_core;
 };
 
