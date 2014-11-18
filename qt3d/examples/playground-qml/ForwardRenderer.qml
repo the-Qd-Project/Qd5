@@ -54,64 +54,44 @@ TechniqueFilter {
     // Using this as a building block for a larger framegraph would
     // allow a scene to be rendered multiple times to different
     // viewports using different cameras for e.g.
-    property alias viewportRect: viewport.rect
-    property alias cameraViewportTopRight: cameraSelectorTopRight.camera
-    property alias cameraViewportBottomLeft: cameraSelectorBottomLeft.camera
-    property alias layerFilters : layerFilter.layers
-    property alias clearColor : viewport.clearColor
-    property alias colorAttachmentTexture : defaultColorAttachment.texture
+    property alias mainCameraViewport: mainCamera.camera
+    property alias detailCameraViewport: detailCamera.camera
+    property alias layerFilters: layerFilter.layers
+    property alias clearColor: viewport.clearColor
 
     requires : [
-        Annotation { name : "RenderingStyle"; value : "forward";},
-        Annotation { name : "Enabled"; value : true;}
+        Annotation { name: "RenderingStyle"; value: "forward";},
+        Annotation { name: "Enabled"; value: true;}
     ]
 
     ClearBuffer {
-        buffers : ClearBuffer.ColorDepthBuffer
+        buffers: ClearBuffer.ColorDepthBuffer
 
+        // Main Viewport
         Viewport {
             id: viewport
-            objectName : "viewport"
-            rect: Qt.rect(0.0, 0.0, 1.0, 1.0) // From Top Left
+            rect: Qt.rect(0.0, 0, 1.0, 1.0)
 
-            Viewport {
-                id : top_right_viewport
-                rect: Qt.rect(0.5, 0, 0.5, 0.5)
-                objectName : "topRightViewport"
-                CameraSelector {
-                    id : cameraSelectorTopRight
-                    objectName : "cameraSelector"
-                    LayerFilter {
-                        id : layerFilter
-                        objectName : "layerFilter"
-                        RenderPassFilter { includes : [Annotation {name : "Name"; value : "TextureLighting";}] }
-                    }
+            CameraSelector {
+                id : mainCamera
+
+                LayerFilter {
+                    id: layerFilter
+                    RenderPassFilter { includes: [
+                            Annotation {name : "Name"; value : "Texture"}
+                        ] }
                 }
             }
         }
     }
 
     Viewport {
-        id : bottom_left_viewport
-        objectName : "bottomLeftViewport"
-        rect: Qt.rect(0.0, 0.5, 0.5, 0.5)
+        id : detailViewport
+        rect: Qt.rect(0.75, 0.0, 0.25, 0.25)
+
         CameraSelector {
-            id: cameraSelectorBottomLeft
-            objectName : "cameraSelector"
-            RenderTargetSelector {
-                target : RenderTarget {
-                    attachments : [
-                        RenderAttachment {
-                            id : defaultColorAttachment
-                            type : RenderAttachment.ColorAttachment0
-                            name : "diffuse"
-                        }
-                    ]
-                }
-                RenderPassFilter { includes : [Annotation {name : "Name"; value : "Texture";}] }
-                RenderPassFilter { includes : [Annotation {name : "Name"; value : "Lighting";}] }
-            }
-            RenderPassFilter { includes : [Annotation {name : "Name"; value : "Final";}] }
+            id: detailCamera
+                RenderPassFilter { includes : [Annotation {name : "Name"; value : "ColorMaterial";}] }
         }
     }
 }
