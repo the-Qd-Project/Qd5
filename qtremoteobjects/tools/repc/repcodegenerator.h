@@ -49,6 +49,7 @@ struct ASTClass;
 struct POD;
 
 QT_BEGIN_NAMESPACE
+class QIODevice;
 class QStringList;
 class QTextStream;
 QT_END_NAMESPACE
@@ -62,9 +63,9 @@ public:
         SOURCE
     };
 
-    explicit RepCodeGenerator(const QString &fileName);
+    explicit RepCodeGenerator(QIODevice &outputDevice);
 
-    bool generate(const AST &ast, Mode mode);
+    void generate(const AST &ast, Mode mode, QString fileName);
 
 private:
     void generateHeader(Mode mode, QTextStream &out, const AST &ast);
@@ -85,7 +86,7 @@ private:
     void generateClass(Mode mode, QStringList &out, const ASTClass &astClasses, const QString &metaTypeRegistrationCode);
 
 private:
-    QString m_fileName;
+    QIODevice &m_outputDevice;
 };
 
 #endif
