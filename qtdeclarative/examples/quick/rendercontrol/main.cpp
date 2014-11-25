@@ -39,13 +39,24 @@
 ****************************************************************************/
 
 #include <QGuiApplication>
-#include "window.h"
+#include "window_singlethreaded.h"
+#include "window_multithreaded.h"
 
 int main(int argc, char **argv)
 {
     QGuiApplication app(argc, argv);
-    Window window;
-    window.resize(1024, 768);
-    window.show();
+
+    QScopedPointer<QWindow> window;
+    if (QCoreApplication::arguments().contains(QLatin1String("--threaded"))) {
+        qWarning("Using separate Qt Quick render thread");
+        window.reset(new WindowMultiThreaded);
+    } else {
+        qWarning("Using single-threaded rendering");
+        window.reset(new WindowSingleThreaded);
+    }
+
+    window->resize(1024, 768);
+    window->show();
+
     return app.exec();
 }
