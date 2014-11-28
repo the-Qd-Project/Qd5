@@ -35,12 +35,16 @@
 #ifndef QDBUSTRAYTYPES_P_H
 #define QDBUSTRAYTYPES_P_H
 
+#ifndef QT_NO_SYSTEMTRAYICON
+
 #include <QObject>
 #include <QString>
 #include <QDBusArgument>
 #include <QDBusConnection>
 #include <QDBusObjectPath>
 #include <QPixmap>
+
+QT_BEGIN_NAMESPACE
 
 // Custom message type to send icons across D-Bus
 struct QXdgDBusImageStruct
@@ -66,16 +70,17 @@ struct QXdgDBusToolTipStruct
 const QDBusArgument &operator<<(QDBusArgument &argument, const QXdgDBusImageStruct &icon);
 const QDBusArgument &operator>>(const QDBusArgument &argument, QXdgDBusImageStruct &icon);
 
-Q_DECLARE_METATYPE(QXdgDBusImageStruct)
-
 const QDBusArgument &operator<<(QDBusArgument &argument, const QXdgDBusImageVector &iconVector);
 const QDBusArgument &operator>>(const QDBusArgument &argument, QXdgDBusImageVector &iconVector);
-
-Q_DECLARE_METATYPE(QXdgDBusImageVector)
 
 const QDBusArgument &operator<<(QDBusArgument &argument, const QXdgDBusToolTipStruct &toolTip);
 const QDBusArgument &operator>>(const QDBusArgument &argument, QXdgDBusToolTipStruct &toolTip);
 
+QT_END_NAMESPACE
+
+Q_DECLARE_METATYPE(QXdgDBusImageStruct)
+Q_DECLARE_METATYPE(QXdgDBusImageVector)
 Q_DECLARE_METATYPE(QXdgDBusToolTipStruct)
 
+#endif // QT_NO_SYSTEMTRAYICON
 #endif // QDBUSTRAYTYPES_P_H
