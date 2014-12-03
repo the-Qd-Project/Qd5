@@ -45,6 +45,7 @@
 #include <Qt3DCore/qbackendnode.h>
 #include <private/shadervariables_p.h>
 #include <private/uniformbuffer_p.h>
+#include <Qt3DRenderer/qshaderdata.h>
 #include <QMutex>
 
 QT_BEGIN_NAMESPACE
@@ -86,6 +87,7 @@ private:
     QAtomicInt m_needsBufferUpdate;
     // QMutex has no copy operator
     QMutex *m_mutex;
+    PropertyReaderInterfacePtr m_propertyReader;
 };
 
 } // Render
