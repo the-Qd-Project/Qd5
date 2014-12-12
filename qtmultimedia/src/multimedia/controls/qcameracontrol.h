@@ -53,7 +53,8 @@ public:
         CaptureMode = 1,
         ImageEncodingSettings = 2,
         VideoEncodingSettings = 3,
-        Viewfinder = 4
+        Viewfinder = 4,
+        ViewfinderSettings = 5
     };
 
     ~QCameraControl();
