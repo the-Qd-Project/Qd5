@@ -54,7 +54,7 @@ Entity {
 
     RenderableEntity {
         id: chest
-        source: ":/assets/chest/Chest.obj"
+        source: "assets/chest/Chest.obj"
         scale: 0.03
 
         material: DiffuseMapMaterial {
