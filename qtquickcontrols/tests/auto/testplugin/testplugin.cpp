@@ -40,12 +40,14 @@
 #include <QStringList>
 #include "testplugin.h"
 #include "testcppmodels.h"
+#include "../shared/testmodel.h"
 
 void TestPlugin::registerTypes(const char *uri)
 {
     // cpp models
     qmlRegisterType<TestObject>(uri, 1, 0, "TestObject");
     qmlRegisterType<TestItemModel>(uri, 1, 0, "TestItemModel");
+    qmlRegisterType<TestModel>(uri, 1, 0, "TreeModel");
 }
 
 void TestPlugin::initializeEngine(QQmlEngine *engine, const char * /*uri*/)
