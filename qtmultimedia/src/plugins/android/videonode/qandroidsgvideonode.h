@@ -47,8 +47,9 @@ public:
     QAndroidSGVideoNode(const QVideoSurfaceFormat &format);
     ~QAndroidSGVideoNode();
 
-    void setCurrentFrame(const QVideoFrame &frame);
+    void setCurrentFrame(const QVideoFrame &frame, FrameFlags flags);
     QVideoFrame::PixelFormat pixelFormat() const { return m_format.pixelFormat(); }
+    QAbstractVideoBuffer::HandleType handleType() const { return QAbstractVideoBuffer::GLTextureHandle; }
 
     void preprocess();
 
