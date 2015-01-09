@@ -36,6 +36,7 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QScopedPointer>
+#include <QtCore/QMap>
 
 //
 //  W A R N I N G
@@ -84,6 +85,7 @@ private:
     QScopedPointer<QLibInputPointer> m_pointer;
     QScopedPointer<QLibInputKeyboard> m_keyboard;
     QScopedPointer<QLibInputTouch> m_touch;
+    QMap<int, int> m_devCount;
 };
 
 QT_END_NAMESPACE
