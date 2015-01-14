@@ -43,8 +43,8 @@
 #define QEGLFSKMSINTEGRATION_H
 
 #include "qeglfsdeviceintegration.h"
-#include <QMap>
-#include <QVariant>
+#include <QtCore/QMap>
+#include <QtCore/QVariant>
 
 QT_BEGIN_NAMESPACE
 
