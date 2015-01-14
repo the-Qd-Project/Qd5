@@ -65,7 +65,8 @@ enum StateMask
     AlphaTestMask           = 1 << 7,
     FrontFaceStateMask      = 1 << 8,
     DitheringStateMask      = 1 << 9,
-    AlphaCoverageStateMask  = 1 << 10
+    AlphaCoverageStateMask  = 1 << 10,
+    PolygonOffsetStateMask  = 1 << 11
 };
 
 typedef quint64 StateMaskSet;
