@@ -37,7 +37,7 @@
 #include <QtQml/qqmlextensionplugin.h>
 #include <QtQml/qqml.h>
 
-#include <QtWebView/private/qwebview_p.h>
+#include <QtWebView/qquickwebview.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -51,7 +51,7 @@ public:
         Q_ASSERT(QLatin1String(uri) == QLatin1String("QtWebView"));
 
         // @uri QtWebView
-        qmlRegisterType<QWebView>(uri, 1, 0, "WebView");
+        qmlRegisterType<QQuickWebView>(uri, 1, 0, "WebView");
     }
 
     void initializeEngine(QQmlEngine *engine, const char *uri)

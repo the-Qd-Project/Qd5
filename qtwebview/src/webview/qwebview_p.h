@@ -34,8 +34,8 @@
 **
 ****************************************************************************/
 
-#ifndef QWEBVIEW_H
-#define QWEBVIEW_H
+#ifndef QWEBVIEW_P_H
+#define QWEBVIEW_P_H
 
 //
 //  W A R N I N G
@@ -48,124 +48,63 @@
 // We mean it.
 //
 
-#include <QtWebView/qwebview_global.h>
-
-#if !defined(QT_WEBVIEW_WEBENGINE_BACKEND)
-
-#include "qwindowcontrolleritem_p.h"
+#include "qwebview_p_p.h"
+#include "qwebviewinterface_p.h"
+#include "qnativeviewcontroller_p.h"
 #include <QtCore/qobject.h>
 #include <QtCore/qurl.h>
 #include <QtGui/qimage.h>
-
+#include <QtQml/qjsvalue.h>
 
 QT_BEGIN_NAMESPACE
 
-class QWebView;
-class QWebViewPrivate : public QObject
+class Q_WEBVIEW_EXPORT QWebView
+        : public QObject
+        , public QWebViewInterface
+        , public QNativeViewController
 {
     Q_OBJECT
 public:
-    QWebViewPrivate(QWebView *q);
-    ~QWebViewPrivate();
+    explicit QWebView(QObject *p = 0);
+    ~QWebView() Q_DECL_OVERRIDE;
 
-    virtual QString getUrl() const = 0;
-    virtual bool canGoBack() const = 0;
-    virtual bool canGoForward() const = 0;
-    virtual QString getTitle() const = 0;
-    virtual void *nativeWebView() const = 0;
+    QUrl url() const Q_DECL_OVERRIDE;
+    void setUrl(const QUrl &url) Q_DECL_OVERRIDE;
+    bool canGoBack() const Q_DECL_OVERRIDE;
+    bool canGoForward() const Q_DECL_OVERRIDE;
+    QString title() const Q_DECL_OVERRIDE;
+    int loadProgress() const Q_DECL_OVERRIDE;
+    bool isLoading() const Q_DECL_OVERRIDE;
 
-    static QWebViewPrivate *create(QWebView *q);
-
-public Q_SLOTS:
-    virtual void loadUrl(const QString &url) = 0;
-    virtual void goBack() const = 0;
-    virtual void goForward() const = 0;
-    virtual void stopLoading() const = 0;
-
-private Q_SLOTS:
-    void onPageStartedPrivate(QString url);
-    void onPageFinishedPrivate(QString url);
-    void onTitleChangedPrivate(QString title);
-    void onProgressChangedPrivate(int progress);
-
-Q_SIGNALS:
-    void pageStarted(QString url);
-    void pageFinished(QString url);
-    void progressChanged(int progress);
-    void titleChanged(QString title);
-
-protected:
-    Q_DECLARE_PUBLIC(QWebView)
-    void ensureNativeWebView();
-
-private:
-    int m_loadProgress;
-    bool m_loading;
-    QString m_title;
-    QUrl m_url;
-    QWebView *q_ptr;
-};
-
-class Q_WEBVIEW_EXPORT QWebView : public QWindowControllerItem
-{
-    Q_OBJECT
-    Q_PROPERTY(QUrl url READ url WRITE setUrl NOTIFY urlChanged)
-    Q_PROPERTY(bool loading READ isLoading NOTIFY loadingChanged)
-    Q_PROPERTY(int loadProgress READ loadProgress NOTIFY loadProgressChanged)
-    Q_PROPERTY(QString title READ title NOTIFY titleChanged)
-    Q_PROPERTY(bool canGoBack READ canGoBack NOTIFY loadingChanged)
-    Q_PROPERTY(bool canGoForward READ canGoForward NOTIFY loadingChanged)
-
-public:
-    QWebView(QQuickItem *parent = 0);
-    ~QWebView();
-
-    QUrl url() const;
-    void setUrl(const QUrl &url);
-    int loadProgress() const;
-    QString title() const;
-    bool canGoBack() const;
-    bool isLoading() const;
-    bool canGoForward() const;
+    void setParentView(QObject *view) Q_DECL_OVERRIDE;
+    void setGeometry(const QRect &geometry) Q_DECL_OVERRIDE;
+    void setVisibility(QWindow::Visibility visibility) Q_DECL_OVERRIDE;
+    void setVisible(bool visible) Q_DECL_OVERRIDE;
+    void setFocus(bool focus) Q_DECL_OVERRIDE;
 
 public Q_SLOTS:
-    void goBack();
-    void goForward();
-    void reload();
-    void stop();
+    void goBack() Q_DECL_OVERRIDE;
+    void goForward() Q_DECL_OVERRIDE;
+    void reload() Q_DECL_OVERRIDE;
+    void stop() Q_DECL_OVERRIDE;
 
 Q_SIGNALS:
     void titleChanged();
     void urlChanged();
     void loadingChanged();
     void loadProgressChanged();
+    void requestFocus(bool focus);
 
 protected:
-    void componentComplete() Q_DECL_OVERRIDE;
+    void init();
 
 private:
-    void load(const QUrl &url);
-
+    friend class QQuickViewController;
+    friend class QQuickWebView;
     Q_DECLARE_PRIVATE(QWebView)
     QScopedPointer<QWebViewPrivate> d_ptr;
 };
 
 QT_END_NAMESPACE
 
-#else
-
-#  include <QtWebEngine/private/qquickwebengineview_p.h>
-
-QT_BEGIN_NAMESPACE
-
-class Q_WEBVIEW_EXPORT QWebView : public QQuickWebEngineView
-{
-    Q_OBJECT
-};
-
-QT_END_NAMESPACE
-
-#endif
-
-
-#endif
+#endif // QWEBVIEW_P_H
