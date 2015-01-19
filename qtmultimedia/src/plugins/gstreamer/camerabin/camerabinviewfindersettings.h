@@ -1,6 +1,7 @@
 /****************************************************************************
 **
 ** Copyright (C) 2013 Jolla Ltd.
+** Copyright (C) 2015 The Qt Company Ltd.
 ** Contact: http://www.qt.io/licensing/
 **
 ** This file is part of the Qt Toolkit.
@@ -36,29 +37,23 @@
 
 #include <qcameraviewfindersettingscontrol.h>
 
-#include <QtCore/qsize.h>
-
 QT_BEGIN_NAMESPACE
+
+class CameraBinSession;
 
 class CameraBinViewfinderSettings : public QCameraViewfinderSettingsControl
 {
     Q_OBJECT
 public:
-    CameraBinViewfinderSettings(QObject *parent);
+    CameraBinViewfinderSettings(CameraBinSession *session);
     ~CameraBinViewfinderSettings();
 
     bool isViewfinderParameterSupported(ViewfinderParameter parameter) const;
     QVariant viewfinderParameter(ViewfinderParameter parameter) const;
     void setViewfinderParameter(ViewfinderParameter parameter, const QVariant &value);
 
-    QSize resolution() const;
-    qreal minimumFrameRate() const;
-    qreal maximumFrameRate() const;
-
 private:
-    QSize m_resolution;
-    qreal m_minimumFrameRate;
-    qreal m_maximumFrameRate;
+    CameraBinSession *m_session;
 };
 
 QT_END_NAMESPACE
