@@ -77,7 +77,8 @@ public:
     void updateFromPeer(QNode *peer) Q_DECL_OVERRIDE;
 
     void sceneChangeEvent(const QSceneChangePtr &e) Q_DECL_OVERRIDE;
-    HMeshData meshData() const;
+    HMeshData meshDataHandle() const;
+    QMeshData *meshData() const;
     void setMeshData(HMeshData handle);
     void setMeshDataManager(MeshDataManager *manager);
 
