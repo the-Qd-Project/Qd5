@@ -42,10 +42,11 @@
 
 QT_BEGIN_NAMESPACE
 class QProcess;
-class QSettings;
 QT_END_NAMESPACE
 
 namespace QInstaller {
+
+class PermissionSettings;
 
 class QProcessSignalReceiver;
 
@@ -66,14 +67,14 @@ private:
     template <typename T>
     void sendData(QDataStream &stream, const T &arg);
     void handleQProcess(const QString &command, QDataStream &receivedStream);
-    void handleQSettings(const QString &command, QDataStream &receivedStream);
+    void handleQSettings(const QString &command, QDataStream &receivedStream,
+                         PermissionSettings *settings);
     void handleQFSFileEngine(const QString &command, QDataStream &receivedStream);
 
 private:
     qintptr m_socketDescriptor;
 
     QProcess *m_process;
-    QSettings *m_settings;
     QFSFileEngine *m_engine;
     QString m_authorizationKey;
     QProcessSignalReceiver *m_signalReceiver;
