@@ -49,9 +49,6 @@ class QAbstractAttribute;
 class QAbstractBuffer;
 class QMeshDataPrivate;
 
-typedef QSharedPointer<QAbstractAttribute> QAbstractAttributePtr;
-typedef QSharedPointer<QAbstractBuffer> QAbstractBufferPtr;
-
 class QT3DRENDERERSHARED_EXPORT QMeshData
 {
 public:
@@ -73,12 +70,12 @@ public:
     explicit QMeshData(PrimitiveType primitiveType = Triangles);
     virtual ~QMeshData();
 
-    void addAttribute(const QString &name, const QAbstractAttributePtr &attr);
-    void setIndexAttribute(const QAbstractAttributePtr &attr);
+    void addAttribute(const QString &name, QAbstractAttribute *attr);
+    void setIndexAttribute(QAbstractAttribute *attr);
 
     QStringList attributeNames() const;
-    QAbstractAttributePtr attributeByName(const QString &name) const;
-    QAbstractAttributePtr indexAttribute() const;
+    QAbstractAttribute *attributeByName(const QString &name) const;
+    QAbstractAttribute *indexAttribute() const;
 
     static QString defaultPositionAttributeName();
     static QString defaultNormalAttributeName();
@@ -94,7 +91,7 @@ public:
 
     int primitiveCount() const;
 
-    QList<QAbstractBufferPtr> buffers() const;
+    QVector<QAbstractBuffer *> buffers() const;
 
     void setBoundingBox(const QAxisAlignedBoundingBox &bbox);
     void computeBoundsFromAttribute(const QString &name);
