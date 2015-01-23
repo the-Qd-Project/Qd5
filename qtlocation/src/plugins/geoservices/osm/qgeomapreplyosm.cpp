@@ -76,16 +76,7 @@ void QGeoMapReplyOsm::networkReplyFinished()
     QByteArray a = m_reply->readAll();
 
     setMapImageData(a);
-    switch (tileSpec().mapId()) {
-    case 1:
-        setMapImageFormat("png");
-        break;
-    case 2:
-        setMapImageFormat("png");
-        break;
-    default:
-        qWarning("Unknown map id %d", tileSpec().mapId());
-    }
+    setMapImageFormat("png");
 
     setFinished(true);
 
