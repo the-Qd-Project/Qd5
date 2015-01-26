@@ -38,6 +38,7 @@
 #include <QtQml/qqml.h>
 
 #include <QtWebView/qquickwebview.h>
+#include <QtWebView/qquickwebviewloadrequest.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -52,6 +53,8 @@ public:
 
         // @uri QtWebView
         qmlRegisterType<QQuickWebView>(uri, 1, 0, "WebView");
+        const QString &msg = QObject::tr("Cannot create separate instance of WebViewLoadRequest");
+        qmlRegisterUncreatableType<QQuickWebViewLoadRequest>(uri, 1, 0, "WebViewLoadRequest", msg);
     }
 
     void initializeEngine(QQmlEngine *engine, const char *uri)
