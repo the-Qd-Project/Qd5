@@ -43,7 +43,7 @@
 #define BARREL_H
 
 #include <Qt3DRenderer/QNormalDiffuseSpecularMapMaterial>
-#include <Qt3DRenderer/QTexture>
+#include <Qt3DRenderer/qtexture.h>
 #include "renderableentity.h"
 
 class Barrel : public RenderableEntity
