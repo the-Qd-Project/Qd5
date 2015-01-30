@@ -63,9 +63,13 @@ QHash<QNodeId, QAbstractMeshFunctorPtr> MeshDataManager::meshesPending()
 
 HMeshData MeshDataManager::meshDataFromFunctor(QAbstractMeshFunctorPtr functor) const
 {
-    Q_FOREACH (const QAbstractMeshFunctorPtr &ptr, m_meshFunctors.keys()) {
-        if (*ptr == *functor)
-            return m_meshFunctors.value(ptr);
+    QHash<QAbstractMeshFunctorPtr, HMeshData>::const_iterator it = m_meshFunctors.begin();
+    const QHash<QAbstractMeshFunctorPtr, HMeshData>::const_iterator end = m_meshFunctors.end();
+
+    while (it != end) {
+        if (*it.key() == *functor)
+            return it.value();
+        ++it;
     }
     return HMeshData();
 }
