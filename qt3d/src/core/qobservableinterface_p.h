@@ -48,15 +48,14 @@ QT_BEGIN_NAMESPACE
 
 namespace Qt3D {
 
-class QObserverInterface;
-class QChangeArbiter;
+class QLockableObserverInterface;
 
 class QT3DCORESHARED_EXPORT QObservableInterface
 {
 public:
     virtual ~QObservableInterface();
 
-    virtual void setArbiter(QChangeArbiter *arbiter) = 0;
+    virtual void setArbiter(QLockableObserverInterface *arbiter) = 0;
 
 protected:
     virtual void notifyObservers(const QSceneChangePtr &e) = 0;
