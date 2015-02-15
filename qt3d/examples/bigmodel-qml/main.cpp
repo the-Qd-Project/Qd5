@@ -35,7 +35,7 @@
 ****************************************************************************/
 
 #include <Qt3DCore/window.h>
-#include <Qt3DRenderer/qrenderaspect.h>
+#include <Qt3DRenderer/QRenderAspect>
 #include <Qt3DInput/QInputAspect>
 #include <Qt3DQuick/QQmlAspectEngine>
 
@@ -47,23 +47,11 @@
 int main(int argc, char* argv[])
 {
     QGuiApplication app(argc, argv);
-
-    QCommandLineParser parser;
-    parser.addPositionalArgument(QStringLiteral("meshfile"), QStringLiteral("The mesh file to load"));
-    parser.process(app);
-
-    const QStringList meshFileNames = parser.positionalArguments();
-    if (meshFileNames.length() == 0) {
-        std::cerr << "Please specify mesh files to load" << std::endl;
-        return 1;
-    }
-
     Qt3D::Window view;
     Qt3D::Quick::QQmlAspectEngine engine;
 
     engine.aspectEngine()->registerAspect(new Qt3D::QRenderAspect());
     engine.aspectEngine()->registerAspect(new Qt3D::QInputAspect());
-    engine.qmlEngine()->rootContext()->setContextProperty("_meshFileNames", meshFileNames);
     QVariantMap data;
     data.insert(QStringLiteral("surface"), QVariant::fromValue(static_cast<QSurface *>(&view)));
     data.insert(QStringLiteral("eventSource"), QVariant::fromValue(&view));
