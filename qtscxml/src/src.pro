@@ -4,4 +4,5 @@ CONFIG += ordered
 
 SUBDIRS += \
     qscxmllib \
-    qscxmlparse
+    qscxmlparse \
+    qscxmlserver
