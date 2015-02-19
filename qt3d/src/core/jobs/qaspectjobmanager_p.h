@@ -39,6 +39,11 @@
 
 #include <private/qabstractaspectjobmanager_p.h>
 
+#ifdef THREAD_POOLER
+#include "qthreadpooler_p.h"
+#include "dependencyhandler_p.h"
+#endif
+
 namespace ThreadWeaver {
 class Queue;
 }
@@ -59,6 +64,13 @@ public:
 
     // Owned by QAspectJobManager via QObject parent-child
     ThreadWeaver::Queue *m_weaver;
+
+#ifdef THREAD_POOLER
+    QThreadPooler *m_threadPooler;
+    DependencyHandler *m_dependencyHandler;
+    QMutex *m_syncMutex;
+    QWaitCondition m_syncFinished;
+#endif
 };
 
 } // Qt3D
