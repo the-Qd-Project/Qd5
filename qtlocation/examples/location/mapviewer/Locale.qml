@@ -43,7 +43,6 @@ import QtPositioning 5.2
 import "forms"
 
 LocaleForm {
-
     property string locale
     signal selectLanguage(string language)
     signal closeForm()
