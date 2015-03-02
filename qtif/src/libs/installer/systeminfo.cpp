@@ -38,30 +38,32 @@
 namespace QInstaller {
 
 /*!
-    \qmltype systemInfo
-    \inqmlmodule scripting
+    \inmodule QtInstallerFramework
+    \class QInstaller::SystemInfo
 
     \brief Provides information about the operating system.
 */
 
-
+/*!
+    Creates a system info object with the parent \a parent.
+*/
 SystemInfo::SystemInfo(QObject *parent) : QObject(parent)
 {
 }
 
 
 /*!
-    \qmlproperty string systemInfo::currentCpuArchitecture
+    \property SystemInfo::currentCpuArchitecture
 
     The architecture of the CPU that the application is running on, in text format.
 
-    Possible values include
+    Possible values include:
     \list
         \li "i386"
         \li "x86_64"
     \endlist
 
-    Note that this function depends on what the OS will report and may not detect the actual CPU
+    \note This function depends on what the OS will report and may not detect the actual CPU
     architecture if the OS hides that information or is unable to provide it. For example, a 32-bit
     OS running on a 64-bit CPU is usually unable to determine whether the CPU is actually capable
     of running 64-bit programs.
@@ -74,13 +76,13 @@ QString SystemInfo::currentCpuArchitecture() const
 }
 
 /*!
-    \qmlproperty string systemInfo::kernelType
+    \property SystemInfo::kernelType
 
     The type of the operating system kernel the installer was compiled for. It is also the
     kernel the installer is running on, unless the host operating system is running a form of
     compatibility or virtualization layer.
 
-    For Windows, Linux, and OS X this will return
+    For Windows, Linux, and OS X this will return:
     \list
         \li "winnt"
         \li "linux"
@@ -97,19 +99,19 @@ QString SystemInfo::kernelType() const
 }
 
 /*!
-    \qmlproperty string systemInfo::kernelVersion
+    \property SystemInfo::kernelVersion
 
-    Example values are
+    The release version of the operating system kernel. On Windows, it returns the version of the
+    NT or CE kernel. On Unix systems, including OS X, it returns the same as the \c {uname -r}
+    command would return.
+
+    Example values are:
 
     \list
         \li "6.1.7601" for Windows 7 with Service Pack 1
         \li "3.16.6-2-desktop" for openSUSE 13.2 kernel 3.16.6-2
         \li "12.5.0" last release of OS X "Mountain Lion"
     \endlist
-
-    The release version of the operating system kernel. On Windows, it returns the version of the
-    NT or CE kernel. On Unix systems, including OS X, it returns the same as the \c {uname -r}
-    command would return.
 
     \sa QSysInfo::kernelVersion()
 */
@@ -119,11 +121,11 @@ QString SystemInfo::kernelVersion() const
 }
 
 /*!
-    \qmlproperty string systemInfo::productType
+    \property SystemInfo::productType
 
     The product name of the operating system this application is running in.
 
-    Example values are
+    Example values are:
 
     \list
         \li "windows"
@@ -139,12 +141,12 @@ QString SystemInfo::productType() const
 }
 
 /*!
-    \qmlproperty string systemInfo::productVersion
+    \property SystemInfo::productVersion
 
     The product version of the operating system in string form. If the version could not be
     determined, this function returns "unknown".
 
-    Example values are
+    Example values are:
 
     \list
         \li "7" for Windows 7
@@ -160,13 +162,13 @@ QString SystemInfo::productVersion() const
 }
 
 /*!
-    \qmlproperty string systemInfo::prettyProductName
+    \property SystemInfo::prettyProductName
 
-    A prettier form of systemInfo::productType and systemInfo::productVersion, containing other
+    A prettier form of SystemInfo::productType and SystemInfo::productVersion, containing other
     tokens like the operating system type, codenames and other information. The result of this
     function is suitable for displaying to the user.
 
-    Example values are
+    Example values are:
 
     \list
         \li "Windows 7"
