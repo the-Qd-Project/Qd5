@@ -64,3 +64,13 @@ void Engine::increaseRpm(int deltaRpm)
 {
     setRpm(rpm() + deltaRpm);
 }
+
+Temperature Engine::temperature()
+{
+    return _temperature;
+}
+
+void Engine::setTemperature(const Temperature &value)
+{
+    _temperature = value;
+}
