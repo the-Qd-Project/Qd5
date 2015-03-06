@@ -37,11 +37,11 @@
 import QtQuick 2.6
 import QtQuick.Controls 2.0
 
-Text {
+AbstractLabel {
     id: control
-
-    // TODO: color: style.textColor
 
     Accessible.name: text
     Accessible.role: Accessible.StaticText
+
+    color: Style.textColor
 }
