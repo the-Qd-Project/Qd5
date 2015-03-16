@@ -52,6 +52,7 @@ namespace Input {
 class KeyboardInputManager;
 class KeyboardControllerManager;
 class KeyboardEventFilter;
+class MouseControllerManager;
 
 class InputHandler
 {
@@ -63,6 +64,7 @@ public:
 
     inline KeyboardControllerManager *keyboardControllerManager() const { return m_keyboardControllerManager; }
     inline KeyboardInputManager *keyboardInputManager() const  { return m_keyboardInputManager; }
+    inline MouseControllerManager *mouseControllerManager() const { return m_mouseControllerManager; }
 
     void appendKeyEvent(const QKeyEvent &event);
     QList<QKeyEvent> pendingKeyEvents();
@@ -71,12 +73,17 @@ public:
     void appendKeyboardController(HKeyboardController controller);
     void removeKeyboardController(HKeyboardController controller);
 
+    void appendMouseController(HMouseController controller);
+    void removeMouseController(HMouseController controller);
+
     QVector<QAspectJobPtr> keyboardJobs();
 
 private:
     KeyboardControllerManager *m_keyboardControllerManager;
     KeyboardInputManager *m_keyboardInputManager;
+    MouseControllerManager *m_mouseControllerManager;
     QVector<HKeyboardController> m_activeKeyboardControllers;
+    QVector<HMouseController> m_activeMouseControllers;
     QObject *m_eventSource;
     KeyboardEventFilter *m_keyboardEventFilter;
     QList<QKeyEvent> m_pendingEvents;

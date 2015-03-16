@@ -41,6 +41,7 @@
 #include <Qt3DInput/private/handle_types_p.h>
 #include <Qt3DInput/private/keyboardcontroller_p.h>
 #include <Qt3DInput/private/keyboardinput_p.h>
+#include <Qt3DInput/private/mousecontroller_p.h>
 #include <Qt3DCore/private/qresourcemanager_p.h>
 
 QT_BEGIN_NAMESPACE
@@ -67,6 +68,16 @@ class KeyboardControllerManager : public QResourceManager<
 {
 public:
     KeyboardControllerManager() {}
+};
+
+class MouseControllerManager : public QResourceManager<
+        MouseController,
+        QNodeId,
+        8,
+        Qt3D::ArrayAllocatingPolicy>
+{
+public:
+    MouseControllerManager() {}
 };
 
 } // Input
