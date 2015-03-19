@@ -57,7 +57,6 @@ class Q_REMOTEOBJECTS_EXPORT QRemoteObjectRegistry : public QRemoteObjectReplica
 
 public:
     ~QRemoteObjectRegistry();
-    void initialize() Q_DECL_OVERRIDE;
 
     QRemoteObjectSourceLocations sourceLocations() const;
 
@@ -65,12 +64,13 @@ Q_SIGNALS:
     void remoteObjectAdded(const QRemoteObjectSourceLocation &entry);
     void remoteObjectRemoved(const QRemoteObjectSourceLocation &entry);
 
-public Q_SLOTS:
+protected Q_SLOTS:
     void addSource(const QRemoteObjectSourceLocation &entry);
     void removeSource(const QRemoteObjectSourceLocation &entry);
     void pushToRegistryIfNeeded();
 
 private:
+    void initialize() Q_DECL_OVERRIDE;
     explicit QRemoteObjectRegistry(QObject *parent = Q_NULLPTR);
     QRemoteObjectSourceLocations hostedSources;
 };
