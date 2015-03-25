@@ -43,26 +43,38 @@
 
 QT_BEGIN_NAMESPACE
 
-class QQuickControlsPrivate {
+class QQuickWindow;
+
+class QQuickControlsPrivateAttached : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(QQuickWindow* window READ window NOTIFY windowChanged)
 
 public:
+    QQuickControlsPrivateAttached(QObject* attachee);
 
-    inline static QObject *registerTooltipModule(QQmlEngine *engine, QJSEngine *jsEngine)
-    {
-        Q_UNUSED(engine);
-        Q_UNUSED(jsEngine);
-        return new QQuickTooltip();
-    }
+    QQuickWindow *window() const;
 
-    inline static QObject *registerSettingsModule(QQmlEngine *engine, QJSEngine *jsEngine)
-    {
-        Q_UNUSED(engine);
-        Q_UNUSED(jsEngine);
-        return new QQuickControlSettings(engine);
-    }
+Q_SIGNALS:
+    void windowChanged();
 
+private:
+    QQuickItem* m_attachee;
+};
+
+class QQuickControlsPrivate : public QObject
+{
+    Q_OBJECT
+
+public:
+    static QObject *registerTooltipModule(QQmlEngine *engine, QJSEngine *jsEngine);
+    static QObject *registerSettingsModule(QQmlEngine *engine, QJSEngine *jsEngine);
+
+    static QQuickControlsPrivateAttached *qmlAttachedProperties(QObject *object);
 };
 
 QT_END_NAMESPACE
+
+QML_DECLARE_TYPEINFO(QQuickControlsPrivate, QML_HAS_ATTACHED_PROPERTIES)
 
 #endif // QQUICKCONTROLSPRIVATE_P_H
