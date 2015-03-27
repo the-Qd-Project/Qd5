@@ -34875,6 +34875,7 @@ static void winLogIoerr(int nRetry){
 ** create a substitute.
 */
 /* #include <time.h> */
+#  if _WIN32_WCE < 0x800
 struct tm *__cdecl localtime(const time_t *t)
 {
   static struct tm y;
@@ -34896,6 +34897,7 @@ struct tm *__cdecl localtime(const time_t *t)
   y.tm_sec = pTm.wSecond;
   return &y;
 }
+#  endif
 #endif
 
 #define HANDLE_TO_WINFILE(a) (winFile*)&((char*)a)[-(int)offsetof(winFile,h)]
