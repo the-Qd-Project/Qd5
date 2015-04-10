@@ -36,9 +36,9 @@
 
 #include <QtQml/qqmlextensionplugin.h>
 
-#include <QtQuickCalendar/private/qquickabstractcalendarview_p.h>
-#include <QtQuickCalendar/private/qquickabstractdayofweekrow_p.h>
-#include <QtQuickCalendar/private/qquickabstractweeknumbercolumn_p.h>
+#include <QtQuickCalendar/private/qquickcalendarview_p.h>
+#include <QtQuickCalendar/private/qquickdayofweekrow_p.h>
+#include <QtQuickCalendar/private/qquickweeknumbercolumn_p.h>
 #include <QtQuickCalendar/private/qquickcalendarmodel_p.h>
 #include <QtQuickCalendar/private/qquickdayofweekmodel_p.h>
 #include <QtQuickCalendar/private/qquickmonthmodel_p.h>
@@ -57,9 +57,9 @@ public:
 
 void QtQuickCalendar2Plugin::registerTypes(const char *uri)
 {
-    qmlRegisterType<QQuickAbstractCalendarView>(uri, 2, 0, "AbstractCalendarView");
-    qmlRegisterType<QQuickAbstractDayOfWeekRow>(uri, 2, 0, "AbstractDayOfWeekRow");
-    qmlRegisterType<QQuickAbstractWeekNumberColumn>(uri, 2, 0, "AbstractWeekNumberColumn");
+    qmlRegisterType<QQuickCalendarView>(uri, 2, 0, "AbstractCalendarView");
+    qmlRegisterType<QQuickDayOfWeekRow>(uri, 2, 0, "AbstractDayOfWeekRow");
+    qmlRegisterType<QQuickWeekNumberColumn>(uri, 2, 0, "AbstractWeekNumberColumn");
     qmlRegisterType<QQuickCalendarModel>(uri, 2, 0, "CalendarModel");
     qmlRegisterType<QQuickDayOfWeekModel>(uri, 2, 0, "DayOfWeekModel");
     qmlRegisterType<QQuickMonthModel>(uri, 2, 0, "MonthModel");
