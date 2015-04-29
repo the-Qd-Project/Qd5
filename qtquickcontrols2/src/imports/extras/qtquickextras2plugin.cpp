@@ -37,6 +37,7 @@
 #include <QtQml/qqmlextensionplugin.h>
 
 #include <QtQuickExtras/private/qquickdrawer_p.h>
+#include <QtQuickExtras/private/qquickswipeview_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -52,6 +53,7 @@ public:
 void QtQuickExtras2Plugin::registerTypes(const char *uri)
 {
     qmlRegisterType<QQuickDrawer>(uri, 2, 0, "AbstractDrawer");
+    qmlRegisterType<QQuickSwipeView>(uri, 2, 0, "AbstractSwipeView");
 }
 
 QT_END_NAMESPACE
