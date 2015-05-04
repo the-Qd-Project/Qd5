@@ -27,54 +27,6 @@ class EcmaScriptDataModelPrivate;
 class SCXML_EXPORT EcmaScriptDataModel: public DataModel
 {
 public:
-    // TODO: move implementation to .cpp file.
-    class SCXML_EXPORT PlatformProperties: public QObject
-    {
-        Q_OBJECT
-
-        PlatformProperties &operator=(const PlatformProperties &) = delete;
-
-        PlatformProperties(QObject *parent)
-            : QObject(parent)
-            , m_table(0)
-        {}
-
-        Q_PROPERTY(QString marks READ marks CONSTANT)
-
-    public:
-        static PlatformProperties *create(QJSEngine *engine, StateTable *table)
-        {
-            PlatformProperties *pp = new PlatformProperties(engine);
-            pp->m_table = table;
-            pp->m_jsValue = engine->newQObject(pp);
-            return pp;
-        }
-
-        QJSEngine *engine() const { return qobject_cast<QJSEngine *>(parent()); }
-        StateTable *table() const { return m_table; }
-        QJSValue jsValue() const { return m_jsValue; }
-
-        QString marks() const
-        {
-            return QStringLiteral("the spot");
-        }
-
-        Q_INVOKABLE bool In(const QString &stateName)
-        {
-            foreach (QAbstractState *s, table()->configuration()) {
-                if (s->objectName() == stateName)
-                    return true;
-            }
-
-            return false;
-        }
-
-    private:
-        StateTable *m_table;
-        QJSValue m_jsValue;
-    };
-
-public:
     EcmaScriptDataModel(StateTable *table);
     ~EcmaScriptDataModel() Q_DECL_OVERRIDE;
 
@@ -82,10 +34,18 @@ public:
     void initializeDataFor(QState *state) Q_DECL_OVERRIDE;
     EvaluatorString createEvaluatorString(const QString &expr, const QString &context) Q_DECL_OVERRIDE;
     EvaluatorBool createEvaluatorBool(const QString &expr, const QString &context) Q_DECL_OVERRIDE;
-    StringPropertySetter createStringPropertySetter(const QString &propertyName) Q_DECL_OVERRIDE;
+    EvaluatorVariant createEvaluatorVariant(const QString &expr, const QString &context) Q_DECL_OVERRIDE;
+    EvaluatorVoid createScriptEvaluator(const QString &script, const QString &context) Q_DECL_OVERRIDE;
+    EvaluatorVoid createAssignmentEvaluator(const QString &dest, const QString &expr,
+                                            const QString &context) Q_DECL_OVERRIDE;
+    ForeachEvaluator createForeachEvaluator(const QString &array, const QString &item,
+                                            const QString &index, const QString &context) Q_DECL_OVERRIDE;
 
-    void assignEvent(const ScxmlEvent &event) Q_DECL_OVERRIDE;
-    QVariant propertyValue(const QString &name) const Q_DECL_OVERRIDE;
+    void setEvent(const ScxmlEvent &event) Q_DECL_OVERRIDE;
+
+    QVariant property(const QString &name) const Q_DECL_OVERRIDE;
+    bool hasProperty(const QString &name) const Q_DECL_OVERRIDE;
+    void setStringProperty(const QString &name, const QString &value) Q_DECL_OVERRIDE;
 
     QJSEngine *engine() const;
 
