@@ -60,8 +60,6 @@ TestCase {
         compare(control.value, 0)
         compare(control.visualPosition, 0)
         compare(control.indeterminate, false)
-        compare(control.layoutDirection, Qt.LeftToRight)
-        compare(control.effectiveLayoutDirection, Qt.LeftToRight)
         control.destroy()
     }
 
@@ -74,32 +72,6 @@ TestCase {
         compare(control.value, 0.0)
         control.value = 2.0
         compare(control.value, 1.0)
-        control.destroy()
-    }
-
-    function test_layoutDirection() {
-        var control = progressBar.createObject(testCase)
-
-        verify(!control.LayoutMirroring.enabled)
-        compare(control.layoutDirection, Qt.LeftToRight)
-        compare(control.effectiveLayoutDirection, Qt.LeftToRight)
-
-        control.layoutDirection = Qt.RightToLeft
-        compare(control.layoutDirection, Qt.RightToLeft)
-        compare(control.effectiveLayoutDirection, Qt.RightToLeft)
-
-        control.LayoutMirroring.enabled = true
-        compare(control.layoutDirection, Qt.RightToLeft)
-        compare(control.effectiveLayoutDirection, Qt.LeftToRight)
-
-        control.layoutDirection = Qt.LeftToRight
-        compare(control.layoutDirection, Qt.LeftToRight)
-        compare(control.effectiveLayoutDirection, Qt.RightToLeft)
-
-        control.LayoutMirroring.enabled = false
-        compare(control.layoutDirection, Qt.LeftToRight)
-        compare(control.effectiveLayoutDirection, Qt.LeftToRight)
-
         control.destroy()
     }
 
