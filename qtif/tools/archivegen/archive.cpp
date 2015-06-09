@@ -35,7 +35,7 @@
 
 #include <errors.h>
 #include <init.h>
-#include <lib7z_facade.h>
+#include <lib7z_create.h>
 #include <utils.h>
 
 #include <QCoreApplication>
@@ -43,7 +43,6 @@
 
 #include <iostream>
 
-using namespace Lib7z;
 using namespace QInstaller;
 
 static void printUsage()
