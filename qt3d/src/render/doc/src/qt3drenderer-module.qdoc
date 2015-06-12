@@ -59,6 +59,17 @@
     \endcode
 
     Classes, types, and functions are declared under the \l [Qt3DCore]{Qt3D} namespace.
+
+    \section1 Overview
+
+    The Qt3D Renderer aspect offers support for data-driven configuration as described
+    in \l {Qt3D Renderer Framegraph}.
+
+    \section1 Reference
+    \list
+    \li \l {Qt3D Renderer C++ Classes}
+    \li \l {Qt3D Examples}
+    \endlist
 */
 
 /*!
