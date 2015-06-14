@@ -35,13 +35,13 @@
 ****************************************************************************/
 
 #include "qquickgroupbox_p.h"
-#include "qquickcontainer_p_p.h"
+#include "qquickframe_p_p.h"
 
 QT_BEGIN_NAMESPACE
 
 /*!
     \qmltype GroupBox
-    \inherits Container
+    \inherits Frame
     \instantiates QQuickGroupBox
     \inqmlmodule QtQuick.Controls
     \ingroup containers
@@ -50,18 +50,17 @@ QT_BEGIN_NAMESPACE
     TODO
 */
 
-class QQuickGroupBoxPrivate : public QQuickContainerPrivate
+class QQuickGroupBoxPrivate : public QQuickFramePrivate
 {
 public:
-    QQuickGroupBoxPrivate() : label(Q_NULLPTR), frame(Q_NULLPTR) { }
+    QQuickGroupBoxPrivate() : label(Q_NULLPTR) { }
 
     QString title;
     QQuickItem *label;
-    QQuickItem *frame;
 };
 
 QQuickGroupBox::QQuickGroupBox(QQuickItem *parent) :
-    QQuickContainer(*(new QQuickGroupBoxPrivate), parent)
+    QQuickFrame(*(new QQuickGroupBoxPrivate), parent)
 {
 }
 
@@ -105,29 +104,6 @@ void QQuickGroupBox::setLabel(QQuickItem *label)
         if (label && !label->parentItem())
             label->setParentItem(this);
         emit labelChanged();
-    }
-}
-
-/*!
-    \qmlproperty Item QtQuickControls2::GroupBox::frame
-
-    TODO
-*/
-QQuickItem *QQuickGroupBox::frame() const
-{
-    Q_D(const QQuickGroupBox);
-    return d->frame;
-}
-
-void QQuickGroupBox::setFrame(QQuickItem *frame)
-{
-    Q_D(QQuickGroupBox);
-    if (d->frame != frame) {
-        delete d->frame;
-        d->frame = frame;
-        if (frame && !frame->parentItem())
-            frame->setParentItem(this);
-        emit frameChanged();
     }
 }
 
