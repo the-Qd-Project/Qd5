@@ -37,7 +37,7 @@
 import QtQuick 2.6
 import QtQuick.Controls 2.0
 
-AbstractButton {
+AbstractToolButton {
     id: control
 
     implicitWidth: Math.max(background ? background.implicitWidth : 0,
