@@ -38,10 +38,7 @@
 #define QCANBUSDEVICE_H
 
 #include <QtSerialBus/qserialbusdevice.h>
-#include <QtSerialBus/qserialbusbackend.h>
 #include <QtSerialBus/qcanframe.h>
-
-#include <QtCore/qpointer.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -52,6 +49,7 @@ class Q_SERIALBUS_EXPORT QCanBusDevice : public QSerialBusDevice
 {
     Q_OBJECT
     Q_DECLARE_PRIVATE(QCanBusDevice)
+    Q_DISABLE_COPY(QCanBusDevice)
 
 public:
     enum CanBusError {
