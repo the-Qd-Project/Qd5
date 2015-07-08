@@ -39,9 +39,10 @@
 
 #include <Qt3DCore/qt3dcore_global.h>
 #include <Qt3DCore/qray3d.h>
+#include <Qt3DCore/qcollisionqueryresult.h>
 #include "qopenglinformationservice.h"
 #include "qsysteminformationservice.h"
-#include "qabstractcollisionqueryservice.h"
+#include <Qt3DCore/qabstractcollisionqueryservice.h>
 
 QT_BEGIN_NAMESPACE
 
