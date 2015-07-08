@@ -48,13 +48,13 @@
 // We mean it.
 //
 
-#include <QtQuickControls/private/qquickbutton_p.h>
+#include <QtQuickControls/private/qquickabstractbutton_p.h>
 
 QT_BEGIN_NAMESPACE
 
 class QQuickCheckablePrivate;
 
-class Q_QUICKCONTROLS_EXPORT QQuickCheckable : public QQuickButton
+class Q_QUICKCONTROLS_EXPORT QQuickCheckable : public QQuickAbstractButton
 {
     Q_OBJECT
     Q_PROPERTY(bool checked READ isChecked WRITE setChecked NOTIFY checkedChanged FINAL)
