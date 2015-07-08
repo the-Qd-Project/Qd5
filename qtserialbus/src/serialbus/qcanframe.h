@@ -43,9 +43,10 @@
 
 QT_BEGIN_NAMESPACE
 
-//TODO: stream operator for this class
+class QDataStream;
+
 //TODO: review ctors for this class
-class QCanFrame
+class Q_SERIALBUS_EXPORT QCanFrame
 {
 public:
     class TimeStamp {
@@ -79,6 +80,11 @@ private:
 
 Q_DECLARE_TYPEINFO(QCanFrame, Q_MOVABLE_TYPE);
 Q_DECLARE_TYPEINFO(QCanFrame::TimeStamp, Q_PRIMITIVE_TYPE);
+
+#ifndef QT_NO_DATASTREAM
+Q_SERIALBUS_EXPORT QDataStream &operator<<(QDataStream &, const QCanFrame &);
+Q_SERIALBUS_EXPORT QDataStream &operator>>(QDataStream &, QCanFrame &);
+#endif
 
 QT_END_NAMESPACE
 
