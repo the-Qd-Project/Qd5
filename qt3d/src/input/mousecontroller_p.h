@@ -59,6 +59,8 @@ public:
     void addMouseInput(const QNodeId &input);
     void removeMouseInput(const QNodeId &input);
 
+    QVector<QNodeId> mouseInputs() const;
+
 protected:
     void sceneChangeEvent(const QSceneChangePtr &e) Q_DECL_OVERRIDE;
 
