@@ -63,9 +63,13 @@ public:
     };
     bool open(QIODevice::OpenMode) { return true; };
     void close() {};
-    void setConfigurationParameter(const QString&, const QVariant&) {};
-    QVariant configurationParameter(const QString&) const { return QVariant(); } ;
-    QVector<QString> configurationKeys() const { return QVector<QString>(); };
+    void setConfigurationParameter(const QString &key, const QVariant &param)
+    {
+        value = param;
+        keys.append(key);
+    };
+    QVariant configurationParameter(const QString&) const { return value; } ;
+    QVector<QString> configurationKeys() const { return keys; };
     qint64 write(const char*, qint64) { emit written(); return 72; };
     void setDataStreamVersion(int v){ version = v; };
     int dataStreamVersion() const { return version; };
@@ -76,6 +80,8 @@ signals:
 
 private:
     int version;
+    QVariant value;
+    QVector<QString> keys;
 };
 
 class tst_QCanBusDevice : public QObject
@@ -90,6 +96,7 @@ private slots:
     void write();
     void read();
     void version();
+    void error();
     void cleanupTestCase();
 
 private:
@@ -114,6 +121,10 @@ void tst_QCanBusDevice::initTestCase()
 void tst_QCanBusDevice::conf()
 {
     device->setConfigurationParameter(QStringLiteral("test"), 1);
+    QVariant value = device->configurationParameter("test");
+    QVector<QString> keys = device->configurationKeys();
+    QVERIFY(keys.count());
+    QCOMPARE(value.toInt(), 1);
 }
 
 void tst_QCanBusDevice::write()
@@ -143,6 +154,35 @@ void tst_QCanBusDevice::version()
     int version = 7;
     device->setDataStreamVersion(version);
     QCOMPARE(version, device->dataStreamVersion());
+}
+
+void tst_QCanBusDevice::error()
+{
+    QSignalSpy spy(device, SIGNAL(errorOccurred(CanBusError)));
+    QString testString(QStringLiteral("testString"));
+
+    //ReadError
+    emit backend->error(testString, 1);
+    QCOMPARE(testString, device->errorString());
+    QVERIFY(device->error() == 1);
+    QCOMPARE(spy.count(), 1);
+
+    //WriteError
+    emit backend->error(testString, 2);
+    QVERIFY(device->error() == 2);
+    QCOMPARE(spy.count(), 2);
+
+    //ConnectionError
+    emit backend->error(testString, 3);
+    QVERIFY(device->error() == 3);
+    QCOMPARE(spy.count(), 3);
+
+    //ConfigurationError
+    emit backend->error(testString, 4);
+    QVERIFY(device->error() == 4);
+    QCOMPARE(spy.count(), 4);
+
+    emit backend->error(testString, 5);
 }
 
 void tst_QCanBusDevice::cleanupTestCase()
