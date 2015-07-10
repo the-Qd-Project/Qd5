@@ -36,6 +36,7 @@
 
 #include <QtQml/qqmlextensionplugin.h>
 
+#include <QtQuickExtras/private/qquickdial_p.h>
 #include <QtQuickExtras/private/qquickdrawer_p.h>
 #include <QtQuickExtras/private/qquickswipeview_p.h>
 #include <QtQuickExtras/private/qquicktumbler_p.h>
@@ -53,6 +54,7 @@ public:
 
 void QtQuickExtras2Plugin::registerTypes(const char *uri)
 {
+    qmlRegisterType<QQuickDial>(uri, 2, 0, "AbstractDial");
     qmlRegisterType<QQuickDrawer>(uri, 2, 0, "AbstractDrawer");
     qmlRegisterType<QQuickSwipeView>(uri, 2, 0, "AbstractSwipeView");
     qmlRegisterType<QQuickTumbler>(uri, 2, 0, "AbstractTumbler");
