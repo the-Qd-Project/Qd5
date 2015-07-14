@@ -31,12 +31,11 @@
 **
 ****************************************************************************/
 
-#ifndef QQMLDEBUGSERVER_H
-#define QQMLDEBUGSERVER_H
+#ifndef QQMLDEBUGSERVER_P_H
+#define QQMLDEBUGSERVER_P_H
 
-#include <QtQml/qtqmlglobal.h>
-#include <private/qqmldebugserverconnection_p.h>
-#include <private/qqmldebugservice_p.h>
+#include <private/qqmldebugconnector_p.h>
+#include <private/qtqmlglobal_p.h>
 
 //
 //  W A R N I N G
@@ -51,44 +50,13 @@
 
 QT_BEGIN_NAMESPACE
 
-
-class QQmlDebugServerPrivate;
-class Q_QML_PRIVATE_EXPORT QQmlDebugServer : public QObject
+class Q_QML_PRIVATE_EXPORT QQmlDebugServer : protected QQmlDebugConnector
 {
     Q_OBJECT
-    Q_DECLARE_PRIVATE(QQmlDebugServer)
-    Q_DISABLE_COPY(QQmlDebugServer)
 public:
-
-    static QQmlDebugServer *instance();
-
-    bool blockingMode() const;
-
-    QQmlDebugService *service(const QString &name) const;
-
-    void addEngine(QQmlEngine *engine);
-    void removeEngine(QQmlEngine *engine);
-
-    bool addService(QQmlDebugService *service);
-    bool removeService(QQmlDebugService *service);
-
-    void receiveMessage(const QByteArray &message);
-
-    void sendMessages(QQmlDebugService *service, const QList<QByteArray> &messages);
-
-private slots:
-    void wakeEngine(QQmlEngine *engine);
-
-private:
-    friend class QQmlDebugServerThread;
-    friend struct QQmlDebugServerInstanceWrapper;
-    QQmlDebugServer();
-    Q_PRIVATE_SLOT(d_func(), void _q_changeServiceState(const QString &serviceName,
-                                                        QQmlDebugService::State state))
-    Q_PRIVATE_SLOT(d_func(), void _q_sendMessages(QList<QByteArray>))
-    Q_PRIVATE_SLOT(d_func(), void _q_removeThread())
+    virtual void receiveMessage(const QByteArray &message) = 0;
 };
 
 QT_END_NAMESPACE
 
-#endif // QQMLDEBUGSERVICE_H
+#endif // QQMLDEBUGSERVER_P_H
