@@ -46,22 +46,24 @@
 //
 
 #include "qqmldebugservice_p.h"
+#include "qqmldebugserviceinterfaces_p.h"
 
 #include <QtQml/qtqmlglobal.h>
 #include <QtCore/QList>
 
 QT_BEGIN_NAMESPACE
 
+namespace QmlJSDebugger { class AbstractViewInspector; }
 
 class QQmlInspectorInterface;
 
-class Q_QML_PRIVATE_EXPORT QQmlInspectorService : public QQmlDebugService
+class Q_QML_PRIVATE_EXPORT QQmlInspectorServiceImpl : public QQmlInspectorService
 {
     Q_OBJECT
 
 public:
-    QQmlInspectorService();
-    static QQmlInspectorService *instance();
+    QQmlInspectorServiceImpl();
+    static QQmlInspectorServiceImpl *instance();
 
     void addView(QObject *);
     void removeView(QObject *);
@@ -75,6 +77,7 @@ private Q_SLOTS:
     void updateState();
 
 private:
+    friend class QmlJSDebugger::AbstractViewInspector;
     void loadInspectorPlugins();
 
     QList<QObject*> m_views;
