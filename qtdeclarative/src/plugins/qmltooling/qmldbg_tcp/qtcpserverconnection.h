@@ -34,11 +34,10 @@
 #ifndef QTCPSERVERCONNECTION_H
 #define QTCPSERVERCONNECTION_H
 
-#include <private/qqmldebugserverconnection_p.h>
+#include "qqmldebugserverconnection.h"
 
 QT_BEGIN_NAMESPACE
 
-class QQmlDebugServer;
 class QTcpServerConnectionPrivate;
 class QTcpServerConnection : public QObject, public QQmlDebugServerConnection
 {
