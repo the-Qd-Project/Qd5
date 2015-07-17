@@ -67,6 +67,7 @@ public:
         PolygonOffset,
         ScissorTest,
         StencilTest,
+        StencilMask,
         StencilOp,
         ClipPlane
     };
