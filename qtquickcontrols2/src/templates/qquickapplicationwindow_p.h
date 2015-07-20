@@ -62,6 +62,7 @@ class Q_LABSTEMPLATES_EXPORT QQuickApplicationWindow : public QQuickWindowQmlImp
     Q_PROPERTY(QQmlListProperty<QObject> data READ contentData FINAL)
     Q_PROPERTY(QQuickItem *header READ header WRITE setHeader NOTIFY headerChanged FINAL)
     Q_PROPERTY(QQuickItem *footer READ footer WRITE setFooter NOTIFY footerChanged FINAL)
+    Q_PROPERTY(QQuickItem *overlay READ overlay CONSTANT FINAL)
     Q_CLASSINFO("DefaultProperty", "data")
 
 public:
@@ -76,6 +77,8 @@ public:
 
     QQuickItem *footer() const;
     void setFooter(QQuickItem *footer);
+
+    QQuickItem *overlay() const;
 
 Q_SIGNALS:
     void headerChanged();
