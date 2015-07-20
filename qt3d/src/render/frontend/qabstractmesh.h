@@ -39,6 +39,7 @@
 
 #include <Qt3DRenderer/qt3drenderer_global.h>
 #include <Qt3DCore/qcomponent.h>
+#include <Qt3DCore/qabstractfunctor.h>
 #include <QSharedPointer>
 
 QT_BEGIN_NAMESPACE
@@ -50,7 +51,7 @@ class QMeshData;
 
 typedef QSharedPointer<QMeshData> QMeshDataPtr;
 
-class QT3DRENDERERSHARED_EXPORT QAbstractMeshFunctor
+class QT3DRENDERERSHARED_EXPORT QAbstractMeshFunctor : public QAbstractFunctor
 {
 public:
     virtual QMeshDataPtr operator()() = 0;
