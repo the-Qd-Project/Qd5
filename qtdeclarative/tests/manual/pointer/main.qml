@@ -56,6 +56,7 @@ Window {
             addExample("pinch", "PinchHandler: scale, rotate and drag", Qt.resolvedUrl("pinchHandler.qml"))
             addExample("map", "scale and pan", Qt.resolvedUrl("map.qml"))
             addExample("custom map", "scale and pan", Qt.resolvedUrl("map2.qml"))
+            addExample("fling animation", "DragHandler: after dragging, use an animation to simulate momentum", Qt.resolvedUrl("flingAnimation.qml"))
         }
     }
 }
