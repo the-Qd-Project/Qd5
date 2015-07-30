@@ -58,6 +58,9 @@ public:
     QWaylandSurface *surface() const;
     void setSurface(QWaylandSurface *surface);
 
+    QWaylandOutput *output() const;
+    void setOutput(QWaylandOutput *output);
+
     virtual void setRequestedPosition(const QPointF &pos);
     virtual QPointF requestedPosition() const;
     virtual QPointF pos() const;
@@ -65,8 +68,13 @@ public:
     virtual void attach(const QWaylandBufferRef &ref);
     virtual bool advance();
     virtual QWaylandBufferRef currentBuffer();
+
+    bool lockedBuffer() const;
+    void setLockedBuffer(bool locked);
 protected:
     virtual void waylandSurfaceChanged(QWaylandSurface *newSurface, QWaylandSurface *oldSurface);
+    virtual void waylandSurfaceDestroyed();
+    virtual void waylandOutputChanged(QWaylandOutput *newOutput, QWaylandOutput *oldOutput);
 
 private:
     class QWaylandSurfaceViewPrivate *const d;
