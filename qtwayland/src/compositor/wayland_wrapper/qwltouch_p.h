@@ -39,77 +39,56 @@
 #define QTWAYLAND_QWLTOUCH_P_H
 
 #include <QtCompositor/qwaylandexport.h>
+#include <QtCompositor/QWaylandDestroyListener>
+#include <QtCompositor/QWaylandTouch>
+#include <QtCompositor/QWaylandInputDevice>
 
 #include <QtCore/QPoint>
-#include <QtCore/QObject>
+#include <QtCore/private/qobject_p.h>
 
 #include <QtCompositor/private/qwayland-server-wayland.h>
-
-#include "qwllistener_p.h"
 
 QT_BEGIN_NAMESPACE
 
 class QWaylandSurfaceView;
+class QWaylandCompositor;
 
-namespace QtWayland {
-
-class Compositor;
-class Surface;
-class Touch;
-
-class Q_COMPOSITOR_EXPORT TouchGrabber {
-public:
-    TouchGrabber();
-    virtual ~TouchGrabber();
-
-    virtual void down(uint32_t time, int touch_id, const QPointF &position) = 0;
-    virtual void up(uint32_t time, int touch_id) = 0;
-    virtual void motion(uint32_t time, int touch_id, const QPointF &position) = 0;
-
-    const Touch *touch() const;
-    Touch *touch();
-    void setTouch(Touch *touch);
-
-private:
-    Touch *m_touch;
-};
-
-class Q_COMPOSITOR_EXPORT Touch : public QObject, public QtWaylandServer::wl_touch, public TouchGrabber
+class Q_COMPOSITOR_EXPORT QWaylandTouchPrivate : public QObjectPrivate, public QtWaylandServer::wl_touch
 {
+    Q_DECLARE_PUBLIC(QWaylandTouch)
 public:
-    explicit Touch(Compositor *compositor);
+    explicit QWaylandTouchPrivate(QWaylandTouch *touch, QWaylandInputDevice *seat);
 
-    void setFocus(QWaylandSurfaceView *surface);
+    QWaylandCompositor *compositor() const { return m_seat->compositor(); }
 
-    void startGrab(TouchGrabber *grab);
+    void startGrab(QWaylandTouchGrabber *grab);
     void endGrab();
 
     void sendCancel();
     void sendFrame();
 
+    void sendTouchPoint(int id, const QPointF &point, Qt::TouchPointState state);
     void sendDown(int touch_id, const QPointF &position);
     void sendMotion(int touch_id, const QPointF &position);
     void sendUp(int touch_id);
 
-    void down(uint32_t time, int touch_id, const QPointF &position);
-    void up(uint32_t time, int touch_id);
-    void motion(uint32_t time, int touch_id, const QPointF &position);
+    void sendFullTouchEvent(QTouchEvent *event);
 
+    Resource *focusResource() const { return m_focusResource; }
 private:
     void focusDestroyed(void *data);
     void touch_destroy_resource(Resource *resource) Q_DECL_OVERRIDE;
     void touch_release(Resource *resource) Q_DECL_OVERRIDE;
 
-    Compositor *m_compositor;
+    QWaylandInputDevice *m_seat;
 
     QWaylandSurfaceView *m_focus;
     Resource *m_focusResource;
-    WlListener m_focusDestroyListener;
+    QWaylandDestroyListener m_focusDestroyListener;
 
-    TouchGrabber *m_grab;
+    QWaylandDefaultTouchGrabber m_defaultGrab;
+    QWaylandTouchGrabber *m_grab;
 };
-
-} // namespace QtWayland
 
 QT_END_NAMESPACE
 

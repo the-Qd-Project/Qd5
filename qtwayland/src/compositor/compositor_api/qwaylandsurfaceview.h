@@ -74,6 +74,8 @@ public:
 
     bool broadcastRequestedPositionChanged() const;
     void setBroadcastRequestedPositionChanged(bool broadcast);
+
+    struct wl_resource *surfaceResource() const;
 protected:
     virtual void waylandSurfaceChanged(QWaylandSurface *newSurface, QWaylandSurface *oldSurface);
     virtual void waylandSurfaceDestroyed();
