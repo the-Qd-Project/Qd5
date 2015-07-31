@@ -43,10 +43,22 @@
 
 QT_BEGIN_NAMESPACE
 
+class QModBusSlavePrivate;
+
 class Q_SERIALBUS_EXPORT QModBusSlave : public QObject
 {
     Q_OBJECT
+    Q_DECLARE_PRIVATE(QModBusSlave)
+
 public:
+    enum ModBusSlaveState {
+        UnconnectedState,
+        ConnectingState,
+        ConnectedState,
+        ClosingState
+    };
+    Q_ENUM(ModBusSlaveState)
+
     explicit QModBusSlave(QObject *parent = 0);
     virtual bool setMapping(int discreteInputMax,
                             int coilMax,
@@ -56,6 +68,13 @@ public:
     virtual void close() = 0;
     virtual int slaveId() const = 0;
     virtual void setSlaveId(int id) = 0;
+
+Q_SIGNALS:
+    void stateChanged(ModBusSlaveState state);
+
+protected:
+    void setState(ModBusSlaveState newState);
+
 };
 
 QT_END_NAMESPACE
