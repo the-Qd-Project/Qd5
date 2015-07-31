@@ -39,6 +39,7 @@
 
 #include <QtSerialBus/qserialbusglobal.h>
 #include <QtSerialBus/qmodbusslave.h>
+#include <QtSerialBus/qmodbusdevice.h>
 
 #include <QtCore/qobject.h>
 #include <QtCore/qiodevice.h>
