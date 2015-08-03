@@ -39,6 +39,7 @@
 
 #include <QtSerialBus/qserialbusglobal.h>
 #include <QtSerialBus/qmodbusslave.h>
+#include <QtSerialBus/qmodbusmaster.h>
 #include <QtSerialBus/qmodbusdevice.h>
 
 #include <QtCore/qobject.h>
@@ -55,6 +56,9 @@ public:
 
     QModBusSlave *createSlave(const QByteArray &plugin,
                                QIODevice *transport) const;
+
+    QModBusMaster *createMaster(const QByteArray &plugin,
+                                QIODevice *transport) const;
 
 private:
     QModBus(QObject *parent = 0);
