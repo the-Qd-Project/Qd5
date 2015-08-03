@@ -60,8 +60,8 @@ QModBusSlave::QModBusSlave(QObject *parent) :
 
 /*!
     \fn int QModBusSlave::slaveId()
-    Multiple Modbus devices can be connected together on the same physical link,
-    slave id will be used to filter received messages. Each slave should have unique id.
+    Multiple Modbus devices can be connected together on the same physical link.
+    Slave id will be used to filter received messages. Each slave should have unique id.
     Returns slave id.
 
     \sa setSlaveId()
@@ -69,8 +69,8 @@ QModBusSlave::QModBusSlave(QObject *parent) :
 
 /*!
     \fn void QModBusSlave::setSlaveId(int id)
-    Multiple Modbus devices can be connected together on the same physical link,
-    slave id will be used to filter received messages. Each slave should have unique id.
+    Multiple Modbus devices can be connected together on the same physical link.
+    Slave id will be used to filter received messages. Each slave should have unique id.
     Sets \a id as slave id.
 
     \sa slaveId()
