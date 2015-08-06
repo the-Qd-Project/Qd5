@@ -51,7 +51,8 @@ QT_BEGIN_NAMESPACE
     Constructs a QModBusReply object with \a parent.
  */
 QModBusReply::QModBusReply(QObject *parent) :
-    QObject(parent)
+    QObject(parent),
+    finish(false)
 {
 
 }
@@ -112,9 +113,9 @@ bool QModBusReply::isRunning() const
     Returns data units read/written if QModBusReply is finished.
     Otherwise returns empty QVector.
  */
-QVector<QModBusDataUnit> QModBusReply::result() const
+QList<QModBusDataUnit> QModBusReply::result() const
 {
-    return QVector<QModBusDataUnit>();
+    return payload;
 }
 
 QT_END_NAMESPACE
