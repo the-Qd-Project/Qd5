@@ -36,6 +36,7 @@
 
 #include <QtQml>
 #include <Qt3DCollision/qboxcollider.h>
+#include <Qt3DCollision/qcapsulecollider.h>
 #include <Qt3DCollision/qspherecollider.h>
 #include "qt3dquick3dcollisionplugin.h"
 
@@ -44,6 +45,7 @@ QT_BEGIN_NAMESPACE
 void Qt3DQuick3DCollisionPlugin::registerTypes(const char *uri)
 {
     qmlRegisterType<Qt3D::QBoxCollider>(uri, 2, 0, "BoxCollider");
+    qmlRegisterType<Qt3D::QCapsuleCollider>(uri, 2, 0, "CapsuleCollider");
     qmlRegisterType<Qt3D::QSphereCollider>(uri, 2, 0, "SphereCollider");
 }
 
