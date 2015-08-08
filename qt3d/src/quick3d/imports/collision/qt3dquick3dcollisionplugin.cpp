@@ -35,6 +35,7 @@
 ****************************************************************************/
 
 #include <QtQml>
+#include <Qt3DCollision/qabstractcollider.h>
 #include <Qt3DCollision/qboxcollider.h>
 #include <Qt3DCollision/qcapsulecollider.h>
 #include <Qt3DCollision/qgeometrycollider.h>
@@ -45,6 +46,7 @@ QT_BEGIN_NAMESPACE
 
 void Qt3DQuick3DCollisionPlugin::registerTypes(const char *uri)
 {
+    qmlRegisterUncreatableType<Qt3D::QAbstractCollider>(uri, 2, 0, "AbstractCollider", "AbstractColliders are only used for references");
     qmlRegisterType<Qt3D::QBoxCollider>(uri, 2, 0, "BoxCollider");
     qmlRegisterType<Qt3D::QCapsuleCollider>(uri, 2, 0, "CapsuleCollider");
     qmlRegisterType<Qt3D::QGeometryCollider>(uri, 2, 0, "GeometryCollider");
