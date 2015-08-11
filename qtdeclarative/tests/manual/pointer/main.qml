@@ -52,6 +52,7 @@ Window {
         Component.onCompleted: {
             addExample("joystick", "DragHandler: move one item inside another with any pointing device", Qt.resolvedUrl("joystick.qml"))
             addExample("mixer", "mixing console", Qt.resolvedUrl("mixer.qml"))
+            addExample("pinch", "PinchHandler: scale, rotate and drag", Qt.resolvedUrl("pinchHandler.qml"))
         }
     }
 }
