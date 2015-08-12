@@ -38,6 +38,7 @@
 
 #ifndef QT_OPENGL_ES_2
 #include <QOpenGLFunctions_3_2_Core>
+#include <QOpenGLFunctions_3_3_Core>
 #include <QtOpenGLExtensions/qopenglextensions.h>
 #include <Qt3DRenderer/private/renderlogging_p.h>
 #include <private/attachmentpack_p.h>
@@ -57,7 +58,6 @@ QGraphicsHelperGL3::QGraphicsHelperGL3()
 void QGraphicsHelperGL3::initializeHelper(QOpenGLContext *context,
                                           QAbstractOpenGLFunctions *functions)
 {
-    Q_UNUSED(context);
     m_funcs = static_cast<QOpenGLFunctions_3_2_Core*>(functions);
     const bool ok = m_funcs->initializeOpenGLFunctions();
     Q_ASSERT(ok);
@@ -221,6 +221,7 @@ void QGraphicsHelperGL3::vertexAttribDivisor(GLuint index, GLuint divisor)
 {
     Q_UNUSED(index);
     Q_UNUSED(divisor);
+    qCWarning(Render::Rendering) << "Vertex attribute divisor not available with OpenGL 3.2 core";
 }
 
 void QGraphicsHelperGL3::blendEquation(GLenum mode)
