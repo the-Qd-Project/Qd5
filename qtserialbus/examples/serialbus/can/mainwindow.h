@@ -41,16 +41,16 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QCanBusDevice>
+#include <QCanBusDevice> // for CanBusError
 
 #include <QMainWindow>
-#include <QPointer>
 
 QT_BEGIN_NAMESPACE
-class QSerialBusBackend;
-class QCanBus;
-class QSerialBusDevice;
+class QLabel;
+
 class QCanBusFrame;
+
+class SettingsDialog;
 
 namespace Ui {
 class MainWindow;
@@ -68,23 +68,21 @@ public:
     ~MainWindow();
 
 private Q_SLOTS:
-
     void checkMessages();
-    void on_sendButton_clicked() const;
+    void sendMessage() const;
     void receiveError(QCanBusDevice::CanBusError) const;
-    void on_connectButton_clicked();
-    void on_pluginBox_activated(int index);
+    void connectDevice();
+    void disconnectDevice();
 
 private:
-    void init();
-    void connectDevice(int pluginIndex);
-    void interpretError(QString&, const QCanBusFrame&);
+    void showStatusMessage(const QString &message);
+    void initActionsConnections();
+    void interpretError(QString &, const QCanBusFrame &);
 
-    QPointer<QCanBusDevice> canDevice;
-    QString deviceName;
-    QList<QByteArray> plugins;
-
-    Ui::MainWindow *ui;
+    Ui::MainWindow *m_ui;
+    QLabel *m_status;
+    SettingsDialog *m_settings;
+    QCanBusDevice *m_canDevice;
 };
 
 #endif // MAINWINDOW_H
