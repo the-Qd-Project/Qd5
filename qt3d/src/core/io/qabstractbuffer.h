@@ -50,16 +50,12 @@ class QAbstractBufferPrivate;
 class QT3DCORESHARED_EXPORT QAbstractBuffer : public QNode
 {
     Q_OBJECT
-    Q_PROPERTY(QByteArray data READ data WRITE setData NOTIFY dataChanged)
 public:
     QAbstractBuffer(QNode *parent = 0);
     virtual ~QAbstractBuffer();
 
-    virtual void setData(const QByteArray &bytes);
+    void setData(const QByteArray &bytes);
     QByteArray data() const;
-
-    // TO DO: Add a functor here so that we can create CPU side buffer data
-    // in parallel with QAspectJobs
 
 protected:
     QAbstractBuffer(QAbstractBufferPrivate &dd, QNode *parent = 0);
