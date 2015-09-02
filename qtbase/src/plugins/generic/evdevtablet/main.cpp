@@ -32,7 +32,7 @@
 ****************************************************************************/
 
 #include <QtGui/qgenericplugin.h>
-#include <QtPlatformSupport/private/qevdevtablet_p.h>
+#include <QtPlatformSupport/private/qevdevtabletmanager_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -44,7 +44,6 @@ class QEvdevTabletPlugin : public QGenericPlugin
 public:
     QEvdevTabletPlugin();
 
-    QStringList keys() const;
     QObject* create(const QString &key, const QString &specification) Q_DECL_OVERRIDE;
 };
 
@@ -52,16 +51,11 @@ QEvdevTabletPlugin::QEvdevTabletPlugin()
 {
 }
 
-QStringList QEvdevTabletPlugin::keys() const
-{
-    return QStringList() << "EvdevTablet";
-}
-
-QObject *QEvdevTabletPlugin::create(const QString &key,
+QObject* QEvdevTabletPlugin::create(const QString &key,
                                     const QString &spec)
 {
     if (!key.compare(QLatin1String("EvdevTablet"), Qt::CaseInsensitive))
-        return new QEvdevTabletHandlerThread(spec);
+        return new QEvdevTabletManager(key, spec);
 
     return 0;
 }
