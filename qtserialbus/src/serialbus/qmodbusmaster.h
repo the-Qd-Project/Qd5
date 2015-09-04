@@ -51,7 +51,7 @@ class Q_SERIALBUS_EXPORT QModBusMaster : public QModBusDevice
     Q_OBJECT
 public:
 
-    explicit QModBusMaster(QModBusDevice *parent = 0);
+    explicit QModBusMaster(QObject *parent = 0);
 
     virtual QModBusReply *write(const QModBusDataUnit &request, int slaveId = 1) = 0;
     virtual QModBusReply *write(const QList<QModBusDataUnit> &requests, int slaveId = 1) = 0;
