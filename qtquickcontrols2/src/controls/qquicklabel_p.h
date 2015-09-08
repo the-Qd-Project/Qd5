@@ -58,16 +58,21 @@ class QQuickLabelPrivate;
 class Q_QUICKCONTROLS_EXPORT QQuickLabel : public QQuickText
 {
     Q_OBJECT
+    Q_PROPERTY(QFont font READ font WRITE setFont NOTIFY fontChanged) // override
     Q_PROPERTY(QQuickItem *background READ background WRITE setBackground NOTIFY backgroundChanged FINAL)
 
 public:
     explicit QQuickLabel(QQuickItem *parent = Q_NULLPTR);
     ~QQuickLabel();
 
+    QFont font() const;
+    void setFont(const QFont &font);
+
     QQuickItem *background() const;
     void setBackground(QQuickItem *background);
 
 Q_SIGNALS:
+    void fontChanged();
     void backgroundChanged();
 
 protected:
@@ -76,7 +81,6 @@ protected:
 private:
     Q_DISABLE_COPY(QQuickLabel)
     Q_DECLARE_PRIVATE(QQuickLabel)
-    QScopedPointer<QQuickLabelPrivate> d_ptr;
 };
 
 Q_DECLARE_TYPEINFO(QQuickLabel, Q_COMPLEX_TYPE);
