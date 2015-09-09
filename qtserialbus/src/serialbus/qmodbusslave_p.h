@@ -38,7 +38,7 @@
 #define QMODBUSSLAVE_P_H
 
 #include "qmodbusslave.h"
-#include "QtCore/private/qobject_p.h"
+#include "qmodbusdevice_p.h"
 
 //
 //  W A R N I N G
@@ -53,7 +53,7 @@
 
 QT_BEGIN_NAMESPACE
 
-class QModBusSlavePrivate : public QObjectPrivate
+class QModBusSlavePrivate : public QModBusDevicePrivate
 {
     Q_DECLARE_PUBLIC(QModBusSlave)
 public:
