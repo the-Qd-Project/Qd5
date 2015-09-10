@@ -68,6 +68,11 @@ bool DummySlave::setMap(QModBusDevice::ModBusTable table, quint16 size)
     return true;
 }
 
+bool DummySlave::setMap(const QModBusRegister &/*newRegister*/)
+{
+    return false;
+}
+
 void DummySlave::setSlaveId(int id)
 {
     Q_UNUSED(id);
