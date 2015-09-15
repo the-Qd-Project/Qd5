@@ -48,6 +48,8 @@ T.TabButton {
 
     padding: 6
 
+    font.pointSize: 10
+
     //! [label]
     label: Text {
         x: control.leftPadding
@@ -56,7 +58,7 @@ T.TabButton {
         height: control.availableHeight
 
         text: control.text
-        font.pointSize: 10
+        font: control.font
         elide: Text.ElideRight
         color: !control.enabled ? control.Theme.disabledColor : control.pressed ? control.Theme.accentColor : control.Theme.textColor
         horizontalAlignment: Text.AlignHCenter
