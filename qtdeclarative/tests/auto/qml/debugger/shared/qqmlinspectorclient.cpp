@@ -34,6 +34,8 @@
 #include "qqmlinspectorclient.h"
 #include "qdatastream.h"
 
+#include <QtCore/qdebug.h>
+
 void QQmlInspectorClient::setShowAppOnTop(bool showOnTop)
 {
     QByteArray message;
