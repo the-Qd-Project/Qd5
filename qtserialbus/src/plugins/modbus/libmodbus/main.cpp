@@ -34,8 +34,10 @@
 **
 ****************************************************************************/
 
-#include "libmodbusslave.h"
 #include "libmodbusmaster.h"
+#include "libmodbusslave.h"
+#include "libmodbustcpclient.h"
+#include "libmodbustcpserver.h"
 
 #include <QtSerialBus/qmodbus.h>
 #include <QtSerialBus/qmodbusfactory.h>
@@ -51,16 +53,23 @@ class ModBusPlugin : public QObject, public QModBusFactory
     Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QModBusFactory" FILE "plugin.json")
     Q_INTERFACES(QModBusFactory)
 
-
 public:
-    QModBusSlave *createSlave() const
+    QModBusSlave *createSlave(QModBusDevice::ModBusConnection type) const
     {
-        return new LibModBusSlave();
+        if (type == QModBusDevice::Serial)
+            return new LibModBusSlave();
+        if (type == QModBusDevice::Tcp)
+            return new LibModBusTcpServer();
+        return Q_NULLPTR;
     }
 
-    QModBusMaster *createMaster() const
+    QModBusMaster *createMaster(QModBusDevice::ModBusConnection type) const
     {
-        return new LibModBusMaster();
+        if (type == QModBusDevice::Serial)
+            return new LibModBusMaster();
+        if (type == QModBusDevice::Tcp)
+            return new LibModBusTcpClient();
+        return Q_NULLPTR;
     }
 };
 
