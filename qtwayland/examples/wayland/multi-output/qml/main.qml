@@ -42,31 +42,62 @@ import QtQuick 2.0
 import QtWayland.Compositor 1.0
 
 WaylandCompositor {
-    id: compositor
+    id: comp
 
-    Component {
-        id: screenComponent
-        Screen { }
+    defaultOutput: shellScreen
+    ShellScreen {
+        id: shellScreen
+        compositor: comp
+    }
+
+    GridScreen {
+        id: gridScreen
+        compositor: comp
     }
 
     Component {
         id: chromeComponent
-        Chrome { }
+        ShellChrome {
+        }
     }
 
-    exposeDefaultShell: true
-
-    Component.onCompleted: {
-        addScreen();
+    Component {
+        id: surfaceComponent
+        WaylandSurface {
+            id: surface
+            onMappedChanged: {
+                if (isMapped && !cursorSurface) {
+                    gridScreen.gridSurfaces.append( { "gridSurface" : surface } );
+                } else {
+                    for (var i = 0; i < gridScreen.gridSurfaces.count; i++) {
+                        if (gridScreen.gridSurfaces.get(i).gridSurface === surface) {
+                            gridScreen.gridSurfaces.remove(i,1);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
     }
 
-    function addScreen() {
-        var screen = screenComponent.createObject(0, { "compositor" : compositor } );
-        var output = compositor.primaryOutputSpace.addOutputWindow(screen);
-        output.automaticFrameCallbacks = true;
-    }
+    extensions: [
+        Shell {
+            id: defaultShell
 
-    onSurfaceCreated: {
-       var chrome = chromeComponent.createObject(surface.primaryOutput.window.surfacesArea, { "surface" : surface } );
+            onCreateShellSurface: {
+                var item = chromeComponent.createObject(defaultOutput.surfaceArea, { "surface": surface } );
+                item.shellSurface.initialize(defaultShell, surface, client, id);
+                item.surface
+            }
+
+            Component.onCompleted: {
+                initialize();
+            }
+        }
+    ]
+
+    onCreateSurface: {
+        var surface = surfaceComponent.createObject(comp, { } );
+        surface.initialize(comp, client, id, version);
     }
 }
