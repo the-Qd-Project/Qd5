@@ -34,7 +34,7 @@
 #ifndef QBB10BRIGHTSTYLE_H
 #define QBB10BRIGHTSTYLE_H
 
-#include "qpixmapstyle.h"
+#include <QPixmapStyle>
 
 QT_BEGIN_NAMESPACE
 
