@@ -59,6 +59,7 @@ public:
     virtual void connectDevice(const QHostAddress &address, quint16 port = 502) = 0;
 
 private:
+    using QModBusDevice::connectDevice;
     QModBusTcpClient(QModBusTcpClientPrivate &dd, QObject *parent = Q_NULLPTR);
 };
 
