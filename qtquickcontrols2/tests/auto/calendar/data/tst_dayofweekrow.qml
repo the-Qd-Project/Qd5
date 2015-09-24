@@ -71,4 +71,15 @@ TestCase {
 
         control.destroy()
     }
+
+    function test_font() {
+        var control = component.createObject(testCase)
+
+        verify(control.contentItem.children[0])
+
+        control.font.pixelSize = 123
+        compare(control.contentItem.children[0].font.pixelSize, 123)
+
+        control.destroy()
+    }
 }
