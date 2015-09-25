@@ -38,6 +38,7 @@
 
 #ifndef QT_OPENGL_ES_2
 #include <QOpenGLFunctions_3_2_Core>
+#include <QOpenGLFunctions_3_3_Core>
 #include <QtOpenGLExtensions/qopenglextensions.h>
 #include <Qt3DRenderer/private/renderlogging_p.h>
 #include <private/attachmentpack_p.h>
@@ -57,7 +58,6 @@ QGraphicsHelperGL3::QGraphicsHelperGL3()
 void QGraphicsHelperGL3::initializeHelper(QOpenGLContext *context,
                                           QAbstractOpenGLFunctions *functions)
 {
-    Q_UNUSED(context);
     m_funcs = static_cast<QOpenGLFunctions_3_2_Core*>(functions);
     const bool ok = m_funcs->initializeOpenGLFunctions();
     Q_ASSERT(ok);
@@ -221,6 +221,7 @@ void QGraphicsHelperGL3::vertexAttribDivisor(GLuint index, GLuint divisor)
 {
     Q_UNUSED(index);
     Q_UNUSED(divisor);
+    qCWarning(Render::Rendering) << "Vertex attribute divisor not available with OpenGL 3.2 core";
 }
 
 void QGraphicsHelperGL3::blendEquation(GLenum mode)
@@ -326,6 +327,8 @@ bool QGraphicsHelperGL3::supportsFeature(QGraphicsHelperInterface::Feature featu
     case MRT:
     case UniformBufferObject:
     case PrimitiveRestart:
+    case RenderBufferDimensionRetrieval:
+    case TextureDimensionRetrieval:
         return true;
     case Tessellation:
         return !m_tessFuncs.isNull();
@@ -890,6 +893,32 @@ void QGraphicsHelperGL3::enablePrimitiveRestart(int primitiveRestartIndex)
 void QGraphicsHelperGL3::disablePrimitiveRestart()
 {
     m_funcs->glDisable(GL_PRIMITIVE_RESTART);
+}
+
+QSize QGraphicsHelperGL3::getRenderBufferDimensions(GLuint renderBufferId)
+{
+    GLint width = 0;
+    GLint height = 0;
+
+    m_funcs->glBindRenderbuffer(GL_RENDERBUFFER, renderBufferId);
+    m_funcs->glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &width);
+    m_funcs->glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &height);
+    m_funcs->glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
+    return QSize(width, height);
+}
+
+QSize QGraphicsHelperGL3::getTextureDimensions(GLuint textureId, GLenum target, uint level)
+{
+    GLint width = 0;
+    GLint height = 0;
+
+    m_funcs->glBindTexture(target, textureId);
+    m_funcs->glGetTexLevelParameteriv(target, level, GL_TEXTURE_WIDTH, &width);
+    m_funcs->glGetTexLevelParameteriv(target, level, GL_TEXTURE_HEIGHT, &height);
+    m_funcs->glBindTexture(target, 0);
+
+    return QSize(width, height);
 }
 
 } // Render
