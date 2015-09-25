@@ -34,6 +34,8 @@
 **
 ****************************************************************************/
 
+// FIXME: rename to QTextToSpeechEngine
+
 #ifndef QTEXTTOSPEECHPLUGINENGINE_H
 #define QTEXTTOSPEECHPLUGINENGINE_H
 
