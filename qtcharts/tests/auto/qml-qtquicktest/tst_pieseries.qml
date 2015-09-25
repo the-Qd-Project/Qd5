@@ -18,7 +18,7 @@
 
 import QtQuick 2.0
 import QtTest 1.0
-import QtCharts 2.0
+import QtCharts 2.1
 
 Rectangle {
     width: 400
