@@ -35,6 +35,7 @@
 #define QQUICKWAYLANDSURFACE_H
 
 #include <QtCompositor/qwaylandsurface.h>
+#include <QtCompositor/qwaylandbufferref.h>
 
 struct wl_client;
 
@@ -45,6 +46,8 @@ class QSGTexture;
 class QWaylandSurfaceItem;
 class QWaylandQuickSurfacePrivate;
 class QWaylandQuickCompositor;
+class QWaylandQuickSurface;
+class QWaylandTextureBufferAttacher;
 
 class Q_COMPOSITOR_EXPORT QWaylandQuickSurface : public QWaylandSurface
 {
@@ -66,6 +69,8 @@ public:
     void setClientRenderingEnabled(bool enabled);
 
     QObject *windowPropertyMap() const;
+
+    QWaylandTextureBufferAttacher *textureBufferAttacher() const;
 
 private:
     bool event(QEvent *event) Q_DECL_OVERRIDE;
