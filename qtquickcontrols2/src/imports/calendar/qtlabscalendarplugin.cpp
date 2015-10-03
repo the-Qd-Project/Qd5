@@ -40,6 +40,7 @@
 #include "qquickmonthgrid_p.h"
 #include "qquickweeknumbercolumn_p.h"
 #include "qquickcalendarmodel_p.h"
+#include "qquickcalendar_p.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -52,12 +53,20 @@ public:
     void registerTypes(const char *uri);
 };
 
+static QObject *calendarSingleton(QQmlEngine *engine, QJSEngine *scriptEngine)
+{
+    Q_UNUSED(engine);
+    Q_UNUSED(scriptEngine);
+    return new QQuickCalendar;
+}
+
 void QtLabsCalendarPlugin::registerTypes(const char *uri)
 {
     qmlRegisterType<QQuickDayOfWeekRow>(uri, 1, 0, "AbstractDayOfWeekRow");
     qmlRegisterType<QQuickMonthGrid>(uri, 1, 0, "AbstractMonthGrid");
     qmlRegisterType<QQuickWeekNumberColumn>(uri, 1, 0, "AbstractWeekNumberColumn");
     qmlRegisterType<QQuickCalendarModel>(uri, 1, 0, "CalendarModel");
+    qmlRegisterSingletonType<QQuickCalendar>(uri, 1, 0, "Calendar", calendarSingleton);
 }
 
 QT_END_NAMESPACE
