@@ -56,10 +56,13 @@ QT_BEGIN_NAMESPACE
 class QModbusServerPrivate : public QModbusDevicePrivate
 {
     Q_DECLARE_PUBLIC(QModbusServer)
+
 public:
     QModbusServerPrivate()
     {
     }
+
+    QModbusResponse processRequest(const QModbusPdu &request);
 };
 
 QT_END_NAMESPACE
