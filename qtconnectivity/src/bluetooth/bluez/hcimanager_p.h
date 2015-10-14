@@ -59,6 +59,7 @@ class HciManager : public QObject
 public:
     enum HciEvent {
         EncryptChangeEvent = EVT_ENCRYPT_CHANGE,
+        CommandCompleteEvent = EVT_CMD_COMPLETE,
     };
 
     explicit HciManager(const QBluetoothAddress &deviceAdapter, QObject *parent = 0);
@@ -66,12 +67,13 @@ public:
 
     bool isValid() const;
     bool monitorEvent(HciManager::HciEvent event);
+    bool sendCommand(OpCodeGroupField ogf, OpCodeCommandField ocf, const QByteArray &parameters);
     void stopEvents();
     QBluetoothAddress addressForConnectionHandle(quint16 handle) const;
 
-
 signals:
     void encryptionChangedEvent(const QBluetoothAddress &address, bool wasSuccess);
+    void commandCompleted(quint16 opCode, quint8 status, const QByteArray &data);
 
 private slots:
     void _q_readNotify();
