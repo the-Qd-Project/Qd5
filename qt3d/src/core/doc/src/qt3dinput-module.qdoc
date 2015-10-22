@@ -49,6 +49,14 @@
 */
 
 /*!
+    \namespace Qt3DInput
+    \inmodule Qt3DInput
+    \ingroup qt3d-namespaces
+
+    \brief Contains classes that enable user input.
+*/
+
+/*!
    \qmlmodule Qt3D.Input 2.0
    \title Qt3D Input QML Types
    \ingroup qmlmodules
