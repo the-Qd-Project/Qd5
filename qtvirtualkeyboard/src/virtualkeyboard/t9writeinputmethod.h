@@ -37,26 +37,26 @@ public:
     explicit T9WriteInputMethod(QObject *parent = 0);
     ~T9WriteInputMethod();
 
-    QList<DeclarativeInputEngine::InputMode> inputModes(const QString &locale);
-    bool setInputMode(const QString &locale, DeclarativeInputEngine::InputMode inputMode);
-    bool setTextCase(DeclarativeInputEngine::TextCase textCase);
+    QList<InputEngine::InputMode> inputModes(const QString &locale);
+    bool setInputMode(const QString &locale, InputEngine::InputMode inputMode);
+    bool setTextCase(InputEngine::TextCase textCase);
 
     bool keyEvent(Qt::Key key, const QString &text, Qt::KeyboardModifiers modifiers);
 
     void reset();
     void update();
 
-    QList<DeclarativeSelectionListModel::Type> selectionLists();
-    int selectionListItemCount(DeclarativeSelectionListModel::Type type);
-    QVariant selectionListData(DeclarativeSelectionListModel::Type type, int index, int role);
-    void selectionListItemSelected(DeclarativeSelectionListModel::Type type, int index);
+    QList<SelectionListModel::Type> selectionLists();
+    int selectionListItemCount(SelectionListModel::Type type);
+    QVariant selectionListData(SelectionListModel::Type type, int index, int role);
+    void selectionListItemSelected(SelectionListModel::Type type, int index);
 
-    QList<DeclarativeInputEngine::PatternRecognitionMode> patternRecognitionModes() const;
-    DeclarativeTrace *traceBegin(int traceId, DeclarativeInputEngine::PatternRecognitionMode patternRecognitionMode,
-                                 const QVariantMap &traceCaptureDeviceInfo, const QVariantMap &traceScreenInfo);
-    bool traceEnd(DeclarativeTrace *trace);
+    QList<InputEngine::PatternRecognitionMode> patternRecognitionModes() const;
+    Trace *traceBegin(int traceId, InputEngine::PatternRecognitionMode patternRecognitionMode,
+                      const QVariantMap &traceCaptureDeviceInfo, const QVariantMap &traceScreenInfo);
+    bool traceEnd(Trace *trace);
 
-    bool reselect(int cursorPosition, const DeclarativeInputEngine::ReselectFlags &reselectFlags);
+    bool reselect(int cursorPosition, const InputEngine::ReselectFlags &reselectFlags);
 
 protected:
     void timerEvent(QTimerEvent *timerEvent);
