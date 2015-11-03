@@ -35,7 +35,6 @@
 #define QPACKETPROTOCOL_P_H
 
 #include <QtCore/qobject.h>
-#include <private/qpacket_p.h>
 
 //
 //  W A R N I N G
@@ -60,9 +59,9 @@ class QPacketProtocol : public QObject
 public:
     explicit QPacketProtocol(QIODevice *dev, QObject *parent = 0);
 
-    void send(const QPacket &);
+    void send(const QByteArray &data);
     qint64 packetsAvailable() const;
-    QPacket read();
+    QByteArray read();
     bool waitForReadyRead(int msecs = 3000);
 
 Q_SIGNALS:
