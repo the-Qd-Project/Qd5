@@ -58,9 +58,10 @@ class Q_QML_PRIVATE_EXPORT QQmlAbstractProfilerAdapter : public QObject, public 
     Q_OBJECT
 
 public:
-    QQmlAbstractProfilerAdapter(QQmlProfilerService *service) :
-        service(service), waiting(true), featuresEnabled(0) {}
+    QQmlAbstractProfilerAdapter(QObject *parent = 0) :
+        QObject(parent), service(0), waiting(true), featuresEnabled(0) {}
     virtual ~QQmlAbstractProfilerAdapter() {}
+    void setService(QQmlProfilerService *new_service) { service = new_service; }
 
     virtual qint64 sendMessages(qint64 until, QList<QByteArray> &messages) = 0;
 
@@ -95,6 +96,15 @@ private:
     bool waiting;
     quint64 featuresEnabled;
 };
+
+class Q_QML_PRIVATE_EXPORT QQmlAbstractProfilerAdapterFactory : public QObject
+{
+    Q_OBJECT
+public:
+    virtual QQmlAbstractProfilerAdapter *create(const QString &key) = 0;
+};
+
+#define QQmlAbstractProfilerAdapterFactory_iid "org.qt-project.Qt.QQmlAbstractProfilerAdapterFactory"
 
 QT_END_NAMESPACE
 
