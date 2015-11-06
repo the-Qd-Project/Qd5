@@ -70,6 +70,11 @@ public:
 
     QVector<Qt3DCore::QAspectJobPtr> jobsToExecute(qint64 time) Q_DECL_OVERRIDE;
 
+    const QSize &surfaceSize() const;
+    void setSurfaceSize(const QSize &s);
+    qreal devicePixelRatio() const;
+    void setDevicePixelRatio(qreal r);
+
 protected:
     void registerBackendTypes();
     QRenderAspect(QRenderAspectPrivate &dd, QObject *parent);
