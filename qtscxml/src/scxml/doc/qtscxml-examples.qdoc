@@ -17,14 +17,11 @@
  ****************************************************************************/
 
 /*!
-
 \group examples-qtscxml
-\title Qt Scxml Examples
-\brief Examples for the Qt Scxml module.
+\title Qt SCXML Examples
+\brief Examples for the Qt SCXML module.
 \ingroup all-examples
 
 Here is a list of example applications demonstrating the functionality
-provided by the \l{Qt Scxml} module.
-
-\note TODO.
+provided by the \l{Qt SCXML} module.
 */
