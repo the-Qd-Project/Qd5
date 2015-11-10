@@ -50,9 +50,12 @@ class QModbusReply;
 
 namespace Ui {
 class MainWindow;
+class SettingsDialog;
 }
 
 QT_END_NAMESPACE
+
+class SettingsDialog;
 
 class MainWindow : public QMainWindow
 {
@@ -61,6 +64,9 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+
+private:
+    void initActions();
 
 private slots:
     void on_connectButton_clicked();
@@ -80,6 +86,7 @@ private:
     Ui::MainWindow *ui;
     QModbusReply* lastRequest;
     QModbusClient* modbusDevice;
+    SettingsDialog *m_settingsDialog;
 };
 
 #endif // MAINWINDOW_H
