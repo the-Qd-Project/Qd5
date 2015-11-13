@@ -56,6 +56,7 @@ class SettingsDialog;
 QT_END_NAMESPACE
 
 class SettingsDialog;
+class WriteRegisterModel;
 
 class MainWindow : public QMainWindow
 {
@@ -78,8 +79,6 @@ private slots:
     void on_writeButton_clicked();
     void writeReady();
 
-    void on_writeTable_currentIndexChanged(const QString &arg1);
-
     void on_connectType_currentIndexChanged(int);
 
 private:
@@ -87,6 +86,7 @@ private:
     QModbusReply* lastRequest;
     QModbusClient* modbusDevice;
     SettingsDialog *m_settingsDialog;
+    WriteRegisterModel *writeModel;
 };
 
 #endif // MAINWINDOW_H
