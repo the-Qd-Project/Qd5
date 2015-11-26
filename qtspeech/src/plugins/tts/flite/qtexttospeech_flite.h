@@ -37,62 +37,18 @@
 #ifndef QTEXTTOSPEECHENGINE_FLITE_H
 #define QTEXTTOSPEECHENGINE_FLITE_H
 
+#include "qtexttospeech_flite_processor.h"
 #include "qtexttospeechengine.h"
 #include "qvoice.h"
 
 #include <QtCore/QString>
 #include <QtCore/QLocale>
 #include <QtCore/QVector>
-#include <QtCore/QThread>
-#include <QtCore/QMutex>
-#include <QtCore/QSemaphore>
-#include <QtCore/QIODevice>
-#include <QtMultimedia/QAudioOutput>
+#include <QtCore/QSharedPointer>
 
 #include <flite/flite.h>
 
 QT_BEGIN_NAMESPACE
-
-class FliteProcessor : public QThread {
-    Q_OBJECT
-
-public:
-    FliteProcessor();
-    ~FliteProcessor();
-    void say(cst_voice *voice, const QString &text);
-    void stop();
-    bool setRate(float rate);
-    bool setPitch(float pitch);
-    bool setVolume(int volume);
-    void exit();
-    bool isIdle();
-    float rate();
-    float pitch();
-    int volume();
-
-signals:
-    void notSpeaking();
-
-private:
-    QMutex m_lock;
-    bool m_stop;
-    bool m_idle;
-    float m_rate;
-    float m_pitch;
-    int m_volume;
-    QSemaphore m_speakSem;
-    QString m_nextText;
-    cst_voice *m_nextVoice;
-    QAudioOutput *m_audio;
-    QIODevice *m_audioBuffer;
-    void run();
-    void setRateForVoice(cst_voice *voice, float rate);
-    void setPitchForVoice(cst_voice *voice, float pitch);
-    int audioOutput(const cst_wave *w, int start, int size,
-                    int last, cst_audio_streaming_info *asi);
-    static int fliteAudioCb(const cst_wave *w, int start, int size,
-                            int last, cst_audio_streaming_info *asi);
-};
 
 class QTextToSpeechEngineFlite : public QTextToSpeechEngine
 {
@@ -125,10 +81,11 @@ public:
     bool init(QString *errorString);
 
 public slots:
-    void onNotSpeaking();
+    void onNotSpeaking(int statusCode);
 
 private:
     QTextToSpeech::State m_state;
+    QSharedPointer<QTextToSpeechProcessorFlite> m_processor;
     QLocale m_currentLocale;
     QVector<QLocale> m_locales;
     QVoice m_currentVoice;
