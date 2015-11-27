@@ -47,9 +47,7 @@ QT_BEGIN_NAMESPACE
 
 namespace Qt3DInput {
 
-#define QInputDevice_iid "org.qt-project.Qt3DInput.QAbstractInputDevice 5.6"
-
-class QAbstractInputDevice;
+class QInputDeviceIntegration;
 
 class QT3DINPUTSHARED_EXPORT QInputDevicePlugin : public QObject
 {
@@ -58,10 +56,14 @@ public:
     explicit QInputDevicePlugin(QObject *parent = Q_NULLPTR);
     ~QInputDevicePlugin();
 
-    virtual QAbstractInputDevice *create(const QString &key, const QStringList &paramList);
+    virtual QInputDeviceIntegration *create(const QString &key, const QStringList &paramList);
 };
 
 } // Qt3DInput
+
+#define QInputDevicePlugin_iid "org.qt-project.Qt3DInput.QInputDevicePlugin 5.6"
+
+Q_DECLARE_INTERFACE(Qt3DInput::QInputDevicePlugin, QInputDevicePlugin_iid)
 
 QT_END_NAMESPACE
 
