@@ -55,7 +55,6 @@ QT_BEGIN_NAMESPACE
 namespace Qt3DInput {
 
 class QInputAspect;
-class QInputDeviceIntegration;
 
 namespace Input {
 class CameraController;
@@ -70,7 +69,6 @@ public:
     Q_DECLARE_PUBLIC(QInputAspect)
     QScopedPointer<Input::InputHandler> m_inputHandler;
     QScopedPointer<Input::CameraController> m_cameraController;
-    QVector<Qt3DInput::QInputDeviceIntegration *> m_inputDeviceIntegrations;
 };
 
 } // namespace Qt3DInput
