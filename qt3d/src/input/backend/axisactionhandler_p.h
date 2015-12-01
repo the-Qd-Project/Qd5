@@ -50,6 +50,7 @@
 
 #include <Qt3DCore/qbackendnode.h>
 #include <Qt3DCore/qnodeid.h>
+#include <Qt3DInput/private/axisactionpayload_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -64,12 +65,16 @@ public:
     AxisActionHandler();
     void updateFromPeer(Qt3DCore::QNode *peer) Q_DECL_OVERRIDE;
     void cleanup();
+    inline Qt3DCore::QNodeId logicalDevice() const { return m_logicalDevice; }
+    void setAndTransmitPayload(const AxisActionPayload &payload);
+    inline AxisActionPayload lastPayload() const { return m_lastPayload; }
 
 protected:
     void sceneChangeEvent(const Qt3DCore::QSceneChangePtr &e) Q_DECL_OVERRIDE;
 
 private:
     Qt3DCore::QNodeId m_logicalDevice;
+    AxisActionPayload m_lastPayload;
 };
 
 class AxisActionHandlerNodeFunctor : public Qt3DCore::QBackendNodeFunctor
