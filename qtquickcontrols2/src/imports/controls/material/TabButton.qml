@@ -49,8 +49,6 @@ T.TabButton {
 
     padding: 6
 
-    font.pointSize: 10
-
     //! [label]
     label: Text {
         x: control.leftPadding
