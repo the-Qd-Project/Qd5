@@ -49,10 +49,6 @@ T.TabButton {
 
     padding: 12 // PivotItemMargin
 
-    font.pixelSize: 24 // PivotHeaderItemFontSize
-    font.family: Universal.fontFamily
-    font.weight: Font.Light
-
     //! [label]
     label: Text {
         x: control.leftPadding
