@@ -48,7 +48,7 @@
 // We mean it.
 //
 
-#include <Qt3DCore/qnodeid.h>
+#include "trianglesvisitor_p.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -58,10 +58,7 @@ class QBoundingVolume;
 
 namespace Render {
 
-class GeometryRenderer;
-class NodeManagers;
-
-class Q_AUTOTEST_EXPORT TrianglesExtractor
+class Q_AUTOTEST_EXPORT TrianglesExtractor : private TrianglesVisitor
 {
 public:
     explicit TrianglesExtractor(GeometryRenderer *renderer,
@@ -70,8 +67,12 @@ public:
     QVector<QBoundingVolume *> extract(const Qt3DCore::QNodeId id);
 
 private:
+    void visit(uint andx, const QVector3D &a,
+               uint bndx, const QVector3D &b,
+               uint cndx, const QVector3D &c) Q_DECL_OVERRIDE;
+
     GeometryRenderer *m_renderer;
-    NodeManagers *m_manager;
+    QVector<QBoundingVolume *> m_volumes;
 };
 
 } // namespace Render
