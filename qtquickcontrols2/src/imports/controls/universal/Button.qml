@@ -52,6 +52,8 @@ T.Button {
     rightPadding: 8
     bottomPadding: 4
 
+    property bool useSystemFocusVisuals: true
+
     //! [label]
     label: Text {
         x: control.leftPadding
