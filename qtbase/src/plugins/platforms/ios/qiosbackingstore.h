@@ -36,34 +36,31 @@
 
 #include <qpa/qplatformbackingstore.h>
 
+#include <QtPlatformSupport/private/qrasterbackingstore_p.h>
+
 QT_BEGIN_NAMESPACE
 
 class QOpenGLPaintDevice;
-class QOpenGLFramebufferObject;
-class QOffscreenSurface;
 
-class QIOSBackingStore : public QPlatformBackingStore
+class QIOSBackingStore : public QRasterBackingStore
 {
 public:
     QIOSBackingStore(QWindow *window);
     ~QIOSBackingStore();
 
-    QPaintDevice *paintDevice();
+    QPaintDevice *paintDevice() Q_DECL_OVERRIDE;
 
-    void beginPaint(const QRegion &);
-    void endPaint();
+    void beginPaint(const QRegion &) Q_DECL_OVERRIDE;
+    void endPaint() Q_DECL_OVERRIDE;
 
-    void flush(QWindow *window, const QRegion &region, const QPoint &offset);
-    void resize(const QSize &size, const QRegion &staticContents);
-    GLuint toTexture(const QRegion &dirtyRegion, QSize *textureSize, TextureFlags *flags) const;
+    void flush(QWindow *window, const QRegion &region, const QPoint &offset) Q_DECL_OVERRIDE;
+    void resize(const QSize &size, const QRegion &staticContents) Q_DECL_OVERRIDE;
 
     void makeCurrent();
 
 private:
     QOpenGLContext *m_context;
-    QOpenGLPaintDevice *m_device;
-    QOpenGLFramebufferObject *m_fbo;
-    QOffscreenSurface *m_surface;
+    QOpenGLPaintDevice *m_glDevice;
 };
 
 QT_END_NAMESPACE
