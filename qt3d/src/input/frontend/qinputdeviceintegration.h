@@ -50,19 +50,25 @@ namespace Qt3DInput {
 
 class QInputAspect;
 class QAbstractPhysicalDevice;
+class QInputDeviceIntegrationPrivate;
 
 class QT3DINPUTSHARED_EXPORT QInputDeviceIntegration : public QObject
 {
     Q_OBJECT
-public:
+protected:
     explicit QInputDeviceIntegration(QObject *parent = 0);
+    explicit QInputDeviceIntegration(QInputDeviceIntegrationPrivate &dd, QObject *parent = 0);
 
+public:
     virtual void initialize(Qt3DInput::QInputAspect *aspect) = 0;
 
     virtual QVector<Qt3DCore::QAspectJobPtr> jobsToExecute(qint64 time) = 0;
     virtual QAbstractPhysicalDevice *createPhysicalDevice(const QString &name) = 0;
     virtual QVector<Qt3DCore::QNodeId> physicalDevices() const = 0;
     virtual QAbstractPhysicalDeviceBackendNode *physicalDevice(Qt3DCore::QNodeId id) const = 0;
+
+private:
+    Q_DECLARE_PRIVATE(QInputDeviceIntegration)
 };
 
 } // namespace Qt3DInput
