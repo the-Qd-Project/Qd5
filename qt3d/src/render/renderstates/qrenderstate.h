@@ -64,6 +64,7 @@ public:
         DepthTest,
         Dithering,
         FrontFace,
+        PointSize,
         PolygonOffset,
         ScissorTest,
         StencilTest,
