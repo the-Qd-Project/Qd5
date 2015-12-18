@@ -51,9 +51,12 @@ class QLineEdit;
 
 namespace Ui {
 class MainWindow;
+class SettingsDialog;
 }
 
 QT_END_NAMESPACE
+
+class SettingsDialog;
 
 class MainWindow : public QMainWindow
 {
@@ -79,6 +82,7 @@ private Q_SLOTS:
     void handleDeviceError(QModbusDevice::ModbusError newError);
 
 private:
+    void initActions();
     void setupDeviceData();
     void setupWidgetContainers();
 
@@ -88,6 +92,7 @@ private:
     QButtonGroup coilButtons;
     QButtonGroup discreteButtons;
     QHash<QString, QLineEdit*> registers;
+    SettingsDialog *m_settingsDialog;
 };
 
 #endif // MAINWINDOW_H
