@@ -66,6 +66,10 @@ WaylandOutput {
                 source: "qrc:/images/background.jpg"
                 smooth: true
             }
+            Loader {
+                anchors.fill: parent
+                source: "Keyboard.qml"
+            }
             WaylandCursorItem {
                 id: cursor
                 inputEventsEnabled: false
