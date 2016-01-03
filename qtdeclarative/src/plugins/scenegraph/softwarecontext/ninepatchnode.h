@@ -45,6 +45,8 @@ public:
 
     void paint(QPainter *painter);
 
+    QRectF bounds() const;
+
 private:
     QPixmap m_pixmap;
     QRectF m_bounds;
