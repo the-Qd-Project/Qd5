@@ -36,6 +36,7 @@
 #include "qactioninput.h"
 #include <Qt3DCore/private/qnode_p.h>
 #include <Qt3DInput/qabstractphysicaldevice.h>
+#include <Qt3DInput/QAbstractActionInput>
 
 QT_BEGIN_NAMESPACE
 
@@ -54,8 +55,9 @@ public:
 };
 
 QActionInput::QActionInput(Qt3DCore::QNode *parent)
-    : Qt3DCore::QNode(*new QActionInputPrivate(), parent)
+    : Qt3DInput::QAbstractActionInput(*new QActionInputPrivate(), parent)
 {
+
 }
 
 QActionInput::~QActionInput()

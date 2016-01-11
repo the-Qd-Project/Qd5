@@ -45,7 +45,7 @@ QT_BEGIN_NAMESPACE
 namespace Qt3DInput {
 
 class QActionPrivate;
-class QActionInput;
+class QAbstractActionInput;
 
 class QT3DINPUTSHARED_EXPORT QAction : public Qt3DCore::QNode
 {
@@ -57,12 +57,12 @@ public:
 
     QString name() const;
 
-    void addInput(QActionInput *input);
-    void removeInput(QActionInput *input);
-    QVector<QActionInput *> inputs() const;
 
 public Q_SLOTS:
     void setName(const QString &name);
+    void addInput(QAbstractActionInput *input);
+    void removeInput(QAbstractActionInput *input);
+    QVector<QAbstractActionInput *> inputs() const;
 
 Q_SIGNALS:
     void nameChanged(const QString &name);
