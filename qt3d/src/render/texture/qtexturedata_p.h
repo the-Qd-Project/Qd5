@@ -59,15 +59,36 @@ class QTexImageDataPrivate
 public:
     QTexImageDataPrivate();
 
+    void setData(const QByteArray &data, QOpenGLTexture::PixelFormat fmt,
+                 QOpenGLTexture::PixelType ptype);
+
+    bool setCompressedFile(const QString &source);
+
+    QByteArray data(int layer, int face, int mipmapLevel) const;
+
     int m_width;
     int m_height;
     int m_depth;
+    int m_layers;
+    int m_faces;
+    int m_mipLevels;
+    int m_blockSize;
+
+    QOpenGLTexture::Target m_target;
+    QOpenGLTexture::TextureFormat m_format;
     QOpenGLTexture::PixelFormat m_pixelFormat;
     QOpenGLTexture::PixelType m_pixelType;
 
     bool m_isCompressed;
     QByteArray m_data;
-    QOpenGLTexture::TextureFormat m_format;
+
+private:
+    int layerSize() const;
+    int faceSize() const;
+    int mipmapLevelSize(int level) const;
+
+    bool setPkmFile(const QString &source);
+    bool setDdsFile(const QString &source);
 };
 
 } // namespace Qt3DRender
