@@ -65,6 +65,8 @@ class AxisInput;
 class AxisSetting;
 class Action;
 class ActionInput;
+class InputSequence;
+class InputChord;
 class LogicalDevice;
 class GenericDeviceBackendNode;
 
@@ -78,6 +80,8 @@ typedef Qt3DCore::QHandle<AxisSetting, 16> HAxisSetting;
 typedef Qt3DCore::QHandle<Action, 16> HAction;
 typedef Qt3DCore::QHandle<AxisInput, 16> HAxisInput;
 typedef Qt3DCore::QHandle<ActionInput, 16> HActionInput;
+typedef Qt3DCore::QHandle<InputSequence, 16> HInputSequence;
+typedef Qt3DCore::QHandle<InputChord, 16> HInputChord;
 typedef Qt3DCore::QHandle<LogicalDevice, 16> HLogicalDevice;
 typedef Qt3DCore::QHandle<GenericDeviceBackendNode, 8> HGenericDeviceBackendNode;
 
