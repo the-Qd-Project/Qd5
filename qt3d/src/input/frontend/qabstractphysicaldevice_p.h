@@ -50,6 +50,8 @@
 
 #include <Qt3DInput/qt3dinput_global.h>
 #include <Qt3DCore/private/qnode_p.h>
+#include <QtCore/qhash.h>
+#include <QtCore/qmutex.h>
 #include <QtCore/qvector.h>
 #include <Qt3DInput/private/qt3dinput_global_p.h>
 
@@ -66,6 +68,8 @@ public:
 
     Q_DECLARE_PUBLIC(QAbstractPhysicalDevice)
     QVector<QAxisSetting *> m_axisSettings;
+    QHash<QString, int> m_axesHash;
+    QHash<QString, int> m_buttonsHash;
 };
 
 }

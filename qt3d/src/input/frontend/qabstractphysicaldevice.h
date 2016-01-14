@@ -57,17 +57,20 @@ public:
     explicit QAbstractPhysicalDevice(Qt3DCore::QNode *parent = 0);
     ~QAbstractPhysicalDevice();
 
-    virtual int axisCount() const = 0;
-    virtual int buttonCount() const = 0;
-    virtual QStringList axisNames() const = 0;
-    virtual QStringList buttonNames() const = 0;
+    virtual int axisCount() const;
+    virtual int buttonCount() const;
+    virtual QStringList axisNames() const;
+    virtual QStringList buttonNames() const;
 
-    virtual int axisIdentifier(const QString &name) const = 0;
-    virtual int buttonIdentifier(const QString &name) const = 0;
+    virtual int axisIdentifier(const QString &name) const;
+    virtual int buttonIdentifier(const QString &name) const;
 
     void addAxisSetting(QAxisSetting *axisSetting);
     void removeAxisSetting(QAxisSetting *axisSetting);
     QVector<QAxisSetting *> axisSettings() const;
+
+    Q_INVOKABLE void postAxisEvent(int axis, qreal value);
+    Q_INVOKABLE void postButtonEvent(int button, qreal value);
 
 protected:
     QAbstractPhysicalDevice(QAbstractPhysicalDevicePrivate &dd, Qt3DCore::QNode *parent = 0);
