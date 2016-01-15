@@ -32,6 +32,8 @@
 #  include "qandroidinapppurchasebackend_p.h"
 #elif defined(Q_OS_MAC)
 #  include "qmacinapppurchasebackend_p.h"
+#elif defined(Q_OS_WINRT)
+#  include "qwinrtinapppurchasebackend_p.h"
 #else
 #  include "qinapppurchasebackend_p.h"
 #endif
@@ -44,6 +46,8 @@ QInAppPurchaseBackend *QInAppPurchaseBackendFactory::create()
     return new QAndroidInAppPurchaseBackend;
 #elif defined (Q_OS_MAC)
     return new QMacInAppPurchaseBackend;
+#elif defined (Q_OS_WINRT)
+    return new QWinRTInAppPurchaseBackend;
 #else
     return new QInAppPurchaseBackend;
 #endif
