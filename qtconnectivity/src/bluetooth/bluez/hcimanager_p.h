@@ -76,6 +76,7 @@ public:
 
     bool isValid() const;
     bool monitorEvent(HciManager::HciEvent event);
+    bool monitorAclPackets();
     bool sendCommand(OpCodeGroupField ogf, OpCodeCommandField ocf, const QByteArray &parameters);
 
     void stopEvents();
@@ -90,12 +91,15 @@ signals:
     void commandCompleted(quint16 opCode, quint8 status, const QByteArray &data);
     void connectionComplete(quint16 handle);
     void connectionUpdate(quint16 handle, const QLowEnergyConnectionParameters &parameters);
+    void signatureResolvingKeyReceived(quint16 connHandle, const quint128 &csrk);
 
 private slots:
     void _q_readNotify();
 
 private:
     int hciForAddress(const QBluetoothAddress &deviceAdapter);
+    void handleHciEventPacket(const quint8 *data, int size);
+    void handleHciAclPacket(const quint8 *data, int size);
     void handleLeMetaEvent(const quint8 *data);
 
     int hciSocket;
