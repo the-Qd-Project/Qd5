@@ -87,7 +87,7 @@ void FrameGraphVisitor::visit(Render::FrameGraphNode *node)
     // Leaf node - create a RenderView ready to be populated
     // TODO: Pass in only framegraph config that has changed from previous
     // index RenderViewJob.
-    if (node->childrenHandles().empty()) {
+    if (node->childrenIds().empty()) {
         QAspectJobPtr job = m_renderer->createRenderViewJob(node, m_renderviewIndex++);
         m_jobs->append(job);
     }
