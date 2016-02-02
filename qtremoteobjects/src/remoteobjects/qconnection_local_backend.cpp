@@ -143,7 +143,7 @@ LocalServerImpl::~LocalServerImpl()
     m_server.close();
 }
 
-ServerIoDevice *LocalServerImpl::_nextPendingConnection()
+ServerIoDevice *LocalServerImpl::configureNewConnection()
 {
     if (!m_server.isListening())
         return Q_NULLPTR;
