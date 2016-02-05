@@ -73,7 +73,8 @@ public:
         StencilTest,
         StencilMask,
         StencilOp,
-        ClipPlane
+        ClipPlane,
+        SeamlessCubemap
     };
     Q_ENUM(Type)
 
