@@ -53,7 +53,7 @@ namespace Qt3DRender {
 namespace Render {
 
 CameraLens::CameraLens()
-    : QBackendNode()
+    : BackendNode()
 {
     m_clearColor = QVector4D(0.5, 0.5, 1.0, 1.0);
 }
