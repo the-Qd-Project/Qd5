@@ -68,31 +68,31 @@ public:
     int compare(const QSGMaterial *other) const;
 
 protected:
-    virtual QSGMaterialType *type() const;
-    virtual QSGMaterialShader *createShader() const;
+    QSGMaterialType *type() const override;
+    QSGMaterialShader *createShader() const override;
 };
 
-class Q_QUICK_PRIVATE_EXPORT QSGDefaultRectangleNode : public QSGRectangleNode
+class Q_QUICK_PRIVATE_EXPORT QSGDefaultNoMaterialRectangleNode : public QSGRectangleNode
 {
 public:
-    QSGDefaultRectangleNode();
+    QSGDefaultNoMaterialRectangleNode();
 
-    virtual void setRect(const QRectF &rect);
-    virtual void setColor(const QColor &color);
-    virtual void setPenColor(const QColor &color);
-    virtual void setPenWidth(qreal width);
-    virtual void setGradientStops(const QGradientStops &stops);
-    virtual void setRadius(qreal radius);
-    virtual void setAntialiasing(bool antialiasing);
-    virtual void setAligned(bool aligned);
-    virtual void update();
+    void setRect(const QRectF &rect) override;
+    void setColor(const QColor &color) override;
+    void setPenColor(const QColor &color) override;
+    void setPenWidth(qreal width) override;
+    void setGradientStops(const QGradientStops &stops) override;
+    void setRadius(qreal radius) override;
+    void setAntialiasing(bool antialiasing) override;
+    void setAligned(bool aligned) override;
+    void update() override;
 
-private:
+protected:
+    virtual void updateMaterialAntialiasing() = 0;
+    virtual void updateMaterialBlending(QSGNode::DirtyState *state) = 0;
+
     void updateGeometry();
     void updateGradientTexture();
-
-    QSGVertexColorMaterial m_material;
-    QSGSmoothColorMaterial m_smoothMaterial;
 
     QRectF m_rect;
     QGradientStops m_gradient_stops;
@@ -107,6 +107,19 @@ private:
     uint m_dirty_geometry : 1;
 
     QSGGeometry m_geometry;
+};
+
+class Q_QUICK_PRIVATE_EXPORT QSGDefaultRectangleNode : public QSGDefaultNoMaterialRectangleNode
+{
+public:
+    QSGDefaultRectangleNode();
+
+private:
+    void updateMaterialAntialiasing() override;
+    void updateMaterialBlending(QSGNode::DirtyState *state) override;
+
+    QSGVertexColorMaterial m_material;
+    QSGSmoothColorMaterial m_smoothMaterial;
 };
 
 QT_END_NAMESPACE
