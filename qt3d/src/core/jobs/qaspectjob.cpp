@@ -58,6 +58,11 @@ QAspectJobPrivate::QAspectJobPrivate()
 {
 }
 
+QAspectJobPrivate *QAspectJobPrivate::get(QAspectJob *job)
+{
+    return job->d_func();
+}
+
 QAspectJob::QAspectJob()
     : d_ptr(new QAspectJobPrivate)
 {
