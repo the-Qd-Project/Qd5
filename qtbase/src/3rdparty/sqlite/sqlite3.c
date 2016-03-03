@@ -15742,9 +15742,11 @@ static void clearYMD_HMS_TZ(DateTime *p){
 #define HAVE_LOCALTIME_S 1
 #endif
 
-#if defined(_WIN32_WCE)
+#if defined(_WIN32_WCE) && _WIN32_WCE < 0x800
 #undef HAVE_LOCALTIME_S
 struct tm *__cdecl localtime(const time_t *t);
+#elif defined(_WIN32_WCE) && _WIN32_WCE >= 0x800
+#  define SQLITE_MSVC_LOCALTIME_API 1
 #endif
 
 #ifndef SQLITE_OMIT_LOCALTIME
