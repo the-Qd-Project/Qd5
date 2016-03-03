@@ -39,6 +39,7 @@
 
 #include "qsgd3d12rendercontext_p.h"
 #include "qsgd3d12renderer_p.h"
+#include "qsgd3d12texture_p.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -52,17 +53,12 @@ void QSGD3D12RenderContext::initialize(QOpenGLContext *)
     Q_UNREACHABLE();
 }
 
-void QSGD3D12RenderContext::invalidate()
-{
-    QSGRenderContext::invalidate();
-}
-
 QSGTexture *QSGD3D12RenderContext::createTexture(const QImage &image, uint flags) const
 {
-    Q_UNUSED(image);
-    Q_UNUSED(flags);
-    Q_UNREACHABLE();
-    return nullptr;
+    Q_ASSERT(m_engine);
+    QSGD3D12Texture *t = new QSGD3D12Texture(m_engine);
+    t->setImage(image, flags);
+    return t;
 }
 
 QSGRenderer *QSGD3D12RenderContext::createRenderer()
