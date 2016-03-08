@@ -42,6 +42,7 @@
 
 #include <Qt3DCore/qcomponent.h>
 #include <Qt3DRender/qt3drender_global.h>
+#include <Qt3DRender/qpickingsettings.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -53,8 +54,8 @@ class QRenderSettingsPrivate;
 class QT3DRENDERSHARED_EXPORT QRenderSettings : public Qt3DCore::QComponent
 {
     Q_OBJECT
-    Q_PROPERTY(PickMethod pickMethod READ pickMethod WRITE setPickMethod NOTIFY pickMethodChanged)
-    Q_PROPERTY(PickResultMode pickResultMode READ pickResultMode WRITE setPickResultMode NOTIFY pickResultModeChanged)
+
+    Q_PROPERTY(QPickingSettings* pickingSettings READ pickingSettings CONSTANT)
     Q_PROPERTY(RenderPolicy renderPolicy READ renderPolicy WRITE setRenderPolicy NOTIFY renderPolicyChanged)
     Q_PROPERTY(Qt3DRender::QFrameGraphNode *activeFrameGraph READ activeFrameGraph WRITE setActiveFrameGraph NOTIFY activeFrameGraphChanged)
     Q_CLASSINFO("DefaultProperty", "activeFrameGraph")
@@ -63,38 +64,21 @@ public:
     explicit QRenderSettings(Qt3DCore::QNode *parent = Q_NULLPTR);
     ~QRenderSettings();
 
-    enum PickMethod {
-        BoundingVolumePicking,
-        TrianglePicking
-    };
-    Q_ENUM(PickMethod)
-
-    enum PickResultMode {
-        NearestPick,
-        AllPicks
-    };
-    Q_ENUM(PickResultMode)
-
     enum RenderPolicy {
         OnDemand,
         Always
     };
     Q_ENUM(RenderPolicy)
 
-    PickMethod pickMethod() const;
-    PickResultMode pickResultMode() const;
+    QPickingSettings* pickingSettings();
     QFrameGraphNode *activeFrameGraph() const;
     RenderPolicy renderPolicy() const;
 
 public Q_SLOTS:
-    void setPickMethod(PickMethod pickMethod);
-    void setPickResultMode(PickResultMode pickResultMode);
     void setActiveFrameGraph(QFrameGraphNode *activeFrameGraph);
     void setRenderPolicy(RenderPolicy renderPolicy);
 
 Q_SIGNALS:
-    void pickMethodChanged(PickMethod pickMethod);
-    void pickResultModeChanged(PickResultMode pickResult);
     void activeFrameGraphChanged(QFrameGraphNode *activeFrameGraph);
     void renderPolicyChanged(RenderPolicy renderPolicy);
 
@@ -105,6 +89,8 @@ protected:
 
 private:
     QT3D_CLONEABLE(QRenderSettings)
+    Q_PRIVATE_SLOT(d_func(), void _q_onPickingMethodChanged(QPickingSettings::PickMethod))
+    Q_PRIVATE_SLOT(d_func(), void _q_onPickResultModeChanged(QPickingSettings::PickResultMode))
 };
 
 } // namespace Qt3Drender
