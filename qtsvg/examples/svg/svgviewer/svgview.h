@@ -44,6 +44,8 @@
 #include <QGraphicsView>
 
 QT_BEGIN_NAMESPACE
+class QGraphicsSvgItem;
+class QSvgRenderer;
 class QWheelEvent;
 class QPaintEvent;
 QT_END_NAMESPACE
@@ -62,6 +64,7 @@ public:
     void drawBackground(QPainter *p, const QRectF &rect) override;
 
     QSize svgSize() const;
+    QSvgRenderer *renderer() const;
 
 public slots:
     void setHighQualityAntialiasing(bool highQualityAntialiasing);
@@ -75,7 +78,7 @@ protected:
 private:
     RendererType m_renderer;
 
-    QGraphicsItem *m_svgItem;
+    QGraphicsSvgItem *m_svgItem;
     QGraphicsRectItem *m_backgroundItem;
     QGraphicsRectItem *m_outlineItem;
 
