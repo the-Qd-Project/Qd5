@@ -86,6 +86,7 @@ protected:
 private:
     Q_DECLARE_PRIVATE(QAxisInput)
     QT3D_CLONEABLE(QAxisInput)
+    Qt3DCore::QNodeCreatedChangeBasePtr createNodeCreationChange() const Q_DECL_OVERRIDE;
 };
 
 } // Qt3DInput
