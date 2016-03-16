@@ -42,7 +42,7 @@
 #include <QTreeView>
 #include <QApplication>
 #include <QRemoteObjectNode>
-#include <QAbstractItemReplica>
+#include <QAbstractItemModelReplica>
 
 int main(int argc, char **argv)
 {
