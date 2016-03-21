@@ -67,6 +67,7 @@ public:
     QSGGlyphNode *createGlyphNode(QSGRenderContext *rc, bool preferNativeGlyphNode) override;
     QSGNinePatchNode *createNinePatchNode() override;
     QSGLayer *createLayer(QSGRenderContext *rc) override;
+    QSize minimumFBOSize() const override;
     QSurfaceFormat defaultSurfaceFormat() const override;
 };
 
