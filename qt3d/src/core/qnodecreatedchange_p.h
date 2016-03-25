@@ -48,6 +48,7 @@
 // We mean it.
 //
 
+#include <Qt3DCore/private/qt3dcore_global_p.h>
 #include <private/qscenechange_p.h>
 #include <Qt3DCore/qnodeid.h>
 
@@ -59,7 +60,7 @@ namespace Qt3DCore {
 
 class QNode;
 
-class QNodeCreatedChangeBasePrivate : public QSceneChangePrivate
+class QT3DCORE_PRIVATE_EXPORT QNodeCreatedChangeBasePrivate : public QSceneChangePrivate
 {
 public:
     QNodeCreatedChangeBasePrivate(const QNode *node);
