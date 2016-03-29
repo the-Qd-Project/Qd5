@@ -68,6 +68,11 @@ QQuickItemDelegate::QQuickItemDelegate(QQuickItem *parent) : QQuickAbstractButto
 {
 }
 
+QQuickItemDelegate::QQuickItemDelegate(QQuickAbstractButtonPrivate &dd, QQuickItem *parent) :
+    QQuickAbstractButton(dd, parent)
+{
+}
+
 QFont QQuickItemDelegate::defaultFont() const
 {
     return QQuickControlPrivate::themeFont(QPlatformTheme::ItemViewFont);
