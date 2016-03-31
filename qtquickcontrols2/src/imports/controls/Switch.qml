@@ -36,6 +36,7 @@
 
 import QtQuick 2.6
 import Qt.labs.templates 1.0 as T
+import Qt.labs.controls.impl 1.0
 
 T.Switch {
     id: control
@@ -51,37 +52,10 @@ T.Switch {
     spacing: 6
 
     //! [indicator]
-    indicator: Item {
+    indicator: SwitchIndicator {
         x: text ? (control.mirrored ? control.width - width - control.rightPadding : control.leftPadding) : control.leftPadding + (control.availableWidth - width) / 2
         y: control.topPadding + (control.availableHeight - height) / 2
-        implicitWidth: 56
-        implicitHeight: 28
-
-        Rectangle {
-            y: parent.height / 2 - height / 2
-            width: 56
-            height: 16
-            radius: 8
-            color: control.checked ? (control.activeKeyFocus ? "#0066ff" : "#353637") : "transparent"
-            border.width: control.activeKeyFocus ? 2 : 1
-            border.color: control.checked ? "transparent" : (control.activeKeyFocus ? "#0066ff" : "#353637")
-        }
-
-        Rectangle {
-            x: Math.max(0, Math.min(parent.width - width, control.visualPosition * parent.width - (width / 2)))
-            y: (parent.height - height) / 2
-            width: 28
-            height: 28
-            radius: 16
-            color: control.pressed ? (control.activeKeyFocus ? "#cce0ff" : "#e4e4e4") : (control.activeKeyFocus ? "#f0f6ff" : "#f6f6f6")
-            border.width: control.activeKeyFocus ? 2 : 1
-            border.color: control.activeKeyFocus ? "#0066ff" : (control.pressed ? "#26282a" : "#353637")
-
-            Behavior on x {
-                enabled: !control.pressed
-                SmoothedAnimation { velocity: 200 }
-            }
-        }
+        control: control
     }
     //! [indicator]
 
