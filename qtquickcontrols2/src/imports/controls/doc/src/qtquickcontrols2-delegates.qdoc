@@ -44,5 +44,13 @@
 
     \l ItemDelegate presents a checkable control that can be pressed and
     clicked by the user.
+
+    \section1 RadioDelegate Control
+
+    \image qtquickcontrols-radiodelegate.gif
+
+    \l RadioDelegate presents a checkable control that can be toggled on
+    (checked) or off (unchecked). Radio delegates are typically used to select
+    one option from a set of options.
 */
 
