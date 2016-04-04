@@ -35,6 +35,7 @@
 ****************************************************************************/
 
 import QtQuick 2.6
+import Qt.labs.controls.impl 1.0
 import Qt.labs.templates 1.0 as T
 
 T.Dial {
@@ -44,13 +45,12 @@ T.Dial {
     implicitHeight: 184
 
     //! [background]
-    background: Rectangle {
-        x: control.width / 2 - width / 2
-        y: control.height / 2 - height / 2
-        width: Math.max(64, Math.min(control.width, control.height))
-        height: width
-        radius: width / 2
-        border.color: "#353637"
+    background: DialRing {
+        width: control.availableWidth
+        height: control.availableHeight
+        color: control.activeFocus ? "#0066ff" : "#353637"
+        progress: control.position
+        opacity: control.enabled ? 1 : 0.3
     }
     //! [background]
 
@@ -61,8 +61,9 @@ T.Dial {
         y: background.y + background.height / 2 - handle.height / 2
         width: 14
         height: 10
-        source: "qrc:/qt-project.org/imports/Qt/labs/controls/images/dial-indicator.png"
+        source: "qrc:/qt-project.org/imports/Qt/labs/controls/images/dial-indicator" + (control.activeKeyFocus ? "-focus.png" : ".png")
         antialiasing: true
+        opacity: control.enabled ? 1 : 0.3
         transform: [
             Translate {
                 y: -background.height * 0.4 + handle.height / 2
