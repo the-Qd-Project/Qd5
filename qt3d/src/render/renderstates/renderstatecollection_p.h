@@ -48,7 +48,7 @@
 // We mean it.
 //
 
-#include <Qt3DRender/private/genericstate_p.h>
+#include <Qt3DRender/private/renderstatenode_p.h>
 
 QT_BEGIN_NAMESPACE
 
