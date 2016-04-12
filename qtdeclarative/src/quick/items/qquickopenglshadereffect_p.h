@@ -74,6 +74,7 @@ struct Q_QUICK_PRIVATE_EXPORT QQuickOpenGLShaderEffectCommon
     typedef QQuickOpenGLShaderEffectMaterialKey Key;
     typedef QQuickOpenGLShaderEffectMaterial::UniformData UniformData;
 
+    QQuickOpenGLShaderEffectCommon(QObject *host) : host(host) { }
     ~QQuickOpenGLShaderEffectCommon();
     void disconnectPropertySignals(QQuickItem *item, Key::ShaderType shaderType);
     void connectPropertySignals(QQuickItem *item, Key::ShaderType shaderType);
@@ -88,6 +89,7 @@ struct Q_QUICK_PRIVATE_EXPORT QQuickOpenGLShaderEffectCommon
     void sourceDestroyed(QObject *object);
     void propertyChanged(QQuickItem *item, int mappedId, bool *textureProviderChanged);
 
+    QObject *host;
     Key source;
     QVector<QByteArray> attributes;
     QVector<UniformData> uniformData[Key::ShaderTypeCount];
@@ -127,29 +129,18 @@ public:
 
     QString parseLog();
 
-Q_SIGNALS:
-    void fragmentShaderChanged();
-    void vertexShaderChanged();
-    void blendingChanged();
-    void meshChanged();
-    void cullModeChanged();
-    void logChanged();
-    void statusChanged();
-    void supportsAtlasTexturesChanged();
-
-protected:
     void handleEvent(QEvent *);
     void handleGeometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
     QSGNode *handleUpdatePaintNode(QSGNode *, QQuickItem::UpdatePaintNodeData *);
     void handleComponentComplete();
     void handleItemChange(QQuickItem::ItemChange change, const QQuickItem::ItemChangeData &value);
-    void handleSourceDestroyed(QObject *object);
-    void handlePropertyChanged(int mappedId);
 
 private Q_SLOTS:
     void updateGeometry();
     void updateGeometryIfAtlased();
     void updateLogAndStatus(const QString &log, int status);
+    void sourceDestroyed(QObject *object);
+    void propertyChanged(int mappedId);
 
 private:
     friend class QQuickCustomMaterialShader;
@@ -178,8 +169,6 @@ private:
     uint m_dirtyGeometry : 1;
     uint m_customVertexShader : 1;
     uint m_supportsAtlasTextures : 1;
-
-    friend class QQuickShaderEffect;
 };
 
 QT_END_NAMESPACE
