@@ -70,6 +70,7 @@ public:
         BlendEquationArguments,
         ColorMask,
         CullFace,
+        MSAAEnabled,
         NoDepthMask,
         DepthTest,
         Dithering,
