@@ -76,32 +76,25 @@ struct Attachment
     QAbstractTexture::CubeMapFace m_face;
 };
 
+class RenderTarget;
+class RenderTargetSelector;
+class AttachmentManager;
+
 class AttachmentPack
 {
 public:
-    void addAttachment(const Attachment &attachment)
-    {
-        m_attachments.append(attachment);
-    }
+    AttachmentPack();
+    AttachmentPack(const RenderTargetSelector *selector, const RenderTarget *target, AttachmentManager *attachmentManager);
 
-    QVector<Attachment> attachments() const
-    {
-        return m_attachments;
-    }
+    QVector<Attachment> attachments() const { return m_attachments; }
+    QVector<int> getGlDrawBuffers() const { return m_drawBuffers; }
 
-    QVector<QRenderTargetOutput::AttachmentPoint> drawBuffers() const
-    {
-        return m_drawBuffers;
-    }
-
-    void setDrawBuffers(const QVector<QRenderTargetOutput::AttachmentPoint> &drawBuffers)
-    {
-        m_drawBuffers = drawBuffers;
-    }
+    // return index of given attachment within actual draw buffers list
+    int getDrawBufferIndex(QRenderTargetOutput::AttachmentPoint attachmentPoint) const;
 
 private:
     QVector<Attachment> m_attachments;
-    QVector<QRenderTargetOutput::AttachmentPoint> m_drawBuffers;
+    QVector<int> m_drawBuffers;
 };
 
 } // namespace Render
