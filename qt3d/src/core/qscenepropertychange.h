@@ -40,7 +40,7 @@
 #ifndef QT3DCORE_QSCENEPROPERTYCHANGE_H
 #define QT3DCORE_QSCENEPROPERTYCHANGE_H
 
-#include <Qt3DCore/qscenechange.h>
+#include <Qt3DCore/qnodepropertychangebase.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -48,16 +48,13 @@ namespace Qt3DCore {
 
 class QScenePropertyChangePrivate;
 
-class QT3DCORESHARED_EXPORT QScenePropertyChange : public QSceneChange
+class QT3DCORESHARED_EXPORT QScenePropertyChange : public QNodePropertyChangeBase
 {
 public:
     QScenePropertyChange(ChangeFlag type, ObservableType observableType, QNodeId subjectId, Priority priority = Standard);
     virtual ~QScenePropertyChange();
 
-    const char *propertyName() const;
     QVariant value() const;
-
-    void setPropertyName(const char *name);
     void setValue(const QVariant &value);
 
     static void *operator new(size_t size);
