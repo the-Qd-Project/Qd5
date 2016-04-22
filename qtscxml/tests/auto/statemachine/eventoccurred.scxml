@@ -42,4 +42,12 @@
         </state>
         <final id="final"/>
     </state>
+
+    <!--
+        The done.state.* events are internal, so expose them to the spy too by re-sending them as
+        external events:
+    -->
+    <transition event="done.state.*" cond="_event.type === 'internal'">
+        <send eventexpr="_event.name"/>
+    </transition>
 </scxml>
