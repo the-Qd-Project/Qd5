@@ -33,7 +33,7 @@
     <qt:editorinfo initialGeometry="135;83;-20;-20;40;40"/>
     <state id="State_1">
         <qt:editorinfo geometry="134;218;-60;-50;122;100" scenegeometry="134;218;74;168;122;100"/>
-        <transition type="external" event="Transition_2" target="State_2">
+        <transition type="external" event="Transition-2" target="State_2">
             <qt:editorinfo movePoint="-26;0"/>
         </transition>
     </state>
