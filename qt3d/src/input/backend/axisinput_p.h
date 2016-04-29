@@ -65,21 +65,17 @@ class Q_AUTOTEST_EXPORT AxisInput : public Qt3DCore::QBackendNode
 public:
     AxisInput();
     void updateFromPeer(Qt3DCore::QNode *peer) Q_DECL_OVERRIDE;
-    void cleanup();
+    virtual void cleanup();
 
     inline int axis() const { return m_axis; }
-    inline float scale() const { return m_scale; }
-    inline QVector<int> buttons() const { return m_buttons; }
     inline Qt3DCore::QNodeId sourceDevice() const { return m_sourceDevice; }
     void sceneChangeEvent(const Qt3DCore::QSceneChangePtr &e) Q_DECL_OVERRIDE;
 
-private:
-    void initializeFromPeer(const Qt3DCore::QNodeCreatedChangeBasePtr &change) Q_DECL_FINAL;
+protected:
+    void initializeFromPeer(const Qt3DCore::QNodeCreatedChangeBasePtr &change) Q_DECL_OVERRIDE;
 
     int m_axis;
-    QVector<int> m_buttons;
     Qt3DCore::QNodeId m_sourceDevice;
-    float m_scale;
 };
 
 } // namespace Input
