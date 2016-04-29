@@ -49,7 +49,6 @@ private Q_SLOTS:
         Qt3DInput::QAxisInput axisInput;
         TestDevice sourceDevice;
 
-        axisInput.setAxis(327);
         axisInput.setSourceDevice(&sourceDevice);
 
         // WHEN
@@ -58,7 +57,6 @@ private Q_SLOTS:
         // THEN
         QCOMPARE(backendAxisInput.peerId(), axisInput.id());
         QCOMPARE(backendAxisInput.isEnabled(), axisInput.isEnabled());
-        QCOMPARE(backendAxisInput.axis(), axisInput.axis());
         QCOMPARE(backendAxisInput.sourceDevice(), sourceDevice.id());
     }
 
@@ -69,7 +67,6 @@ private Q_SLOTS:
 
         // THEN
         QVERIFY(backendAxisInput.peerId().isNull());
-        QCOMPARE(backendAxisInput.axis(), 0);
         QCOMPARE(backendAxisInput.isEnabled(), false);
         QCOMPARE(backendAxisInput.sourceDevice(), Qt3DCore::QNodeId());
 
@@ -77,7 +74,6 @@ private Q_SLOTS:
         Qt3DInput::QAxisInput axisInput;
         TestDevice sourceDevice;
 
-        axisInput.setAxis(327);
         axisInput.setSourceDevice(&sourceDevice);
 
         // WHEN
@@ -86,7 +82,6 @@ private Q_SLOTS:
 
         // THEN
         QVERIFY(backendAxisInput.peerId().isNull());
-        QCOMPARE(backendAxisInput.axis(), 0);
         QCOMPARE(backendAxisInput.isEnabled(), false);
         QCOMPARE(backendAxisInput.sourceDevice(), Qt3DCore::QNodeId());
     }
@@ -98,15 +93,6 @@ private Q_SLOTS:
 
         // WHEN
         Qt3DCore::QNodePropertyChangePtr updateChange(new Qt3DCore::QNodePropertyChange(Qt3DCore::NodeUpdated, Qt3DCore::QSceneChange::Node, Qt3DCore::QNodeId()));
-        updateChange->setValue(32);
-        updateChange->setPropertyName("axis");
-        backendAxisInput.sceneChangeEvent(updateChange);
-
-        // THEN
-        QCOMPARE(backendAxisInput.axis(), 32);
-
-        // WHEN
-        updateChange.reset(new Qt3DCore::QNodePropertyChange(Qt3DCore::NodeUpdated, Qt3DCore::QSceneChange::Node, Qt3DCore::QNodeId()));
         updateChange->setPropertyName("enabled");
         updateChange->setValue(true);
         backendAxisInput.sceneChangeEvent(updateChange);

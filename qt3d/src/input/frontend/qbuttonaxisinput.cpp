@@ -103,7 +103,6 @@ Qt3DCore::QNodeCreatedChangeBasePtr QButtonAxisInput::createNodeCreationChange()
 
     Q_D(const QButtonAxisInput);
     data.sourceDeviceId = qIdForNode(d->m_sourceDevice);
-    data.axis = d->m_axis;
     data.buttons = d->m_buttons;
     data.scale = d->m_scale;
 
