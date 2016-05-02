@@ -51,9 +51,7 @@ public:
         Unknown,
         Software,
         OpenGL,
-        Direct3D12,
-        Vulkan,
-        Metal
+        Direct3D12
     };
 
     enum Resource {
