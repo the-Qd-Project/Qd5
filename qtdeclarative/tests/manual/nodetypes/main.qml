@@ -71,5 +71,8 @@ Item {
 
         if (event.key === Qt.Key_E)
             loader.source = "qrc:/Effects.qml";
+
+        if (event.key === Qt.Key_P)
+            loader.source = "qrc:/Painter.qml";
     }
 }

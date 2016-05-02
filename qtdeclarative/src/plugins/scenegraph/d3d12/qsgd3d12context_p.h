@@ -64,7 +64,7 @@ public:
     QSGRectangleNode *createRectangleNode() override;
     QSGImageNode *createImageNode() override;
     QSGPainterNode *createPainterNode(QQuickPaintedItem *item) override;
-    QSGGlyphNode *createGlyphNode(QSGRenderContext *rc, bool preferNativeGlyphNode) override;
+    QSGGlyphNode *createGlyphNode(QSGRenderContext *renderContext, bool preferNativeGlyphNode) override;
     QSGNinePatchNode *createNinePatchNode() override;
     QSGLayer *createLayer(QSGRenderContext *renderContext) override;
     QSGGuiThreadShaderEffectManager *createGuiThreadShaderEffectManager() override;
