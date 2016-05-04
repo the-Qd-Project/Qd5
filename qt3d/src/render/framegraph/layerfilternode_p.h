@@ -70,15 +70,13 @@ public:
     LayerFilterNode();
 
     void sceneChangeEvent(const Qt3DCore::QSceneChangePtr &e) Q_DECL_OVERRIDE;
-    QStringList layers() const;
-    QVector<int> layerIds() const Q_DECL_NOEXCEPT { return m_layerIds; }
-    void setLayers(const QStringList &list);
+    Qt3DCore::QNodeIdVector layerIds() const Q_DECL_NOEXCEPT;
+    void setLayerIds(const Qt3DCore::QNodeIdVector &list);
 
 private:
     void initializeFromPeer(const Qt3DCore::QNodeCreatedChangeBasePtr &change) Q_DECL_FINAL;
 
-    QStringList m_layers;
-    QVector<int> m_layerIds;
+    Qt3DCore::QNodeIdVector m_layerIds;
 };
 
 } // namespace Render
