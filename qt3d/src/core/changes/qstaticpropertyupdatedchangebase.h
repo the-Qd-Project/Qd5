@@ -40,7 +40,6 @@
 #ifndef QT3DCORE_QSTATICPROPERTYUPDATEDCHANGEBASE_H
 #define QT3DCORE_QSTATICPROPERTYUPDATEDCHANGEBASE_H
 
-#include <Qt3DCore/qscenechange.h>
 #include <Qt3DCore/qpropertyupdatedchangebase.h>
 
 QT_BEGIN_NAMESPACE
@@ -64,32 +63,6 @@ protected:
 };
 
 typedef QSharedPointer<QStaticPropertyUpdatedChangeBase> QStaticPropertyUpdatedChangeBasePtr;
-
-template<typename T>
-class QTypedNodePropertyChange : public QStaticPropertyUpdatedChangeBase
-{
-public:
-    explicit QTypedNodePropertyChange(QNodeId _subjectId)
-        : QStaticPropertyUpdatedChangeBase(_subjectId)
-        , data()
-    {
-    }
-
-    T data;
-};
-
-#if defined(Q_COMPILER_TEMPLATE_ALIAS)
-template<typename T>
-using QTypedNodePropertyChangePtr = QSharedPointer<QTypedNodePropertyChange<T>>;
-#else
-template <typename T>
-struct QTypedNodePropertyChangePtr {
-    static QSharedPointer<QTypedNodePropertyChange<T> > create(QNodeId subjectId)
-    {
-        return QSharedPointer<QTypedNodePropertyChange<T> >::create(subjectId);
-    }
-};
-#endif
 
 } // namespace Qt3DCore
 
