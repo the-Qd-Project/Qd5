@@ -53,7 +53,6 @@
 
 #include <private/qstaticpropertyvalueaddedchangebase_p.h>
 #include <Qt3DCore/qnode.h>
-#include <QtCore/qvariant.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -65,15 +64,11 @@ class QFrameAllocator;
 class QPropertyNodeAddedChangePrivate : public QStaticPropertyValueAddedChangeBasePrivate
 {
 public:
-    QPropertyNodeAddedChangePrivate()
-        : m_addedNodeIdTypePair()
-    {
-    }
+    QPropertyNodeAddedChangePrivate();
 
     Q_DECLARE_PUBLIC(QPropertyNodeAddedChange)
 
     QNodeIdTypePair m_addedNodeIdTypePair;
-    QVariant m_addedValue;
 };
 
 } // Qt3DCore
