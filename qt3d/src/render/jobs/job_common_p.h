@@ -76,7 +76,8 @@ namespace JobTypes {
         UpdateBoundingVolume,
         FrameSubmission,
         LayerFiltering,
-        EntityComponentTypeFiltering
+        EntityComponentTypeFiltering,
+        MaterialParameterGathering
     };
 
 } // JobTypes
