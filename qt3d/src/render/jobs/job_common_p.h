@@ -74,7 +74,8 @@ namespace JobTypes {
         RenderView,
         UpdateTransform,
         UpdateBoundingVolume,
-        FrameSubmission
+        FrameSubmission,
+        LayerFiltering
     };
 
 } // JobTypes
