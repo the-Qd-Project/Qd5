@@ -77,7 +77,8 @@ namespace JobTypes {
         FrameSubmission,
         LayerFiltering,
         EntityComponentTypeFiltering,
-        MaterialParameterGathering
+        MaterialParameterGathering,
+        RenderViewBuilder
     };
 
 } // JobTypes
