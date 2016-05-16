@@ -78,7 +78,9 @@ namespace JobTypes {
         LayerFiltering,
         EntityComponentTypeFiltering,
         MaterialParameterGathering,
-        RenderViewBuilder
+        RenderViewBuilder,
+        GenericLambda,
+        FrustumCulling
     };
 
 } // JobTypes
