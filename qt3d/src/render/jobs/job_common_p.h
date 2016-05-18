@@ -80,7 +80,8 @@ namespace JobTypes {
         MaterialParameterGathering,
         RenderViewBuilder,
         GenericLambda,
-        FrustumCulling
+        FrustumCulling,
+        LightGathering
     };
 
 } // JobTypes
