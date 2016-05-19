@@ -33,7 +33,7 @@ name:                   qt
 identifier:             windows
 
 [PackageConfigurationFiles]
-file_list:              x86-qt57-mingw49_32-conf,
+file_list:              x86-qt57-mingw53_32-conf,
                         x86-qt57-msvc2015_32-conf,
                         x86-qt57-msvc2013_32-conf,
                         x86_64-qt57-msvc2013_64-conf,
