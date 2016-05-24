@@ -59,6 +59,8 @@ Item {
 
         if (event.key === Qt.Key_I)
             loader.source = "qrc:/Images.qml";
+        if (event.key === Qt.Key_5)
+            loader.source = "qrc:/LotsOfImages.qml";
 
         if (event.key === Qt.Key_T)
             loader.source = "qrc:/Text.qml";
