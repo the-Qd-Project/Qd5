@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2015 The Qt Company Ltd.
+** Copyright (C) 2016 The Qt Company Ltd.
 ** Contact: http://www.qt.io/licensing/
 **
 ** This file is part of the test suite of the Qt Toolkit.
@@ -38,82 +38,59 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.6
-import QtQuick.Window 2.0
-import QtQuick.Controls 2.0
+import QtQuick 2.8
+import QtQuick.Window 2.2
+import QtQuick.Controls 2.1
 
 Window {
-    width: 200
-    height: 200
+    width: frame.implicitWidth + 10
+    height: frame.implicitHeight + 10
     visible: true
 
+    function formatText(count, modelData) {
+        var data = count === 12 ? modelData + 1 : modelData;
+        return data.toString().length < 2 ? "0" + data : data;
+    }
+
+    Component {
+        id: delegateComponent
+
+        Label {
+            text: formatText(Tumbler.tumbler.count, modelData)
+            opacity: 1.0 - Math.abs(Tumbler.displacement) / (Tumbler.tumbler.visibleItemCount / 2)
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+        }
+    }
+
     Frame {
+        id: frame
         padding: 0
         anchors.centerIn: parent
-        width: row.implicitWidth
-        height: row.implicitHeight
-
-        FontMetrics {
-            id: fontMetrics
-        }
-
-        Component {
-            id: delegateComponent
-
-            Text {
-                text: modelData.toString().length < 2 ? "0" + modelData : modelData
-                color: "#666666"
-                opacity: 0.4 + Math.max(0, 1 - Math.abs(Tumbler.displacement)) * 0.6
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-                font.pixelSize: fontMetrics.font.pixelSize * 1.25
-            }
-        }
 
         Row {
             id: row
 
             Tumbler {
                 id: hoursTumbler
+                visibleItemCount: 5
                 model: 12
-                delegate: Text {
-                    text: (modelData.toString().length < 2 ? "0" : "") + (modelData + 1)
-                    color: "#666666"
-                    opacity: 0.4 + Math.max(0, 1 - Math.abs(Tumbler.displacement)) * 0.6
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                    font.pixelSize: fontMetrics.font.pixelSize * 1.25
-                }
-                width: 50
-                height: 150
+                delegate: delegateComponent
             }
 
             Tumbler {
                 id: minutesTumbler
-                currentIndex: 6
+                visibleItemCount: 5
                 model: 60
                 delegate: delegateComponent
-                width: 50
-                height: 150
             }
 
             Tumbler {
                 id: amPmTumbler
+                visibleItemCount: 5
+                wrap: false
                 model: ["AM", "PM"]
                 delegate: delegateComponent
-                width: 50
-                height: 150
-                contentItem: ListView {
-                    anchors.fill: parent
-                    model: amPmTumbler.model
-                    delegate: amPmTumbler.delegate
-
-                    snapMode: ListView.SnapToItem
-                    highlightRangeMode: ListView.StrictlyEnforceRange
-                    preferredHighlightBegin: height / 2 - (height / 3 / 2)
-                    preferredHighlightEnd: height / 2  + (height / 3 / 2)
-                    clip: true
-                }
             }
         }
     }
