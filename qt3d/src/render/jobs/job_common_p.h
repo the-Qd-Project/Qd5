@@ -81,7 +81,8 @@ namespace JobTypes {
         RenderViewBuilder,
         GenericLambda,
         FrustumCulling,
-        LightGathering
+        LightGathering,
+        UpdateWorldBoundingVolume
     };
 
 } // JobTypes
