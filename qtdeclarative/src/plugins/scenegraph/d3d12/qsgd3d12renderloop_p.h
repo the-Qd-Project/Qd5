@@ -58,12 +58,9 @@ QT_BEGIN_NAMESPACE
 class QSGD3D12Engine;
 class QSGD3D12Context;
 class QSGD3D12RenderContext;
-class QSGD3D12RenderThread;
 
 class QSGD3D12RenderLoop : public QSGRenderLoop
 {
-    Q_OBJECT
-
 public:
     QSGD3D12RenderLoop();
     ~QSGD3D12RenderLoop();
@@ -91,37 +88,23 @@ public:
     void postJob(QQuickWindow *window, QRunnable *job) override;
 
     QSurface::SurfaceType windowSurfaceType() const override;
-    bool interleaveIncubation() const override;
     int flags() const override;
 
-    bool event(QEvent *e) override;
-
-public Q_SLOTS:
-    void onAnimationStarted();
-    void onAnimationStopped();
-
 private:
-    struct WindowData {
-        QQuickWindow *window;
-        QSGD3D12RenderThread *thread;
-        uint updateDuringSync : 1;
-        uint forceRenderPass : 1;
-    };
-
-    void startOrStopAnimationTimer();
-    void handleExposure(QQuickWindow *window);
-    void handleObscurity(WindowData *w);
-    void scheduleUpdate(WindowData *w);
-    void handleResourceRelease(WindowData *w, bool destroying);
-    void polishAndSync(WindowData *w, bool inExpose);
+    void renderWindow(QQuickWindow *window);
 
     QSGD3D12Context *sg;
-    QAnimationDriver *anim;
-    int animationTimer = 0;
-    bool lockedForSync = false;
-    QVector<WindowData> windows;
 
-    friend class QSGD3D12RenderThread;
+    struct WindowData {
+        QSGD3D12RenderContext *rc = nullptr;
+        QSGD3D12Engine *engine = nullptr;
+        bool updatePending = false;
+        bool grabOnly = false;
+    };
+
+    QHash<QQuickWindow *, WindowData> m_windows;
+
+    QImage m_grabContent;
 };
 
 QT_END_NAMESPACE
