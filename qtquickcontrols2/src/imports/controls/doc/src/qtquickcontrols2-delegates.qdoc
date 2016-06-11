@@ -28,6 +28,8 @@
 /*!
     \page qtquickcontrols2-delegates.html
     \title Delegate Controls
+    \ingroup qtquickcontrols2-guidelines
+    \brief Guidelines for delegate controls
 
     Qt Quick Controls 2 offers a selection of controls that are used as
     delegates in views.
@@ -52,5 +54,20 @@
     \l RadioDelegate presents a checkable control that can be toggled on
     (checked) or off (unchecked). Radio delegates are typically used to select
     one option from a set of options.
+
+    \b {See also} \l {RadioButton Control}.
+
+    \section1 SwitchDelegate Control
+
+    \image qtquickcontrols2-switchdelegate.gif
+
+    \l SwitchDelegate presents a switchable delegate that can be toggled on or off.
+
+    \b {See also} \l {Switch Control}.
+
+    \section1 Related Information
+    \list
+    \li \l {Qt Quick Controls 2 Guidelines}
+    \endlist
 */
 
