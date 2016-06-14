@@ -35,6 +35,7 @@
 ****************************************************************************/
 
 #include "qtwebviewfunctions.h"
+#include "qtwebviewfunctions_p.h"
 
 #ifdef QT_WEBVIEW_WEBENGINE_BACKEND
 #include <QtWebEngine/qtwebengineglobal.h>
@@ -65,14 +66,31 @@ QT_BEGIN_NAMESPACE
 
 void QtWebView::initialize()
 {
+#if defined(Q_OS_MACOS)
+    if (QtWebViewPrivate::useNativeWebView()) {
+        // On macOS, correct WebView / QtQuick compositing and stacking requires running
+        // Qt in layer-backed mode, which again resuires rendering on the Gui thread.
+        qWarning("Setting QT_MAC_WANTS_LAYER=1 and QSG_RENDER_LOOP=basic");
+        qputenv("QT_MAC_WANTS_LAYER", "1");
+        qputenv("QSG_RENDER_LOOP", "basic");
+    } else
+#endif
 #if defined(QT_WEBVIEW_WEBENGINE_BACKEND)
     QtWebEngine::initialize();
-#elif defined(Q_OS_OSX) && defined(QT_WEBVIEW_EXPERIMENTAL)
-    // On OS X, correct WebView / QtQuick compositing and stacking requires running
-    // Qt in layer-backed mode, which again resuires rendering on the Gui thread.
-    qWarning("Setting QT_MAC_WANTS_LAYER=1 and QSG_RENDER_LOOP=basic");
-    qputenv("QT_MAC_WANTS_LAYER", "1");
-    qputenv("QSG_RENDER_LOOP", "basic");
+#endif
+}
+
+/*!
+ * \fn QtWebView::useNativeWebView()
+ * \internal
+ */
+
+bool QtWebViewPrivate::useNativeWebView()
+{
+#ifdef Q_OS_MACOS
+    return qEnvironmentVariableIsSet("QT_MAC_USE_NATIVE_WEBVIEW");
+#else
+    return true;
 #endif
 }
 
