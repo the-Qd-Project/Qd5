@@ -37,6 +37,7 @@
 import QtQuick 2.6
 import QtQuick.Templates 2.1 as T
 import QtQuick.Controls.Material 2.1
+import QtQuick.Controls.Material.impl 2.1
 
 T.DialogButtonBox {
     id: control
@@ -67,8 +68,12 @@ T.DialogButtonBox {
         snapMode: ListView.SnapToItem
     }
 
-    background: Rectangle {
+    background: PaddedRectangle {
         implicitHeight: 52
-        color: control.Material.backgroundColor
+        radius: 2
+        color: control.Material.dialogColor
+        topPadding: control.position === T.DialogButtonBox.Footer ? -2 : 0
+        bottomPadding: control.position === T.DialogButtonBox.Header ? -2 : 0
+        clip: true
     }
 }
