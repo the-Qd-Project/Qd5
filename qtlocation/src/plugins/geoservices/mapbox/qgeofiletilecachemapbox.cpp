@@ -40,9 +40,10 @@
 
 QT_BEGIN_NAMESPACE
 
-QGeoFileTileCacheMapbox::QGeoFileTileCacheMapbox(const QList<QGeoMapType> &mapTypes, const QString &directory, QObject *parent)
+QGeoFileTileCacheMapbox::QGeoFileTileCacheMapbox(const QList<QGeoMapType> &mapTypes, int scaleFactor, const QString &directory, QObject *parent)
     :QGeoFileTileCache(directory, parent), m_mapTypes(mapTypes)
 {
+    m_scaleFactor = qBound(1, scaleFactor, 2);
     for (int i=0; i < mapTypes.size(); i++)
         m_mapNameToId.insert(mapTypes[i].name(), i);
 }
@@ -70,6 +71,10 @@ QString QGeoFileTileCacheMapbox::tileSpecToFilename(const QGeoTileSpec &spec, co
         filename += QString::number(spec.version());
     }
 
+    filename += QLatin1String("-@");
+    filename += QString::number(m_scaleFactor);
+    filename += QLatin1Char('x');
+
     filename += QLatin1String(".");
     filename += format;
 
@@ -89,13 +94,21 @@ QGeoTileSpec QGeoFileTileCacheMapbox::filenameToTileSpec(const QString &filename
     QStringList fields = name.split('-');
 
     int length = fields.length();
-    if (length != 5 && length != 6)
+    if (length != 6 && length != 7) {
         return QGeoTileSpec();
+    } else {
+        int scaleIdx = fields.last().indexOf("@");
+        if (scaleIdx < 0 || fields.last().size() <= (scaleIdx + 2))
+            return QGeoTileSpec();
+        int scaleFactor = fields.last()[scaleIdx + 1].digitValue();
+        if (scaleFactor != m_scaleFactor)
+           return QGeoTileSpec();
+    }
 
     QList<int> numbers;
 
     bool ok = false;
-    for (int i = 2; i < length; ++i) {
+    for (int i = 2; i < length-1; ++i) { // skipping -@_X
         ok = false;
         int value = fields.at(i).toInt(&ok);
         if (!ok)
