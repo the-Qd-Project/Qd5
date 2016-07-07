@@ -38,6 +38,7 @@
 ****************************************************************************/
 
 #include "statemachineloader.h"
+#include "eventconnection.h"
 #include "qscxmlevent.h"
 
 #include <QQmlExtensionPlugin>
@@ -66,6 +67,7 @@ public:
         static const int qScxmlEventMetaTypeId = qMetaTypeId<QScxmlEvent>();
         Q_UNUSED(qScxmlEventMetaTypeId)
         qmlRegisterType<QScxmlStateMachineLoader>(uri, major, minor, "StateMachineLoader");
+        qmlRegisterType<QScxmlEventConnection>(uri, major, minor, "EventConnection");
         qmlProtectModule(uri, 1);
     }
 };
