@@ -50,7 +50,8 @@ Window {
         id: ll
         anchors.fill: parent
         Component.onCompleted: {
-//            addExample("pointer", "PointerHandler: demonstrate the basics", Qt.resolvedUrl("pointerHandler.qml"))
+            addExample("joystick", "DragHandler: move one item inside another with any pointing device", Qt.resolvedUrl("joystick.qml"))
+            addExample("mixer", "mixing console", Qt.resolvedUrl("mixer.qml"))
         }
     }
 }
