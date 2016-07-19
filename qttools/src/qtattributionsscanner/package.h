@@ -37,6 +37,7 @@ struct Package {
     QString path; // Source directory. Optional.
                   // Default is the directory of the qt_attribution.json ile.
     QString name; // Descriptive name of the package. Will be used as the title. Mandatory.
+    QString qdocModule; // QDoc module where the documentation should be included. Mandatory.
     QString qtUsage; // How the package is used in Qt. Any way to disable? Mandatory.
 
     QString description; // A short description of what the package is and is used for. Optional.
