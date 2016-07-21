@@ -39,6 +39,16 @@
     sections offer guidelines for choosing the appropriate type of separator,
     depending on the use case.
 
+    \section1 MenuSeparator Control
+
+    \image qtquickcontrols2-menuseparator.png
+
+    \l MenuSeparator should be used to separate items (typically MenuItem
+    controls) in a Menu. Grouping related menu items together makes it easier
+    for the user to interact with the menu. For example, a typical desktop
+    user interface might have \c Undo and \c Redo items in one group, and
+    \c Cut, \c Copy and \c Paste in another.
+
     \section1 ToolSeparator Control
 
     \image qtquickcontrols2-toolseparator.png
