@@ -40,12 +40,14 @@
 #include <QtCore/qstringlist.h>
 #include <QtSerialBus/qserialbusglobal.h>
 #include <QtSerialBus/qcanbusdevice.h>
+#include <QtSerialBus/qcanbusdeviceinfo.h>
 
 QT_BEGIN_NAMESPACE
 
 class Q_SERIALBUS_EXPORT QCanBusFactory
 {
 public:
+    virtual QList<QCanBusDeviceInfo> availableDevices(QString *errorMessage) const = 0;
     virtual QCanBusDevice *createDevice(const QString &interfaceName,
                                         QString *errorMessage) const = 0;
 protected:
