@@ -92,7 +92,8 @@ namespace JobTypes {
         SyncRenderViewInitialization,
         SyncRenderViewCommandBuilder,
         SyncFrustumCulling,
-        ClearBufferDrawIndex
+        ClearBufferDrawIndex,
+        UpdateMeshTriangleList
     };
 
 } // JobTypes
