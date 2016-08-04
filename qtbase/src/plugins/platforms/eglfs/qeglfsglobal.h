@@ -48,7 +48,7 @@
 #define Q_EGLFS_EXPORT Q_DECL_IMPORT
 #endif
 
-#include <EGL/egl.h>
+#include <QtPlatformSupport/private/qt_egl_p.h>
 #undef Status
 #undef None
 #undef Bool
