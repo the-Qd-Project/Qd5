@@ -46,6 +46,7 @@
 #include <QtPositioning/QGeoShape>
 #include <QtPositioning/QGeoRectangle>
 #include <QtPositioning/QGeoCircle>
+#include <QtPositioning/QGeoPath>
 #include <QVariant>
 
 class LocationSingleton : public QObject
@@ -71,8 +72,11 @@ public:
     Q_INVOKABLE QGeoCircle circle() const;
     Q_INVOKABLE QGeoCircle circle(const QGeoCoordinate &center, qreal radius = -1.0) const;
 
+    Q_INVOKABLE QGeoPath path() const;
+
     Q_INVOKABLE QGeoCircle shapeToCircle(const QGeoShape &shape) const;
     Q_INVOKABLE QGeoRectangle shapeToRectangle(const QGeoShape &shape) const;
+    Q_INVOKABLE QGeoPath shapeToPath(const QGeoShape &shape) const;
 };
 
 #endif // LOCATIONSINGLETON_H
