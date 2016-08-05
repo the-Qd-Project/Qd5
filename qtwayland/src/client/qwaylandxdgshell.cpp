@@ -37,6 +37,7 @@
 #include "qwaylandwindow_p.h"
 #include "qwaylandinputdevice_p.h"
 #include "qwaylandscreen_p.h"
+#include "qwaylandxdgsurface_p.h"
 
 #include <QtCore/QDebug>
 
@@ -60,6 +61,10 @@ QWaylandXdgShell::~QWaylandXdgShell()
     xdg_shell_destroy(object());
 }
 
+QWaylandXdgSurface *QWaylandXdgShell::createXdgSurface(QWaylandWindow *window)
+{
+    return new QWaylandXdgSurface(this, window);
+}
 
 void QWaylandXdgShell::xdg_shell_ping(uint32_t serial)
 {
