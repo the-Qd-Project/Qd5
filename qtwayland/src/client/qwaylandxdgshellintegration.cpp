@@ -36,6 +36,7 @@
 #include <QtWaylandClient/private/qwaylandwindow_p.h>
 #include <QtWaylandClient/private/qwaylanddisplay_p.h>
 #include <QtWaylandClient/private/qwaylandxdgsurface_p.h>
+#include <QtWaylandClient/private/qwaylandxdgpopup_p.h>
 #include <QtWaylandClient/private/qwaylandxdgshell_p.h>
 
 QT_BEGIN_NAMESPACE
@@ -55,7 +56,10 @@ QWaylandXdgShellIntegration::QWaylandXdgShellIntegration(QWaylandDisplay *displa
 
 QWaylandShellSurface *QWaylandXdgShellIntegration::createShellSurface(QWaylandWindow *window)
 {
-    return m_xdgShell->createXdgSurface(window);
+    if (window->window()->type() == Qt::WindowType::Popup)
+        return m_xdgShell->createXdgPopup(window);
+    else
+        return m_xdgShell->createXdgSurface(window);
 }
 
 }
