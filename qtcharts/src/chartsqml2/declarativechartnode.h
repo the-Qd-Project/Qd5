@@ -31,29 +31,29 @@
 #define DECLARATIVECHARTNODE_P_H
 
 #include <QtCharts/QChartGlobal>
-#include <QtQuick/QSGSimpleTextureNode>
+#include <QtQuick/QSGNode>
 #include <QtQuick/QQuickWindow>
-#include <QtGui/QOpenGLFunctions>
+#include <QtQuick/QSGImageNode>
 
 QT_CHARTS_BEGIN_NAMESPACE
 
-class DeclarativeRenderNode;
-
-class DeclarativeChartNode : public QSGSimpleTextureNode, QOpenGLFunctions
+class DeclarativeAbstractRenderNode;
+class DeclarativeChartNode : public QSGRootNode
 {
 public:
     DeclarativeChartNode(QQuickWindow *window);
     ~DeclarativeChartNode();
 
     void createTextureFromImage(const QImage &chartImage);
-    DeclarativeRenderNode *glRenderNode() const { return m_glRenderNode; }
+    DeclarativeAbstractRenderNode *renderNode() const { return m_renderNode; }
+
+    void setRect(const QRectF &rect);
 
 private:
-    QSGTexture *m_texture;
+    QRectF m_rect;
     QQuickWindow *m_window;
-    QQuickWindow::CreateTextureOptions m_textureOptions;
-    QSize m_textureSize;
-    DeclarativeRenderNode *m_glRenderNode;
+    DeclarativeAbstractRenderNode *m_renderNode;
+    QSGImageNode *m_imageNode;
 };
 
 QT_CHARTS_END_NAMESPACE
