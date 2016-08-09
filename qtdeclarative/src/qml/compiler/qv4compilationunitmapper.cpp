@@ -53,6 +53,40 @@ CompilationUnitMapper::CompilationUnitMapper()
 
 }
 
+CompilationUnitMapper::~CompilationUnitMapper()
+{
+    close();
+}
+
+bool CompilationUnitMapper::verifyHeader(const CompiledData::Unit *header, const QString &sourcePath, QString *errorString)
+{
+    if (strncmp(header->magic, CompiledData::magic_str, sizeof(header->magic))) {
+        *errorString = QStringLiteral("Magic bytes in the header do not match");
+        return false;
+    }
+
+    if (header->version != quint32(QV4_DATA_STRUCTURE_VERSION)) {
+        *errorString = QString::fromUtf8("V4 data structure version mismatch. Found %1 expected %2").arg(header->version, 0, 16).arg(QV4_DATA_STRUCTURE_VERSION, 0, 16);
+        return false;
+    }
+
+    if (header->qtVersion != quint32(QT_VERSION)) {
+        *errorString = QString::fromUtf8("Qt version mismatch. Found %1 expected %2").arg(header->qtVersion, 0, 16).arg(QT_VERSION, 0, 16);
+        return false;
+    }
+
+    {
+        QFileInfo sourceCode(sourcePath);
+        if (sourceCode.exists() && sourceCode.lastModified().toMSecsSinceEpoch() != header->sourceTimeStamp) {
+            *errorString = QStringLiteral("QML source file has a different time stamp than cached file.");
+            return false;
+        }
+    }
+
+    return true;
+}
+
+#if  !defined(Q_OS_UNIX)
 CompiledData::Unit *CompilationUnitMapper::open(const QString &sourcePath, QString *errorString)
 {
     close();
@@ -71,28 +105,8 @@ CompiledData::Unit *CompilationUnitMapper::open(const QString &sourcePath, QStri
         return nullptr;
     }
 
-    if (strncmp(header.magic, CompiledData::magic_str, sizeof(header.magic))) {
-        *errorString = QStringLiteral("Magic bytes in the header do not match");
+    if (!verifyHeader(&header, sourcePath, errorString))
         return nullptr;
-    }
-
-    if (header.version != quint32(QV4_DATA_STRUCTURE_VERSION)) {
-        *errorString = QString::fromUtf8("V4 data structure version mismatch. Found %1 expected %2").arg(header.version, 0, 16).arg(QV4_DATA_STRUCTURE_VERSION, 0, 16);
-        return nullptr;
-    }
-
-    if (header.qtVersion != quint32(QT_VERSION)) {
-        *errorString = QString::fromUtf8("Qt version mismatch. Found %1 expected %2").arg(header.qtVersion, 0, 16).arg(QT_VERSION, 0, 16);
-        return nullptr;
-    }
-
-    {
-        QFileInfo sourceCode(sourcePath);
-        if (sourceCode.exists() && sourceCode.lastModified().toMSecsSinceEpoch() != header.sourceTimeStamp) {
-            *errorString = QStringLiteral("QML source file has a different time stamp than cached file.");
-            return nullptr;
-        }
-    }
 
     // Data structure and qt version matched, so now we can access the rest of the file safely.
 
@@ -110,5 +124,6 @@ void CompilationUnitMapper::close()
     f.close();
     dataPtr = nullptr;
 }
+#endif // !defined(Q_OS_UNIX)
 
 QT_END_NAMESPACE
