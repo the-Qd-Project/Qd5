@@ -42,26 +42,13 @@
 #include <sys/mman.h>
 #include <functional>
 #include <private/qcore_unix_p.h>
+#include <private/qdeferredcleanup_p.h>
 
 #include "qv4compileddata_p.h"
 
 QT_BEGIN_NAMESPACE
 
 using namespace QV4;
-
-namespace {
-    struct Defer
-    {
-        std::function<void()> callback;
-        template <typename Callback>
-        Defer(Callback &&cb)
-            : callback(cb)
-        {}
-        ~Defer() { callback(); }
-        Defer(const Defer &) = delete;
-        Defer &operator=(const Defer &) = delete;
-    };
-}
 
 CompiledData::Unit *CompilationUnitMapper::open(const QString &sourcePath, QString *errorString)
 {
@@ -75,7 +62,7 @@ CompiledData::Unit *CompilationUnitMapper::open(const QString &sourcePath, QStri
         return nullptr;
     }
 
-    Defer cleanup([fd]{
+    QDeferredCleanup cleanup([fd]{
        qt_safe_close(fd) ;
     });
 
