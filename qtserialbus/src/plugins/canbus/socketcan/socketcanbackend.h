@@ -52,7 +52,11 @@
 #include <linux/can.h>
 #include <sys/time.h>
 
+#include <memory>
+
 QT_BEGIN_NAMESPACE
+
+class LibSocketCan;
 
 class SocketCanBackend : public QCanBusDevice
 {
@@ -89,6 +93,7 @@ private:
 
     qint64 canSocket = -1;
     QSocketNotifier *notifier = nullptr;
+    std::unique_ptr<LibSocketCan> libSocketCan;
     QString canSocketName;
     bool canFdOptionEnabled = false;
 };
