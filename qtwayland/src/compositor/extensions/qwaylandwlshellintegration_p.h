@@ -67,6 +67,8 @@ public:
 private Q_SLOTS:
     void handleStartMove(QWaylandSeat *seat);
     void handleStartResize(QWaylandSeat *seat, QWaylandWlShellSurface::ResizeEdge edges);
+    void handleSetDefaultTopLevel();
+    void handleSetTransient(QWaylandSurface *parentSurface, const QPoint &relativeToParent, bool inactive);
     void handleSetPopup(QWaylandSeat *seat, QWaylandSurface *parent, const QPoint &relativeToParent);
     void handleShellSurfaceDestroyed();
     void handleSurfaceHasContentChanged();
