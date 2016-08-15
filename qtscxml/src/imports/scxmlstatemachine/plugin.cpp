@@ -41,6 +41,7 @@
 #include "eventconnection.h"
 #include "qscxmlevent.h"
 #include "statemachineextended.h"
+#include "substatemachines.h"
 
 #include <QQmlExtensionPlugin>
 #include <qqml.h>
@@ -69,6 +70,7 @@ public:
         Q_UNUSED(qScxmlEventMetaTypeId)
         qmlRegisterType<QScxmlStateMachineLoader>(uri, major, minor, "StateMachineLoader");
         qmlRegisterType<QScxmlEventConnection>(uri, major, minor, "EventConnection");
+        qmlRegisterType<QScxmlSubStateMachines>(uri, major, minor, "SubStateMachines");
         qmlRegisterExtendedUncreatableType<QScxmlStateMachine, QScxmlStateMachineExtended>(
                     uri, major, minor, "QScxmlStateMachine", "Only created through derived types");
         qmlProtectModule(uri, 1);
