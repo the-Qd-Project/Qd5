@@ -60,55 +60,25 @@ Window {
     width: lights.width
     height: lights.height
 
-    Image {
+    Lights {
         id: lights
-        source: "background.png"
 
-        MouseArea {
-            anchors.fill: parent
-            onClicked: {
-                Qt.quit();
-            }
+        mouseArea.onClicked: {
+            Qt.quit();
         }
 
-        Column {
-            y: 40
-            spacing: 27
-            anchors.horizontalCenter: parent.horizontalCenter
+        button.onClicked: {
 
-            Image {
-                id: redLight
-                source: "red.png"
-                opacity: stateMachine.red || stateMachine.redGoingGreen ? 1 : 0.2
-            }
-
-            Image {
-                id: yellowLight
-                source: "yellow.png"
-                opacity: stateMachine.yellow || stateMachine.blinking ? 1 : 0.2
-            }
-
-            Image {
-                id: greenLight
-                source: "green.png"
-                opacity: stateMachine.green ? 1 : 0.2
-            }
-        }
-    }
-
-    Button {
-        id: button
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-        anchors.margins: 20
-
-        source: stateMachine.working ? "pause.png" : "play.png"
-
-        onClicked: {
             if (stateMachine.working)
                 stateMachine.submitEvent("smash")
             else
                 stateMachine.submitEvent("repair")
         }
+
+        button.source: stateMachine.working ? "pause.png" : "play.png"
+
+        redLight.opacity: stateMachine.red || stateMachine.redGoingGreen ? 1 : 0.2
+        yellowLight.opacity: stateMachine.yellow || stateMachine.blinking ? 1 : 0.2
+        greenLight.opacity: stateMachine.green ? 1 : 0.2
     }
 }
