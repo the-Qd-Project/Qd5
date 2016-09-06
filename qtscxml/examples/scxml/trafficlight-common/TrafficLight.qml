@@ -50,65 +50,23 @@
 
 import QtQuick 2.5
 import QtQuick.Window 2.2
+import TrafficLightStateMachine 1.0
 
 Window {
     id: root
-    property QtObject stateMachine
+
+    property TrafficLightStateMachine stateMachine
 
     visible: true
-    color: "black"
     width: lights.width
     height: lights.height
 
-    Image {
+    Lights {
         id: lights
-        source: "qrc:///background.png"
 
-        MouseArea {
-            anchors.fill: parent
-            onClicked: {
-                Qt.quit();
-            }
-        }
+        stateMachine: root.stateMachine
+        button.source: stateMachine.working ? "pause.png" : "play.png"
 
-        Image {
-            id: redLight
-            x: (lights.width - width) / 2
-            y: 40
-            source: "qrc:///red.png"
-            visible: stateMachine.red || stateMachine.redGoingGreen
-        }
-
-        Image {
-            id: yellowLight
-            x: (lights.width - width) / 2
-            y: 135
-            source: "qrc:///yellow.png"
-            visible: stateMachine.yellow || stateMachine.blinking
-        }
-
-        Image {
-            id: greenLight
-            x: (lights.width - width) / 2
-            y: 230
-            source: "qrc:///green.png"
-            visible: stateMachine.green
-        }
-    }
-
-    Button {
-        id: button
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-        anchors.margins: 20
-
-        source: stateMachine.working ? "qrc:///pause.png" : "qrc:///play.png"
-
-        onClicked: {
-            if (stateMachine.working)
-                stateMachine.submitEvent("smash")
-            else
-                stateMachine.submitEvent("repair")
-        }
+        button.onClicked: stateMachine.submitEvent(stateMachine.working ? "smash" : "repair");
     }
 }
