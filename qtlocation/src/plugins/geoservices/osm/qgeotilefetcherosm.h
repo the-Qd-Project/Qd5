@@ -47,10 +47,12 @@
 QT_BEGIN_NAMESPACE
 
 class QNetworkAccessManager;
+class QGeoTileFetcherOsmPrivate;
 
 class QGeoTileFetcherOsm : public QGeoTileFetcher
 {
     Q_OBJECT
+    Q_DECLARE_PRIVATE(QGeoTileFetcherOsm)
 
     friend class QGeoMapReplyOsm;
     friend class QGeoTiledMappingManagerEngineOsm;
@@ -70,6 +72,7 @@ protected:
 protected Q_SLOTS:
     void onProviderResolutionFinished(const QGeoTileProviderOsm *provider);
     void onProviderResolutionError(const QGeoTileProviderOsm *provider);
+    void restartTimer();
 
 private:
     QGeoTiledMapReply *getTileImage(const QGeoTileSpec &spec);
