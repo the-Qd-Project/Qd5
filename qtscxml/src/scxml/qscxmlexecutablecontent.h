@@ -81,6 +81,16 @@ struct ParameterInfo {
     EvaluatorId expr;
     StringId location;
 };
+
+struct InvokeInfo {
+    StringId id;
+    StringId prefix;
+    StringId location;
+    StringId context;
+    EvaluatorId expr;
+    ContainerId finalize;
+    bool autoforward;
+};
 #if defined(Q_CC_MSVC) || defined(Q_CC_GNU)
 #pragma pack(pop)
 #endif
