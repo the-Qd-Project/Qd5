@@ -51,12 +51,8 @@
 // We mean it.
 //
 
-#include <Qt3DCore/private/qt3dcore_global_p.h>
+#include <Qt3DCore/private/vector3d_p.h>
 #include <QtGui/qvector4d.h>
-#include <QtGui/qvector3d.h>
-#include <QtCore/QtGlobal>
-#include <QtCore/private/qsimd_p.h>
-#include <math.h>
 
 #ifdef QT_COMPILER_SUPPORTS_SSE2
 
@@ -85,6 +81,12 @@ public:
     explicit Q_ALWAYS_INLINE Vector4D_SSE(QVector4D v)
         : m_xyzw(_mm_set_ps(v.w(), v.z(), v.y(), v.x()))
     {
+    }
+
+    explicit Q_ALWAYS_INLINE Vector4D_SSE(const Vector3D_SSE &vec3, float w = 0.0f)
+        : m_xyzw(vec3.m_xyzw)
+    {
+        setW(w);
     }
 
     explicit Q_ALWAYS_INLINE Vector4D_SSE(QVector3D v, float w = 0.0f)
