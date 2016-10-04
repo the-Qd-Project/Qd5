@@ -84,62 +84,6 @@ private:
     Q_DECLARE_PRIVATE(QQuickSwipeDelegate)
 };
 
-class QQuickSwipePrivate;
-
-class Q_QUICKTEMPLATES2_PRIVATE_EXPORT QQuickSwipe : public QObject
-{
-    Q_OBJECT
-    Q_PROPERTY(qreal position READ position NOTIFY positionChanged FINAL)
-    Q_PROPERTY(bool complete READ isComplete NOTIFY completeChanged FINAL)
-    Q_PROPERTY(QQmlComponent *left READ left WRITE setLeft NOTIFY leftChanged FINAL)
-    Q_PROPERTY(QQmlComponent *behind READ behind WRITE setBehind NOTIFY behindChanged FINAL)
-    Q_PROPERTY(QQmlComponent *right READ right WRITE setRight NOTIFY rightChanged FINAL)
-    Q_PROPERTY(QQuickItem *leftItem READ leftItem NOTIFY leftItemChanged FINAL)
-    Q_PROPERTY(QQuickItem *behindItem READ behindItem NOTIFY behindItemChanged FINAL)
-    Q_PROPERTY(QQuickItem *rightItem READ rightItem NOTIFY rightItemChanged FINAL)
-
-public:
-    explicit QQuickSwipe(QQuickSwipeDelegate *control);
-
-    qreal position() const;
-    void setPosition(qreal position);
-
-    bool isComplete() const;
-    void setComplete(bool complete);
-
-    QQmlComponent *left() const;
-    void setLeft(QQmlComponent *left);
-
-    QQmlComponent *behind() const;
-    void setBehind(QQmlComponent *behind);
-
-    QQmlComponent *right() const;
-    void setRight(QQmlComponent *right);
-
-    QQuickItem *leftItem() const;
-    void setLeftItem(QQuickItem *item);
-
-    QQuickItem *behindItem() const;
-    void setBehindItem(QQuickItem *item);
-
-    QQuickItem *rightItem() const;
-    void setRightItem(QQuickItem *item);
-
-Q_SIGNALS:
-    void positionChanged();
-    void completeChanged();
-    void leftChanged();
-    void behindChanged();
-    void rightChanged();
-    void leftItemChanged();
-    void behindItemChanged();
-    void rightItemChanged();
-
-private:
-    Q_DISABLE_COPY(QQuickSwipe)
-    Q_DECLARE_PRIVATE(QQuickSwipe)
-};
-
 QT_END_NAMESPACE
 
 QML_DECLARE_TYPE(QQuickSwipeDelegate)
