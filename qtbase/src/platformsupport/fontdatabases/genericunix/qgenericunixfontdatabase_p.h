@@ -54,10 +54,10 @@
 #include <QtGui/private/qtguiglobal_p.h>
 
 #if QT_CONFIG(fontconfig)
-#include <QtPlatformSupport/private/qfontconfigdatabase_p.h>
+#include <QtFontDatabaseSupport/private/qfontconfigdatabase_p.h>
 typedef QFontconfigDatabase QGenericUnixFontDatabase;
 #else
-#include <QtPlatformSupport/private/qbasicfontdatabase_p.h>
+#include <QtFontDatabaseSupport/private/qbasicfontdatabase_p.h>
 typedef QBasicFontDatabase QGenericUnixFontDatabase;
 #endif //Q_FONTCONFIGDATABASE
 
