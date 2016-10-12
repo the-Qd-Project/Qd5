@@ -40,6 +40,8 @@
 #include <Qt3DRender/private/qgeometryloaderfactory_p.h>
 
 #include "objgeometryloader.h"
+#include "plygeometryloader.h"
+#include "stlgeometryloader.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -51,13 +53,19 @@ public:
 
     QStringList keys() const Q_DECL_OVERRIDE
     {
-        return QStringList() << OBJGEOMETRYLOADER_EXT;
+        return QStringList() << OBJGEOMETRYLOADER_EXT
+                             << PLYGEOMETRYLOADER_EXT
+                             << STLGEOMETRYLOADER_EXT;
     }
 
     Qt3DRender::QGeometryLoaderInterface *create(const QString &ext) Q_DECL_OVERRIDE
     {
         if (ext.compare(OBJGEOMETRYLOADER_EXT, Qt::CaseInsensitive) == 0)
             return new Qt3DRender::ObjGeometryLoader;
+        else if (ext.compare(PLYGEOMETRYLOADER_EXT, Qt::CaseInsensitive) == 0)
+            return new Qt3DRender::PlyGeometryLoader;
+        else if (ext.compare(STLGEOMETRYLOADER_EXT, Qt::CaseInsensitive) == 0)
+            return new Qt3DRender::StlGeometryLoader;
         return nullptr;
     }
 };
