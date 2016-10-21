@@ -31,6 +31,7 @@
 #define SETTINGS_H
 
 #include <QObject>
+#include <QUrl>
 
 namespace QtVirtualKeyboard {
 
@@ -62,12 +63,16 @@ public:
     QStringList activeLocales() const;
     void setActiveLocales(const QStringList &activeLocales);
 
+    QUrl layoutPath() const;
+    void setLayoutPath(const QUrl &layoutPath);
+
 signals:
     void styleChanged();
     void styleNameChanged();
     void localeChanged();
     void availableLocalesChanged();
     void activeLocalesChanged();
+    void layoutPathChanged();
 };
 
 } // namespace QtVirtualKeyboard
