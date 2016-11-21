@@ -56,6 +56,7 @@ class DirectShowCameraExposureControl;
 class DirectShowCameraCaptureDestinationControl;
 class DirectShowCameraCaptureBufferFormatControl;
 class DirectShowVideoProbeControl;
+class DirectShowCameraZoomControl;
 
 class DSCameraService : public QMediaService
 {
@@ -80,6 +81,7 @@ private:
     DirectShowCameraCaptureDestinationControl *m_captureDestinationControl;
     DirectShowCameraCaptureBufferFormatControl *m_captureBufferFormatControl;
     DirectShowVideoProbeControl *m_videoProbeControl;
+    DirectShowCameraZoomControl *m_zoomControl;
 };
 
 QT_END_NAMESPACE
