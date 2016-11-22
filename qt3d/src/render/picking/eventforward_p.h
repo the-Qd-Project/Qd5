@@ -69,7 +69,6 @@ public:
 
     void cleanup();
 
-    QObject *target() const;
     QString coordinateAttribute() const;
     QMatrix4x4 coordinateTransform() const;
     bool forwardMouseEvents() const;
@@ -86,12 +85,11 @@ public:
     void sceneChangeEvent(const Qt3DCore::QSceneChangePtr &e) Q_DECL_FINAL;
 
     void forward(const QMouseEvent &event, const QVector4D &coordinate);
-    void forward(const QList<QKeyEvent> &events);
+    void forward(const QList<QKeyEvent> &keyEvents);
 
 private:
     void initializeFromPeer(const Qt3DCore::QNodeCreatedChangeBasePtr &change) Q_DECL_FINAL;
 
-    QObject *m_target;
     QString m_coordinateAttribute;
     QMatrix4x4 m_coordinateTransform;
     bool m_forwardMouseEvents;
