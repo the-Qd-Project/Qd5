@@ -53,6 +53,8 @@ class DSImageCaptureControl;
 class DSCameraViewfinderSettingsControl;
 class DSCameraImageProcessingControl;
 class DirectShowCameraExposureControl;
+class DirectShowCameraCaptureDestinationControl;
+class DirectShowCameraCaptureBufferFormatControl;
 
 class DSCameraService : public QMediaService
 {
@@ -74,6 +76,8 @@ private:
     DSCameraViewfinderSettingsControl *m_viewfinderSettings;
     DSCameraImageProcessingControl *m_imageProcessingControl;
     DirectShowCameraExposureControl *m_exposureControl;
+    DirectShowCameraCaptureDestinationControl *m_captureDestinationControl;
+    DirectShowCameraCaptureBufferFormatControl *m_captureBufferFormatControl;
 };
 
 QT_END_NAMESPACE
