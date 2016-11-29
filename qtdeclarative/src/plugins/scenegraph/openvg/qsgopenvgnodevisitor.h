@@ -79,24 +79,12 @@ public:
     void endVisit(QSGRenderNode *) override;
 
 private:
-    struct ClipState {
-        ClipState(VGPath p, QOpenVGMatrix t)
-        {
-            path = p;
-            transform = t;
-        }
-
-        VGPath path;
-        QOpenVGMatrix transform;
-    };
-
     VGPath generateClipPath(const QRectF &rect) const;
     void renderRenderableNode(QSGOpenVGRenderable *node);
 
-
     QStack<QOpenVGMatrix> m_transformStack;
     QStack<float> m_opacityState;
-    QStack<ClipState*> m_clipStack;
+    QStack<VGPath> m_clipStack;
 };
 
 QT_END_NAMESPACE
