@@ -54,6 +54,7 @@ Window {
             addExample("mixer", "mixing console", Qt.resolvedUrl("mixer.qml"))
             addExample("pinch", "PinchHandler: scale, rotate and drag", Qt.resolvedUrl("pinchHandler.qml"))
             addExample("map", "scale and pan", Qt.resolvedUrl("map.qml"))
+            addExample("custom map", "scale and pan", Qt.resolvedUrl("map2.qml"))
         }
     }
 }
