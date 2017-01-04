@@ -56,29 +56,31 @@ Rectangle {
         id: pathItem
         anchors.fill: parent
 
-        strokeWidth: 5
-        strokeColor: "blue"
-        strokeStyle: PathItem.DashLine
-        dashPattern: [ 1, 4, 4, 4 ]
-        fillColor: "lightBlue"
+        VisualPath {
+            strokeWidth: 5
+            strokeColor: "blue"
+            strokeStyle: VisualPath.DashLine
+            dashPattern: [ 1, 4, 4, 4 ]
+            fillColor: "lightBlue"
 
-        path: Path {
-            id: p
-            property real xr: 70
-            property real yr: 30
-            startX: pathItem.width / 2 - xr
-            startY: pathItem.height / 2 - yr
-            PathArc {
-                x: pathItem.width / 2 + p.xr
-                y: pathItem.height / 2 + p.yr
-                radiusX: p.xr; radiusY: p.yr
-                useLargeArc: true
-            }
-            PathArc {
-                x: pathItem.width / 2 - p.xr
-                y: pathItem.height / 2 - p.yr
-                radiusX: p.xr; radiusY: p.yr
-                useLargeArc: true
+            Path {
+                id: p
+                property real xr: 70
+                property real yr: 30
+                startX: pathItem.width / 2 - xr
+                startY: pathItem.height / 2 - yr
+                PathArc {
+                    x: pathItem.width / 2 + p.xr
+                    y: pathItem.height / 2 + p.yr
+                    radiusX: p.xr; radiusY: p.yr
+                    useLargeArc: true
+                }
+                PathArc {
+                    x: pathItem.width / 2 - p.xr
+                    y: pathItem.height / 2 - p.yr
+                    radiusX: p.xr; radiusY: p.yr
+                    useLargeArc: true
+                }
             }
         }
     }
