@@ -57,7 +57,7 @@ T.TextArea {
     selectionColor: Default.textSelectionColor
     selectedTextColor: color
 
-    Text {
+    PlaceholderText {
         id: placeholder
         x: control.leftPadding
         y: control.topPadding
@@ -67,7 +67,6 @@ T.TextArea {
         text: control.placeholderText
         font: control.font
         color: Default.textDisabledLightColor
-        horizontalAlignment: control.horizontalAlignment
         verticalAlignment: control.verticalAlignment
         visible: !control.length && !control.preeditText && (!control.activeFocus || control.horizontalAlignment !== Qt.AlignHCenter)
         elide: Text.ElideRight
