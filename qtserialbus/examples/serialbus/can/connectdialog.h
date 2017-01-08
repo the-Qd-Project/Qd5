@@ -52,8 +52,6 @@ namespace Ui {
 class ConnectDialog;
 }
 
-class QIntValidator;
-
 QT_END_NAMESPACE
 
 class ConnectDialog : public QDialog
@@ -76,7 +74,6 @@ public:
     Settings settings() const;
 
 private slots:
-    void checkCustomSpeedPolicy(int idx);
     void backendChanged(const QString &backend);
     void interfaceChanged(const QString &interface);
     void ok();
@@ -86,10 +83,8 @@ private:
     QString configurationValue(QCanBusDevice::ConfigurationKey key);
     void revertSettings();
     void updateSettings();
-    void fillSpeeds();
 
     Ui::ConnectDialog *m_ui = nullptr;
-    QIntValidator *m_customSpeedValidator = nullptr;
     Settings m_currentSettings;
     QList<QCanBusDeviceInfo> m_interfaces;
 };
