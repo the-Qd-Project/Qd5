@@ -70,6 +70,7 @@ Rectangle {
             source: "tiger.qml"
             asynchronous: true
             visible: status == Loader.Ready
+            scale: 0.4
         }
     }
 }
