@@ -56,6 +56,8 @@ QT_BEGIN_NAMESPACE
 namespace Qt3DAnimation {
 namespace Animation {
 
+class Handler;
+
 class Q_AUTOTEST_EXPORT AnimationClip : public Qt3DCore::QBackendNode
 {
 public:
@@ -66,9 +68,12 @@ public:
     QUrl source() const { return m_source; }
     void sceneChangeEvent(const Qt3DCore::QSceneChangePtr &e) Q_DECL_OVERRIDE;
 
+    void setHandler(Handler *handler) { m_handler = handler; }
+
 private:
     void initializeFromPeer(const Qt3DCore::QNodeCreatedChangeBasePtr &change) Q_DECL_FINAL;
 
+    Handler *m_handler;
     QUrl m_source;
 };
 

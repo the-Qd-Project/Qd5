@@ -59,12 +59,18 @@ namespace Qt3DAnimation {
 
 class QAnimationAspect;
 
+namespace Animation {
+class Handler;
+}
+
 class QAnimationAspectPrivate : public Qt3DCore::QAbstractAspectPrivate
 {
 public:
     QAnimationAspectPrivate();
 
     Q_DECLARE_PUBLIC(QAnimationAspect)
+
+    QScopedPointer<Animation::Handler> m_handler;
 };
 
 } // namespace Qt3DAnimation
