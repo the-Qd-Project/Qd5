@@ -65,6 +65,12 @@ namespace Animation {
 
 class AnimationClip;
 class AnimationClipManager;
+class ClipAnimator;
+class ClipAnimatorManager;
+class BlendedClipAnimator;
+class BlendedClipAnimatorManager;
+class ConductedClipAnimator;
+class ConductedClipAnimatorManager;
 
 class Q_AUTOTEST_EXPORT Handler
 {
@@ -73,11 +79,17 @@ public:
     ~Handler();
 
     AnimationClipManager *animationClipManager() const Q_DECL_NOTHROW { return m_animationClipManager.data(); }
+    ClipAnimatorManager *clipAnimatorManager() const Q_DECL_NOTHROW { return m_clipAnimatorManager.data(); }
+    BlendedClipAnimatorManager *blendedClipAnimatorManager() const Q_DECL_NOTHROW { return m_blendedClipAnimatorManager.data(); }
+    ConductedClipAnimatorManager *conductedClipAnimatorManager() const Q_DECL_NOTHROW { return m_conductedClipAnimatorManager.data(); }
 
     QVector<Qt3DCore::QAspectJobPtr> jobsToExecute(qint64 time);
 
 private:
     QScopedPointer<AnimationClipManager> m_animationClipManager;
+    QScopedPointer<ClipAnimatorManager> m_clipAnimatorManager;
+    QScopedPointer<BlendedClipAnimatorManager> m_blendedClipAnimatorManager;
+    QScopedPointer<ConductedClipAnimatorManager> m_conductedClipAnimatorManager;
 
 #if defined(QT_BUILD_INTERNAL)
     friend class QT_PREPEND_NAMESPACE(tst_Handler);
