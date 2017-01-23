@@ -42,7 +42,9 @@
 #include <Qt3DAnimation/qblendedclipanimator.h>
 #include <Qt3DAnimation/qclipanimator.h>
 #include <Qt3DAnimation/qconductedclipanimator.h>
+#include <Qt3DAnimation/qchannelmapping.h>
 #include <Qt3DQuickAnimation/private/qt3dquickanimation_global_p.h>
+#include <Qt3DQuickAnimation/private/quick3dchannelmapper_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -55,6 +57,9 @@ void Qt3DQuick3DAnimationPlugin::registerTypes(const char *uri)
     qmlRegisterType<Qt3DAnimation::QClipAnimator>(uri, 2, 2, "ClipAnimator");
     qmlRegisterType<Qt3DAnimation::QBlendedClipAnimator>(uri, 2, 2, "BlendedClipAnimator");
     qmlRegisterType<Qt3DAnimation::QConductedClipAnimator>(uri, 2, 2, "ConductedClipAnimator");
+    qmlRegisterType<Qt3DAnimation::QChannelMapping>(uri, 2, 2, "ChannelMapping");
+    qmlRegisterExtendedType<Qt3DAnimation::QChannelMapper,
+                            Qt3DAnimation::Animation::Quick::Quick3DChannelMapper>(uri, 2, 2, "ChannelMapper");
 }
 
 QT_END_NAMESPACE
