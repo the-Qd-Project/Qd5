@@ -64,7 +64,7 @@ public:
     ClipAnimator();
 
     void cleanup();
-    void setClipId(Qt3DCore::QNodeId clipId) { m_clipId = clipId; }
+    void setClipId(Qt3DCore::QNodeId clipId);
     Qt3DCore::QNodeId clipId() const { return m_clipId; }
     void setMapperId(Qt3DCore::QNodeId mapperId);
     Qt3DCore::QNodeId mapperId() const { return m_mapperId; }
@@ -75,6 +75,9 @@ public:
     void sceneChangeEvent(const Qt3DCore::QSceneChangePtr &e) Q_DECL_OVERRIDE;
 
     void setHandler(Handler *handler) { m_handler = handler; }
+
+    // Called by jobs
+    bool canRun() const { return !m_clipId.isNull() && !m_mapperId.isNull() && m_running; }
 
 private:
     void initializeFromPeer(const Qt3DCore::QNodeCreatedChangeBasePtr &change) Q_DECL_FINAL;
