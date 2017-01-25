@@ -52,6 +52,7 @@
 //
 
 #include <Qt3DRender/private/backendnode_p.h>
+#include <Qt3DCore/private/qnodecommand_p.h>
 #include <QMatrix4x4>
 #include <QRectF>
 
@@ -62,6 +63,7 @@ namespace Qt3DRender {
 namespace Render {
 
 class CameraManager;
+class Sphere;
 
 class CameraLensFunctor : public Qt3DCore::QBackendNodeMapper
 {
@@ -93,12 +95,17 @@ public:
     inline float exposure() const { return m_exposure; }
 
     void sceneChangeEvent(const Qt3DCore::QSceneChangePtr &e) Q_DECL_OVERRIDE;
+    void notifySceneBoundingVolume(const Sphere &sphere, Qt3DCore::QNodeCommand::CommandId commandId);
 
 private:
     void initializeFromPeer(const Qt3DCore::QNodeCreatedChangeBasePtr &change) Q_DECL_FINAL;
+    void computeSceneBoundingVolume(Qt3DCore::QNodeId entityId,
+                                    Qt3DCore::QNodeId cameraId,
+                                    Qt3DCore::QNodeCommand::CommandId commandId);
 
     QRenderAspect *m_renderAspect;
     QMatrix4x4 m_projection;
+    Qt3DCore::QNodeCommand::CommandId m_pendingViewAllCommand;
     float m_exposure;
 };
 
