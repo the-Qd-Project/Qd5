@@ -50,6 +50,7 @@
 
 #include <Qt3DAnimation/private/qabstractclipblendnode_p.h>
 #include <Qt3DCore/qnodeid.h>
+#include "qlerpblend.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -68,7 +69,6 @@ public:
 
 struct QLerpBlendData
 {
-    Qt3DCore::QNodeIdVector clips;
     float blendFactor;
 };
 
