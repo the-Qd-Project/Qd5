@@ -61,9 +61,13 @@ public:
 
     Q_DECLARE_PUBLIC(QChannelMapping)
 
+    void updatePropertyNameAndType();
+
     QString m_channelName;
     Qt3DCore::QNode *m_target;
     QString m_property;
+    const char *m_propertyName;
+    int m_type;
 };
 
 struct QChannelMappingData
@@ -71,6 +75,8 @@ struct QChannelMappingData
     QString channelName;
     Qt3DCore::QNodeId targetId;
     QString property;
+    int type;
+    const char *propertyName;
 };
 
 } // namespace Qt3DAnimation
