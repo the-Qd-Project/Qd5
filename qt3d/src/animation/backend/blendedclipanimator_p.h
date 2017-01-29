@@ -49,6 +49,7 @@
 //
 
 #include <Qt3DAnimation/private/backendnode_p.h>
+#include <Qt3DAnimation/private/animationutils_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -69,15 +70,36 @@ public:
     Qt3DCore::QNodeId mapperId() const { return m_mapperId; }
     bool isRunning() const { return m_running; }
 
+    //  Called by BuildBlendTreeJob
+    bool canRun() const { return !m_mapperId.isNull() && !m_blendTreeRootId.isNull() && m_running; }
+
     void setBlendTreeRootId(Qt3DCore::QNodeId blendTreeRootId);
     void setMapperId(Qt3DCore::QNodeId mapperId);
     void setRunning(bool running);
+
+    void setMappingData(const QVector<AnimationUtils::BlendingMappingData> mappingData);
+    QVector<AnimationUtils::BlendingMappingData> mappingData() const { return m_mappingData; }
+
+    void setStartTime(qint64 globalTime) { m_startGlobalTime = globalTime; }
+    qint64 startTime() const { return m_startGlobalTime; }
+
+    int loops() const { return m_loops; }
+
+    int currentLoop() const { return m_currentLoop; }
+    void setCurrentLoop(int currentLoop) { m_currentLoop = currentLoop; }
+
+    void sendPropertyChanges(const QVector<Qt3DCore::QSceneChangePtr> &changes);
 
 private:
     void initializeFromPeer(const Qt3DCore::QNodeCreatedChangeBasePtr &change) Q_DECL_FINAL;
     Qt3DCore::QNodeId m_blendTreeRootId;
     Qt3DCore::QNodeId m_mapperId;
     bool m_running;
+
+    qint64 m_startGlobalTime;
+    QVector<AnimationUtils::BlendingMappingData> m_mappingData;
+    int m_currentLoop;
+    int m_loops;
 };
 
 } // namespace Animation
