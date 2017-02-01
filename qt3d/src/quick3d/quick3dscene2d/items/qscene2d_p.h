@@ -48,21 +48,10 @@
 // We mean it.
 //
 
-#include <QtQml/QQmlEngine>
-#include <QtQml/QQmlComponent>
-#include <QtQuick/QQuickItem>
-#include <QtQuick/QQuickWindow>
-#include <QtQuick/QQuickRenderControl>
-#include <QtGui/QOffscreenSurface>
-#include <QtCore/QCoreApplication>
-#include <QtCore/QWaitCondition>
-#include <QtCore/QThread>
-
 #include <Qt3DQuickScene2D/qscene2d.h>
-#include <Qt3DRender/qabstracttexture.h>
 
-#include <private/qobject_p.h>
 #include <private/qnode_p.h>
+#include <private/scene2dsharedobject_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -90,56 +79,6 @@ static const QEvent::Type RENDERED = QEvent::Type(QEvent::User + 6);
 // main thread -> render thread
 static const QEvent::Type QUIT = QEvent::Type(QEvent::User + 7);
 
-class Q_AUTOTEST_EXPORT Scene2DSharedObject
-{
-public:
-    Scene2DSharedObject(Scene2DManager *manager);
-    ~Scene2DSharedObject();
-
-    QQuickRenderControl *m_renderControl;
-    QQuickWindow *m_quickWindow;
-    Scene2DManager *m_renderManager;
-    QOffscreenSurface *m_surface;
-
-    QThread *m_renderThread;
-    QObject *m_renderObject;
-
-    QWaitCondition m_cond;
-    QMutex m_mutex;
-
-    bool isInitialized() const;
-    void setInitialized();
-
-    void requestQuit();
-    bool isQuit() const;
-
-    void requestRender(bool sync);
-
-    bool isSyncRequested() const;
-    void clearSyncRequest();
-
-    void wait();
-    void wake();
-
-    bool isPrepared() const;
-    void setPrepared();
-
-    void disallowRender();
-    bool canRender() const;
-
-    void cleanup();
-
-private:
-
-    bool m_disallowed;
-    bool m_quit;
-    bool m_requestSync;
-    bool m_requestRender;
-    bool m_prepared;
-    bool m_initialized;
-};
-
-typedef QSharedPointer<Scene2DSharedObject> Scene2DSharedObjectPtr;
 
 class Q_AUTOTEST_EXPORT QScene2DPrivate : public Qt3DCore::QNodePrivate
 {
@@ -161,59 +100,9 @@ struct QScene2DData
     Qt3DCore::QNodeId output;
 };
 
-class Scene2DManager : public QObject
-{
-    Q_OBJECT
-public:
-    Scene2DManager(QScene2DPrivate *priv);
-    ~Scene2DManager();
-
-    QQmlEngine *m_qmlEngine;
-    QQmlComponent *m_qmlComponent;
-    QQuickItem *m_rootItem;
-    QQuickItem *m_item;
-
-    QScene2DPrivate *m_priv;
-    QSharedPointer<Scene2DSharedObject> m_sharedObject;
-
-    QUrl m_source;
-    Qt3DCore::QNodeId m_id;
-    QMetaObject::Connection m_connection;
-    QScene2D::RenderPolicy m_renderPolicy;
-
-    bool m_requested;
-    bool m_initialized;
-    bool m_renderSyncRequested;
-    bool m_backendInitialized;
-    bool m_noSourceMode;
-    bool m_ownEngine;
-
-    void requestRender();
-    void requestRenderSync();
-    void doRenderSync();
-    void startIfInitialized();
-    void stopAndClean();
-    void run();
-    void updateSizes();
-
-    void setSource(const QUrl &url);
-    void setItem(QQuickItem *item);
-
-    bool event(QEvent *e) Q_DECL_OVERRIDE;
-    bool forwardEvent(QEvent *event);
-
-    Q_SIGNAL void onLoadedChanged();
-
-    void cleanup();
-    void setEngine(QQmlEngine *engine);
-    void engineDestroyed();
-};
-
 } // namespace Quick
 } // namespace Qt3DRender
 
 QT_END_NAMESPACE
-
-Q_DECLARE_METATYPE(Qt3DRender::Quick::Scene2DSharedObjectPtr)
 
 #endif // QT3DRENDER_QUICK3DSCENE2D_QSCENE2D_P_H
