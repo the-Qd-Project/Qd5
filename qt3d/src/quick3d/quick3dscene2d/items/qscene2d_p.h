@@ -62,24 +62,6 @@ namespace Quick {
 class QScene2D;
 class Scene2DManager;
 
-// render thread -> render thread
-static const QEvent::Type INITIALIZE = QEvent::Type(QEvent::User + 1);
-
-// main thread -> main thread, render thread
-static const QEvent::Type RENDER = QEvent::Type(QEvent::User + 2);
-
-// main thread -> main thread
-static const QEvent::Type RENDERSYNC = QEvent::Type(QEvent::User + 3);
-
-// render thread -> main thread
-static const QEvent::Type PREPARE = QEvent::Type(QEvent::User + 4);
-static const QEvent::Type INITIALIZED = QEvent::Type(QEvent::User + 5);
-static const QEvent::Type RENDERED = QEvent::Type(QEvent::User + 6);
-
-// main thread -> render thread
-static const QEvent::Type QUIT = QEvent::Type(QEvent::User + 7);
-
-
 class Q_AUTOTEST_EXPORT QScene2DPrivate : public Qt3DCore::QNodePrivate
 {
 public:
