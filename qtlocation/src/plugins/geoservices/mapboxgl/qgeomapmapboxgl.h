@@ -40,8 +40,10 @@
 
 #include "qgeomappingmanagerenginemapboxgl.h"
 #include <QtLocation/private/qgeomap_p.h>
+#include <QtLocation/private/qgeomapparameter_p.h>
 
 class QGeoMapMapboxGLPrivate;
+
 class QGeoMapMapboxGL : public QGeoMap
 {
     Q_OBJECT
@@ -60,24 +62,13 @@ private Q_SLOTS:
     void onMapChanged(QMapboxGL::MapChange);
 
     // QDeclarativeGeoMapItemBase
-    void onMapItemOpacityChanged();
+    void onMapItemPropertyChanged();
+    void onMapItemSubPropertyChanged();
+    void onMapItemUnsupportedPropertyChanged();
+    void onMapItemGeometryChanged();
 
-    // QDeclarativeRectangleMapItem
-    void onMapRectangleGeometryChanged();
-    void onMapRectangleColorChanged();
-    void onMapRectangleBorderColorChanged();
-    void onMapRectangleBorderWidthChanged();
-
-    // QDeclarativePolygonMapItem
-    void onMapPolygonGeometryChanged();
-    void onMapPolygonColorChanged();
-    void onMapPolygonBorderColorChanged();
-    void onMapPolygonBorderWidthChanged();
-
-    // QDeclarativePolylineMapItem
-    void onMapPolylineGeometryChanged();
-    void onMapPolylineLineColorChanged();
-    void onMapPolylineLineWidthChanged();
+    // QGeoMapParameter
+    void onParameterPropertyUpdated(QGeoMapParameter *param, const char *propertyName);
 
 public Q_SLOTS:
     void copyrightsChanged(const QString &copyrightsHtml);
