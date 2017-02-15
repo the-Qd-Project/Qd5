@@ -97,8 +97,8 @@ public:
     // Node -> Property Update Data
     struct NodePropertyTrackData
     {
-        QNode::PropertyTrackMode updateMode = QNode::DefaultTrackMode;
-        QStringList namedProperties;
+        QNode::PropertyTrackingMode defaultTrackMode = QNode::TrackFinalValues;
+        QHash<QString, QNode::PropertyTrackingMode> trackedPropertiesOverrides;
     };
     NodePropertyTrackData lookupNodePropertyTrackData(QNodeId id) const;
     void setPropertyTrackDataForNode(QNodeId id, const NodePropertyTrackData &data);
