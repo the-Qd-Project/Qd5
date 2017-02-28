@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/images">
+    <qresource prefix="/nokia">
         <file>logo.png</file>
     </qresource>
 </RCC>

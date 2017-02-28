@@ -40,8 +40,10 @@
 
 #include "qgeomappingmanagerenginemapboxgl.h"
 #include <QtLocation/private/qgeomap_p.h>
+#include <QtLocation/private/qgeomapparameter_p.h>
 
 class QGeoMapMapboxGLPrivate;
+
 class QGeoMapMapboxGL : public QGeoMap
 {
     Q_OBJECT
@@ -51,15 +53,27 @@ public:
     QGeoMapMapboxGL(QGeoMappingManagerEngineMapboxGL *engine, QObject *parent);
     virtual ~QGeoMapMapboxGL();
 
+    QString copyrightsStyleSheet() const Q_DECL_OVERRIDE;
     void setMapboxGLSettings(const QMapboxGLSettings &);
+    void setUseFBO(bool);
 
 private Q_SLOTS:
-    void onMapItemLinePathChange();
-    void onMapItemLineOpacityChange();
-    void onMapItemLineWidthChange(qreal);
-    void onMapItemLineColorChange(const QColor &);
+    // QMapboxGL
+    void onMapChanged(QMapboxGL::MapChange);
 
-protected:
+    // QDeclarativeGeoMapItemBase
+    void onMapItemPropertyChanged();
+    void onMapItemSubPropertyChanged();
+    void onMapItemUnsupportedPropertyChanged();
+    void onMapItemGeometryChanged();
+
+    // QGeoMapParameter
+    void onParameterPropertyUpdated(QGeoMapParameter *param, const char *propertyName);
+
+public Q_SLOTS:
+    void copyrightsChanged(const QString &copyrightsHtml);
+
+private:
     QSGNode *updateSceneGraph(QSGNode *oldNode, QQuickWindow *window) Q_DECL_OVERRIDE;
 
     QGeoMappingManagerEngineMapboxGL *m_engine;
