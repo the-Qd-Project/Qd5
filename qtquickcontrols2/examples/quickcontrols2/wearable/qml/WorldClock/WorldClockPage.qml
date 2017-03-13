@@ -107,21 +107,5 @@ Item {
 
         count: svWatchContainer.count
         currentIndex: svWatchContainer.currentIndex
-
-        delegate: Rectangle {
-            implicitWidth: 8
-            implicitHeight: 8
-
-            radius: width / 2
-            color: UIStyle.colorQtGray3
-
-            opacity: index === pgWatchIndicator.currentIndex ? 1.0 : 0.35
-
-            Behavior on opacity {
-                OpacityAnimator {
-                    duration: 100
-                }
-            }
-        }
     }
 }
