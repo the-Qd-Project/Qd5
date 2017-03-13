@@ -56,8 +56,8 @@ import "Navigation"
 import "Style"
 
 Item {
-    Item {
-        id: homeCntrl
+    NaviButton {
+        id: homeButton
 
         z: 2
 
@@ -65,73 +65,18 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
 
-        height: 40
+        edge: Qt.TopEdge
+        enabled: stackView.depth > 1
+        imageSource: "../images/home.png"
 
-        states: State {
-            name: "slideOut"
-
-            AnchorChanges {
-                target: homeButton
-                anchors.bottom: homeCntrl.bottom
-            }
-        }
-
-        transitions: Transition {
-            AnchorAnimation {
-                duration: 250
-            }
-        }
-
-        state: (stackView.depth > 1)  ? "slideOut" : ""
-
-        Item {
-            id: homeButton
-
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.bottom: parent.top
-
-            height: parent.height
-
-            Rectangle {
-                height: parent.height * 4
-                width: height
-                radius: width / 2
-
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.top
-                anchors.verticalCenterOffset: -height / 4
-
-                color: UIStyle.colorQtGray2
-            }
-
-            Image {
-                height: parent.height
-                width: height
-
-                anchors.horizontalCenter: parent.horizontalCenter
-
-                source: "../images/home.png"
-            }
-        }
-
-        MouseArea {
-            id: homeCntrlMArea
-            anchors.fill: parent
-            onClicked: {
-                homeCntrl.homeKeyPressed()
-            }
-        }
-
-        function homeKeyPressed() {
-            stackView.pop()
-        }
+        onClicked: stackView.pop(null)
     }
 
     QQC2.StackView {
         id: stackView
 
-        anchors.top: homeCntrl.bottom
-        anchors.bottom: backCntrl.top
+        anchors.top: homeButton.bottom
+        anchors.bottom: backButton.top
 
         width: parent.width
 
@@ -141,8 +86,8 @@ Item {
         }
     }
 
-    Item {
-        id: backCntrl
+    NaviButton {
+        id: backButton
 
         z: 2
 
@@ -150,65 +95,10 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
 
-        height: 40
+        edge: Qt.BottomEdge
+        enabled: stackView.depth > 1
+        imageSource: "../images/back.png"
 
-        states: State {
-            name: "slideOut"
-
-            AnchorChanges {
-                target: backButton
-                anchors.top: backCntrl.top
-            }
-        }
-
-        transitions: Transition {
-            AnchorAnimation {
-                duration: 250
-            }
-        }
-
-        state: (stackView.depth > 1) ? "slideOut" : ""
-
-        Item {
-            id: backButton
-
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: parent.bottom
-
-            height: parent.height
-
-            Rectangle {
-                height: parent.height * 4
-                width: height
-                radius: width / 2
-
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.bottom
-                anchors.verticalCenterOffset: height / 4
-
-                color: UIStyle.colorQtGray2
-            }
-
-            Image {
-                height: parent.height
-                width: height
-
-                anchors.horizontalCenter: parent.horizontalCenter
-
-                source: "../images/back.png"
-            }
-        }
-
-        MouseArea {
-            id: backCntrlMArea
-            anchors.fill: parent
-            onClicked: {
-                backCntrl.backKeyPressed()
-            }
-        }
-
-        function backKeyPressed() {
-            stackView.pop()
-        }
+        onClicked: stackView.pop()
     }
 }
