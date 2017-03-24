@@ -87,6 +87,8 @@ protected:
 
     void moveTarget(QPointF pos, QQuickEventPoint *point);
 
+    void setPointId(int id);
+
 private:
     void reset();
 
