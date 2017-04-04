@@ -82,8 +82,8 @@ DefaultSceneEntity {
                 loops: 3
                 onRunningChanged: console.log("running = " + running)
 
-                clip: AnimationClipLoader {
-                    source: "cubeanimation.json"
+                clip: AnimationClip {
+                    clipData: _animationFactory.clipData
                     onDurationChanged: console.log("duration = " + duration)
                 }
 
