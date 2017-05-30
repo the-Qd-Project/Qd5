@@ -1,6 +1,6 @@
 /******************************************************************************
 ** This file is an amalgamation of many separate C source files from SQLite
-** version 3.16.1.  By combining all the individual C code files into this
+** version 3.16.2.  By combining all the individual C code files into this
 ** single large file, the entire code can be compiled as a single translation
 ** unit.  This allows many compilers to do optimizations that would not be
 ** possible if the files were compiled separately.  Performance improvements
@@ -381,9 +381,9 @@ extern "C" {
 ** [sqlite3_libversion_number()], [sqlite3_sourceid()],
 ** [sqlite_version()] and [sqlite_source_id()].
 */
-#define SQLITE_VERSION        "3.16.1"
-#define SQLITE_VERSION_NUMBER 3016001
-#define SQLITE_SOURCE_ID      "2017-01-03 18:27:03 979f04392853b8053817a3eea2fc679947b437fd"
+#define SQLITE_VERSION        "3.16.2"
+#define SQLITE_VERSION_NUMBER 3016002
+#define SQLITE_SOURCE_ID      "2017-01-06 16:32:41 a65a62893ca8319e89e48b8a38cf8a59c69a8209"
 
 /*
 ** CAPI3REF: Run-Time Library Version Numbers
@@ -4156,8 +4156,12 @@ SQLITE_API int sqlite3_clear_bindings(sqlite3_stmt*);
 ** METHOD: sqlite3_stmt
 **
 ** ^Return the number of columns in the result set returned by the
-** [prepared statement]. ^This routine returns 0 if pStmt is an SQL
-** statement that does not return data (for example an [UPDATE]).
+** [prepared statement]. ^If this routine returns 0, that means the 
+** [prepared statement] returns no data (for example an [UPDATE]).
+** ^However, just because this routine returns a positive number does not
+** mean that one or more rows of data will be returned.  ^A SELECT statement
+** will always have a positive sqlite3_column_count() but depending on the
+** WHERE clause constraints and the table content, it might return no rows.
 **
 ** See also: [sqlite3_data_count()]
 */
@@ -12861,8 +12865,10 @@ SQLITE_PRIVATE int sqlite3VdbeAddOp4Int(Vdbe*,int,int,int,int,int);
 SQLITE_PRIVATE void sqlite3VdbeEndCoroutine(Vdbe*,int);
 #if defined(SQLITE_DEBUG) && !defined(SQLITE_TEST_REALLOC_STRESS)
 SQLITE_PRIVATE   void sqlite3VdbeVerifyNoMallocRequired(Vdbe *p, int N);
+SQLITE_PRIVATE   void sqlite3VdbeVerifyNoResultRow(Vdbe *p);
 #else
 # define sqlite3VdbeVerifyNoMallocRequired(A,B)
+# define sqlite3VdbeVerifyNoResultRow(A)
 #endif
 SQLITE_PRIVATE VdbeOp *sqlite3VdbeAddOpList(Vdbe*, int nOp, VdbeOpList const *aOp, int iLineno);
 SQLITE_PRIVATE void sqlite3VdbeAddParseSchemaOp(Vdbe*,int,char*);
@@ -70277,6 +70283,7 @@ static SQLITE_NOINLINE const void *valueToText(sqlite3_value* pVal, u8 enc){
   assert( (pVal->flags & MEM_RowSet)==0 );
   assert( (pVal->flags & (MEM_Null))==0 );
   if( pVal->flags & (MEM_Blob|MEM_Str) ){
+    if( ExpandBlob(pVal) ) return 0;
     pVal->flags |= MEM_Str;
     if( pVal->enc != (enc & ~SQLITE_UTF16_ALIGNED) ){
       sqlite3VdbeChangeEncoding(pVal, enc & ~SQLITE_UTF16_ALIGNED);
@@ -71622,6 +71629,22 @@ SQLITE_PRIVATE int sqlite3VdbeCurrentAddr(Vdbe *p){
 #if defined(SQLITE_DEBUG) && !defined(SQLITE_TEST_REALLOC_STRESS)
 SQLITE_PRIVATE void sqlite3VdbeVerifyNoMallocRequired(Vdbe *p, int N){
   assert( p->nOp + N <= p->pParse->nOpAlloc );
+}
+#endif
+
+/*
+** Verify that the VM passed as the only argument does not contain
+** an OP_ResultRow opcode. Fail an assert() if it does. This is used
+** by code in pragma.c to ensure that the implementation of certain
+** pragmas comports with the flags specified in the mkpragmatab.tcl
+** script.
+*/
+#if defined(SQLITE_DEBUG) && !defined(SQLITE_TEST_REALLOC_STRESS)
+SQLITE_PRIVATE void sqlite3VdbeVerifyNoResultRow(Vdbe *p){
+  int i;
+  for(i=0; i<p->nOp; i++){
+    assert( p->aOp[i].opcode!=OP_ResultRow );
+  }
 }
 #endif
 
@@ -109544,12 +109567,25 @@ SQLITE_PRIVATE void sqlite3GenerateConstraintChecks(
       onError = OE_Abort;
     }
 
-    if( ix==0 && pPk==pIdx && onError==OE_Replace && pPk->pNext==0 ){
+    /* Collision detection may be omitted if all of the following are true:
+    **   (1) The conflict resolution algorithm is REPLACE
+    **   (2) The table is a WITHOUT ROWID table
+    **   (3) There are no secondary indexes on the table
+    **   (4) No delete triggers need to be fired if there is a conflict
+    **   (5) No FK constraint counters need to be updated if a conflict occurs.
+    */ 
+    if( (ix==0 && pIdx->pNext==0)                   /* Condition 3 */
+     && pPk==pIdx                                   /* Condition 2 */
+     && onError==OE_Replace                         /* Condition 1 */
+     && ( 0==(db->flags&SQLITE_RecTriggers) ||      /* Condition 4 */
+          0==sqlite3TriggersExist(pParse, pTab, TK_DELETE, 0, 0))
+     && ( 0==(db->flags&SQLITE_ForeignKeys) ||      /* Condition 5 */
+         (0==pTab->pFKey && 0==sqlite3FkReferences(pTab)))
+    ){
       sqlite3VdbeResolveLabel(v, addrUniqueOk);
       continue;
     }
 
-    
     /* Check to see if the new index entry will be unique */
     sqlite3VdbeAddOp4Int(v, OP_NoConflict, iThisCur, addrUniqueOk,
                          regIdx, pIdx->nKeyCol); VdbeCoverage(v);
@@ -111795,11 +111831,12 @@ SQLITE_PRIVATE void sqlite3AutoLoadExtensions(sqlite3 *db){
 /* Property flags associated with various pragma. */
 #define PragFlg_NeedSchema 0x01 /* Force schema load before running */
 #define PragFlg_NoColumns  0x02 /* OP_ResultRow called with zero columns */
-#define PragFlg_ReadOnly   0x04 /* Read-only HEADER_VALUE */
-#define PragFlg_Result0    0x08 /* Acts as query when no argument */
-#define PragFlg_Result1    0x10 /* Acts as query when has one argument */
-#define PragFlg_SchemaOpt  0x20 /* Schema restricts name search if present */
-#define PragFlg_SchemaReq  0x40 /* Schema required - "main" is default */
+#define PragFlg_NoColumns1 0x04 /* zero columns if RHS argument is present */
+#define PragFlg_ReadOnly   0x08 /* Read-only HEADER_VALUE */
+#define PragFlg_Result0    0x10 /* Acts as query when no argument */
+#define PragFlg_Result1    0x20 /* Acts as query when has one argument */
+#define PragFlg_SchemaOpt  0x40 /* Schema restricts name search if present */
+#define PragFlg_SchemaReq  0x80 /* Schema required - "main" is default */
 
 /* Names of columns for pragmas that return multi-column result
 ** or that return single-column results where the name of the
@@ -111876,14 +111913,14 @@ static const PragmaName aPragmaName[] = {
 #if !defined(SQLITE_OMIT_SCHEMA_VERSION_PRAGMAS)
  {/* zName:     */ "application_id",
   /* ePragTyp:  */ PragTyp_HEADER_VALUE,
-  /* ePragFlg:  */ PragFlg_Result0,
+  /* ePragFlg:  */ PragFlg_NoColumns1|PragFlg_Result0,
   /* ColNames:  */ 0, 0,
   /* iArg:      */ BTREE_APPLICATION_ID },
 #endif
 #if !defined(SQLITE_OMIT_AUTOVACUUM)
  {/* zName:     */ "auto_vacuum",
   /* ePragTyp:  */ PragTyp_AUTO_VACUUM,
-  /* ePragFlg:  */ PragFlg_NeedSchema|PragFlg_Result0|PragFlg_SchemaReq,
+  /* ePragFlg:  */ PragFlg_NeedSchema|PragFlg_Result0|PragFlg_SchemaReq|PragFlg_NoColumns1,
   /* ColNames:  */ 0, 0,
   /* iArg:      */ 0 },
 #endif
@@ -111891,7 +111928,7 @@ static const PragmaName aPragmaName[] = {
 #if !defined(SQLITE_OMIT_AUTOMATIC_INDEX)
  {/* zName:     */ "automatic_index",
   /* ePragTyp:  */ PragTyp_FLAG,
-  /* ePragFlg:  */ PragFlg_Result0|PragFlg_NoColumns,
+  /* ePragFlg:  */ PragFlg_Result0|PragFlg_NoColumns1,
   /* ColNames:  */ 0, 0,
   /* iArg:      */ SQLITE_AutoIndex },
 #endif
@@ -111904,31 +111941,31 @@ static const PragmaName aPragmaName[] = {
 #if !defined(SQLITE_OMIT_PAGER_PRAGMAS)
  {/* zName:     */ "cache_size",
   /* ePragTyp:  */ PragTyp_CACHE_SIZE,
-  /* ePragFlg:  */ PragFlg_NeedSchema|PragFlg_Result0|PragFlg_SchemaReq,
+  /* ePragFlg:  */ PragFlg_NeedSchema|PragFlg_Result0|PragFlg_SchemaReq|PragFlg_NoColumns1,
   /* ColNames:  */ 0, 0,
   /* iArg:      */ 0 },
 #endif
 #if !defined(SQLITE_OMIT_FLAG_PRAGMAS)
  {/* zName:     */ "cache_spill",
   /* ePragTyp:  */ PragTyp_CACHE_SPILL,
-  /* ePragFlg:  */ PragFlg_Result0|PragFlg_SchemaReq,
+  /* ePragFlg:  */ PragFlg_Result0|PragFlg_SchemaReq|PragFlg_NoColumns1,
   /* ColNames:  */ 0, 0,
   /* iArg:      */ 0 },
 #endif
  {/* zName:     */ "case_sensitive_like",
   /* ePragTyp:  */ PragTyp_CASE_SENSITIVE_LIKE,
-  /* ePragFlg:  */ 0,
+  /* ePragFlg:  */ PragFlg_NoColumns,
   /* ColNames:  */ 0, 0,
   /* iArg:      */ 0 },
  {/* zName:     */ "cell_size_check",
   /* ePragTyp:  */ PragTyp_FLAG,
-  /* ePragFlg:  */ PragFlg_Result0|PragFlg_NoColumns,
+  /* ePragFlg:  */ PragFlg_Result0|PragFlg_NoColumns1,
   /* ColNames:  */ 0, 0,
   /* iArg:      */ SQLITE_CellSizeCk },
 #if !defined(SQLITE_OMIT_FLAG_PRAGMAS)
  {/* zName:     */ "checkpoint_fullfsync",
   /* ePragTyp:  */ PragTyp_FLAG,
-  /* ePragFlg:  */ PragFlg_Result0|PragFlg_NoColumns,
+  /* ePragFlg:  */ PragFlg_Result0|PragFlg_NoColumns1,
   /* ColNames:  */ 0, 0,
   /* iArg:      */ SQLITE_CkptFullFSync },
 #endif
@@ -111949,21 +111986,21 @@ static const PragmaName aPragmaName[] = {
 #if !defined(SQLITE_OMIT_FLAG_PRAGMAS)
  {/* zName:     */ "count_changes",
   /* ePragTyp:  */ PragTyp_FLAG,
-  /* ePragFlg:  */ PragFlg_Result0|PragFlg_NoColumns,
+  /* ePragFlg:  */ PragFlg_Result0|PragFlg_NoColumns1,
   /* ColNames:  */ 0, 0,
   /* iArg:      */ SQLITE_CountRows },
 #endif
 #if !defined(SQLITE_OMIT_PAGER_PRAGMAS) && SQLITE_OS_WIN
  {/* zName:     */ "data_store_directory",
   /* ePragTyp:  */ PragTyp_DATA_STORE_DIRECTORY,
-  /* ePragFlg:  */ 0,
+  /* ePragFlg:  */ PragFlg_NoColumns1,
   /* ColNames:  */ 0, 0,
   /* iArg:      */ 0 },
 #endif
 #if !defined(SQLITE_OMIT_SCHEMA_VERSION_PRAGMAS)
  {/* zName:     */ "data_version",
   /* ePragTyp:  */ PragTyp_HEADER_VALUE,
-  /* ePragFlg:  */ PragFlg_Result0|PragFlg_ReadOnly,
+  /* ePragFlg:  */ PragFlg_ReadOnly|PragFlg_Result0,
   /* ColNames:  */ 0, 0,
   /* iArg:      */ BTREE_DATA_VERSION },
 #endif
@@ -111977,7 +112014,7 @@ static const PragmaName aPragmaName[] = {
 #if !defined(SQLITE_OMIT_PAGER_PRAGMAS) && !defined(SQLITE_OMIT_DEPRECATED)
  {/* zName:     */ "default_cache_size",
   /* ePragTyp:  */ PragTyp_DEFAULT_CACHE_SIZE,
-  /* ePragFlg:  */ PragFlg_NeedSchema|PragFlg_Result0|PragFlg_SchemaReq,
+  /* ePragFlg:  */ PragFlg_NeedSchema|PragFlg_Result0|PragFlg_SchemaReq|PragFlg_NoColumns1,
   /* ColNames:  */ 0, 1,
   /* iArg:      */ 0 },
 #endif
@@ -111985,7 +112022,7 @@ static const PragmaName aPragmaName[] = {
 #if !defined(SQLITE_OMIT_FOREIGN_KEY) && !defined(SQLITE_OMIT_TRIGGER)
  {/* zName:     */ "defer_foreign_keys",
   /* ePragTyp:  */ PragTyp_FLAG,
-  /* ePragFlg:  */ PragFlg_Result0|PragFlg_NoColumns,
+  /* ePragFlg:  */ PragFlg_Result0|PragFlg_NoColumns1,
   /* ColNames:  */ 0, 0,
   /* iArg:      */ SQLITE_DeferFKs },
 #endif
@@ -111993,14 +112030,14 @@ static const PragmaName aPragmaName[] = {
 #if !defined(SQLITE_OMIT_FLAG_PRAGMAS)
  {/* zName:     */ "empty_result_callbacks",
   /* ePragTyp:  */ PragTyp_FLAG,
-  /* ePragFlg:  */ PragFlg_Result0|PragFlg_NoColumns,
+  /* ePragFlg:  */ PragFlg_Result0|PragFlg_NoColumns1,
   /* ColNames:  */ 0, 0,
   /* iArg:      */ SQLITE_NullCallback },
 #endif
 #if !defined(SQLITE_OMIT_UTF16)
  {/* zName:     */ "encoding",
   /* ePragTyp:  */ PragTyp_ENCODING,
-  /* ePragFlg:  */ PragFlg_Result0,
+  /* ePragFlg:  */ PragFlg_Result0|PragFlg_NoColumns1,
   /* ColNames:  */ 0, 0,
   /* iArg:      */ 0 },
 #endif
@@ -112022,7 +112059,7 @@ static const PragmaName aPragmaName[] = {
 #if !defined(SQLITE_OMIT_FOREIGN_KEY) && !defined(SQLITE_OMIT_TRIGGER)
  {/* zName:     */ "foreign_keys",
   /* ePragTyp:  */ PragTyp_FLAG,
-  /* ePragFlg:  */ PragFlg_Result0|PragFlg_NoColumns,
+  /* ePragFlg:  */ PragFlg_Result0|PragFlg_NoColumns1,
   /* ColNames:  */ 0, 0,
   /* iArg:      */ SQLITE_ForeignKeys },
 #endif
@@ -112030,19 +112067,19 @@ static const PragmaName aPragmaName[] = {
 #if !defined(SQLITE_OMIT_SCHEMA_VERSION_PRAGMAS)
  {/* zName:     */ "freelist_count",
   /* ePragTyp:  */ PragTyp_HEADER_VALUE,
-  /* ePragFlg:  */ PragFlg_Result0|PragFlg_ReadOnly,
+  /* ePragFlg:  */ PragFlg_ReadOnly|PragFlg_Result0,
   /* ColNames:  */ 0, 0,
   /* iArg:      */ BTREE_FREE_PAGE_COUNT },
 #endif
 #if !defined(SQLITE_OMIT_FLAG_PRAGMAS)
  {/* zName:     */ "full_column_names",
   /* ePragTyp:  */ PragTyp_FLAG,
-  /* ePragFlg:  */ PragFlg_Result0|PragFlg_NoColumns,
+  /* ePragFlg:  */ PragFlg_Result0|PragFlg_NoColumns1,
   /* ColNames:  */ 0, 0,
   /* iArg:      */ SQLITE_FullColNames },
  {/* zName:     */ "fullfsync",
   /* ePragTyp:  */ PragTyp_FLAG,
-  /* ePragFlg:  */ PragFlg_Result0|PragFlg_NoColumns,
+  /* ePragFlg:  */ PragFlg_Result0|PragFlg_NoColumns1,
   /* ColNames:  */ 0, 0,
   /* iArg:      */ SQLITE_FullFSync },
 #endif
@@ -112062,7 +112099,7 @@ static const PragmaName aPragmaName[] = {
 #if !defined(SQLITE_OMIT_CHECK)
  {/* zName:     */ "ignore_check_constraints",
   /* ePragTyp:  */ PragTyp_FLAG,
-  /* ePragFlg:  */ PragFlg_Result0|PragFlg_NoColumns,
+  /* ePragFlg:  */ PragFlg_Result0|PragFlg_NoColumns1,
   /* ColNames:  */ 0, 0,
   /* iArg:      */ SQLITE_IgnoreChecks },
 #endif
@@ -112120,14 +112157,14 @@ static const PragmaName aPragmaName[] = {
 #if !defined(SQLITE_OMIT_FLAG_PRAGMAS)
  {/* zName:     */ "legacy_file_format",
   /* ePragTyp:  */ PragTyp_FLAG,
-  /* ePragFlg:  */ PragFlg_Result0|PragFlg_NoColumns,
+  /* ePragFlg:  */ PragFlg_Result0|PragFlg_NoColumns1,
   /* ColNames:  */ 0, 0,
   /* iArg:      */ SQLITE_LegacyFileFmt },
 #endif
 #if !defined(SQLITE_OMIT_PAGER_PRAGMAS) && SQLITE_ENABLE_LOCKING_STYLE
  {/* zName:     */ "lock_proxy_file",
   /* ePragTyp:  */ PragTyp_LOCK_PROXY_FILE,
-  /* ePragFlg:  */ 0,
+  /* ePragFlg:  */ PragFlg_NoColumns1,
   /* ColNames:  */ 0, 0,
   /* iArg:      */ 0 },
 #endif
@@ -112161,7 +112198,7 @@ static const PragmaName aPragmaName[] = {
   /* iArg:      */ 0 },
  {/* zName:     */ "page_size",
   /* ePragTyp:  */ PragTyp_PAGE_SIZE,
-  /* ePragFlg:  */ PragFlg_Result0|PragFlg_SchemaReq,
+  /* ePragFlg:  */ PragFlg_Result0|PragFlg_SchemaReq|PragFlg_NoColumns1,
   /* ColNames:  */ 0, 0,
   /* iArg:      */ 0 },
 #endif
@@ -112175,7 +112212,7 @@ static const PragmaName aPragmaName[] = {
 #if !defined(SQLITE_OMIT_FLAG_PRAGMAS)
  {/* zName:     */ "query_only",
   /* ePragTyp:  */ PragTyp_FLAG,
-  /* ePragFlg:  */ PragFlg_Result0|PragFlg_NoColumns,
+  /* ePragFlg:  */ PragFlg_Result0|PragFlg_NoColumns1,
   /* ColNames:  */ 0, 0,
   /* iArg:      */ SQLITE_QueryOnly },
 #endif
@@ -112189,12 +112226,12 @@ static const PragmaName aPragmaName[] = {
 #if !defined(SQLITE_OMIT_FLAG_PRAGMAS)
  {/* zName:     */ "read_uncommitted",
   /* ePragTyp:  */ PragTyp_FLAG,
-  /* ePragFlg:  */ PragFlg_Result0|PragFlg_NoColumns,
+  /* ePragFlg:  */ PragFlg_Result0|PragFlg_NoColumns1,
   /* ColNames:  */ 0, 0,
   /* iArg:      */ SQLITE_ReadUncommitted },
  {/* zName:     */ "recursive_triggers",
   /* ePragTyp:  */ PragTyp_FLAG,
-  /* ePragFlg:  */ PragFlg_Result0|PragFlg_NoColumns,
+  /* ePragFlg:  */ PragFlg_Result0|PragFlg_NoColumns1,
   /* ColNames:  */ 0, 0,
   /* iArg:      */ SQLITE_RecTriggers },
 #endif
@@ -112208,14 +112245,14 @@ static const PragmaName aPragmaName[] = {
 #if !defined(SQLITE_OMIT_FLAG_PRAGMAS)
  {/* zName:     */ "reverse_unordered_selects",
   /* ePragTyp:  */ PragTyp_FLAG,
-  /* ePragFlg:  */ PragFlg_Result0|PragFlg_NoColumns,
+  /* ePragFlg:  */ PragFlg_Result0|PragFlg_NoColumns1,
   /* ColNames:  */ 0, 0,
   /* iArg:      */ SQLITE_ReverseOrder },
 #endif
 #if !defined(SQLITE_OMIT_SCHEMA_VERSION_PRAGMAS)
  {/* zName:     */ "schema_version",
   /* ePragTyp:  */ PragTyp_HEADER_VALUE,
-  /* ePragFlg:  */ PragFlg_Result0,
+  /* ePragFlg:  */ PragFlg_NoColumns1|PragFlg_Result0,
   /* ColNames:  */ 0, 0,
   /* iArg:      */ BTREE_SCHEMA_VERSION },
 #endif
@@ -112229,13 +112266,13 @@ static const PragmaName aPragmaName[] = {
 #if !defined(SQLITE_OMIT_FLAG_PRAGMAS)
  {/* zName:     */ "short_column_names",
   /* ePragTyp:  */ PragTyp_FLAG,
-  /* ePragFlg:  */ PragFlg_Result0|PragFlg_NoColumns,
+  /* ePragFlg:  */ PragFlg_Result0|PragFlg_NoColumns1,
   /* ColNames:  */ 0, 0,
   /* iArg:      */ SQLITE_ShortColNames },
 #endif
  {/* zName:     */ "shrink_memory",
   /* ePragTyp:  */ PragTyp_SHRINK_MEMORY,
-  /* ePragFlg:  */ 0,
+  /* ePragFlg:  */ PragFlg_NoColumns,
   /* ColNames:  */ 0, 0,
   /* iArg:      */ 0 },
  {/* zName:     */ "soft_heap_limit",
@@ -112247,7 +112284,7 @@ static const PragmaName aPragmaName[] = {
 #if defined(SQLITE_DEBUG)
  {/* zName:     */ "sql_trace",
   /* ePragTyp:  */ PragTyp_FLAG,
-  /* ePragFlg:  */ PragFlg_Result0|PragFlg_NoColumns,
+  /* ePragFlg:  */ PragFlg_Result0|PragFlg_NoColumns1,
   /* ColNames:  */ 0, 0,
   /* iArg:      */ SQLITE_SqlTrace },
 #endif
@@ -112262,7 +112299,7 @@ static const PragmaName aPragmaName[] = {
 #if !defined(SQLITE_OMIT_PAGER_PRAGMAS)
  {/* zName:     */ "synchronous",
   /* ePragTyp:  */ PragTyp_SYNCHRONOUS,
-  /* ePragFlg:  */ PragFlg_NeedSchema|PragFlg_Result0|PragFlg_SchemaReq,
+  /* ePragFlg:  */ PragFlg_NeedSchema|PragFlg_Result0|PragFlg_SchemaReq|PragFlg_NoColumns1,
   /* ColNames:  */ 0, 0,
   /* iArg:      */ 0 },
 #endif
@@ -112276,12 +112313,12 @@ static const PragmaName aPragmaName[] = {
 #if !defined(SQLITE_OMIT_PAGER_PRAGMAS)
  {/* zName:     */ "temp_store",
   /* ePragTyp:  */ PragTyp_TEMP_STORE,
-  /* ePragFlg:  */ PragFlg_Result0,
+  /* ePragFlg:  */ PragFlg_Result0|PragFlg_NoColumns1,
   /* ColNames:  */ 0, 0,
   /* iArg:      */ 0 },
  {/* zName:     */ "temp_store_directory",
   /* ePragTyp:  */ PragTyp_TEMP_STORE_DIRECTORY,
-  /* ePragFlg:  */ 0,
+  /* ePragFlg:  */ PragFlg_NoColumns1,
   /* ColNames:  */ 0, 0,
   /* iArg:      */ 0 },
 #endif
@@ -112293,7 +112330,7 @@ static const PragmaName aPragmaName[] = {
 #if !defined(SQLITE_OMIT_SCHEMA_VERSION_PRAGMAS)
  {/* zName:     */ "user_version",
   /* ePragTyp:  */ PragTyp_HEADER_VALUE,
-  /* ePragFlg:  */ PragFlg_Result0,
+  /* ePragFlg:  */ PragFlg_NoColumns1|PragFlg_Result0,
   /* ColNames:  */ 0, 0,
   /* iArg:      */ BTREE_USER_VERSION },
 #endif
@@ -112301,27 +112338,27 @@ static const PragmaName aPragmaName[] = {
 #if defined(SQLITE_DEBUG)
  {/* zName:     */ "vdbe_addoptrace",
   /* ePragTyp:  */ PragTyp_FLAG,
-  /* ePragFlg:  */ PragFlg_Result0|PragFlg_NoColumns,
+  /* ePragFlg:  */ PragFlg_Result0|PragFlg_NoColumns1,
   /* ColNames:  */ 0, 0,
   /* iArg:      */ SQLITE_VdbeAddopTrace },
  {/* zName:     */ "vdbe_debug",
   /* ePragTyp:  */ PragTyp_FLAG,
-  /* ePragFlg:  */ PragFlg_Result0|PragFlg_NoColumns,
+  /* ePragFlg:  */ PragFlg_Result0|PragFlg_NoColumns1,
   /* ColNames:  */ 0, 0,
   /* iArg:      */ SQLITE_SqlTrace|SQLITE_VdbeListing|SQLITE_VdbeTrace },
  {/* zName:     */ "vdbe_eqp",
   /* ePragTyp:  */ PragTyp_FLAG,
-  /* ePragFlg:  */ PragFlg_Result0|PragFlg_NoColumns,
+  /* ePragFlg:  */ PragFlg_Result0|PragFlg_NoColumns1,
   /* ColNames:  */ 0, 0,
   /* iArg:      */ SQLITE_VdbeEQP },
  {/* zName:     */ "vdbe_listing",
   /* ePragTyp:  */ PragTyp_FLAG,
-  /* ePragFlg:  */ PragFlg_Result0|PragFlg_NoColumns,
+  /* ePragFlg:  */ PragFlg_Result0|PragFlg_NoColumns1,
   /* ColNames:  */ 0, 0,
   /* iArg:      */ SQLITE_VdbeListing },
  {/* zName:     */ "vdbe_trace",
   /* ePragTyp:  */ PragTyp_FLAG,
-  /* ePragFlg:  */ PragFlg_Result0|PragFlg_NoColumns,
+  /* ePragFlg:  */ PragFlg_Result0|PragFlg_NoColumns1,
   /* ColNames:  */ 0, 0,
   /* iArg:      */ SQLITE_VdbeTrace },
 #endif
@@ -112341,7 +112378,7 @@ static const PragmaName aPragmaName[] = {
 #if !defined(SQLITE_OMIT_FLAG_PRAGMAS)
  {/* zName:     */ "writable_schema",
   /* ePragTyp:  */ PragTyp_FLAG,
-  /* ePragFlg:  */ PragFlg_Result0|PragFlg_NoColumns,
+  /* ePragFlg:  */ PragFlg_Result0|PragFlg_NoColumns1,
   /* ColNames:  */ 0, 0,
   /* iArg:      */ SQLITE_WriteSchema|SQLITE_RecoveryMode },
 #endif
@@ -112729,7 +112766,9 @@ SQLITE_PRIVATE void sqlite3Pragma(
   }
 
   /* Register the result column names for pragmas that return results */
-  if( (pPragma->mPragFlg & PragFlg_NoColumns)==0 ){
+  if( (pPragma->mPragFlg & PragFlg_NoColumns)==0 
+   && ((pPragma->mPragFlg & PragFlg_NoColumns1)==0 || zRight==0)
+  ){
     setPragmaResultColumnNames(v, pPragma);
   }
 
@@ -114273,6 +114312,15 @@ SQLITE_PRIVATE void sqlite3Pragma(
 #endif
 
   } /* End of the PRAGMA switch */
+
+  /* The following block is a no-op unless SQLITE_DEBUG is defined. Its only
+  ** purpose is to execute assert() statements to verify that if the
+  ** PragFlg_NoColumns1 flag is set and the caller specified an argument
+  ** to the PRAGMA, the implementation has not added any OP_ResultRow 
+  ** instructions to the VM.  */
+  if( (pPragma->mPragFlg & PragFlg_NoColumns1) && zRight ){
+    sqlite3VdbeVerifyNoResultRow(v);
+  }
 
 pragma_out:
   sqlite3DbFree(db, zLeft);
@@ -116188,8 +116236,7 @@ static void selectInnerLoop(
     }else{
       ecelFlags = 0;
     }
-    assert( eDest!=SRT_Table || pSort==0 );
-    if( pSort && hasDistinct==0 && eDest!=SRT_EphemTab ){
+    if( pSort && hasDistinct==0 && eDest!=SRT_EphemTab && eDest!=SRT_Table ){
       /* For each expression in pEList that is a copy of an expression in
       ** the ORDER BY clause (pSort->pOrderBy), set the associated 
       ** iOrderByCol value to one more than the index of the ORDER BY 
@@ -116731,6 +116778,7 @@ static void generateSortTail(
     VdbeComment((v, "%s", aOutEx[i].zName ? aOutEx[i].zName : aOutEx[i].zSpan));
   }
   switch( eDest ){
+    case SRT_Table:
     case SRT_EphemTab: {
       sqlite3VdbeAddOp2(v, OP_NewRowid, iParm, regRowid);
       sqlite3VdbeAddOp3(v, OP_Insert, iParm, regRow, regRowid);
@@ -189750,7 +189798,7 @@ static void fts5SegIterNext(
       else if( pLeaf->nn>pLeaf->szLeaf ){
         pIter->iPgidxOff = pLeaf->szLeaf + fts5GetVarint32(
             &pLeaf->p[pLeaf->szLeaf], iOff
-            );
+        );
         pIter->iLeafOffset = iOff;
         pIter->iEndofDoclist = iOff;
         bNewTerm = 1;
@@ -189784,6 +189832,7 @@ static void fts5SegIterNext(
       */
       int nSz;
       assert( p->rc==SQLITE_OK );
+      assert( pIter->iLeafOffset<=pIter->pLeaf->nn );
       fts5FastGetVarint32(pIter->pLeaf->p, pIter->iLeafOffset, nSz);
       pIter->bDel = (nSz & 0x0001);
       pIter->nPos = nSz>>1;
@@ -190778,7 +190827,7 @@ static void fts5ChunkIterate(
       break;
     }else{
       pgno++;
-      pData = fts5DataRead(p, FTS5_SEGMENT_ROWID(pSeg->pSeg->iSegid, pgno));
+      pData = fts5LeafRead(p, FTS5_SEGMENT_ROWID(pSeg->pSeg->iSegid, pgno));
       if( pData==0 ) break;
       pChunk = &pData->p[4];
       nChunk = MIN(nRem, pData->szLeaf - 4);
@@ -193540,7 +193589,7 @@ static void fts5IndexIntegrityCheckSegment(
     ** ignore this b-tree entry. Otherwise, load it into memory. */
     if( iIdxLeaf<pSeg->pgnoFirst ) continue;
     iRow = FTS5_SEGMENT_ROWID(pSeg->iSegid, iIdxLeaf);
-    pLeaf = fts5DataRead(p, iRow);
+    pLeaf = fts5LeafRead(p, iRow);
     if( pLeaf==0 ) break;
 
     /* Check that the leaf contains at least one term, and that it is equal
@@ -196816,7 +196865,7 @@ static void fts5SourceIdFunc(
 ){
   assert( nArg==0 );
   UNUSED_PARAM2(nArg, apUnused);
-  sqlite3_result_text(pCtx, "fts5: 2017-01-03 18:27:03 979f04392853b8053817a3eea2fc679947b437fd", -1, SQLITE_TRANSIENT);
+  sqlite3_result_text(pCtx, "fts5: 2017-01-06 16:32:41 a65a62893ca8319e89e48b8a38cf8a59c69a8209", -1, SQLITE_TRANSIENT);
 }
 
 static int fts5Init(sqlite3 *db){
