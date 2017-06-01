@@ -52,12 +52,14 @@
 
 QT_BEGIN_NAMESPACE
 
+class QQuickMenu;
 class QQuickMenuItemPrivate;
 
 class Q_QUICKTEMPLATES2_PRIVATE_EXPORT QQuickMenuItem : public QQuickAbstractButton
 {
     Q_OBJECT
     Q_PROPERTY(bool highlighted READ isHighlighted WRITE setHighlighted NOTIFY highlightedChanged FINAL)
+    Q_PROPERTY(QQuickMenu *menu READ menu NOTIFY menuChanged FINAL REVISION 3)
 
 public:
     explicit QQuickMenuItem(QQuickItem *parent = nullptr);
@@ -65,9 +67,12 @@ public:
     bool isHighlighted() const;
     void setHighlighted(bool highlighted);
 
+    QQuickMenu *menu() const;
+
 Q_SIGNALS:
     void triggered();
     void highlightedChanged();
+    Q_REVISION(3) void menuChanged();
 
 protected:
     QFont defaultFont() const override;
