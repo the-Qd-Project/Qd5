@@ -94,6 +94,11 @@ public:
     inline bool isCreated() const { return m_isCreated; }
     inline bool isBound() const { return m_bound; }
 
+#ifdef Q_OS_WIN
+    // To get MSVC to compile even though we don't need any cleanup
+    void cleanup() {}
+#endif
+
 private:
     GLuint m_bufferId;
     bool m_isCreated;
