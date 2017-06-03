@@ -106,12 +106,14 @@ public:
     void setParentMenu(QQuickMenu *parent);
     void resolveParentItem();
 
+    void propagateKeyEvent(QKeyEvent *event);
+
     void startHoverTimer();
     void stopHoverTimer();
 
     void setCurrentIndex(int index, Qt::FocusReason reason);
-    void activateNextItem();
-    void activatePreviousItem();
+    bool activateNextItem();
+    bool activatePreviousItem();
 
     static void contentData_append(QQmlListProperty<QObject> *prop, QObject *obj);
     static int contentData_count(QQmlListProperty<QObject> *prop);

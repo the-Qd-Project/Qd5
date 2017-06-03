@@ -38,6 +38,8 @@
 #include "qquickoverlay_p_p.h"
 #include "qquicktooltip_p.h"
 #include "qquickpopup_p.h"
+#include "qquickmenu_p.h"
+#include "qquickmenubaritem_p.h"
 
 #include <QtGui/qguiapplication.h>
 
@@ -53,8 +55,13 @@ static bool isBlockedByPopup(QQuickItem *item)
     for (QQuickPopup *popup : popups) {
         if (qobject_cast<QQuickToolTip *>(popup))
             continue; // ignore tooltips (QTBUG-60492)
-        if (popup->isModal() || popup->closePolicy() & QQuickPopup::CloseOnEscape)
+        if (popup->isModal() || popup->closePolicy() & QQuickPopup::CloseOnEscape) {
+            if (QQuickMenu *menu = qobject_cast<QQuickMenu *>(popup)) {
+                if (qobject_cast<QQuickMenuBarItem *>(menu->parentItem()))
+                    continue;
+            }
             return item != popup->popupItem() && !popup->popupItem()->isAncestorOf(item);
+        }
     }
 
     return false;
