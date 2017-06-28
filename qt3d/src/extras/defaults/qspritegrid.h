@@ -47,12 +47,6 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace Qt3DRender {
-
-class QAbstractTexture;
-
-} // namespace Qt3DRender
-
 namespace Qt3DExtras {
 
 class QSpriteGridPrivate;
