@@ -68,7 +68,7 @@ public:
 
 private slots:
     void processReceivedFrames();
-    void sendFrame() const;
+    void sendFrame(const QCanBusFrame &frame) const;
     void processErrors(QCanBusDevice::CanBusError) const;
     void connectDevice();
     void disconnectDevice();
