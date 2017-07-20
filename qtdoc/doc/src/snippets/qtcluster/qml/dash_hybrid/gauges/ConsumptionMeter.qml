@@ -62,7 +62,7 @@ Item {
         numVertices: 32
         radius: 155
         fillWidth: 20
-        color: "#EF2973"
+        color: ValueSource.rpm < 4000 ? "green" : "#EF2973"
         opacity: 0.3
         minAngle: consumtionMeter.minValueAngle
         maxAngle: consumtionMeter.maxValueAngle
@@ -75,7 +75,7 @@ Item {
     }
 
     Item {
-        width: 311
+        width: 322
         height: 7
         rotation: consumptionFiller.angle - 72
         anchors.centerIn: parent
@@ -86,7 +86,7 @@ Item {
             //opacity: 0.75
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
-            source: "image://etc/SpeedometerNeedle.png"
+            source: ValueSource.rpm < 4000 ? "image://etc/SpeedometerNeedleGreen.png" : "image://etc/SpeedometerNeedle.png"
         }
     }
 }
