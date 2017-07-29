@@ -52,6 +52,7 @@
 //
 
 #include <Qt3DCore/private/qnode_p.h>
+#include <Qt3DCore/private/qskeletoncreatedchange_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -63,6 +64,9 @@ public:
     QAbstractSkeletonPrivate();
 
     Q_DECLARE_PUBLIC(QAbstractSkeleton)
+    static const QAbstractSkeletonPrivate *get(const QAbstractSkeleton *q);
+
+    QSkeletonCreatedChangeBase::SkeletonType m_type;
 };
 
 } // namespace Qt3DCore
