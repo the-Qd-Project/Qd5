@@ -49,9 +49,11 @@
 //
 
 #include <Qt3DRender/private/backendnode_p.h>
+#include <Qt3DRender/private/skeletondata_p.h>
 
 #include <Qt3DCore/qskeletonloader.h>
 
+#include <QtGui/qmatrix4x4.h>
 #include <QDebug>
 
 QT_BEGIN_NAMESPACE
@@ -76,7 +78,8 @@ public:
     void setName(const QString &name) { m_name = name; }
     QString name() const { return m_name; }
 
-    int jointCount() const { return m_jointCount; }
+    int jointCount() const { return m_skeletonData.joints.size(); }
+    QVector<JointInfo> joints() const { return m_skeletonData.joints; }
 
     // Called from jobs
     void loadSkeleton();
@@ -107,7 +110,8 @@ private:
     SkeletonDataType m_dataType;
 
     QString m_name;
-    int m_jointCount;
+    SkeletonData m_skeletonData;
+    SkeletonManager *m_skeletonManager;
 };
 
 #ifndef QT_NO_DEBUG_STREAM
