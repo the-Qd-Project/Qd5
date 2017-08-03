@@ -49,7 +49,9 @@
 //
 
 #include <Qt3DRender/private/backendnode_p.h>
+#include <Qt3DRender/private/uniform_p.h>
 #include <Qt3DCore/qnodeid.h>
+#include <QtGui/qmatrix4x4.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -66,10 +68,14 @@ public:
 
     Qt3DCore::QNodeId skeletonId() const { return m_skeletonId; }
 
+    // Called from jobs
+    UniformValue &skinningPaletteUniform() { return m_skinningPaletteUniform; }
+
 private:
     void initializeFromPeer(const Qt3DCore::QNodeCreatedChangeBasePtr &change) Q_DECL_FINAL;
 
     Qt3DCore::QNodeId m_skeletonId;
+    UniformValue m_skinningPaletteUniform;
 };
 
 } // namespace Render
