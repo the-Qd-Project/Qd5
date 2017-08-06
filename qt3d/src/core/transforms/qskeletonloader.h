@@ -48,6 +48,7 @@ QT_BEGIN_NAMESPACE
 
 namespace Qt3DCore {
 
+class QJoint;
 class QSkeletonLoaderPrivate;
 
 class QT3DCORESHARED_EXPORT QSkeletonLoader : public QAbstractSkeleton
@@ -55,6 +56,8 @@ class QT3DCORESHARED_EXPORT QSkeletonLoader : public QAbstractSkeleton
     Q_OBJECT
     Q_PROPERTY(QUrl source READ source WRITE setSource NOTIFY sourceChanged)
     Q_PROPERTY(Status status READ status NOTIFY statusChanged)
+    Q_PROPERTY(bool createJointsEnabled READ isCreateJointsEnabled WRITE setCreateJointsEnabled NOTIFY createJointsEnabledChanged)
+    Q_PROPERTY(Qt3DCore::QJoint* rootJoint READ rootJoint NOTIFY rootJointChanged)
 
 public:
     explicit QSkeletonLoader(Qt3DCore::QNode *parent = nullptr);
@@ -71,13 +74,18 @@ public:
 
     QUrl source() const;
     Status status() const;
+    bool isCreateJointsEnabled() const;
+    Qt3DCore::QJoint* rootJoint() const;
 
 public Q_SLOTS:
     void setSource(const QUrl &source);
+    void setCreateJointsEnabled(bool enabled);
 
 Q_SIGNALS:
     void sourceChanged(const QUrl &source);
     void statusChanged(Status status);
+    void createJointsEnabledChanged(bool createJointsEnabled);
+    void rootJointChanged(Qt3DCore::QJoint* rootJoint);
 
 protected:
     explicit QSkeletonLoader(QSkeletonLoaderPrivate &dd, Qt3DCore::QNode *parent = nullptr);
@@ -86,6 +94,7 @@ protected:
 private:
     Q_DECLARE_PRIVATE(QSkeletonLoader)
     QNodeCreatedChangeBasePtr createNodeCreationChange() const override;
+    void setRootJoint(QJoint *rootJoint); // Needed for lifetime management of created joints
 };
 
 } // namespace Qt3DCore
