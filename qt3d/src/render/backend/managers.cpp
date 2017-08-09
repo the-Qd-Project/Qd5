@@ -101,6 +101,17 @@ QVector<HSkeleton> SkeletonManager::dirtySkeletons(DirtyFlag dirtyFlag)
     return QVector<HSkeleton>();
 }
 
+void JointManager::addDirtyJoint(Qt3DCore::QNodeId jointId)
+{
+    const HJoint jointHandle = lookupHandle(jointId);
+    m_dirtyJoints.push_back(jointHandle);
+}
+
+QVector<HJoint> JointManager::dirtyJoints()
+{
+    return std::move(m_dirtyJoints);
+}
+
 } // namespace Render
 } // namespace Qt3DRender
 
