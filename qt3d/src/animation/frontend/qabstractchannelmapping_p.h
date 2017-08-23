@@ -52,19 +52,24 @@
 //
 
 #include <Qt3DCore/private/qnode_p.h>
+#include <Qt3DAnimation/private/qchannelmappingcreatedchange_p.h>
 
 QT_BEGIN_NAMESPACE
 
 namespace Qt3DAnimation {
+
+class QAbstractChannelMapping;
 
 class QAbstractChannelMappingPrivate : public Qt3DCore::QNodePrivate
 {
 public:
     QAbstractChannelMappingPrivate();
 
+    static const QAbstractChannelMappingPrivate *get(const Qt3DAnimation::QAbstractChannelMapping *q);
+
     Q_DECLARE_PUBLIC(QAbstractChannelMapping)
 
-    // TODO Add member variables
+    QChannelMappingCreatedChangeBase::MappingType m_mappingType;
 };
 
 struct QAbstractChannelMappingData
