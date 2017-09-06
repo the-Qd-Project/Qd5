@@ -67,6 +67,8 @@ public:
         return button->d_func();
     }
 
+    QQuickItem *getContentItem() override;
+
     void handlePress(const QPointF &point) override;
     void handleMove(const QPointF &point) override;
     void handleRelease(const QPointF &point) override;
@@ -85,6 +87,8 @@ public:
 
     void toggle(bool value);
 
+    void executeIndicator();
+
     QString text;
     bool down;
     bool explicitDown;
@@ -100,7 +104,7 @@ public:
     int repeatTimer;
     QPointF pressPoint;
     Qt::MouseButtons pressButtons;
-    QQuickItem *indicator;
+    QQuickDeferredPointer<QQuickItem> indicator;
     QQuickButtonGroup *group;
 };
 
