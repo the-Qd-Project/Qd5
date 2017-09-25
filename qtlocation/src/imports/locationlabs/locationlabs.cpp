@@ -37,6 +37,7 @@
 #include <QtLocationLabs/private/qmapiconobject_p.h>
 #include <QtLocationLabs/private/qmapobjectview_p.h>
 #include <QtLocationLabs/private/qmaprouteobject_p.h>
+#include <QtLocationLabs/private/qmapcircleobject_p.h>
 //#include <QtLocationLabs/private/qdeclarativenavigator_p.h>
 
 #include <QtQml/qqmlextensionplugin.h>
@@ -75,6 +76,7 @@ public:
             qmlRegisterType<QMapIconObject>(uri, major, minor, "MapIconObject");
             qmlRegisterType<QMapObjectView>(uri, major, minor, "MapObjectView");
             qmlRegisterType<QMapRouteObject>(uri, major, minor, "MapRouteObject");
+            qmlRegisterType<QMapCircleObject>(uri, major, minor, "MapCircleObject");
 
             // Register the latest Qt version as QML type version
             qmlRegisterModule(uri, QT_VERSION_MAJOR, QT_VERSION_MINOR);
