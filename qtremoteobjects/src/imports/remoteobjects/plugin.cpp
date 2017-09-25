@@ -38,6 +38,7 @@
 ****************************************************************************/
 
 #include <QtRemoteObjects/qremoteobjectnode.h>
+#include <QtRemoteObjects/qremoteobjectsettingsstore.h>
 #include <QQmlExtensionPlugin>
 #include <qqml.h>
 
@@ -54,6 +55,7 @@ public:
         qmlRegisterUncreatableType<QRemoteObjectPersistedStore>(uri, 1, 0, "PersistedStore", "Cannot create PersistedStore");
 
         qmlRegisterType<QRemoteObjectNode>(uri, 1, 0, "Node");
+        qmlRegisterType<QRemoteObjectSettingsStore>(uri, 1, 0, "SettingsStore");
         qmlProtectModule(uri, 1);
     }
 };
