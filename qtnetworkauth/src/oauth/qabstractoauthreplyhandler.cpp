@@ -30,6 +30,7 @@
 #ifndef QT_NO_HTTP
 
 #include "qabstractoauthreplyhandler.h"
+#include "qabstractoauthreplyhandler_p.h"
 
 Q_LOGGING_CATEGORY(lcReplyHandler, "qt.networkauth.replyhandler")
 
