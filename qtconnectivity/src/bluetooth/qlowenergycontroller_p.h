@@ -77,10 +77,7 @@ QT_END_NAMESPACE
 #include "qlowenergycontroller.h"
 #include "qlowenergycontrollerbase_p.h"
 
-#if defined(QT_ANDROID_BLUETOOTH)
-#include <QtAndroidExtras/QAndroidJniObject>
-#include "android/lowenergynotificationhub_p.h"
-#elif defined(QT_WINRT_BLUETOOTH)
+#if defined(QT_WINRT_BLUETOOTH)
 #include <wrl.h>
 #include <windows.devices.bluetooth.h>
 #endif
@@ -91,12 +88,6 @@ QT_BEGIN_NAMESPACE
 
 class QLowEnergyServiceData;
 class QTimer;
-
-#if defined(QT_ANDROID_BLUETOOTH)
-class LowEnergyNotificationHub;
-#elif defined(QT_WINRT_BLUETOOTH)
-class QWinRTLowEnergyServiceHandler;
-#endif
 
 extern void registerQLowEnergyControllerMetaType();
 
@@ -164,38 +155,7 @@ public:
 
 private:
 
-#if defined(QT_ANDROID_BLUETOOTH)
-    LowEnergyNotificationHub *hub;
-
-private slots:
-    void connectionUpdated(QLowEnergyController::ControllerState newState,
-                           QLowEnergyController::Error errorCode);
-    void servicesDiscovered(QLowEnergyController::Error errorCode,
-                            const QString &foundServices);
-    void serviceDetailsDiscoveryFinished(const QString& serviceUuid,
-                                         int startHandle, int endHandle);
-    void characteristicRead(const QBluetoothUuid &serviceUuid, int handle,
-                            const QBluetoothUuid &charUuid, int properties,
-                            const QByteArray& data);
-    void descriptorRead(const QBluetoothUuid &serviceUuid, const QBluetoothUuid &charUuid,
-                        int handle, const QBluetoothUuid &descUuid, const QByteArray &data);
-    void characteristicWritten(int charHandle, const QByteArray &data,
-                               QLowEnergyService::ServiceError errorCode);
-    void descriptorWritten(int descHandle, const QByteArray &data,
-                           QLowEnergyService::ServiceError errorCode);
-    void serverDescriptorWritten(const QAndroidJniObject &jniDesc, const QByteArray &newValue);
-    void characteristicChanged(int charHandle, const QByteArray &data);
-    void serverCharacteristicChanged(const QAndroidJniObject &jniChar, const QByteArray &newValue);
-    void serviceError(int attributeHandle, QLowEnergyService::ServiceError errorCode);
-    void advertisementError(int errorCode);
-
-private:
-    void peripheralConnectionUpdated(QLowEnergyController::ControllerState newState,
-                           QLowEnergyController::Error errorCode);
-    void centralConnectionUpdated(QLowEnergyController::ControllerState newState,
-                           QLowEnergyController::Error errorCode);
-
-#elif defined(QT_WINRT_BLUETOOTH)
+#if defined(QT_WINRT_BLUETOOTH)
 private slots:
     void characteristicChanged(int charHandle, const QByteArray &data);
 
