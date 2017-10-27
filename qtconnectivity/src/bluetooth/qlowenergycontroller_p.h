@@ -77,11 +77,6 @@ QT_END_NAMESPACE
 #include "qlowenergycontroller.h"
 #include "qlowenergycontrollerbase_p.h"
 
-#if defined(QT_WINRT_BLUETOOTH)
-#include <wrl.h>
-#include <windows.devices.bluetooth.h>
-#endif
-
 #include <functional>
 
 QT_BEGIN_NAMESPACE
@@ -152,39 +147,6 @@ public:
         int maxLength;
     };
     QVector<Attribute> localAttributes;
-
-private:
-
-#if defined(QT_WINRT_BLUETOOTH)
-private slots:
-    void characteristicChanged(int charHandle, const QByteArray &data);
-
-private:
-    Microsoft::WRL::ComPtr<ABI::Windows::Devices::Bluetooth::IBluetoothLEDevice> mDevice;
-    EventRegistrationToken mStatusChangedToken;
-    struct ValueChangedEntry {
-        ValueChangedEntry() {}
-        ValueChangedEntry(Microsoft::WRL::ComPtr<ABI::Windows::Devices::Bluetooth::GenericAttributeProfile::IGattCharacteristic> c,
-                          EventRegistrationToken t)
-            : characteristic(c)
-            , token(t)
-        {
-        }
-
-        Microsoft::WRL::ComPtr<ABI::Windows::Devices::Bluetooth::GenericAttributeProfile::IGattCharacteristic> characteristic;
-        EventRegistrationToken token;
-    };
-    QVector<ValueChangedEntry> mValueChangedTokens;
-
-    Microsoft::WRL::ComPtr<ABI::Windows::Devices::Bluetooth::GenericAttributeProfile::IGattDeviceService> getNativeService(const QBluetoothUuid &serviceUuid);
-    Microsoft::WRL::ComPtr<ABI::Windows::Devices::Bluetooth::GenericAttributeProfile::IGattCharacteristic> getNativeCharacteristic(const QBluetoothUuid &serviceUuid, const QBluetoothUuid &charUuid);
-
-    void registerForValueChanges(const QBluetoothUuid &serviceUuid, const QBluetoothUuid &charUuid);
-
-    void obtainIncludedServices(QSharedPointer<QLowEnergyServicePrivate> servicePointer,
-        Microsoft::WRL::ComPtr<ABI::Windows::Devices::Bluetooth::GenericAttributeProfile::IGattDeviceService> nativeService);
-#endif
-
 };
 
 Q_DECLARE_TYPEINFO(QLowEnergyControllerPrivateCommon::Attribute, Q_MOVABLE_TYPE);
