@@ -43,6 +43,7 @@
 
 #if QT_CONFIG(opengl)
 #include <private/qsgpkmhandler_p.h>
+#include <private/qsgktxhandler_p.h>
 #endif
 
 #include <QFileInfo>
@@ -80,6 +81,8 @@ bool QSGTextureReader::isTexture()
         // Currently the handlers are hardcoded; later maybe a list of plugins
         if (QSGPkmHandler::canRead(suffix, headerBlock)) {
             m_handler = new QSGPkmHandler(m_device, logName);
+        } else if (QSGKtxHandler::canRead(suffix, headerBlock)) {
+            m_handler = new QSGKtxHandler(m_device, logName);
         }
         // else if OtherHandler::canRead() ...etc.
     }
