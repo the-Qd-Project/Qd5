@@ -71,6 +71,7 @@ namespace JobTypes {
         LoadScene,
         LoadTextureData,
         PickBoundingVolume,
+        RayCasting,
         RenderView,
         UpdateTransform,
         UpdateTreeEnabled,
