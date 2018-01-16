@@ -51,7 +51,7 @@
 // We mean it.
 //
 
-#include <Qt3DCore/qaspectjob.h>
+#include "abstractpickingjob_p.h"
 #include <Qt3DRender/qpickevent.h>
 #include <Qt3DRender/private/handle_types_p.h>
 #include <Qt3DRender/private/qcollisionqueryresult_p.h>
@@ -61,45 +61,25 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace Qt3DCore {
-class QNodeId;
-}
-
 namespace Qt3DRender {
 namespace Render {
-
-class Entity;
-class NodeManagers;
-class RenderSettings;
-class RayCaster;
 
 namespace PickingUtils {
 typedef QVector<RayCasting::QCollisionQueryResult::Hit> HitList;
 }
 
-class Q_AUTOTEST_EXPORT RayCastingJob : public Qt3DCore::QAspectJob
+class Q_AUTOTEST_EXPORT RayCastingJob : public AbstractPickingJob
 {
 public:
     RayCastingJob();
 
-    void setRoot(Entity *root);
-    void setFrameGraphRoot(FrameGraphNode *frameGraphRoot);
-    void setRenderSettings(RenderSettings *settings);
-    void setManagers(NodeManagers *manager);
-
     void markCastersDirty();
-    bool runHelper();
+    bool runHelper() override;
 
 protected:
-    void run() final;
     void dispatchHits(RayCaster *rayCaster, const PickingUtils::HitList &sphereHits);
 
 private:
-    NodeManagers *m_manager;
-    Entity *m_node;
-    FrameGraphNode *m_frameGraphRoot;
-    RenderSettings *m_renderSettings;
-
     bool m_castersDirty;
     bool m_oneEnabledAtLeast;
 };
