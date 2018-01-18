@@ -4414,7 +4414,7 @@ Poista toinen niistä käytöstä.</translation>
     </message>
     <message>
         <source>pattern contains an item that is not supported for DFA matching</source>
-        <translation>mallissa on osa jota DFA-haku ei tue</translation>
+        <translation>mallissa on osa, jota DFA-haku ei tue</translation>
     </message>
     <message>
         <source>workspace size exceeded in DFA matching</source>
