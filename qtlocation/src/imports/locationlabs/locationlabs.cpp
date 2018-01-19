@@ -34,7 +34,7 @@
 **
 ****************************************************************************/
 
-//#include <QtLocationLabs/private/qmapiconobject_p.h>
+#include <QtLocationLabs/private/qmapiconobject_p.h>
 #include <QtLocationLabs/private/qmapobjectview_p.h>
 #include <QtLocationLabs/private/qmaprouteobject_p.h>
 //#include <QtLocationLabs/private/qdeclarativenavigator_p.h>
@@ -71,8 +71,8 @@ public:
             int minor = 11;
 
             // Register the 5.11 types
-//            qmlRegisterType<QDeclarativeNavigator>(uri, major, minor, "Navigator");
-//            qmlRegisterType<QMapIconObject>(uri, major, minor, "MapIconObject");
+            //qmlRegisterType<QDeclarativeNavigator>(uri, major, minor, "Navigator");
+            qmlRegisterType<QMapIconObject>(uri, major, minor, "MapIconObject");
             qmlRegisterType<QMapObjectView>(uri, major, minor, "MapObjectView");
             qmlRegisterType<QMapRouteObject>(uri, major, minor, "MapRouteObject");
 
