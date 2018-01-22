@@ -32,7 +32,8 @@ name:                   preview
 [PlatformIdentifier]
 identifier:             mac
 
-[PackageTemplates]
-template_dirs:          preview_tools
+[PackageConfigurationFiles]
+file_list:              tools-qt3dstudio-macOS-online-preview-conf
 
-[preview.qt.tools.qt3dstudio]
+[PackageTemplates]
+template_dirs:          preview_pkg_qt3dstudio
