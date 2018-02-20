@@ -49,6 +49,7 @@
 // We mean it.
 //
 
+#include <QtLocationLabs/private/qlocationlabsglobal_p.h>
 #include <QtLocation/private/qgeomapobject_p_p.h>
 #include <QPointer>
 #include <QVector>
@@ -58,7 +59,7 @@ QT_BEGIN_NAMESPACE
 
 class QQmlDelegateModel;
 class QGeoMap;
-class Q_LOCATION_PRIVATE_EXPORT QMapObjectViewPrivate : public QGeoMapObjectPrivate
+class Q_LOCATIONLABS_PRIVATE_EXPORT QMapObjectViewPrivate : public QGeoMapObjectPrivate
 {
 public:
     QMapObjectViewPrivate(QGeoMapObject *q);
@@ -67,7 +68,7 @@ public:
     virtual QGeoMapObject::Type type() const override final;
 };
 
-class Q_LOCATION_PRIVATE_EXPORT QMapObjectViewPrivateDefault : public QMapObjectViewPrivate
+class Q_LOCATIONLABS_PRIVATE_EXPORT QMapObjectViewPrivateDefault : public QMapObjectViewPrivate
 {
 public:
     QMapObjectViewPrivateDefault(QGeoMapObject *q);
