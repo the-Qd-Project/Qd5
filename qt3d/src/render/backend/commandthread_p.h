@@ -53,6 +53,7 @@
 
 #include <QtCore/QThread>
 #include <QtCore/QSemaphore>
+#include <QtCore/QMutex>
 
 QT_BEGIN_NAMESPACE
 
@@ -63,12 +64,10 @@ namespace Qt3DRender {
 namespace Render {
 
 class Renderer;
-
-class Command
-{
-public:
-    virtual void execute(Renderer *renderer, QOpenGLContext *localContext) = 0;
-};
+class GLCommand;
+class OffscreenSurfaceHelper;
+class GraphicsContext;
+class ShaderCache;
 
 class CommandThread : public QThread
 {
@@ -79,21 +78,32 @@ public:
 
     Render::Renderer* renderer() const { return m_renderer; }
 
-    void initialize(QOpenGLContext *mainContext);
+    void setShaderCache(ShaderCache *shaderCache);
+    ShaderCache *shaderCache() const { return m_shaderCache; }
+
+    void initialize(QOpenGLContext *mainContext, OffscreenSurfaceHelper *offsreenSurfaceHelper);
     void shutdown();
 
-    void executeCommand(Command *command);
+    void executeCommand(GLCommand *command);
 
 private:
     void run() override;
-    Q_INVOKABLE void executeCommandInternal(Command *command);
+    void executeCommandInternal(Qt3DRender::Render::GLCommand *command);
 
 private:
     Renderer* m_renderer;
     QSemaphore m_waitForStartSemaphore;
     QSemaphore m_initializedSemaphore;
+    QSemaphore m_commandRequestedSemaphore;
+    QSemaphore m_commandExecutionSemaphore;
+    QMutex m_blockingCallerMutex;
     QOpenGLContext *m_mainContext;
+    ShaderCache *m_shaderCache;
+    OffscreenSurfaceHelper *m_offsreenSurfaceHelper;
     QScopedPointer<QOpenGLContext> m_localContext;
+    QScopedPointer<GraphicsContext> m_graphicsContext;
+    GLCommand *m_currentCommand;
+    QAtomicInt m_running;
 };
 
 } // Render
