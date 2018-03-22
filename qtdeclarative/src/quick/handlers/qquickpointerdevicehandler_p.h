@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2016 The Qt Company Ltd.
+** Copyright (C) 2018 The Qt Company Ltd.
 ** Contact: https://www.qt.io/licensing/
 **
 ** This file is part of the QtQuick module of the Qt Toolkit.
@@ -36,6 +36,7 @@
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
+#include "qquickpointerhandler_p.h"
 
 #ifndef QQUICKPOINTERDEVICEHANDLER_H
 #define QQUICKPOINTERDEVICEHANDLER_H
@@ -51,9 +52,9 @@
 // We mean it.
 //
 
-#include "qquickpointerhandler_p.h"
-
 QT_BEGIN_NAMESPACE
+
+class QQuickPointerDeviceHandlerPrivate;
 
 class Q_AUTOTEST_EXPORT QQuickPointerDeviceHandler : public QQuickPointerHandler
 {
@@ -66,11 +67,11 @@ public:
     explicit QQuickPointerDeviceHandler(QObject *parent = nullptr);
     ~QQuickPointerDeviceHandler();
 
-    QQuickPointerDevice::DeviceTypes acceptedDevices() const { return m_acceptedDevices; }
-    QQuickPointerDevice::PointerTypes acceptedPointerTypes() const { return m_acceptedPointerTypes; }
-    Qt::KeyboardModifiers acceptedModifiers() const { return m_acceptedModifiers; }
+    QQuickPointerDevice::DeviceTypes acceptedDevices() const;
+    QQuickPointerDevice::PointerTypes acceptedPointerTypes() const;
+    Qt::KeyboardModifiers acceptedModifiers() const;
 
-public slots:
+public Q_SLOTS:
     void setAcceptedDevices(QQuickPointerDevice::DeviceTypes acceptedDevices);
     void setAcceptedPointerTypes(QQuickPointerDevice::PointerTypes acceptedPointerTypes);
     void setAcceptedModifiers(Qt::KeyboardModifiers acceptedModifiers);
@@ -81,12 +82,11 @@ Q_SIGNALS:
     void acceptedModifiersChanged();
 
 protected:
+    QQuickPointerDeviceHandler(QQuickPointerDeviceHandlerPrivate &dd, QObject *parent = nullptr);
+
     bool wantsPointerEvent(QQuickPointerEvent *event) override;
 
-protected:
-    QQuickPointerDevice::DeviceTypes m_acceptedDevices;
-    QQuickPointerDevice::PointerTypes m_acceptedPointerTypes;
-    Qt::KeyboardModifiers m_acceptedModifiers;
+    Q_DECLARE_PRIVATE(QQuickPointerDeviceHandler)
 };
 
 QT_END_NAMESPACE
