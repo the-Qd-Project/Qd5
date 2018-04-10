@@ -39,8 +39,7 @@
 
 #include <QtQml/qqmlextensionplugin.h>
 #include <QtQml/qqml.h>
-
-#include "qquickshape_p.h"
+#include <QtQuickShapes/private/qquickshape_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -50,7 +49,11 @@ class QmlShapesPlugin : public QQmlExtensionPlugin
     Q_PLUGIN_METADATA(IID QQmlExtensionInterface_iid)
 
 public:
-    QmlShapesPlugin(QObject *parent = nullptr) : QQmlExtensionPlugin(parent) { }
+    QmlShapesPlugin(QObject *parent = nullptr)
+        : QQmlExtensionPlugin(parent)
+    {
+    }
+
     void registerTypes(const char *uri) override
     {
         Q_ASSERT(QByteArray(uri) == QByteArray("QtQuick.Shapes"));
