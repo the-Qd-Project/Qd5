@@ -84,6 +84,8 @@ Q_SIGNALS:
     void footerChanged();
 
 protected:
+    QQuickPage(QQuickPagePrivate &dd, QQuickItem *parent);
+
     void componentComplete() override;
 
     void spacingChange(qreal newSpacing, qreal oldSpacing) override;
