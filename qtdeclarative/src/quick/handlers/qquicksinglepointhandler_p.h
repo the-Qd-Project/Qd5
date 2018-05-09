@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2016 The Qt Company Ltd.
+** Copyright (C) 2018 The Qt Company Ltd.
 ** Contact: https://www.qt.io/licensing/
 **
 ** This file is part of the QtQuick module of the Qt Toolkit.
@@ -51,59 +51,10 @@
 // We mean it.
 //
 
+#include "qquickhandlerpoint_p.h"
 #include "qquickpointerdevicehandler_p.h"
 
 QT_BEGIN_NAMESPACE
-
-class QQuickSinglePointHandler;
-
-class Q_QUICK_PRIVATE_EXPORT QQuickHandlerPoint {
-    Q_GADGET
-    Q_PROPERTY(int id READ id)
-    Q_PROPERTY(QPointingDeviceUniqueId uniqueId READ uniqueId)
-    Q_PROPERTY(QPointF position READ position)
-    Q_PROPERTY(QPointF scenePosition READ scenePosition)
-    Q_PROPERTY(QPointF pressPosition READ pressPosition)
-    Q_PROPERTY(QPointF scenePressPosition READ scenePressPosition)
-    Q_PROPERTY(QPointF sceneGrabPosition READ sceneGrabPosition)
-    Q_PROPERTY(Qt::MouseButtons pressedButtons READ pressedButtons)
-    Q_PROPERTY(QVector2D velocity READ velocity)
-    Q_PROPERTY(qreal rotation READ rotation)
-    Q_PROPERTY(qreal pressure READ pressure)
-    Q_PROPERTY(QSizeF ellipseDiameters READ ellipseDiameters)
-
-public:
-    QQuickHandlerPoint();
-
-    int id() const { return m_id; }
-    Qt::MouseButtons pressedButtons() const { return m_pressedButtons; }
-    QPointF pressPosition() const { return m_pressPosition; }
-    QPointF scenePressPosition() const { return m_scenePressPosition; }
-    QPointF sceneGrabPosition() const { return m_sceneGrabPosition; }
-    QPointF position() const { return m_position; }
-    QPointF scenePosition() const { return m_scenePosition; }
-    QVector2D velocity() const { return m_velocity; }
-    qreal rotation() const { return m_rotation; }
-    qreal pressure() const { return m_pressure; }
-    QSizeF ellipseDiameters() const { return m_ellipseDiameters; }
-    QPointingDeviceUniqueId uniqueId() const { return m_uniqueId; }
-
-private:
-    void reset();
-    int m_id;
-    QPointingDeviceUniqueId m_uniqueId;
-    Qt::MouseButtons m_pressedButtons;
-    QPointF m_position;
-    QPointF m_scenePosition;
-    QPointF m_pressPosition;
-    QPointF m_scenePressPosition;
-    QPointF m_sceneGrabPosition;
-    QVector2D m_velocity;
-    qreal m_rotation;
-    qreal m_pressure;
-    QSizeF m_ellipseDiameters;
-    friend class QQuickSinglePointHandler;
-};
 
 class Q_QUICK_PRIVATE_EXPORT QQuickSinglePointHandler : public QQuickPointerDeviceHandler
 {
@@ -148,7 +99,6 @@ private:
 
 QT_END_NAMESPACE
 
-QML_DECLARE_TYPE(QQuickHandlerPoint)
 QML_DECLARE_TYPE(QQuickSinglePointHandler)
 
 #endif // QQUICKPOINTERSINGLEHANDLER_H
