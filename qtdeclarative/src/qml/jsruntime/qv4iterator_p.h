@@ -59,6 +59,12 @@ QT_BEGIN_NAMESPACE
 
 namespace QV4 {
 
+enum IteratorKind {
+    KeyIteratorKind,
+    ValueIteratorKind,
+    KeyValueIteratorKind
+};
+
 struct IteratorPrototype : Object
 {
     void init(ExecutionEngine *engine);
