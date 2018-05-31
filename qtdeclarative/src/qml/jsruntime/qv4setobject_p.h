@@ -60,18 +60,19 @@ QT_BEGIN_NAMESPACE
 
 namespace QV4 {
 
+class ESTable;
+
 namespace Heap {
 
 struct SetCtor : FunctionObject {
     void init(QV4::ExecutionContext *scope);
 };
 
-#define SetObjectMembers(class, Member) \
-    Member(class, Pointer, ArrayObject *, setArray)
-
-DECLARE_HEAP_OBJECT(SetObject, Object) {
-    DECLARE_MARKOBJECTS(SetObject);
-    void init() { Object::init(); }
+struct SetObject : Object {
+    static void markObjects(Heap::Base *that, MarkStack *markStack);
+    void init();
+    void destroy();
+    ESTable *esTable;
 };
 
 }
@@ -88,6 +89,7 @@ struct SetObject : Object
 {
     V4_OBJECT2(SetObject, Object)
     V4_PROTOTYPE(setPrototype)
+    V4_NEEDS_DESTROY
 };
 
 struct SetPrototype : Object
