@@ -51,14 +51,14 @@
 // We mean it.
 //
 
-#include <Qt3DRender/private/graphicshelperes3_p.h>
+#include <Qt3DRender/private/graphicshelperes3_1_p.h>
 
 QT_BEGIN_NAMESPACE
 
 namespace Qt3DRender {
 namespace Render {
 
-class GraphicsHelperES3_2 : public GraphicsHelperES3
+class GraphicsHelperES3_2 : public GraphicsHelperES3_1
 {
 public:
     GraphicsHelperES3_2();

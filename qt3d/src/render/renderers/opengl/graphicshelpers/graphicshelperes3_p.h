@@ -87,6 +87,7 @@ public:
     void vertexAttributePointer(GLenum shaderDataType, GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid *pointer) override;
 
     UniformType uniformTypeFromGLType(GLenum glType) override;
+    uint uniformByteSize(const ShaderUniform &description) override;
 
 protected:
     QOpenGLExtraFunctions *m_extraFuncs = nullptr;
