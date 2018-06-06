@@ -52,38 +52,9 @@
 //
 
 #include "qquicksinglepointhandler_p.h"
+#include "qquickdragaxis_p.h"
 
 QT_BEGIN_NAMESPACE
-
-class Q_AUTOTEST_EXPORT QQuickDragAxis : public QObject
-{
-    Q_OBJECT
-    Q_PROPERTY(qreal minimum READ minimum WRITE setMinimum NOTIFY minimumChanged)
-    Q_PROPERTY(qreal maximum READ maximum WRITE setMaximum NOTIFY maximumChanged)
-    Q_PROPERTY(bool enabled READ enabled WRITE setEnabled NOTIFY enabledChanged)
-
-public:
-    QQuickDragAxis();
-
-    qreal minimum() const { return m_minimum; }
-    void setMinimum(qreal minimum);
-
-    qreal maximum() const { return m_maximum; }
-    void setMaximum(qreal maximum);
-
-    bool enabled() const { return m_enabled; }
-    void setEnabled(bool enabled);
-
-signals:
-    void minimumChanged();
-    void maximumChanged();
-    void enabledChanged();
-
-private:
-    qreal m_minimum;
-    qreal m_maximum;
-    bool m_enabled;
-};
 
 class Q_AUTOTEST_EXPORT QQuickDragHandler : public QQuickSinglePointHandler
 {
