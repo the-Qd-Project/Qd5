@@ -106,6 +106,7 @@ namespace JobTypes {
         ProximityFiltering,
         SyncFilterEntityByLayer,
         SyncMaterialGatherer,
+        UpdateLayerEntity
     };
 
 } // JobTypes
