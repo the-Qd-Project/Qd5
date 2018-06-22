@@ -47,6 +47,7 @@
 #include <private/qqmldelegatecomponent_p.h>
 #endif
 #include <private/qqmlobjectmodel_p.h>
+#include <private/qqmltablemodel_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -75,6 +76,7 @@ void QQmlModelsModule::defineLabsModule()
     qmlRegisterUncreatableType<QQmlAbstractDelegateComponent>(uri, 1, 0, "AbstractDelegateComponent", QQmlAbstractDelegateComponent::tr("Cannot create instance of abstract class AbstractDelegateComponent."));
     qmlRegisterType<QQmlDelegateChooser>(uri, 1, 0, "DelegateChooser");
     qmlRegisterType<QQmlDelegateChoice>(uri, 1, 0, "DelegateChoice");
+    qmlRegisterType<QQmlTableModel>(uri, 1, 0, "TableModel");
 }
 
 QT_END_NAMESPACE
