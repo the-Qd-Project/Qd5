@@ -55,12 +55,6 @@
 #include "qbluetoothsocketbase_p.h"
 #include <QtGlobal>
 
-QT_FORWARD_DECLARE_CLASS(QSocketNotifier)
-
-#ifdef QT_WINRT_BLUETOOTH
-QT_FORWARD_DECLARE_CLASS(SocketWorker)
-#endif
-
 QT_BEGIN_NAMESPACE
 
 class QBluetoothSocketPrivate : public QBluetoothSocketBasePrivate
@@ -91,12 +85,6 @@ public:
     qint64 writeData(const char *data, qint64 maxSize) override;
     qint64 readData(char *data, qint64 maxSize) override;
 
-#if defined(QT_WINRT_BLUETOOTH)
-    bool setSocketDescriptor(Microsoft::WRL::ComPtr<ABI::Windows::Networking::Sockets::IStreamSocket> socket,
-                             QBluetoothServiceInfo::Protocol socketType,
-                             QBluetoothSocket::SocketState socketState = QBluetoothSocket::ConnectedState,
-                             QBluetoothSocket::OpenMode openMode = QBluetoothSocket::ReadWrite) override;
-#endif
     bool setSocketDescriptor(int socketDescriptor, QBluetoothServiceInfo::Protocol socketType,
                              QBluetoothSocket::SocketState socketState = QBluetoothSocket::ConnectedState,
                              QBluetoothSocket::OpenMode openMode = QBluetoothSocket::ReadWrite) override;
@@ -104,31 +92,6 @@ public:
     qint64 bytesAvailable() const override;
     bool canReadLine() const override;
     qint64 bytesToWrite() const override;
-
-#ifdef QT_WINRT_BLUETOOTH
-    SocketWorker *m_worker;
-
-    Microsoft::WRL::ComPtr<ABI::Windows::Networking::Sockets::IStreamSocket> m_socketObject;
-    Microsoft::WRL::ComPtr<ABI::Windows::Foundation::IAsyncAction> m_connectOp;
-
-    QMutex m_readMutex;
-
-    // Protected by m_readMutex. Written in addToPendingData (native callback)
-    QVector<QByteArray> m_pendingData;
-
-    Q_INVOKABLE void addToPendingData(const QVector<QByteArray> &data);
-
-private slots:
-    void handleNewData(const QVector<QByteArray> &data);
-    void handleError(QBluetoothSocket::SocketError error);
-#endif // QT_WINRT_BLUETOOTH
-
-private:
-
-#ifdef QT_WINRT_BLUETOOTH
-    HRESULT handleConnectOpFinished(ABI::Windows::Foundation::IAsyncAction *action,
-                                    ABI::Windows::Foundation::AsyncStatus status);
-#endif
 };
 
 QT_END_NAMESPACE
