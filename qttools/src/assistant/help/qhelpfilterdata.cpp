@@ -54,31 +54,65 @@ public:
     QStringList m_components;
 };
 
+/*!
+    \class QHelpFilterData
+    \since 5.13
+    \inmodule QtHelp
+    \brief The QHelpFilterData class provides details for the filters
+    used by QHelpFilterEngine.
+
+    By using setComponents() you may constrain the search results to
+    documents that belong only to components specified on the given list.
+
+    \sa QHelpFilterEngine
+*/
+
+/*!
+    Constructs the empty filter.
+*/
 QHelpFilterData::QHelpFilterData()
     : d(new QHelpFilterDataPrivate)
 {
 }
 
+/*!
+    Constructs a copy of \a other.
+*/
 QHelpFilterData::QHelpFilterData(const QHelpFilterData &other)
     : d(other.d)
 {
 }
 
+/*!
+    Destroys the filter.
+*/
 QHelpFilterData::~QHelpFilterData()
 {
 }
 
+/*!
+    Assigns \a other to this filter and returns a reference to this filter.
+*/
 QHelpFilterData &QHelpFilterData::operator=(const QHelpFilterData &other)
 {
     d = other.d;
     return *this;
 }
 
+/*!
+    Specifies the component list that is used for filtering
+    the search results. Only the results which match the \a components
+    will be returned.
+*/
 void QHelpFilterData::setComponents(const QStringList &components)
 {
     d->m_components = components;
 }
 
+/*!
+    Returns the component list that is used for filtering
+    the search results.
+*/
 QStringList QHelpFilterData::components() const
 {
     return d->m_components;
