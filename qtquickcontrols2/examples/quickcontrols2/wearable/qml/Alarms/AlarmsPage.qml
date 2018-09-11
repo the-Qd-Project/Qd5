@@ -50,6 +50,7 @@
 
 import QtQuick 2.7
 import QtQuick.Controls 2.0 as QQC2
+import ".."
 import "../Style"
 
 Item {
@@ -64,7 +65,7 @@ Item {
                 ListElement { name: qsTr("Week Ends"); state: false; time: "07:30 AM" }
             }
 
-            Item {
+            SwipeViewPage {
                 Column {
                     spacing: 30
                     anchors.centerIn: parent
