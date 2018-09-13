@@ -77,6 +77,9 @@ public Q_SLOTS:
     virtual void handleGridLineColorChanged(const QColor &color);
     virtual void handleMinorGridLineColorChanged(const QColor &color);
 
+protected:
+    void updateLabelsValues(QValueAxis *axis);
+
 private:
     void createItems(int count);
     void deleteItems(int count);
