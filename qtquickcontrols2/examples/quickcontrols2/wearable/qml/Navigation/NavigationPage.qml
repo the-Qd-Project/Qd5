@@ -53,6 +53,8 @@ import "../Style"
 import "navigation.js" as NavigationData
 
 Item {
+    property alias routeListView: routeView
+
     Column {
         anchors.fill: parent
         anchors.margins: 2
