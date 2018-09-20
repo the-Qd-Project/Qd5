@@ -75,6 +75,7 @@ public:
     ~SendBufferCaptureJob();
 
     void addRequest(QPair<Buffer*, QByteArray> request);
+    bool hasRequests() const;
 
     void run() final;
 
