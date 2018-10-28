@@ -26,40 +26,20 @@
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
-#include "valueaxislabel_p.h"
+#include <private/valueaxislabel_p.h>
 
 #include <QtCore/qlocale.h>
-#include <QtGui/qevent.h>
-#include <QtGui/qtextcursor.h>
-#include <QtGui/qtextdocument.h>
 
 QT_CHARTS_BEGIN_NAMESPACE
 
 ValueAxisLabel::ValueAxisLabel(QGraphicsItem *parent) :
-    QGraphicsTextItem(parent)
+    EditableAxisLabel(parent)
 {
 
 }
 
-void ValueAxisLabel::focusInEvent(QFocusEvent *event)
+void ValueAxisLabel::finishEditing()
 {
-    m_htmlBeforeEdit = toHtml();
-    setTextWidth(-1);
-    m_valueBeforeEdit = m_value;
-    setHtml(QString::number(m_value));
-    m_editing = true;
-    QGraphicsTextItem::focusInEvent(event);
-}
-
-void ValueAxisLabel::focusOutEvent(QFocusEvent *event)
-{
-    // perform the modifications before emitting valueChanged
-    // because slots attached to valueChanged can trigger
-    // a range change which might invalidate the current label
-    QGraphicsTextItem::focusOutEvent(event);
-    setTextInteractionFlags(Qt::NoTextInteraction);
-    m_editing = false;
-
     bool ok = false;
     QLocale locale;
     qreal oldValue = m_value;
@@ -70,6 +50,11 @@ void ValueAxisLabel::focusOutEvent(QFocusEvent *event)
     } else {
         document()->setHtml(m_htmlBeforeEdit);
     }
+}
+
+void ValueAxisLabel::resetBeforeEditValue()
+{
+    m_value = m_valueBeforeEdit;
 }
 
 qreal ValueAxisLabel::value() const
@@ -84,48 +69,22 @@ void ValueAxisLabel::setValue(const qreal &value)
     m_value = value;
 }
 
-void ValueAxisLabel::reloadBeforeEditContent()
+void ValueAxisLabel::setInitialEditValue()
 {
-    m_value = m_valueBeforeEdit;
-    setHtml(m_htmlBeforeEdit);
-}
-
-QRectF ValueAxisLabel::boundingRect() const
-{
-    QRectF ret = QGraphicsTextItem::boundingRect();
-
-    // add 2px margin to allow the cursor to
-    // show up properly when editing
-    if (m_editing)
-        ret.setWidth(ret.width() + 2);
-    return ret;
-}
-
-void ValueAxisLabel::setEditable(bool editable)
-{
-    m_editable = editable;
+    m_valueBeforeEdit = m_value;
+    setHtml(QString::number(m_value));
 }
 
 void ValueAxisLabel::keyPressEvent(QKeyEvent *event)
 {
-    if (event->text().length() >= 1) {
-        // finish editing with enter
-        if (event->key() == Qt::Key_Enter ||
-                event->key() == Qt::Key_Return) {
-            clearFocus();
-            // prevent further event processing with a return
-            // because the focusOutEvent could have triggered
-            // a range change which might have invalidated the current label
-            return;
-        } else if (event->key() == Qt::Key_Escape) {
-            document()->setHtml(m_htmlBeforeEdit);
-            clearFocus();
-            // prevent further event processing with a return
-            // because the focusOutEvent could have triggered
-            // a range change which might have invalidated the current label
-            return;
-        }
+    if (isEditEndingKeyPress(event)) {
+        // prevent further event processing with a return
+        // because the focusOutEvent could have triggered
+        // a range change which might have invalidated the current label
+        return;
+    }
 
+    if (event->text().length() >= 1) {
         QLocale locale;
         if (!event->text().at(0).isDigit()
                 && event->text().at(0) != locale.decimalPoint()
@@ -138,23 +97,6 @@ void ValueAxisLabel::keyPressEvent(QKeyEvent *event)
         }
     }
     QGraphicsTextItem::keyPressEvent(event);
-}
-
-bool ValueAxisLabel::sceneEvent(QEvent *event)
-{
-    if (m_editable && event->type() == QEvent::GraphicsSceneMouseDoubleClick) {
-        setTextInteractionFlags(Qt::TextEditorInteraction);
-
-        bool ret = QGraphicsTextItem::sceneEvent(event);
-        // QGraphicsTextItem::sceneevent needs to be processed before
-        // the focus and text selection
-        setFocus(Qt::MouseFocusReason);
-        QTextCursor cursor = textCursor();
-        cursor.select(QTextCursor::Document);
-        setTextCursor(cursor);
-        return ret;
-    }
-    return QGraphicsTextItem::sceneEvent(event);
 }
 
 QT_CHARTS_END_NAMESPACE

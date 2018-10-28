@@ -39,39 +39,30 @@
 #ifndef VALUEAXISLABEL_H
 #define VALUEAXISLABEL_H
 
-#include <QtWidgets/qgraphicsitem.h>
-#include <QtCharts/private/qchartglobal_p.h>
+#include <private/editableaxislabel_p.h>
 
 QT_CHARTS_BEGIN_NAMESPACE
 
-class QT_CHARTS_PRIVATE_EXPORT ValueAxisLabel : public QGraphicsTextItem
+class QT_CHARTS_PRIVATE_EXPORT ValueAxisLabel : public EditableAxisLabel
 {
     Q_OBJECT
 public:
     ValueAxisLabel(QGraphicsItem *parent = nullptr);
 
-    void focusInEvent(QFocusEvent *event);
-    void focusOutEvent(QFocusEvent *event);
     void keyPressEvent(QKeyEvent *event);
-
-    bool sceneEvent(QEvent *event);
 
     qreal value() const;
     void setValue(const qreal &value);
-    void reloadBeforeEditContent();
-
-    QRectF boundingRect() const;
-
-    void setEditable(bool editable);
 
 private:
     qreal m_value = 0.0;
     qreal m_valueBeforeEdit = 0.0;
-    QString m_htmlBeforeEdit;
-    bool m_editing = false;
-    bool m_editable = false;
 
-signals:
+    void setInitialEditValue() override;
+    void finishEditing() override;
+    void resetBeforeEditValue() override;
+
+Q_SIGNALS:
     void valueChanged(qreal oldValue, qreal newValue);
 };
 
