@@ -39,7 +39,8 @@ file_list:              x86-tools-mingw-conf,
                         x86-tools-mingw491-conf,
                         x86-tools-mingw492-conf,
                         x86-tools-mingw530-conf,
-                        x86_64-tools-mingw730-conf
+                        x86_64-tools-mingw730-conf,
+                        x86-tools-mingw730-conf
 
 [PackageTemplates]
 template_dirs:          pkg_tools
