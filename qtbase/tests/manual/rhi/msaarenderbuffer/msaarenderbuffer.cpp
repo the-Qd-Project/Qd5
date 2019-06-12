@@ -146,8 +146,8 @@ void Window::customInit()
     d.releasePool << d.triPs;
     d.triPs->setSampleCount(4); // must match the render target
     d.triPs->setShaderStages({
-        { QRhiGraphicsShaderStage::Vertex, getShader(QLatin1String(":/color.vert.qsb")) },
-        { QRhiGraphicsShaderStage::Fragment, getShader(QLatin1String(":/color.frag.qsb")) }
+        { QRhiShaderStage::Vertex, getShader(QLatin1String(":/color.vert.qsb")) },
+        { QRhiShaderStage::Fragment, getShader(QLatin1String(":/color.frag.qsb")) }
     });
     QRhiVertexInputLayout inputLayout;
     inputLayout.setBindings({
@@ -178,8 +178,8 @@ void Window::customInit()
     d.ps = m_r->newGraphicsPipeline();
     d.releasePool << d.ps;
     d.ps->setShaderStages({
-        { QRhiGraphicsShaderStage::Vertex, getShader(QLatin1String(":/texture.vert.qsb")) },
-        { QRhiGraphicsShaderStage::Fragment, getShader(QLatin1String(":/texture.frag.qsb")) }
+        { QRhiShaderStage::Vertex, getShader(QLatin1String(":/texture.vert.qsb")) },
+        { QRhiShaderStage::Fragment, getShader(QLatin1String(":/texture.frag.qsb")) }
     });
     inputLayout.setBindings({
         { 4 * sizeof(float) }
