@@ -54,6 +54,10 @@
 #include <QtCore/qlogging.h>
 #include <QtCore/qstring.h>
 
+// Include the API version here, to avoid complications when querying it for the
+// QQmlSourceLocation -> line/column change.
+#include <private/qqmlapiversion_p.h>
+
 QT_BEGIN_NAMESPACE
 
 namespace QQmlJS {
