@@ -39,7 +39,7 @@
 
 #include "qv4engine_p.h"
 #include "qv4runtimecodegen_p.h"
-#include "qv4compilerscanfunctions_p.h"
+#include <private/qv4compilerscanfunctions_p.h>
 
 using namespace QV4;
 using namespace QQmlJS;
