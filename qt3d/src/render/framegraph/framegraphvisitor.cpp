@@ -74,10 +74,8 @@ QVector<FrameGraphNode *> FrameGraphVisitor::traverse(FrameGraphNode *root)
 
 void FrameGraphVisitor::visit(Render::FrameGraphNode *node)
 {
-    // TO DO: check if node is a subtree selector
-    // in which case, we only visit the subtrees returned
-    // by the selector functor and not all the children
-    // as we would otherwise do
+    if (node->nodeType() == Render::FrameGraphNode::SubtreeEnabler && !node->isEnabled())
+        return;
 
     // Recurse to children (if we have any), otherwise if this is a leaf node,
     // initiate a rendering from the current camera
