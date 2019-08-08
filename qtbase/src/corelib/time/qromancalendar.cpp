@@ -57,7 +57,7 @@ QT_BEGIN_NAMESPACE
   lengths depend in a common way on whether the year is a leap year. They differ
   in how they determine which years are leap years.
 
-  \sa QGregorianCalendar
+  \sa QGregorianCalendar, QJulianCalendar, QMilankovicCalendar
 */
 
 int QRomanCalendar::daysInMonth(int month, int year) const
