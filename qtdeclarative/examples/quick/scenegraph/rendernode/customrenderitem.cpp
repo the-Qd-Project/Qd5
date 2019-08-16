@@ -53,6 +53,7 @@
 #include <QSGRendererInterface>
 
 #include "openglrenderer.h"
+#include "metalrenderer.h"
 #include "d3d12renderer.h"
 #include "softwarerenderer.h"
 
@@ -82,6 +83,18 @@ QSGNode *CustomRenderItem::updatePaintNode(QSGNode *node, UpdatePaintNodeData *)
 #endif
             break;
 
+        case QSGRendererInterface::MetalRhi:
+#ifdef Q_OS_DARWIN
+        {
+            MetalRenderNode *metalNode = new MetalRenderNode(this);
+            n = metalNode;
+            metalNode->resourceBuilder()->setWindow(window());
+            QObject::connect(window(), &QQuickWindow::beforeRendering,
+                             metalNode->resourceBuilder(), &MetalRenderNodeResourceBuilder::build);
+        }
+#endif
+            break;
+
         case QSGRendererInterface::Direct3D12: // ### Qt 6: remove
 #if QT_CONFIG(d3d12)
             n = new D3D12RenderNode(this);
@@ -102,3 +115,6 @@ QSGNode *CustomRenderItem::updatePaintNode(QSGNode *node, UpdatePaintNodeData *)
     return n;
 }
 //! [2]
+
+// This item does not support being moved between windows. If that is desired,
+// itemChange() should be reimplemented as well.
