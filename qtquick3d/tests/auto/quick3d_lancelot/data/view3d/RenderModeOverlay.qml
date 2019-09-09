@@ -59,7 +59,7 @@ Rectangle {
     color: "transparent"
 
     Image {
-        source: "../shared/checkerboard_1.png"
+        source: "../shared/maps/checkerboard_1.png"
         anchors.fill: parent
     }
 
