@@ -41,7 +41,7 @@ View3D {
             id: directionalLight
         }
 
-        Camera {
+        PerspectiveCamera {
             id: camera
             z: -350
         }
