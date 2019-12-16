@@ -1177,10 +1177,6 @@ All files (*)</source>
         <translation>版本 %1</translation>
     </message>
     <message>
-        <source>&lt;center&gt;&lt;img src=&quot;:/images/icons/linguist-128-32.png&quot;/&gt;&lt;/img&gt;&lt;p&gt;%1&lt;/p&gt;&lt;/center&gt;&lt;p&gt;Qt Linguist is a tool for adding translations to Qt applications.&lt;/p&gt;&lt;p&gt;Copyright (C) %2 The Qt Company Ltd.</source>
-        <translation>&lt;center&gt;&lt;img src=&quot;:/images/icons/linguist-128-32.png&quot;/&gt;&lt;/img&gt;&lt;p&gt;%1&lt;/p&gt;&lt;/center&gt;&lt;p&gt;Qt 語言家是款用於將翻譯加入 Qt 應用程式的工具。&lt;/p&gt;&lt;p&gt;版權所有 (C) %2 The Qt Company Ltd.</translation>
-    </message>
-    <message>
         <source>Do you want to save the modified files?</source>
         <translation>您要儲存已變更的檔案嗎？</translation>
     </message>
@@ -1321,7 +1317,7 @@ All files (*)</source>
     <message>
         <source>&lt;center&gt;&lt;img src=&quot;:/images/splash.png&quot;/&gt;&lt;/img&gt;&lt;p&gt;%1&lt;/p&gt;&lt;/center&gt;&lt;p&gt;Qt Linguist is a tool for adding translations to Qt applications.&lt;/p&gt;&lt;p&gt;Copyright (C) %2 The Qt Company Ltd.</source>
         <translatorcomment>請忽略警告！</translatorcomment>
-        <translation>&lt;center&gt;&lt;img src=&quot;:/images/splash.png&quot;/&gt;&lt;/img&gt;&lt;p&gt;%1&lt;/p&gt;&lt;/center&gt;&lt;p&gt;Qt Linguist 是個對 Qt 應用程式加入翻譯的工具。&lt;/p&gt;&lt;p&gt;版權所有 (C) %2 Qt 公司</translation>
+        <translation>&lt;center&gt;&lt;img src=&quot;:/images/splash.png&quot;/&gt;&lt;/img&gt;&lt;p&gt;%1&lt;/p&gt;&lt;/center&gt;&lt;p&gt;Qt Linguist 是個對 Qt 應用程式加入翻譯的工具。&lt;/p&gt;&lt;p&gt;版權所有 (C) %2 The Qt Company Ltd.</translation>
     </message>
 </context>
 <context>
