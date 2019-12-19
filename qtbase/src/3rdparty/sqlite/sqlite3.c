@@ -19519,6 +19519,12 @@ SQLITE_PRIVATE    Module *sqlite3VtabCreateModule(
    );
 #  define sqlite3VtabInSync(db) ((db)->nVTrans>0 && (db)->aVTrans==0)
 #endif
+SQLITE_PRIVATE int sqlite3ReadOnlyShadowTables(sqlite3 *db);
+#ifndef SQLITE_OMIT_VIRTUALTABLE
+SQLITE_PRIVATE int sqlite3ShadowTableName(sqlite3 *db, const char *zName);
+#else
+# define sqlite3ShadowTableName(A,B) 0
+#endif
 SQLITE_PRIVATE int sqlite3VtabEponymousTableInit(Parse*,Module*);
 SQLITE_PRIVATE void sqlite3VtabEponymousTableClear(sqlite3*,Module*);
 SQLITE_PRIVATE void sqlite3VtabMakeWritable(Parse*,Table*);
@@ -108484,6 +108490,22 @@ SQLITE_PRIVATE int sqlite3WritableSchema(sqlite3 *db){
 }
 
 /*
+ ** Return TRUE if shadow tables should be read-only in the current
+ ** context.
+ */
+int sqlite3ReadOnlyShadowTables(sqlite3 *db){
+#ifndef SQLITE_OMIT_VIRTUALTABLE
+    if( (db->flags & SQLITE_Defensive)!=0
+       && db->pVtabCtx==0
+       && db->nVdbeExec==0
+       ){
+        return 1;
+    }
+#endif
+    return 0;
+}
+
+/*
 ** This routine is used to check if the UTF-8 string zName is a legal
 ** unqualified name for a new schema object (table, index, view or
 ** trigger). All names are legal except those that begin with the string
@@ -108516,8 +108538,8 @@ SQLITE_PRIVATE int sqlite3CheckObjectName(
       }
     }
   }else{
-    if( pParse->nested==0 
-     && 0==sqlite3StrNICmp(zName, "sqlite_", 7)
+      if( (pParse->nested==0 && 0==sqlite3StrNICmp(zName, "sqlite_", 7))
+       || (sqlite3ReadOnlyShadowTables(db) && sqlite3ShadowTableName(db, zName))
     ){
       sqlite3ErrorMsg(pParse, "object name reserved for internal use: %s",
                       zName);
@@ -109662,7 +109684,7 @@ static void convertToWithoutRowidTable(Parse *pParse, Table *pTab){
 ** zName is temporarily modified while this routine is running, but is
 ** restored to its original value prior to this routine returning.
 */
-static int isShadowTableName(sqlite3 *db, char *zName){
+int sqlite3ShadowTableName(sqlite3 *db, const char *zName){
   char *zTail;                  /* Pointer to the last "_" in zName */
   Table *pTab;                  /* Table that zName is a shadow of */
   Module *pMod;                 /* Module for the virtual table */
@@ -109680,8 +109702,6 @@ static int isShadowTableName(sqlite3 *db, char *zName){
   if( pMod->pModule->xShadowName==0 ) return 0;
   return pMod->pModule->xShadowName(zTail+1);
 }
-#else
-# define isShadowTableName(x,y) 0
 #endif /* ifndef SQLITE_OMIT_VIRTUALTABLE */
 
 /*
@@ -109723,7 +109743,7 @@ SQLITE_PRIVATE void sqlite3EndTable(
   p = pParse->pNewTable;
   if( p==0 ) return;
 
-  if( pSelect==0 && isShadowTableName(db, p->zName) ){
+  if( pSelect==0 && sqlite3ShadowTableName(db, p->zName) ){
     p->tabFlags |= TF_Shadow;
   }
 
