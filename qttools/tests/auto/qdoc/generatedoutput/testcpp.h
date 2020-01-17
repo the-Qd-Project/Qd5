@@ -44,6 +44,11 @@ public:
 protected:
     void overload() {}
     void overload(bool b) { if (!b) return; }
+#ifdef test_template
+    template <typename T1, typename T2> void funcTemplate(T1 a, T2 b) {
+        a = b;
+    }
+#endif
 };
 
 class TestDerived : public Test {
