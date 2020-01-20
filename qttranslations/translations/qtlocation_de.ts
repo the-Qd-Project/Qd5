@@ -11,6 +11,13 @@ Bitte besuchen Sie https://developers.arcgis.com/authentication/accessing-arcgis
     </message>
 </context>
 <context>
+    <name>PlaceSearchReplyEsri</name>
+    <message>
+        <source>Response parse error</source>
+        <translation>Fehler beim Auswerten der Antwort</translation>
+    </message>
+</context>
+<context>
     <name>QDeclarativeGeoMap</name>
     <message>
         <source>No Map</source>
@@ -64,6 +71,17 @@ Bitte besuchen Sie https://developers.arcgis.com/authentication/accessing-arcgis
     </message>
 </context>
 <context>
+    <name>QDeclarativeNavigator</name>
+    <message>
+        <source>Plugin does not support navigation.</source>
+        <translation>Das Plugin unterstützt keine Navigation.</translation>
+    </message>
+    <message>
+        <source>Failed to create a navigator object.</source>
+        <translation>Es konnte kein Navigator-Objekt erstellt werden.</translation>
+    </message>
+</context>
+<context>
     <name>QGeoCodeReplyMapbox</name>
     <message>
         <source>Response parse error</source>
@@ -86,6 +104,18 @@ Bitte besuchen Sie https://developers.arcgis.com/authentication/accessing-arcgis
 </context>
 <context>
     <name>QGeoMappingManagerEngineMapboxGL</name>
+    <message>
+        <source>China Streets</source>
+        <translation>Straßen (chinesisch)</translation>
+    </message>
+    <message>
+        <source>China Light</source>
+        <translation>Hell (chinesisch)</translation>
+    </message>
+    <message>
+        <source>China Dark</source>
+        <translation>Dunkel (chinesisch)</translation>
+    </message>
     <message>
         <source>Streets</source>
         <translation>Straßen</translation>
@@ -521,6 +551,7 @@ Bitte besuchen Sie https://developers.arcgis.com/authentication/accessing-arcgis
     </message>
     <message>
         <source>Head %1</source>
+        <extracomment>%1 is &quot;North&quot;, &quot;South&quot;, &quot;East&quot; or &quot;West&quot;</extracomment>
         <translation>Fahren Sie %1</translation>
     </message>
     <message>
@@ -895,6 +926,7 @@ Bitte besuchen Sie https://developers.arcgis.com/authentication/accessing-arcgis
     </message>
     <message>
         <source> and continue straight</source>
+        <extracomment>This string will be prepended with lane instructions. E.g., &quot;Use the left or the right lane and continue straight&quot;</extracomment>
         <translation> und fahren Sie geradeaus weiter</translation>
     </message>
     <message>
