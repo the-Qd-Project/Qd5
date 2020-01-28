@@ -48,6 +48,7 @@
 #include "qquick3dnode_p.h"
 
 #include <QtGui/QVector3D>
+#include <QtGui/QQuaternion>
 #include <QtGui/QMatrix4x4>
 
 QT_BEGIN_NAMESPACE
@@ -78,12 +79,12 @@ public:
 
     static inline QQuick3DNodePrivate *get(QQuick3DNode *node) { return node->d_func(); }
 
-    QVector3D m_rotation;
+    QQuaternion m_rotation;
+    QVector3D m_eulerRotationAngles;
     QVector3D m_position;
     QVector3D m_scale{ 1.0f, 1.0f, 1.0f };
     QVector3D m_pivot;
     float m_opacity = 1.0f;
-    QQuick3DNode::RotationOrder m_rotationorder = QQuick3DNode::YXZ;
     int m_staticFlags = 0;
     bool m_visible = true;
     QMatrix4x4 m_sceneTransform; // Right handed
