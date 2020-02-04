@@ -71,7 +71,8 @@ Window {
             lightProbe: Texture {
                 source: "maps/OpenfootageNET_garage-1024.hdr"
             }
-            multisampleAAMode: SceneEnvironment.SSAA
+            antialiasingMode: SceneEnvironment.SSAA
+            antialiasingQuality: SceneEnvironment.VeryHigh
         }
         //! [environment]
 
