@@ -78,7 +78,9 @@ class Scene3DRenderer : public QObject
 {
     Q_OBJECT
 public:
-    Scene3DRenderer();
+    Scene3DRenderer(Scene3DItem *item,
+                    Qt3DCore::QAspectEngine *aspectEngine,
+                    QRenderAspect *renderAspect);
     ~Scene3DRenderer();
 
     void setSGNode(Scene3DSGNode *node);
@@ -87,12 +89,7 @@ public:
     void setCompositingMode(Scene3DItem::CompositingMode mode);
     void setSkipFrame(bool skip);
     void setScene3DViews(const QVector<Scene3DView *> views);
-    void init(Scene3DItem *item, Qt3DCore::QAspectEngine *aspectEngine, QRenderAspect *renderAspect);
 
-    QRenderAspect *renderAspect() const
-    {
-        return m_renderAspect;
-    }
 public Q_SLOTS:
     void render();
     void shutdown();
@@ -106,12 +103,13 @@ private:
     void scheduleRootEntityChange();
 
     Scene3DItem *m_item; // Will be released by the QQuickWindow/QML Engine
-    Qt3DCore::QAspectEngine *m_aspectEngine; // Will be released by the Scene3DItem
+    Qt3DCore::QAspectEngine *m_aspectEngine; // Will be released by the Scene3DRendererCleaner
     QRenderAspect *m_renderAspect; // Will be released by the aspectEngine
     QScopedPointer<QOpenGLFramebufferObject> m_multisampledFBO;
     QScopedPointer<QOpenGLFramebufferObject> m_finalFBO;
     QScopedPointer<QSGTexture> m_texture;
     Scene3DSGNode *m_node; // Will be released by the QtQuick SceneGraph
+    Scene3DCleaner *m_cleaner;
     QQuickWindow *m_window;
     QMutex m_windowMutex;
     QSize m_lastSize;
@@ -125,9 +123,8 @@ private:
     QSemaphore m_allowRendering;
     Scene3DItem::CompositingMode m_compositingMode;
     QVector<Scene3DView *> m_views;
-    bool m_resetRequested = false;
 
-    friend class Scene3DItem;
+    friend class Scene3DCleaner;
 };
 
 } // namespace Qt3DRender
