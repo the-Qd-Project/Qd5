@@ -45,8 +45,8 @@ Effect {
     property TextureInput depthTexture: TextureInput {
         texture: Texture {}
     }
-    property int aberrationAmount: 500
-    property int focusDepth: 250
+    property int aberrationAmount: 50
+    property int focusDepth: 600
 
     Shader {
         id: chromaticAberration
@@ -61,7 +61,7 @@ Effect {
                 BufferInput {
                     param: "sourceTexture"
                 },
-                BufferInput {
+                DepthInput {
                     param: "depthTexture"
                 }
             ]
