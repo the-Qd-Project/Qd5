@@ -39,18 +39,18 @@ class CommandLineInterface : public SDKApp<QCoreApplication>
 public:
     CommandLineInterface(int &argc, char *argv[]);
     int checkUpdates();
-    int silentUpdate();
     int listInstalledPackages();
-    int listAvailablePackages();
+    int searchAvailablePackages();
     int updatePackages();
-    int install();
-    int installDefault();
+    int installPackages();
     int uninstallPackages();
 
 private:
     bool initialize();
     bool checkLicense();
     bool setTargetDir();
+
+    QStringList m_positionalArguments;
 };
 
 #endif // COMMANDLINEINTERFACE_H
