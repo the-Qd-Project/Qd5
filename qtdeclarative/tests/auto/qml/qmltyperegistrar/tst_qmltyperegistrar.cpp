@@ -31,11 +31,24 @@
 #include <QtCore/qcoreapplication.h>
 #include <QtCore/qfile.h>
 
-void tst_qmltyperegistrar::qmltypesHasForeign()
+void tst_qmltyperegistrar::initTestCase()
 {
     QFile file(QCoreApplication::applicationDirPath() + "/tst_qmltyperegistrar.qmltypes");
     QVERIFY(file.open(QIODevice::ReadOnly));
-    QVERIFY(file.readAll().contains("things"));
+    qmltypesData = file.readAll();
+    QVERIFY(file.atEnd());
+    QCOMPARE(file.error(), QFile::NoError);
+}
+
+void tst_qmltyperegistrar::qmltypesHasForeign()
+{
+    QVERIFY(qmltypesData.contains("things"));
+}
+
+void tst_qmltyperegistrar::qmltypesHasHppClassAndNoext()
+{
+    QVERIFY(qmltypesData.contains("HppClass"));
+    QVERIFY(qmltypesData.contains("Noext"));
 }
 
 QTEST_MAIN(tst_qmltyperegistrar)
