@@ -273,6 +273,7 @@ void QWebSocketDataProcessor::clear()
     if (!m_pConverterState)
         m_pConverterState = new QTextCodec::ConverterState(QTextCodec::ConvertInvalidToNull |
                                                            QTextCodec::IgnoreHeader);
+    frame.clear();
 }
 
 /*!
