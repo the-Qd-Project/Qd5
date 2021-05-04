@@ -75,7 +75,7 @@ public:
 
     void contentChildrenChange();
 
-    void updateContentWidth();
+    virtual void updateContentWidth();
     void updateContentHeight();
 
     bool hasContentWidth = false;
