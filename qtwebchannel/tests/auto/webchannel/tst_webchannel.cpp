@@ -785,7 +785,7 @@ void TestWebChannel::testTransportWrapObjectProperties()
     DummyTransport *dummyTransport = new DummyTransport(this);
     channel.connectTo(dummyTransport);
     channel.d_func()->publisher->initializeClient(dummyTransport);
-    channel.d_func()->publisher->setClientIsIdle(true);
+    channel.d_func()->publisher->setClientIsIdle(true, dummyTransport);
 
     QCOMPARE(channel.d_func()->publisher->transportedWrappedObjects.size(), 0);
 
@@ -988,6 +988,50 @@ void TestWebChannel::testAsyncObject()
     thread.wait();
 }
 
+void TestWebChannel::testPropertyMultipleTransports()
+{
+    DummyTransport transport1;
+    DummyTransport transport2;
+
+    QWebChannel channel;
+    QMetaObjectPublisher *publisher = channel.d_func()->publisher;
+
+    TestObject testObj;
+    testObj.setObjectName("testObject");
+    channel.registerObject(testObj.objectName(), &testObj);
+    channel.connectTo(&transport1);
+    channel.connectTo(&transport2);
+
+    testObj.setProp("Hello");
+
+    publisher->initializeClient(&transport1);
+    publisher->initializeClient(&transport2);
+    publisher->setClientIsIdle(true, &transport1);
+    QCOMPARE(publisher->isClientIdle(&transport1), true);
+    QCOMPARE(publisher->isClientIdle(&transport2), false);
+    QVERIFY(transport1.messagesSent().isEmpty());
+    QVERIFY(transport2.messagesSent().isEmpty());
+
+    testObj.setProp("World");
+    QTRY_COMPARE_WITH_TIMEOUT(transport1.messagesSent().size(), 1u, 2000);
+    QCOMPARE(transport2.messagesSent().size(), 0u);
+    publisher->setClientIsIdle(true, &transport2);
+    QTRY_COMPARE_WITH_TIMEOUT(transport2.messagesSent().size(), 1u, 2000);
+    QCOMPARE(publisher->isClientIdle(&transport1), false);
+    QCOMPARE(publisher->isClientIdle(&transport2), false);
+
+    testObj.setProp("!!!");
+    publisher->setClientIsIdle(true, &transport2);
+    QCOMPARE(publisher->isClientIdle(&transport2), true);
+    QCOMPARE(publisher->isClientIdle(&transport1), false);
+    QTRY_COMPARE_WITH_TIMEOUT(transport2.messagesSent().size(), 2u, 2000);
+    QCOMPARE(transport1.messagesSent().size(), 1u);
+    publisher->setClientIsIdle(true, &transport1);
+    QTRY_COMPARE_WITH_TIMEOUT(transport1.messagesSent().size(), 2u, 2000);
+    QCOMPARE(publisher->isClientIdle(&transport1), false);
+    QCOMPARE(publisher->isClientIdle(&transport2), false);
+}
+
 class FunctionWrapper : public QObject
 {
     Q_OBJECT
@@ -1105,7 +1149,7 @@ void TestWebChannel::benchPropertyUpdates()
             obj->change();
         }
 
-        channel.d_func()->publisher->clientIsIdle = true;
+        channel.d_func()->publisher->setClientIsIdle(true, m_dummyTransport);
         channel.d_func()->publisher->sendPendingPropertyUpdates();
     }
 }

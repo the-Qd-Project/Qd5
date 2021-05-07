@@ -348,6 +348,7 @@ private slots:
     void testJsonToVariant();
     void testInfiniteRecursion();
     void testAsyncObject();
+    void testPropertyMultipleTransports();
     void testDeletionDuringMethodInvocation_data();
     void testDeletionDuringMethodInvocation();
 
