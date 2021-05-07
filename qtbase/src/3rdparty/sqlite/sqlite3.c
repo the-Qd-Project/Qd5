@@ -1,6 +1,6 @@
 /******************************************************************************
 ** This file is an amalgamation of many separate C source files from SQLite
-** version 3.35.2.  By combining all the individual C code files into this
+** version 3.35.5.  By combining all the individual C code files into this
 ** single large file, the entire code can be compiled as a single translation
 ** unit.  This allows many compilers to do optimizations that would not be
 ** possible if the files were compiled separately.  Performance improvements
@@ -1186,9 +1186,9 @@ extern "C" {
 ** [sqlite3_libversion_number()], [sqlite3_sourceid()],
 ** [sqlite_version()] and [sqlite_source_id()].
 */
-#define SQLITE_VERSION        "3.35.2"
-#define SQLITE_VERSION_NUMBER 3035002
-#define SQLITE_SOURCE_ID      "2021-03-17 19:07:21 ea80f3002f4120f5dcee76e8779dfdc88e1e096c5cdd06904c20fd26d50c3827"
+#define SQLITE_VERSION        "3.35.5"
+#define SQLITE_VERSION_NUMBER 3035005
+#define SQLITE_SOURCE_ID      "2021-04-19 18:32:05 1b256d97b553a9611efca188a3d995a2fff712759044ba480f9a0c9e98fae886"
 
 /*
 ** CAPI3REF: Run-Time Library Version Numbers
@@ -19764,6 +19764,7 @@ SQLITE_PRIVATE Expr *sqlite3ExprFunction(Parse*,ExprList*, Token*, int);
 SQLITE_PRIVATE void sqlite3ExprFunctionUsable(Parse*,Expr*,FuncDef*);
 SQLITE_PRIVATE void sqlite3ExprAssignVarNumber(Parse*, Expr*, u32);
 SQLITE_PRIVATE void sqlite3ExprDelete(sqlite3*, Expr*);
+SQLITE_PRIVATE void sqlite3ExprDeferredDelete(Parse*, Expr*);
 SQLITE_PRIVATE void sqlite3ExprUnmapAndDelete(Parse*, Expr*);
 SQLITE_PRIVATE ExprList *sqlite3ExprListAppend(Parse*,ExprList*,Expr*);
 SQLITE_PRIVATE ExprList *sqlite3ExprListAppendVector(Parse*,ExprList*,IdList*,Expr*);
@@ -21071,6 +21072,7 @@ struct VdbeCursor {
   Bool isEphemeral:1;     /* True for an ephemeral table */
   Bool useRandomRowid:1;  /* Generate new record numbers semi-randomly */
   Bool isOrdered:1;       /* True if the table is not BTREE_UNORDERED */
+  Bool hasBeenDuped:1;    /* This cursor was source or target of OP_OpenDup */
   u16 seekHit;            /* See the OP_SeekHit and OP_IfNoHope opcodes */
   Btree *pBtx;            /* Separate file holding temporary table */
   i64 seqCount;           /* Sequence counter */
@@ -40220,7 +40222,8 @@ static int unixBackupDir(const char *z, int *pJ){
   int j = *pJ;
   int i;
   if( j<=0 ) return 0;
-  for(i=j-1; ALWAYS(i>0) && z[i-1]!='/'; i--){}
+  for(i=j-1; i>0 && z[i-1]!='/'; i--){}
+  if( i==0 ) return 0;
   if( z[i]=='.' && i==j-2 && z[i+1]=='.' ) return 0;
   *pJ = i-1;
   return 1;
@@ -64277,7 +64280,7 @@ struct Btree {
   u8 hasIncrblobCur; /* True if there are one or more Incrblob cursors */
   int wantToLock;    /* Number of nested calls to sqlite3BtreeEnter() */
   int nBackup;       /* Number of backup operations reading this btree */
-  u32 iDataVersion;  /* Combines with pBt->pPager->iDataVersion */
+  u32 iBDataVersion; /* Combines with pBt->pPager->iDataVersion */
   Btree *pNext;      /* List of other sharable Btrees from the same db */
   Btree *pPrev;      /* Back pointer of the same list */
 #ifdef SQLITE_DEBUG
@@ -67690,19 +67693,23 @@ static void freeTempSpace(BtShared *pBt){
 */
 SQLITE_PRIVATE int sqlite3BtreeClose(Btree *p){
   BtShared *pBt = p->pBt;
-  BtCursor *pCur;
 
   /* Close all cursors opened via this handle.  */
   assert( sqlite3_mutex_held(p->db->mutex) );
   sqlite3BtreeEnter(p);
-  pCur = pBt->pCursor;
-  while( pCur ){
-    BtCursor *pTmp = pCur;
-    pCur = pCur->pNext;
-    if( pTmp->pBtree==p ){
-      sqlite3BtreeCloseCursor(pTmp);
+
+  /* Verify that no other cursors have this Btree open */
+#ifdef SQLITE_DEBUG
+  {
+    BtCursor *pCur = pBt->pCursor;
+    while( pCur ){
+      BtCursor *pTmp = pCur;
+      pCur = pCur->pNext;
+      assert( pTmp->pBtree!=p );
+
     }
   }
+#endif
 
   /* Rollback any active transaction and free the handle structure.
   ** The call to sqlite3BtreeRollback() drops any table-locks held by
@@ -69084,7 +69091,7 @@ SQLITE_PRIVATE int sqlite3BtreeCommitPhaseTwo(Btree *p, int bCleanup){
       sqlite3BtreeLeave(p);
       return rc;
     }
-    p->iDataVersion--;  /* Compensate for pPager->iDataVersion++; */
+    p->iBDataVersion--;  /* Compensate for pPager->iDataVersion++; */
     pBt->inTransaction = TRANS_READ;
     btreeClearHasContent(pBt);
   }
@@ -69494,7 +69501,14 @@ SQLITE_PRIVATE int sqlite3BtreeCloseCursor(BtCursor *pCur){
     unlockBtreeIfUnused(pBt);
     sqlite3_free(pCur->aOverflow);
     sqlite3_free(pCur->pKey);
-    sqlite3BtreeLeave(pBtree);
+    if( (pBt->openFlags & BTREE_SINGLE) && pBt->pCursor==0 ){
+      /* Since the BtShared is not sharable, there is no need to
+      ** worry about the missing sqlite3BtreeLeave() call here.  */
+      assert( pBtree->sharable==0 );
+      sqlite3BtreeClose(pBtree);
+    }else{
+      sqlite3BtreeLeave(pBtree);
+    }
     pCur->pBtree = 0;
   }
   return SQLITE_OK;
@@ -74607,7 +74621,7 @@ SQLITE_PRIVATE void sqlite3BtreeGetMeta(Btree *p, int idx, u32 *pMeta){
   assert( idx>=0 && idx<=15 );
 
   if( idx==BTREE_DATA_VERSION ){
-    *pMeta = sqlite3PagerDataVersion(pBt->pPager) + p->iDataVersion;
+    *pMeta = sqlite3PagerDataVersion(pBt->pPager) + p->iBDataVersion;
   }else{
     *pMeta = get4byte(&pBt->pPage1->aData[36 + idx*4]);
   }
@@ -80835,20 +80849,15 @@ SQLITE_PRIVATE void sqlite3VdbeFreeCursor(Vdbe *p, VdbeCursor *pCx){
     return;
   }
   assert( pCx->pBtx==0 || pCx->eCurType==CURTYPE_BTREE );
+  assert( pCx->pBtx==0 || pCx->isEphemeral );
   switch( pCx->eCurType ){
     case CURTYPE_SORTER: {
       sqlite3VdbeSorterClose(p->db, pCx);
       break;
     }
     case CURTYPE_BTREE: {
-      if( pCx->isEphemeral ){
-        if( pCx->pBtx ) sqlite3BtreeClose(pCx->pBtx);
-        /* The pCx->pCursor will be close automatically, if it exists, by
-        ** the call above. */
-      }else{
-        assert( pCx->uc.pCursor!=0 );
-        sqlite3BtreeCloseCursor(pCx->uc.pCursor);
-      }
+      assert( pCx->uc.pCursor!=0 );
+      sqlite3BtreeCloseCursor(pCx->uc.pCursor);
       break;
     }
 #ifndef SQLITE_OMIT_VIRTUALTABLE
@@ -81932,6 +81941,7 @@ SQLITE_PRIVATE int sqlite3VdbeCursorMoveto(VdbeCursor **pp, u32 *piCol){
   assert( p->eCurType==CURTYPE_BTREE || p->eCurType==CURTYPE_PSEUDO );
   if( p->deferredMoveto ){
     u32 iMap;
+    assert( !p->isEphemeral );
     if( p->aAltMap && (iMap = p->aAltMap[1+*piCol])>0 && !p->nullRow ){
       *pp = p->pAltCursor;
       *piCol = iMap - 1;
@@ -86140,11 +86150,6 @@ static VdbeCursor *allocateCursor(
 
   assert( iCur>=0 && iCur<p->nCursor );
   if( p->apCsr[iCur] ){ /*OPTIMIZATION-IF-FALSE*/
-    /* Before calling sqlite3VdbeFreeCursor(), ensure the isEphemeral flag
-    ** is clear. Otherwise, if this is an ephemeral cursor created by
-    ** OP_OpenDup, the cursor will not be closed and will still be part
-    ** of a BtShared.pCursor list.  */
-    if( p->apCsr[iCur]->pBtx==0 ) p->apCsr[iCur]->isEphemeral = 0;
     sqlite3VdbeFreeCursor(p, p->apCsr[iCur]);
     p->apCsr[iCur] = 0;
   }
@@ -89830,7 +89835,7 @@ case OP_OpenDup: {
 
   pOrig = p->apCsr[pOp->p2];
   assert( pOrig );
-  assert( pOrig->pBtx!=0 );  /* Only ephemeral cursors can be duplicated */
+  assert( pOrig->isEphemeral );  /* Only ephemeral cursors can be duplicated */
 
   pCx = allocateCursor(p, pOp->p1, pOrig->nField, -1, CURTYPE_BTREE);
   if( pCx==0 ) goto no_mem;
@@ -89840,7 +89845,10 @@ case OP_OpenDup: {
   pCx->isTable = pOrig->isTable;
   pCx->pgnoRoot = pOrig->pgnoRoot;
   pCx->isOrdered = pOrig->isOrdered;
-  rc = sqlite3BtreeCursor(pOrig->pBtx, pCx->pgnoRoot, BTREE_WRCSR,
+  pCx->pBtx = pOrig->pBtx;
+  pCx->hasBeenDuped = 1;
+  pOrig->hasBeenDuped = 1;
+  rc = sqlite3BtreeCursor(pCx->pBtx, pCx->pgnoRoot, BTREE_WRCSR,
                           pCx->pKeyInfo, pCx->uc.pCursor);
   /* The sqlite3BtreeCursor() routine can only fail for the first cursor
   ** opened for a database.  Since there is already an open cursor when this
@@ -89906,9 +89914,10 @@ case OP_OpenEphemeral: {
     aMem[pOp->p3].z = "";
   }
   pCx = p->apCsr[pOp->p1];
-  if( pCx && ALWAYS(pCx->pBtx) ){
-    /* If the ephermeral table is already open, erase all existing content
-    ** so that the table is empty again, rather than creating a new table. */
+  if( pCx && !pCx->hasBeenDuped ){
+    /* If the ephermeral table is already open and has no duplicates from
+    ** OP_OpenDup, then erase all existing content so that the table is
+    ** empty again, rather than creating a new table. */
     assert( pCx->isEphemeral );
     pCx->seqCount = 0;
     pCx->cacheStatus = CACHE_STALE;
@@ -89922,33 +89931,36 @@ case OP_OpenEphemeral: {
                           vfsFlags);
     if( rc==SQLITE_OK ){
       rc = sqlite3BtreeBeginTrans(pCx->pBtx, 1, 0);
-    }
-    if( rc==SQLITE_OK ){
-      /* If a transient index is required, create it by calling
-      ** sqlite3BtreeCreateTable() with the BTREE_BLOBKEY flag before
-      ** opening it. If a transient table is required, just use the
-      ** automatically created table with root-page 1 (an BLOB_INTKEY table).
-      */
-      if( (pCx->pKeyInfo = pKeyInfo = pOp->p4.pKeyInfo)!=0 ){
-        assert( pOp->p4type==P4_KEYINFO );
-        rc = sqlite3BtreeCreateTable(pCx->pBtx, &pCx->pgnoRoot,
-                                     BTREE_BLOBKEY | pOp->p5);
-        if( rc==SQLITE_OK ){
-          assert( pCx->pgnoRoot==SCHEMA_ROOT+1 );
-          assert( pKeyInfo->db==db );
-          assert( pKeyInfo->enc==ENC(db) );
-          rc = sqlite3BtreeCursor(pCx->pBtx, pCx->pgnoRoot, BTREE_WRCSR,
-                                  pKeyInfo, pCx->uc.pCursor);
+      if( rc==SQLITE_OK ){
+        /* If a transient index is required, create it by calling
+        ** sqlite3BtreeCreateTable() with the BTREE_BLOBKEY flag before
+        ** opening it. If a transient table is required, just use the
+        ** automatically created table with root-page 1 (an BLOB_INTKEY table).
+        */
+        if( (pCx->pKeyInfo = pKeyInfo = pOp->p4.pKeyInfo)!=0 ){
+          assert( pOp->p4type==P4_KEYINFO );
+          rc = sqlite3BtreeCreateTable(pCx->pBtx, &pCx->pgnoRoot,
+              BTREE_BLOBKEY | pOp->p5);
+          if( rc==SQLITE_OK ){
+            assert( pCx->pgnoRoot==SCHEMA_ROOT+1 );
+            assert( pKeyInfo->db==db );
+            assert( pKeyInfo->enc==ENC(db) );
+            rc = sqlite3BtreeCursor(pCx->pBtx, pCx->pgnoRoot, BTREE_WRCSR,
+                pKeyInfo, pCx->uc.pCursor);
+          }
+          pCx->isTable = 0;
+        }else{
+          pCx->pgnoRoot = SCHEMA_ROOT;
+          rc = sqlite3BtreeCursor(pCx->pBtx, SCHEMA_ROOT, BTREE_WRCSR,
+              0, pCx->uc.pCursor);
+          pCx->isTable = 1;
         }
-        pCx->isTable = 0;
-      }else{
-        pCx->pgnoRoot = SCHEMA_ROOT;
-        rc = sqlite3BtreeCursor(pCx->pBtx, SCHEMA_ROOT, BTREE_WRCSR,
-                                0, pCx->uc.pCursor);
-        pCx->isTable = 1;
+      }
+      pCx->isOrdered = (pOp->p5!=BTREE_UNORDERED);
+      if( rc ){
+        sqlite3BtreeClose(pCx->pBtx);
       }
     }
-    pCx->isOrdered = (pOp->p5!=BTREE_UNORDERED);
   }
   if( rc ) goto abort_due_to_error;
   pCx->nullRow = 1;
@@ -90382,13 +90394,13 @@ seek_not_found:
 **
 ** There are three possible outcomes from this opcode:<ol>
 **
-** <li> If after This.P1 steps, the cursor is still point to a place that
-**      is earlier in the btree than the target row,
-**      then fall through into the subsquence OP_SeekGE opcode.
+** <li> If after This.P1 steps, the cursor is still pointing to a place that
+**      is earlier in the btree than the target row, then fall through
+**      into the subsquence OP_SeekGE opcode.
 **
 ** <li> If the cursor is successfully moved to the target row by 0 or more
 **      sqlite3BtreeNext() calls, then jump to This.P2, which will land just
-**      past the OP_IdxGT opcode that follows the OP_SeekGE.
+**      past the OP_IdxGT or OP_IdxGE opcode that follows the OP_SeekGE.
 **
 ** <li> If the cursor ends up past the target row (indicating the the target
 **      row does not exist in the btree) then jump to SeekOP.P2.
@@ -90405,7 +90417,8 @@ case OP_SeekScan: {
   /* pOp->p2 points to the first instruction past the OP_IdxGT that
   ** follows the OP_SeekGE.  */
   assert( pOp->p2>=(int)(pOp-aOp)+2 );
-  assert( aOp[pOp->p2-1].opcode==OP_IdxGT );
+  assert( aOp[pOp->p2-1].opcode==OP_IdxGT || aOp[pOp->p2-1].opcode==OP_IdxGE );
+  testcase( aOp[pOp->p2-1].opcode==OP_IdxGE );
   assert( pOp[1].p1==aOp[pOp->p2-1].p1 );
   assert( pOp[1].p2==aOp[pOp->p2-1].p2 );
   assert( pOp[1].p3==aOp[pOp->p2-1].p3 );
@@ -91940,6 +91953,8 @@ case OP_IdxRowid: {           /* out2 */
       pTabCur->deferredMoveto = 1;
       assert( pOp->p4type==P4_INTARRAY || pOp->p4.ai==0 );
       pTabCur->aAltMap = pOp->p4.ai;
+      assert( !pC->isEphemeral );
+      assert( !pTabCur->isEphemeral );
       pTabCur->pAltCursor = pC;
     }else{
       pOut = out2Prerelease(p, pOp);
@@ -98988,14 +99003,18 @@ static int lookupName(
       if( pParse->pTriggerTab!=0 ){
         int op = pParse->eTriggerOp;
         assert( op==TK_DELETE || op==TK_UPDATE || op==TK_INSERT );
-        if( op!=TK_DELETE && zTab && sqlite3StrICmp("new",zTab) == 0 ){
+        if( pParse->bReturning ){
+          if( (pNC->ncFlags & NC_UBaseReg)!=0
+           && (zTab==0 || sqlite3StrICmp(zTab,pParse->pTriggerTab->zName)==0)
+          ){
+            pExpr->iTable = op!=TK_DELETE;
+            pTab = pParse->pTriggerTab;
+          }
+        }else if( op!=TK_DELETE && zTab && sqlite3StrICmp("new",zTab) == 0 ){
           pExpr->iTable = 1;
           pTab = pParse->pTriggerTab;
         }else if( op!=TK_INSERT && zTab && sqlite3StrICmp("old",zTab)==0 ){
           pExpr->iTable = 0;
-          pTab = pParse->pTriggerTab;
-        }else if( pParse->bReturning && (pNC->ncFlags & NC_UBaseReg)!=0 ){
-          pExpr->iTable = op!=TK_DELETE;
           pTab = pParse->pTriggerTab;
         }
       }
@@ -101591,8 +101610,8 @@ SQLITE_PRIVATE Expr *sqlite3ExprAnd(Parse *pParse, Expr *pLeft, Expr *pRight){
   }else if( (ExprAlwaysFalse(pLeft) || ExprAlwaysFalse(pRight))
          && !IN_RENAME_OBJECT
   ){
-    sqlite3ExprDelete(db, pLeft);
-    sqlite3ExprDelete(db, pRight);
+    sqlite3ExprDeferredDelete(pParse, pLeft);
+    sqlite3ExprDeferredDelete(pParse, pRight);
     return sqlite3Expr(db, TK_INTEGER, "0");
   }else{
     return sqlite3PExpr(pParse, TK_AND, pLeft, pRight);
@@ -101787,6 +101806,22 @@ static SQLITE_NOINLINE void sqlite3ExprDeleteNN(sqlite3 *db, Expr *p){
 }
 SQLITE_PRIVATE void sqlite3ExprDelete(sqlite3 *db, Expr *p){
   if( p ) sqlite3ExprDeleteNN(db, p);
+}
+
+
+/*
+** Arrange to cause pExpr to be deleted when the pParse is deleted.
+** This is similar to sqlite3ExprDelete() except that the delete is
+** deferred untilthe pParse is deleted.
+**
+** The pExpr might be deleted immediately on an OOM error.
+**
+** The deferred delete is (currently) implemented by adding the
+** pExpr to the pParse->pConstExpr list with a register number of 0.
+*/
+SQLITE_PRIVATE void sqlite3ExprDeferredDelete(Parse *pParse, Expr *pExpr){
+  pParse->pConstExpr =
+      sqlite3ExprListAppend(pParse, pParse->pConstExpr, pExpr);
 }
 
 /* Invoke sqlite3RenameExprUnmap() and sqlite3ExprDelete() on the
@@ -106414,8 +106449,7 @@ static int agginfoPersistExprCb(Walker *pWalker, Expr *pExpr){
         pExpr = sqlite3ExprDup(db, pExpr, 0);
         if( pExpr ){
           pAggInfo->aCol[iAgg].pCExpr = pExpr;
-          pParse->pConstExpr =
-             sqlite3ExprListAppend(pParse, pParse->pConstExpr, pExpr);
+          sqlite3ExprDeferredDelete(pParse, pExpr);
         }
       }
     }else{
@@ -106424,8 +106458,7 @@ static int agginfoPersistExprCb(Walker *pWalker, Expr *pExpr){
         pExpr = sqlite3ExprDup(db, pExpr, 0);
         if( pExpr ){
           pAggInfo->aFunc[iAgg].pFExpr = pExpr;
-          pParse->pConstExpr =
-             sqlite3ExprListAppend(pParse, pParse->pConstExpr, pExpr);
+          sqlite3ExprDeferredDelete(pParse, pExpr);
         }
       }
     }
@@ -108668,33 +108701,44 @@ SQLITE_PRIVATE void sqlite3AlterDropColumn(Parse *pParse, SrcList *pSrc, Token *
     sqlite3OpenTable(pParse, iCur, iDb, pTab, OP_OpenWrite);
     addr = sqlite3VdbeAddOp1(v, OP_Rewind, iCur); VdbeCoverage(v);
     reg = ++pParse->nMem;
-    pParse->nMem += pTab->nCol;
     if( HasRowid(pTab) ){
       sqlite3VdbeAddOp2(v, OP_Rowid, iCur, reg);
+      pParse->nMem += pTab->nCol;
     }else{
       pPk = sqlite3PrimaryKeyIndex(pTab);
+      pParse->nMem += pPk->nColumn;
+      for(i=0; i<pPk->nKeyCol; i++){
+        sqlite3VdbeAddOp3(v, OP_Column, iCur, i, reg+i+1);
+      }
+      nField = pPk->nKeyCol;
     }
+    regRec = ++pParse->nMem;
     for(i=0; i<pTab->nCol; i++){
       if( i!=iCol && (pTab->aCol[i].colFlags & COLFLAG_VIRTUAL)==0 ){
         int regOut;
         if( pPk ){
           int iPos = sqlite3TableColumnToIndex(pPk, i);
           int iColPos = sqlite3TableColumnToIndex(pPk, iCol);
+          if( iPos<pPk->nKeyCol ) continue;
           regOut = reg+1+iPos-(iPos>iColPos);
         }else{
           regOut = reg+1+nField;
         }
-        sqlite3ExprCodeGetColumnOfTable(v, pTab, iCur, i, regOut);
+        if( i==pTab->iPKey ){
+          sqlite3VdbeAddOp2(v, OP_Null, 0, regOut);
+        }else{
+          sqlite3ExprCodeGetColumnOfTable(v, pTab, iCur, i, regOut);
+        }
         nField++;
       }
     }
-    regRec = reg + pTab->nCol;
     sqlite3VdbeAddOp3(v, OP_MakeRecord, reg+1, nField, regRec);
     if( pPk ){
       sqlite3VdbeAddOp4Int(v, OP_IdxInsert, iCur, regRec, reg+1, pPk->nKeyCol);
     }else{
       sqlite3VdbeAddOp3(v, OP_Insert, iCur, regRec, reg);
     }
+    sqlite3VdbeChangeP5(v, OPFLAG_SAVEPOSITION);
 
     sqlite3VdbeAddOp2(v, OP_Next, iCur, addr+1); VdbeCoverage(v);
     sqlite3VdbeJumpHere(v, addr);
@@ -115684,7 +115728,11 @@ SQLITE_PRIVATE void sqlite3CreateIndex(
   /* Clean up before exiting */
 exit_create_index:
   if( pIndex ) sqlite3FreeIndex(db, pIndex);
-  if( pTab ){  /* Ensure all REPLACE indexes are at the end of the list */
+  if( pTab ){
+    /* Ensure all REPLACE indexes on pTab are at the end of the pIndex list.
+    ** The list was already ordered when this routine was entered, so at this
+    ** point at most a single index (the newly added index) will be out of
+    ** order.  So we have to reorder at most one index. */
     Index **ppFrom = &pTab->pIndex;
     Index *pThis;
     for(ppFrom=&pTab->pIndex; (pThis = *ppFrom)!=0; ppFrom=&pThis->pNext){
@@ -115698,6 +115746,16 @@ exit_create_index:
       }
       break;
     }
+#ifdef SQLITE_DEBUG
+    /* Verify that all REPLACE indexes really are now at the end
+    ** of the index list.  In other words, no other index type ever
+    ** comes after a REPLACE index on the list. */
+    for(pThis = pTab->pIndex; pThis; pThis=pThis->pNext){
+      assert( pThis->onError!=OE_Replace
+           || pThis->pNext==0
+           || pThis->pNext->onError==OE_Replace );
+    }
+#endif
   }
   sqlite3ExprDelete(db, pPIWhere);
   sqlite3ExprListDelete(db, pList);
@@ -123114,7 +123172,9 @@ SQLITE_PRIVATE void sqlite3Insert(
       pNx->iDataCur = iDataCur;
       pNx->iIdxCur = iIdxCur;
       if( pNx->pUpsertTarget ){
-        sqlite3UpsertAnalyzeTarget(pParse, pTabList, pNx);
+        if( sqlite3UpsertAnalyzeTarget(pParse, pTabList, pNx) ){
+          goto insert_cleanup;
+        }
       }
       pNx = pNx->pNextUpsert;
     }while( pNx!=0 );
@@ -124536,7 +124596,7 @@ static void codeWithoutRowidPreupdate(
   Vdbe *v = pParse->pVdbe;
   int r = sqlite3GetTempReg(pParse);
   assert( !HasRowid(pTab) );
-  assert( 0==(pParse->db->mDbFlags & DBFLAG_Vacuum) );
+  assert( 0==(pParse->db->mDbFlags & DBFLAG_Vacuum) || CORRUPT_DB );
   sqlite3VdbeAddOp2(v, OP_Integer, 0, r);
   sqlite3VdbeAddOp4(v, OP_Insert, iCur, regData, r, (char*)pTab, P4_TABLE);
   sqlite3VdbeChangeP5(v, OPFLAG_ISNOOP);
@@ -133084,7 +133144,7 @@ SQLITE_PRIVATE int sqlite3ColumnsFromExprList(
     nCol = pEList->nExpr;
     aCol = sqlite3DbMallocZero(db, sizeof(aCol[0])*nCol);
     testcase( aCol==0 );
-    if( nCol>32767 ) nCol = 32767;
+    if( NEVER(nCol>32767) ) nCol = 32767;
   }else{
     nCol = 0;
     aCol = 0;
@@ -136158,16 +136218,24 @@ static int resolveFromTermToCte(
     pSavedWith = pParse->pWith;
     pParse->pWith = pWith;
     if( pSel->selFlags & SF_Recursive ){
+      int rc;
       assert( pRecTerm!=0 );
       assert( (pRecTerm->selFlags & SF_Recursive)==0 );
       assert( pRecTerm->pNext!=0 );
       assert( (pRecTerm->pNext->selFlags & SF_Recursive)!=0 );
       assert( pRecTerm->pWith==0 );
       pRecTerm->pWith = pSel->pWith;
-      sqlite3WalkSelect(pWalker, pRecTerm);
+      rc = sqlite3WalkSelect(pWalker, pRecTerm);
       pRecTerm->pWith = 0;
+      if( rc ){
+        pParse->pWith = pSavedWith;
+        return 2;
+      }
     }else{
-      sqlite3WalkSelect(pWalker, pSel);
+      if( sqlite3WalkSelect(pWalker, pSel) ){
+        pParse->pWith = pSavedWith;
+        return 2;
+      }
     }
     pParse->pWith = pWith;
 
@@ -137476,7 +137544,9 @@ SQLITE_PRIVATE int sqlite3Select(
       sqlite3VdbeAddOp2(v, OP_OpenDup, pItem->iCursor, pPrior->iCursor);
       pSub->nSelectRow = pPrior->pSelect->nSelectRow;
     }else{
-      /* Generate a subroutine that will materialize the view. */
+      /* Materalize the view.  If the view is not correlated, generate a
+      ** subroutine to do the materialization so that subsequent uses of
+      ** the same view can reuse the materialization. */
       int topAddr;
       int onceAddr = 0;
       int retAddr;
@@ -137503,7 +137573,7 @@ SQLITE_PRIVATE int sqlite3Select(
       VdbeComment((v, "end %s", pItem->pTab->zName));
       sqlite3VdbeChangeP1(v, topAddr, retAddr);
       sqlite3ClearTempRegCache(pParse);
-      if( pItem->fg.isCte ){
+      if( pItem->fg.isCte && pItem->fg.isCorrelated==0 ){
         CteUse *pCteUse = pItem->u2.pCteUse;
         pCteUse->addrM9e = pItem->addrFillSub;
         pCteUse->regRtn = pItem->regReturn;
@@ -139275,6 +139345,25 @@ SQLITE_PRIVATE SrcList *sqlite3TriggerStepSrc(
   return pSrc;
 }
 
+/*
+** Return true if the pExpr term from the RETURNING clause argument
+** list is of the form "*".  Raise an error if the terms if of the
+** form "table.*".
+*/
+static int isAsteriskTerm(
+  Parse *pParse,      /* Parsing context */
+  Expr *pTerm         /* A term in the RETURNING clause */
+){
+  assert( pTerm!=0 );
+  if( pTerm->op==TK_ASTERISK ) return 1;
+  if( pTerm->op!=TK_DOT ) return 0;
+  assert( pTerm->pRight!=0 );
+  assert( pTerm->pLeft!=0 );
+  if( pTerm->pRight->op!=TK_ASTERISK ) return 0;
+  sqlite3ErrorMsg(pParse, "RETURNING may not use \"TABLE.*\" wildcards");
+  return 1;
+}
+
 /* The input list pList is the list of result set terms from a RETURNING
 ** clause.  The table that we are returning from is pTab.
 **
@@ -139292,7 +139381,8 @@ static ExprList *sqlite3ExpandReturning(
 
   for(i=0; i<pList->nExpr; i++){
     Expr *pOldExpr = pList->a[i].pExpr;
-    if( ALWAYS(pOldExpr!=0) && pOldExpr->op==TK_ASTERISK ){
+    if( NEVER(pOldExpr==0) ) continue;
+    if( isAsteriskTerm(pParse, pOldExpr) ){
       int jj;
       for(jj=0; jj<pTab->nCol; jj++){
         Expr *pNewExpr;
@@ -146825,6 +146915,7 @@ static void whereCombineDisjuncts(
   int op;                /* Operator for the combined expression */
   int idxNew;            /* Index in pWC of the next virtual term */
 
+  if( (pOne->wtFlags | pTwo->wtFlags) & TERM_VNULL ) return;
   if( (pOne->eOperator & (WO_EQ|WO_LT|WO_LE|WO_GT|WO_GE))==0 ) return;
   if( (pTwo->eOperator & (WO_EQ|WO_LT|WO_LE|WO_GT|WO_GE))==0 ) return;
   if( (eOp & (WO_EQ|WO_LT|WO_LE))!=eOp
@@ -147530,6 +147621,7 @@ static void exprAnalyzeExists(
 #endif
   if( pSel->pPrior ) return;
   if( pSel->pWhere==0 ) return;
+  if( pSel->pLimit ) return;
   if( 0==exprAnalyzeExistsFindEq(pSel, 0, 0) ) return;
 
   pDup = sqlite3ExprDup(db, pExpr, 0);
@@ -155314,6 +155406,7 @@ static void windowCheckValue(Parse *pParse, int reg, int eCond){
     VdbeCoverageIf(v, eCond==2);
   }
   sqlite3VdbeAddOp3(v, aOp[eCond], regZero, sqlite3VdbeCurrentAddr(v)+2, reg);
+  sqlite3VdbeChangeP5(v, SQLITE_AFF_NUMERIC);
   VdbeCoverageNeverNullIf(v, eCond==0); /* NULL case captured by */
   VdbeCoverageNeverNullIf(v, eCond==1); /*   the OP_MustBeInt */
   VdbeCoverageNeverNullIf(v, eCond==2);
@@ -162308,7 +162401,7 @@ static const unsigned char aiClass[] = {
 #ifdef SQLITE_EBCDIC
 /*         x0  x1  x2  x3  x4  x5  x6  x7  x8  x9  xa  xb  xc  xd  xe  xf */
 /* 0x */   29, 28, 28, 28, 28,  7, 28, 28, 28, 28, 28, 28,  7,  7, 28, 28,
-/* 1x */   28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28,
+/* 1x */   28, 28, 28, 28, 28,  7, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28,
 /* 2x */   28, 28, 28, 28, 28,  7, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28,
 /* 3x */   28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28,
 /* 4x */    7, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 26, 12, 17, 20, 10,
@@ -229213,7 +229306,7 @@ static void fts5SourceIdFunc(
 ){
   assert( nArg==0 );
   UNUSED_PARAM2(nArg, apUnused);
-  sqlite3_result_text(pCtx, "fts5: 2021-03-17 19:07:21 ea80f3002f4120f5dcee76e8779dfdc88e1e096c5cdd06904c20fd26d50c3827", -1, SQLITE_TRANSIENT);
+  sqlite3_result_text(pCtx, "fts5: 2021-04-19 18:32:05 1b256d97b553a9611efca188a3d995a2fff712759044ba480f9a0c9e98fae886", -1, SQLITE_TRANSIENT);
 }
 
 /*
@@ -234139,9 +234232,9 @@ SQLITE_API int sqlite3_stmt_init(
 #endif /* !defined(SQLITE_CORE) || defined(SQLITE_ENABLE_STMTVTAB) */
 
 /************** End of stmt.c ************************************************/
-#if __LINE__!=234142
+#if __LINE__!=234235
 #undef SQLITE_SOURCE_ID
-#define SQLITE_SOURCE_ID      "2021-03-17 19:07:21 ea80f3002f4120f5dcee76e8779dfdc88e1e096c5cdd06904c20fd26d50calt2"
+#define SQLITE_SOURCE_ID      "2021-04-19 18:32:05 1b256d97b553a9611efca188a3d995a2fff712759044ba480f9a0c9e98faalt2"
 #endif
 /* Return the source-id for this library */
 SQLITE_API const char *sqlite3_sourceid(void){ return SQLITE_SOURCE_ID; }
