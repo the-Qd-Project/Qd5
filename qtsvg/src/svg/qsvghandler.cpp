@@ -3353,7 +3353,9 @@ static QSvgNode *createTextNode(QSvgNode *parent,
     //### editable and rotate not handled
     QSvgHandler::LengthType type;
     qreal nx = parseLength(x, type, handler);
+    nx = convertToPixels(nx, true, type);
     qreal ny = parseLength(y, type, handler);
+    ny = convertToPixels(ny, true, type);
 
     QSvgNode *text = new QSvgText(parent, QPointF(nx, ny));
     return text;
