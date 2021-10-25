@@ -191,6 +191,8 @@ bool QSvgIOHandler::read(QImage *image)
             }
         }
         if (!finalSize.isEmpty()) {
+            if (qMax(finalSize.width(), finalSize.height()) > 0xffff)
+                return false; // Assume corrupted file
             image->fill(d->backColor.rgba());
             QPainter p(image);
             d->r.render(&p, bounds);
