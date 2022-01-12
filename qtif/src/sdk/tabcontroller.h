@@ -1,6 +1,6 @@
 /**************************************************************************
 **
-** Copyright (C) 2017 The Qt Company Ltd.
+** Copyright (C) 2022 The Qt Company Ltd.
 ** Contact: https://www.qt.io/licensing/
 **
 ** This file is part of the Qt Installer Framework.
@@ -60,6 +60,7 @@ public Q_SLOTS:
 private Q_SLOTS:
     void restartWizard();
     void onSettingsButtonClicked();
+    void onAboutApplicationClicked();
     void onCurrentIdChanged(int newId);
     void onNetworkSettingsChanged(const QInstaller::Settings &settings);
 
