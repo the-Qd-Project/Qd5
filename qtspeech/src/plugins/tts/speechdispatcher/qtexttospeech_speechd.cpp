@@ -357,7 +357,9 @@ QVector<QLocale> QTextToSpeechEngineSpeechd::availableLocales() const
 
 QVector<QVoice> QTextToSpeechEngineSpeechd::availableVoices() const
 {
-    return m_voices.values(m_currentLocale.name()).toVector();
+    QList<QVoice> resultList = m_voices.values(m_currentLocale.name());
+    std::reverse(resultList.begin(), resultList.end());
+    return resultList.toVector();
 }
 
 // We have no way of knowing our own client_id since speech-dispatcher seems to be incomplete
