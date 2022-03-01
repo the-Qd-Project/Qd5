@@ -58,13 +58,21 @@ private:
     void startUndoProcess(const QStringList &files);
     void deleteDataFile(const QString &fileName);
 
-private:
-    QString m_relocatedDataFileName;
+    QString generateBackupName(const QString &fn);
+    bool prepareForFile(const QString &filename);
 
 private:
+    typedef QPair<QString, QString> Backup;
+    typedef QVector<Backup> BackupFiles;
+
     class Callback;
     class Worker;
     class Receiver;
+
+private:
+    QString m_relocatedDataFileName;
+    BackupFiles m_backupFiles;
+    quint64 m_totalEntries;
 };
 
 }
