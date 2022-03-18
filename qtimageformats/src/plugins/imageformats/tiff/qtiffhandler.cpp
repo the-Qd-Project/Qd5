@@ -38,13 +38,14 @@
 ****************************************************************************/
 
 #include "qtiffhandler_p.h"
-#include <qvariant.h>
 #include <qcolorspace.h>
 #include <qdebug.h>
 #include <qimage.h>
 #include <qglobal.h>
 #include <qbuffer.h>
 #include <qfiledevice.h>
+#include <qvariant.h>
+#include <qvarlengtharray.h>
 
 extern "C" {
 #include "tiffio.h"
