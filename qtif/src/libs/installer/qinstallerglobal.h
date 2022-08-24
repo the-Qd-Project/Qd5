@@ -46,7 +46,8 @@ enum INSTALLER_EXPORT JobError
     InvalidMetaInfo,
     ExtractionError,
     UserIgnoreError,
-    RepositoryUpdatesReceived
+    RepositoryUpdatesReceived,
+    CacheError
 };
 
 typedef KDUpdater::UpdateOperation Operation;
