@@ -1201,6 +1201,12 @@ QAccessible::Role QQuickAbstractButton::accessibleRole() const
     }
     return QAccessible::Button;
 }
+
+void QQuickAbstractButton::accessiblePressAction()
+{
+    Q_D(QQuickAbstractButton);
+    d->trigger();
+}
 #endif
 
 QT_END_NAMESPACE
