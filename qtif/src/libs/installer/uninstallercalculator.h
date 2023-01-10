@@ -30,6 +30,7 @@
 
 #include "installer_global.h"
 #include "qinstallerglobal.h"
+#include "calculatorbase.h"
 
 #include <QHash>
 #include <QList>
@@ -41,49 +42,30 @@ namespace QInstaller {
 class Component;
 class PackageManagerCore;
 
-class INSTALLER_EXPORT UninstallerCalculator
+class INSTALLER_EXPORT UninstallerCalculator : public CalculatorBase
 {
 public:
-    enum UninstallReasonType
-    {
-        Selected,         // "Deselected Component(s)"
-        Replaced,         // "Component(s) replaced by other components"
-        VirtualDependent, // "No dependencies to virtual component"
-        Dependent,        // "Removed as dependency component is removed"
-        AutoDependent     // "Removed as autodependency component is removed"
-    };
-
     UninstallerCalculator(PackageManagerCore *core,
                           const AutoDependencyHash &autoDependencyComponentHash,
                           const LocalDependencyHash &localDependencyComponentHash,
                           const QStringList &localVirtualComponents);
+    ~UninstallerCalculator();
 
-    QSet<Component*> componentsToUninstall() const;
-    QString componentsToUninstallError() const;
-
-    bool appendComponentsToUninstall(const QList<Component*> &components);
-    void insertUninstallReason(Component *component,
-                               const UninstallReasonType uninstallReason,
-                               const QString &referencedComponentName = QString());
-    QString uninstallReason(Component *component) const;
-    UninstallerCalculator::UninstallReasonType uninstallReasonType(Component *c) const;
+    bool solve(const QList<Component*> &components) override;
+    QString resolutionText(Component *component) const override;
 
 private:
-    QString uninstallReasonReferencedComponent(Component *component) const;
-    bool isRequiredVirtualPackage(Component *component);
-    bool appendComponentToUninstall(Component *component);
-    void appendVirtualComponentsToUninstall();
-    QString m_componentsToUninstallError;
+    bool solveComponent(Component *component, const QString &version = QString()) override;
 
-    QSet<Component *> m_componentsToUninstall;
-    PackageManagerCore *m_core;
-    QHash<QString, QPair<UninstallReasonType, QString> > m_toUninstallComponentIdReasonHash;
+    bool isRequiredVirtualPackage(Component *component);
+    void appendVirtualComponentsToUninstall();
+
+private:
     AutoDependencyHash m_autoDependencyComponentHash;
     LocalDependencyHash m_localDependencyComponentHash;
     QStringList m_localVirtualComponents;
 };
 
-}
-
+} // namespace QInstaller
 
 #endif // UNINSTALLERCALCULATOR_H
