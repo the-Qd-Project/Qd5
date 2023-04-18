@@ -46,6 +46,7 @@
 
 #include <QtQml/qqmlinfo.h>
 #include <QtQuick/qquickitem.h>
+#include <QtQuick/private/qquickaccessibleattached_p.h>
 #include <QtQuick/private/qquicktransition_p.h>
 #include <QtQuick/private/qquickitem_p.h>
 #include <QtQuick/private/qquickaccessibleattached_p.h>
