@@ -423,10 +423,6 @@ static int LZWDecode(TIFF *tif, uint8_t *op0, tmsize_t occ0, uint16_t s)
 
     if (sp->read_error)
     {
-        TIFFErrorExtR(tif, module,
-                      "LZWDecode: Scanline %" PRIu32 " cannot be read due to "
-                      "previous error",
-                      tif->tif_row);
         return 0;
     }
 
@@ -746,7 +742,6 @@ after_loop:
     return (1);
 
 no_eoi:
-    sp->read_error = 1;
     TIFFErrorExtR(tif, module,
                   "LZWDecode: Strip %" PRIu32 " not terminated with EOI code",
                   tif->tif_curstrip);

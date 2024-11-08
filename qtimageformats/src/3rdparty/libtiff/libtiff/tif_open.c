@@ -365,12 +365,8 @@ TIFF *TIFFClientOpenExt(const char *name, const char *mode,
                     (tif->tif_flags & ~TIFF_FILLORDER) | FILLORDER_LSB2MSB;
                 break;
             case 'H':
-                TIFFWarningExtR(tif, name,
-                                "H(ost) mode is deprecated. Since "
-                                "libtiff 4.5.1, it is an alias of 'B' / "
-                                "FILLORDER_MSB2LSB.");
                 tif->tif_flags =
-                    (tif->tif_flags & ~TIFF_FILLORDER) | FILLORDER_MSB2LSB;
+                    (tif->tif_flags & ~TIFF_FILLORDER) | HOST_FILLORDER;
                 break;
             case 'M':
                 if (m == O_RDONLY)
@@ -489,7 +485,7 @@ TIFF *TIFFClientOpenExt(const char *name, const char *mode,
             goto bad;
         tif->tif_diroff = 0;
         tif->tif_lastdiroff = 0;
-        tif->tif_setdirectory_force_absolute = FALSE;
+        tif->tif_dirnumber = 0;
         return (tif);
     }
     /*
