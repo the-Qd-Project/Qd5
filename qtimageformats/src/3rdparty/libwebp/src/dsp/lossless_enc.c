@@ -791,7 +791,6 @@ VP8LBundleColorMapFunc VP8LBundleColorMap;
 VP8LPredictorAddSubFunc VP8LPredictorsSub[16];
 VP8LPredictorAddSubFunc VP8LPredictorsSub_C[16];
 
-extern VP8CPUInfo VP8GetCPUInfo;
 extern void VP8LEncDspInitSSE2(void);
 extern void VP8LEncDspInitSSE41(void);
 extern void VP8LEncDspInitNEON(void);
