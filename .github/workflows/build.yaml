@@ -45,6 +45,13 @@ jobs:
             libwayland-dev libwayland-egl-backend-dev wayland-protocols \
             flite1-dev libspeechd-dev
 
+      - name: Setup ccache
+        uses: hendrikmuhs/ccache-action@v1.2.24
+        with:
+          variant: sccache
+          create-symlink: true
+          key: ${{ runner.os }}-${{ runner.arch }}-sccache
+
       - name: Configure
         run: |
           LLVM_CONFIG="$(command -v llvm-config || command -v llvm-config-21)"
@@ -59,13 +66,14 @@ jobs:
             -make examples \
             -make tools \
             -make libs \
-            -v
+            -c++std c++17 \
+            -v -ccache
 
       - name: Build
         run: make -j"$(nproc)"
 
       - name: Test
-        run: make check
+        run: make -j"$(nproc)" check
 
       - name: Install
         run: make install
