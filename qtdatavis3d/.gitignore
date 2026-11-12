@@ -2,6 +2,7 @@
 # ----------------------------------------------------------------------------
 
 !examples/*/*/*[.]*
+examples/*/*/*_wrapper.sh
 !examples/*/*/README
 examples/*/*/*[.]app
 !examples/declarative/*

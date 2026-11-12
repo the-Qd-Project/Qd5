@@ -705,12 +705,13 @@ if [ -e "$relpath/../.git" ]; then
     # Generate forwarding headers for all Qt modules.
     for module in "$relpath"/../qt*; do
         [ -f "$module/sync.profile" ] || continue
-
+        module_dir=$(cd "$module" && pwd -P) || exit 1
         echo "Running syncqt for $(basename "$module")..."
 
         "$PERL" "$relpath/bin/syncqt.pl" \
             -version "$QT_VERSION" \
-            "$module" || exit 1
+            -outdir "$module_dir" \
+            "$module_dir" || exit 1
     done
 fi
 
