@@ -58,7 +58,7 @@ jobs:
             -make tests \
             -make examples \
             -make tools \
-            -make libs
+            -make libs \
             -v
 
       - name: Build
