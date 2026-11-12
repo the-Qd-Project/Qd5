@@ -108,112 +108,15 @@ defineReplace(qtConfFunc_crossCompile) {
 }
 
 defineReplace(qtConfFunc_licenseCheck) {
-    exists($$QT_SOURCE_TREE/LICENSE.LGPL3)|exists($$QT_SOURCE_TREE/LICENSE.GPL2)|exists($$QT_SOURCE_TREE/LICENSE.GPL3): \
-        hasOpenSource = true
-    else: \
-        hasOpenSource = false
-    exists($$QT_SOURCE_TREE/LICENSE.QT-LICENSE-AGREEMENT): \
-        hasCommercial = true
-    else: \
-        hasCommercial = false
+    QMAKE_SAVED_ARGS += -opensource
+    export(QMAKE_SAVED_ARGS)
 
-    commercial = $$config.input.commercial
-    isEmpty(commercial) {
-        $$hasOpenSource {
-            $$hasCommercial {
-                logn()
-                logn("Selecting Qt Edition.")
-                logn()
-                logn("Type 'c' if you want to use the Commercial Edition.")
-                logn("Type 'o' if you want to use the Open Source Edition.")
-                logn()
-                for(ever) {
-                    val = $$lower($$prompt("Which edition of Qt do you want to use? ", false))
-                    equals(val, c) {
-                        commercial = yes
-                        QMAKE_SAVED_ARGS += -commercial
-                    } else: equals(val, o) {
-                        commercial = no
-                        QMAKE_SAVED_ARGS += -opensource
-                    } else {
-                        next()
-                    }
-                    export(QMAKE_SAVED_ARGS)
-                    break()
-                }
-            } else {
-                commercial = no
-            }
-        } else {
-            !$$hasCommercial: \
-                qtConfFatalError("No license files. Cannot proceed. Try re-installing Qt.")
-            commercial = yes
-        }
-    }
+    logn()
+    logn("This is the Qd Open Source Edition.")
 
-    equals(commercial, no) {
-        !$$hasOpenSource: \
-            qtConfFatalError("This is the Qt Commercial Edition." \
-                             "Cannot proceed with -opensource.")
-
-        logn()
-        logn("This is the Qt Open Source Edition.")
-
-        EditionString = "Open Source"
-        config.input.qt_edition = OpenSource
-        export(config.input.qt_edition)
-    } else {
-        !$$hasCommercial: \
-            qtConfFatalError("This is the Qt Open Source Edition." \
-                             "Cannot proceed with -commercial.")
-
-        !exists($$QT_SOURCE_TREE/.release-timestamp) {
-            #  Build from git
-
-            logn()
-            logn("This is the Qt Commercial Edition.")
-
-            EditionString = "Commercial"
-            config.input.qt_edition = Commercial
-            export(config.input.qt_edition)
-        } else {
-            # Build from a released source package
-
-            equals(QMAKE_HOST.os, Linux) {
-                !equals(QMAKE_HOST.arch, x86_64): \
-                    Licheck = licheck32
-                else: \
-                    Licheck = licheck64
-            } else: equals(QMAKE_HOST.os, Darwin) {
-                Licheck = licheck_mac
-            } else: equals(QMAKE_HOST.os, Windows) {
-                Licheck = licheck.exe
-            } else {
-                qtConfFatalError("Host operating system not supported by this edition of Qt.")
-            }
-
-            !qtRunLoggedCommand("$$system_quote($$QT_SOURCE_TREE/bin/$$Licheck) \
-                                    $$system_quote($$eval(config.input.confirm-license)) \
-                                    $$system_quote($$QT_SOURCE_TREE) $$system_quote($$QT_BUILD_TREE) \
-                                    $$[QMAKE_SPEC] $$[QMAKE_XSPEC]", \
-                                LicheckOutput, false): \
-                return(false)
-            logn()
-            for (o, LicheckOutput) {
-                contains(o, "\\w+=.*"): \
-                    eval($$o)
-                else: \
-                    logn($$o)
-            }
-            config.input.qt_edition = $$Edition
-            config.input.qt_licheck = $$Licheck
-            config.input.qt_release_date = $$ReleaseDate
-            export(config.input.qt_edition)
-            export(config.input.qt_licheck)
-            export(config.input.qt_release_date)
-            return(true)
-        }
-    }
+    EditionString = "Open Source"
+    config.input.qt_edition = OpenSource
+    export(config.input.qt_edition)
 
     !isEmpty(config.input.confirm-license) {
         logn()
@@ -222,29 +125,23 @@ defineReplace(qtConfFunc_licenseCheck) {
     }
 
     affix = the
-    equals(commercial, no) {
-        theLicense = "GNU Lesser General Public License (LGPL) version 3"
-        showWhat = "Type 'L' to view the GNU Lesser General Public License version 3 (LGPLv3)."
-        gpl2Ok = false
-        gpl3Ok = false
-        winrt {
-            notTheLicense = "Note: GPL version 2 is not available on WinRT."
-        } else: wasm {
-            gpl3Ok = true
-            theLicense = "GNU General Public License (GPL) version 3"
-            showWhat = "Type 'G' to view the GNU General Public License version 3 (GPLv3)."
-        } else: $$qtConfEvaluate("features.android-style-assets") {
-            notTheLicense = "Note: GPL version 2 is not available due to using Android style assets."
-        } else {
-            theLicense += "or the GNU General Public License (GPL) version 2"
-            showWhat += "Type 'G' to view the GNU General Public License version 2 (GPLv2)."
-            gpl2Ok = true
-            affix = either
-        }
+    theLicense = "GNU Lesser General Public License (LGPL) version 3"
+    showWhat = "Type 'L' to view the GNU Lesser General Public License version 3 (LGPLv3)."
+    gpl2Ok = false
+    gpl3Ok = false
+    winrt {
+        notTheLicense = "Note: GPL version 2 is not available on WinRT."
+    } else: wasm {
+        gpl3Ok = true
+        theLicense = "GNU General Public License (GPL) version 3"
+        showWhat = "Type 'G' to view the GNU General Public License version 3 (GPLv3)."
+    } else: $$qtConfEvaluate("features.android-style-assets") {
+        notTheLicense = "Note: GPL version 2 is not available due to using Android style assets."
     } else {
-        theLicense = $$cat($$QT_SOURCE_TREE/LICENSE.QT-LICENSE-AGREEMENT, lines)
-        theLicense = $$first(theLicense)
-        showWhat = "Type '?' to view the $${theLicense}."
+        theLicense += "or the GNU General Public License (GPL) version 2"
+        showWhat += "Type 'G' to view the GNU General Public License version 2 (GPLv2)."
+        gpl2Ok = true
+        affix = either
     }
     msg = \
         " " \
@@ -268,14 +165,12 @@ defineReplace(qtConfFunc_licenseCheck) {
                 return(true)
             } else: equals(val, n)|equals(val, no) {
                 return(false)
-            } else: equals(commercial, yes):equals(val, ?) {
-                licenseFile = $$QT_SOURCE_TREE/LICENSE.QT-LICENSE-AGREEMENT
-            } else: equals(commercial, no):equals(val, l) {
-                licenseFile = $$QT_SOURCE_TREE/LICENSE.LGPL3
-            } else: equals(commercial, no):equals(val, g):$$gpl2Ok {
-                licenseFile = $$QT_SOURCE_TREE/LICENSE.GPL2
-            } else: equals(commercial, no):equals(val, g):$$gpl3Ok {
-                licenseFile = $$QT_SOURCE_TREE/LICENSE.GPL3
+            } else: equals(val, l) {
+                licenseFile = $$QT_SOURCE_TREE/../LICENSE.LGPLv3
+            } else: equals(val, g):$$gpl2Ok {
+                licenseFile = $$QT_SOURCE_TREE/../LICENSE.GPLv2
+            } else: equals(val, g):$$gpl3Ok {
+                licenseFile = $$QT_SOURCE_TREE/../LICENSE.GPLv3
             } else {
                 next()
             }
@@ -1268,11 +1163,6 @@ defineReplace(qtConfOutputPostProcess_publicPro) {
     }
 
     output += "QT_EDITION = $$config.input.qt_edition"
-    !contains(config.input.qt_edition, "(OpenSource|Preview)") {
-        output += \
-            "QT_LICHECK = $$config.input.qt_licheck" \
-            "QT_RELEASE_DATE = $$config.input.qt_release_date"
-    }
 
     wasm: {
         qt_emcc_version = $$qtSystemEmccVersion()

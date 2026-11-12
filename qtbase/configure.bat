@@ -215,7 +215,7 @@ set QTVERSION=%QTVERMAJ%.%QTVERMIN%.%QTVERPAT%
 rem Create forwarding headers
 
 if "%SYNCQT%" == "" (
-    if exist "%QTSRC%\.git" (
+    if exist "%QTSRC%\..\.git" (
         set SYNCQT=true
     ) else (
         set SYNCQT=false
@@ -247,7 +247,7 @@ if "%tmpl%" == "win32" (
 ) else (
     echo SOURCE_PATH = %QTSRC:\=/%>> Makefile
 )
-if exist "%QTSRC%\.git" (
+if exist "%QTSRC%\..\.git" (
     echo INC_PATH = ../include>> Makefile
 ) else (
     echo INC_PATH = $^(SOURCE_PATH^)/include>> Makefile

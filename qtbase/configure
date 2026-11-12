@@ -694,7 +694,7 @@ fi
 # -----------------------------------------------------------------------------
 
 # symlink includes
-if [ -e "$relpath/.git" ]; then
+if [ -e "$relpath/../.git" ]; then
     if [ -z "$PERL" ]; then
         echo
         echo "You need perl in your PATH to make a build from GIT."
@@ -702,7 +702,16 @@ if [ -e "$relpath/.git" ]; then
         exit 1
     fi
 
-    "$relpath/bin/syncqt.pl" -version $QT_VERSION -minimal -module QtCore "$relpath" || exit 1
+    # Generate forwarding headers for all Qt modules.
+    for module in "$relpath"/../qt*; do
+        [ -f "$module/sync.profile" ] || continue
+
+        echo "Running syncqt for $(basename "$module")..."
+
+        "$PERL" "$relpath/bin/syncqt.pl" \
+            -version "$QT_VERSION" \
+            "$module" || exit 1
+    done
 fi
 
 # $1: input variable name (awk regexp)
@@ -755,7 +764,7 @@ setBootstrapVariable()
 
         echo "BUILD_PATH = .." >> "$mkfile"
         echo "SOURCE_PATH = $adjrelpath" >> "$mkfile"
-        if [ -e "$relpath/.git" ]; then
+        if [ -e "$relpath/../.git" ]; then
             echo 'INC_PATH = $(BUILD_PATH)/include' >> "$mkfile"
         else
             echo 'INC_PATH = $(SOURCE_PATH)/include' >> "$mkfile"

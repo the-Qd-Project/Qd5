@@ -443,25 +443,6 @@ sub git_clone_all_submodules
     return;
 }
 
-sub git_add_remotes
-{
-    my ($self, $gerrit_repo_basename) = @_;
-
-    my $gerrit_repo_url = $GERRIT_SSH_BASE;
-    # If given a username, make a "verbose" remote.
-    # Otherwise, rely on proper SSH configuration.
-    if ($self->{'codereview-username'}) {
-        $gerrit_repo_url =~ s,\@USER\@,$self->{'codereview-username'}\@,;
-        $gerrit_repo_url =~ s,\@PORT\@,:29418,;
-    } else {
-        $gerrit_repo_url =~ s,\@[^\@]+\@,,g;
-    }
-
-    $gerrit_repo_url .= $gerrit_repo_basename;
-    $self->exe('git', 'config', 'remote.gerrit.url', $gerrit_repo_url);
-    $self->exe('git', 'config', 'remote.gerrit.fetch', '+refs/heads/*:refs/remotes/gerrit/*', '/heads/');
-}
-
 sub git_stat_one_submodule
 {
     my ($self, $submodule) = @_;
@@ -563,8 +544,6 @@ sub git_clone_one_submodule
         $self->exe('git', 'config', 'commit.template', $template);
     }
 
-    $self->git_add_remotes($repo_basename);
-
     if ($self->{'detach-alternates'}) {
         $self->exe('git', 'repack', '-a');
 
@@ -643,8 +622,6 @@ sub run
     $self->{'base-url'} = $url;
 
     $self->git_clone_all_submodules('qt5', $self->{branch}, $self->{alternates}, @{$self->{'module-subset'}});
-
-    $self->git_add_remotes('qt5');
 
     $self->git_install_hooks;
 

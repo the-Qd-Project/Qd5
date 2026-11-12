@@ -1,0 +1,13 @@
+name: Build Qd5
+on:
+  push:
+  pull_request:
+jobs:
+  build:
+    runs-on: ubuntu-26.04
+    steps:
+      - uses: actions/checkout@v7
+      - name: Configure
+        run: ./configure -prefix $PWD/qtbase -opensource -confirm-license -v 
+      - name: Build
+        run: make -j${nproc}

@@ -13,24 +13,24 @@ TEMPLATE      = subdirs
 
 CONFIG += prepare_docs qt_docs_targets
 
-# Extract submodules from .gitmodules.
-lines = $$cat(.gitmodules, lines)
+# Extract modules from qdmodules.conf.
+lines = $$cat(qdmodules.conf, lines)
 for (line, lines) {
-    mod = $$replace(line, "^\\[submodule \"([^\"]+)\"\\]$", \\1)
+    mod = $$replace(line, "^\\[([^]]+)\\]$", \\1)
     !equals(mod, $$line) {
         module = $$mod
         modules += $$mod
     } else {
-        prop = $$replace(line, "^$$escape_expand(\\t)([^ =]+) *=.*$", \\1)
+        prop = $$replace(line, "^([^ =]+) *=.*$", \\1)
         !equals(prop, $$line) {
             val = $$replace(line, "^[^=]+= *", )
             module.$${module}.$$prop = $$split(val)
         } else {
-            error("Malformed line in .gitmodules: $$line")
+            error("Malformed line in qdmodules.conf: $$line")
         }
     }
 }
-QMAKE_INTERNAL_INCLUDED_FILES += $$PWD/.gitmodules
+QMAKE_INTERNAL_INCLUDED_FILES += $$PWD/qdmodules.conf
 
 QT_SKIP_MODULES =
 
