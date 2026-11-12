@@ -1,9 +1,14 @@
 name: Build Qd5
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 on:
   push:
   pull_request:
+  workflow_dispatch:
+  workflow_call:
 jobs:
-  build:
+  linux:
     runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@v7
@@ -48,9 +53,9 @@ jobs:
       - name: Setup ccache
         uses: hendrikmuhs/ccache-action@v1.2.24
         with:
-          variant: sccache
+          variant: ccache
           create-symlink: true
-          key: ${{ runner.os }}-${{ runner.arch }}-sccache
+          key: ${{ runner.os }}-${{ runner.arch }}-ccache
 
       - name: Configure
         run: |
