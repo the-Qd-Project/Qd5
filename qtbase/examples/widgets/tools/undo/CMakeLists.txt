@@ -1,0 +1,62 @@
+# Generated from undo.pro.
+
+cmake_minimum_required(VERSION 3.14)
+project(undo LANGUAGES CXX)
+
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+
+set(INSTALL_EXAMPLEDIR "examples/widgets/tools/undo")
+
+find_package(Qt5 COMPONENTS Core)
+find_package(Qt5 COMPONENTS Gui)
+find_package(Qt5 COMPONENTS Widgets)
+
+add_qt_gui_executable(undo
+    commands.cpp commands.h
+    document.cpp document.h
+    main.cpp
+    mainwindow.cpp mainwindow.h mainwindow.ui
+)
+target_link_libraries(undo PUBLIC
+    Qt::Core
+    Qt::Gui
+    Qt::Widgets
+)
+
+
+# Resources:
+set(undo_resource_files
+    "icons/background.png"
+    "icons/blue.png"
+    "icons/circle.png"
+    "icons/exit.png"
+    "icons/fileclose.png"
+    "icons/filenew.png"
+    "icons/fileopen.png"
+    "icons/filesave.png"
+    "icons/green.png"
+    "icons/ok.png"
+    "icons/rectangle.png"
+    "icons/red.png"
+    "icons/redo.png"
+    "icons/remove.png"
+    "icons/triangle.png"
+    "icons/undo.png"
+)
+
+qt5_add_resources(undo "undo"
+    PREFIX
+        "/"
+    FILES
+        ${undo_resource_files}
+)
+
+install(TARGETS undo
+    RUNTIME DESTINATION "${INSTALL_EXAMPLEDIR}"
+    BUNDLE DESTINATION "${INSTALL_EXAMPLEDIR}"
+    LIBRARY DESTINATION "${INSTALL_EXAMPLEDIR}"
+)

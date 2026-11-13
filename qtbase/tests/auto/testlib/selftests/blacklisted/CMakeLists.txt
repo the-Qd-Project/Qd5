@@ -1,0 +1,16 @@
+# Generated from blacklisted.pro.
+
+#####################################################################
+## blacklisted Binary:
+#####################################################################
+
+qt_add_executable(blacklisted
+    GUI
+    SOURCES
+        tst_blacklisted.cpp
+    PUBLIC_LIBRARIES
+        Qt::TestPrivate
+)
+
+## Scopes:
+#####################################################################

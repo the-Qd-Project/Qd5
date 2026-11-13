@@ -1,0 +1,10 @@
+# Generated from gui.pro.
+
+if(NOT TARGET Qt::Gui)
+    return()
+endif()
+add_subdirectory(analogclock)
+add_subdirectory(rasterwindow)
+if(QT_FEATURE_opengl AND TARGET Qt::Gui)
+    add_subdirectory(openglwindow)
+endif()

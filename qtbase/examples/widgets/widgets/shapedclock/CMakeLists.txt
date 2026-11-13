@@ -1,0 +1,32 @@
+# Generated from shapedclock.pro.
+
+cmake_minimum_required(VERSION 3.14)
+project(shapedclock LANGUAGES CXX)
+
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+
+set(INSTALL_EXAMPLEDIR "examples/widgets/widgets/shapedclock")
+
+find_package(Qt5 COMPONENTS Core)
+find_package(Qt5 COMPONENTS Gui)
+find_package(Qt5 COMPONENTS Widgets)
+
+add_qt_gui_executable(shapedclock
+    main.cpp
+    shapedclock.cpp shapedclock.h
+)
+target_link_libraries(shapedclock PUBLIC
+    Qt::Core
+    Qt::Gui
+    Qt::Widgets
+)
+
+install(TARGETS shapedclock
+    RUNTIME DESTINATION "${INSTALL_EXAMPLEDIR}"
+    BUNDLE DESTINATION "${INSTALL_EXAMPLEDIR}"
+    LIBRARY DESTINATION "${INSTALL_EXAMPLEDIR}"
+)

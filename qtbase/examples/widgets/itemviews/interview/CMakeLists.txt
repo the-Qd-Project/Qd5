@@ -1,0 +1,47 @@
+# Generated from interview.pro.
+
+cmake_minimum_required(VERSION 3.14)
+project(interview LANGUAGES CXX)
+
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+
+set(INSTALL_EXAMPLEDIR "examples/widgets/itemviews/interview")
+
+find_package(Qt5 COMPONENTS Core)
+find_package(Qt5 COMPONENTS Gui)
+find_package(Qt5 COMPONENTS Widgets)
+
+add_qt_gui_executable(interview
+    main.cpp
+    model.cpp model.h
+)
+target_link_libraries(interview PUBLIC
+    Qt::Core
+    Qt::Gui
+    Qt::Widgets
+)
+
+
+# Resources:
+set(interview_resource_files
+    "images/folder.png"
+    "images/interview.png"
+    "images/services.png"
+)
+
+qt5_add_resources(interview "interview"
+    PREFIX
+        "/"
+    FILES
+        ${interview_resource_files}
+)
+
+install(TARGETS interview
+    RUNTIME DESTINATION "${INSTALL_EXAMPLEDIR}"
+    BUNDLE DESTINATION "${INSTALL_EXAMPLEDIR}"
+    LIBRARY DESTINATION "${INSTALL_EXAMPLEDIR}"
+)

@@ -1,5 +1,19 @@
 
-set_property(TARGET Qt5::Test
-  APPEND PROPERTY
-    INTERFACE_COMPILE_DEFINITIONS QT_TESTCASE_BUILDDIR=\\\"\${CMAKE_BINARY_DIR}\\\"
-)
+# Qt5::Test can be an ALIAS target when this file is included from inside the
+# Qt build tree. set_property() does not work on aliases.
+set(_qt5test_is_alias FALSE)
+if(TARGET Qt5::Test)
+    get_target_property(_qt5test_aliased Qt5::Test ALIASED_TARGET)
+    if(_qt5test_aliased)
+        set(_qt5test_is_alias TRUE)
+    endif()
+    unset(_qt5test_aliased)
+endif()
+
+if(NOT _qt5test_is_alias)
+    set_property(TARGET Qt5::Test
+      APPEND PROPERTY
+        INTERFACE_COMPILE_DEFINITIONS "QT_TESTCASE_BUILDDIR=\"${CMAKE_BINARY_DIR}\""
+    )
+endif()
+unset(_qt5test_is_alias)

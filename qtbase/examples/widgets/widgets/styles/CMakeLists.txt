@@ -1,0 +1,47 @@
+# Generated from styles.pro.
+
+cmake_minimum_required(VERSION 3.14)
+project(styles LANGUAGES CXX)
+
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+
+set(INSTALL_EXAMPLEDIR "examples/widgets/widgets/styles")
+
+find_package(Qt5 COMPONENTS Core)
+find_package(Qt5 COMPONENTS Gui)
+find_package(Qt5 COMPONENTS Widgets)
+
+add_qt_gui_executable(styles
+    main.cpp
+    norwegianwoodstyle.cpp norwegianwoodstyle.h
+    widgetgallery.cpp widgetgallery.h
+)
+target_link_libraries(styles PUBLIC
+    Qt::Core
+    Qt::Gui
+    Qt::Widgets
+)
+
+
+# Resources:
+set(styles_resource_files
+    "images/woodbackground.png"
+    "images/woodbutton.png"
+)
+
+qt5_add_resources(styles "styles"
+    PREFIX
+        "/"
+    FILES
+        ${styles_resource_files}
+)
+
+install(TARGETS styles
+    RUNTIME DESTINATION "${INSTALL_EXAMPLEDIR}"
+    BUNDLE DESTINATION "${INSTALL_EXAMPLEDIR}"
+    LIBRARY DESTINATION "${INSTALL_EXAMPLEDIR}"
+)

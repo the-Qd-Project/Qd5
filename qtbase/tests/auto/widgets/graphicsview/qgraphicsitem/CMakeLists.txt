@@ -1,0 +1,27 @@
+# Generated from qgraphicsitem.pro.
+
+#####################################################################
+## tst_qgraphicsitem Test:
+#####################################################################
+
+qt_add_test(tst_qgraphicsitem
+    SOURCES
+        tst_qgraphicsitem.cpp
+    DEFINES
+        QT_NO_CAST_TO_ASCII
+    PUBLIC_LIBRARIES
+        Qt::CorePrivate
+        Qt::Gui
+        Qt::GuiPrivate
+        Qt::TestPrivate
+        Qt::Widgets
+        Qt::WidgetsPrivate
+)
+
+## Scopes:
+#####################################################################
+
+qt_extend_target(tst_qgraphicsitem CONDITION WIN32 AND NOT WINRT
+    PUBLIC_LIBRARIES
+        user32
+)

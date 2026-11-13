@@ -1,0 +1,42 @@
+# Generated from dialogs.pro.
+
+#####################################################################
+## dialogs Binary:
+#####################################################################
+
+qt_add_manual_test(dialogs
+    GUI
+    SOURCES
+        colordialogpanel.cpp colordialogpanel.h
+        filedialogpanel.cpp filedialogpanel.h
+        fontdialogpanel.cpp fontdialogpanel.h
+        main.cpp
+        messageboxpanel.cpp messageboxpanel.h
+        utils.cpp utils.h
+        wizardpanel.cpp wizardpanel.h
+    PUBLIC_LIBRARIES
+        Qt::Gui
+)
+
+#### Keys ignored in scope 1:.:.:dialogs.pro:<TRUE>:
+# TEMPLATE = "app"
+
+## Scopes:
+#####################################################################
+
+qt_extend_target(dialogs CONDITION (QT_MAJOR_VERSION GREATER 4)
+    PUBLIC_LIBRARIES
+        Qt::Widgets
+)
+
+qt_extend_target(dialogs CONDITION ((QT_MAJOR_VERSION GREATER 4)) AND (TARGET Qt::PrintSupport)
+    PUBLIC_LIBRARIES
+        Qt::PrintSupport
+)
+
+qt_extend_target(dialogs CONDITION NOT (QT_FEATURE_printer EQUAL FALSE)
+    SOURCES
+        printdialogpanel.cpp printdialogpanel.h printdialogpanel.ui
+    ENABLE_AUTOGEN_TOOLS
+        uic
+)

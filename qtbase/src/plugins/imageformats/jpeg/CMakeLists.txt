@@ -1,0 +1,22 @@
+# Generated from jpeg.pro.
+
+#####################################################################
+## QJpegPlugin Plugin:
+#####################################################################
+
+qt_add_plugin(QJpegPlugin
+    OUTPUT_NAME qjpeg
+    TYPE imageformats
+    SOURCES
+        main.cpp
+        qjpeghandler.cpp qjpeghandler_p.h
+    PUBLIC_LIBRARIES
+        JPEG::JPEG
+        Qt::Core
+        Qt::CorePrivate
+        Qt::Gui
+        Qt::GuiPrivate
+)
+
+#### Keys ignored in scope 1:.:.:jpeg.pro:<TRUE>:
+# OTHER_FILES = "jpeg.json"

@@ -1,0 +1,47 @@
+# Generated from completer.pro.
+
+cmake_minimum_required(VERSION 3.14)
+project(completer LANGUAGES CXX)
+
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+
+set(INSTALL_EXAMPLEDIR "examples/widgets/tools/completer")
+
+find_package(Qt5 COMPONENTS Core)
+find_package(Qt5 COMPONENTS Gui)
+find_package(Qt5 COMPONENTS Widgets)
+
+add_qt_gui_executable(completer
+    fsmodel.cpp fsmodel.h
+    main.cpp
+    mainwindow.cpp mainwindow.h
+)
+target_link_libraries(completer PUBLIC
+    Qt::Core
+    Qt::Gui
+    Qt::Widgets
+)
+
+
+# Resources:
+set(completer_resource_files
+    "resources/countries.txt"
+    "resources/wordlist.txt"
+)
+
+qt5_add_resources(completer "completer"
+    PREFIX
+        "/"
+    FILES
+        ${completer_resource_files}
+)
+
+install(TARGETS completer
+    RUNTIME DESTINATION "${INSTALL_EXAMPLEDIR}"
+    BUNDLE DESTINATION "${INSTALL_EXAMPLEDIR}"
+    LIBRARY DESTINATION "${INSTALL_EXAMPLEDIR}"
+)

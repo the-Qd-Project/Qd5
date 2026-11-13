@@ -1,0 +1,69 @@
+# Generated from torrent.pro.
+
+cmake_minimum_required(VERSION 3.14)
+project(torrent LANGUAGES CXX)
+
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+
+set(INSTALL_EXAMPLEDIR "examples/network/torrent")
+
+find_package(Qt5 COMPONENTS Core)
+find_package(Qt5 COMPONENTS Gui)
+find_package(Qt5 COMPONENTS Network)
+find_package(Qt5 COMPONENTS Widgets)
+
+add_qt_gui_executable(torrent
+    addtorrentdialog.cpp addtorrentdialog.h
+    bencodeparser.cpp bencodeparser.h
+    connectionmanager.cpp connectionmanager.h
+    filemanager.cpp filemanager.h
+    forms/addtorrentform.ui
+    main.cpp
+    mainwindow.cpp mainwindow.h
+    metainfo.cpp metainfo.h
+    peerwireclient.cpp peerwireclient.h
+    ratecontroller.cpp ratecontroller.h
+    torrentclient.cpp torrentclient.h
+    torrentserver.cpp torrentserver.h
+    trackerclient.cpp trackerclient.h
+)
+target_include_directories(torrent PUBLIC forms)
+target_link_libraries(torrent PUBLIC
+    Qt::Core
+    Qt::Gui
+    Qt::Network
+    Qt::Widgets
+)
+
+set_property(TARGET torrent APPEND PROPERTY AUTOUIC_SEARCH_PATHS
+    "${CMAKE_CURRENT_SOURCE_DIR}/forms"
+)
+
+# Resources:
+set(icons_resource_files
+    "icons/1downarrow.png"
+    "icons/1uparrow.png"
+    "icons/bottom.png"
+    "icons/exit.png"
+    "icons/peertopeer.png"
+    "icons/player_pause.png"
+    "icons/player_play.png"
+    "icons/player_stop.png"
+)
+
+qt5_add_resources(torrent "icons"
+    PREFIX
+        "/"
+    FILES
+        ${icons_resource_files}
+)
+
+install(TARGETS torrent
+    RUNTIME DESTINATION "${INSTALL_EXAMPLEDIR}"
+    BUNDLE DESTINATION "${INSTALL_EXAMPLEDIR}"
+    LIBRARY DESTINATION "${INSTALL_EXAMPLEDIR}"
+)

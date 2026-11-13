@@ -1,0 +1,50 @@
+# Generated from tablet.pro.
+
+cmake_minimum_required(VERSION 3.14)
+project(qttablet LANGUAGES CXX)
+
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+
+set(INSTALL_EXAMPLEDIR "examples/widgets/widgets/tablet")
+
+find_package(Qt5 COMPONENTS Core)
+find_package(Qt5 COMPONENTS Gui)
+find_package(Qt5 COMPONENTS Widgets)
+
+add_qt_gui_executable(qttablet
+    main.cpp
+    mainwindow.cpp mainwindow.h
+    tabletapplication.cpp tabletapplication.h
+    tabletcanvas.cpp tabletcanvas.h
+)
+target_link_libraries(qttablet PUBLIC
+    Qt::Core
+    Qt::Gui
+    Qt::Widgets
+)
+
+
+# Resources:
+set(images_resource_files
+    "images/cursor-airbrush.png"
+    "images/cursor-eraser.png"
+    "images/cursor-felt-marker.png"
+    "images/cursor-pencil.png"
+)
+
+qt5_add_resources(qttablet "images"
+    PREFIX
+        "/"
+    FILES
+        ${images_resource_files}
+)
+
+install(TARGETS qttablet
+    RUNTIME DESTINATION "${INSTALL_EXAMPLEDIR}"
+    BUNDLE DESTINATION "${INSTALL_EXAMPLEDIR}"
+    LIBRARY DESTINATION "${INSTALL_EXAMPLEDIR}"
+)

@@ -1,0 +1,39 @@
+# Generated from painterpaths.pro.
+
+cmake_minimum_required(VERSION 3.14)
+project(painterpaths LANGUAGES CXX)
+
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+
+set(INSTALL_EXAMPLEDIR "examples/widgets/painting/painterpaths")
+
+find_package(Qt5 COMPONENTS Core)
+find_package(Qt5 COMPONENTS Gui)
+find_package(Qt5 COMPONENTS Widgets)
+
+add_qt_gui_executable(painterpaths
+    main.cpp
+    renderarea.cpp renderarea.h
+    window.cpp window.h
+)
+target_link_libraries(painterpaths PUBLIC
+    Qt::Core
+    Qt::Gui
+    Qt::Widgets
+)
+
+if(UNIX AND NOT APPLE AND NOT HAIKU AND NOT INTEGRITY AND NOT VXWORKS)
+    target_link_libraries(painterpaths PUBLIC
+        m
+    )
+endif()
+
+install(TARGETS painterpaths
+    RUNTIME DESTINATION "${INSTALL_EXAMPLEDIR}"
+    BUNDLE DESTINATION "${INSTALL_EXAMPLEDIR}"
+    LIBRARY DESTINATION "${INSTALL_EXAMPLEDIR}"
+)

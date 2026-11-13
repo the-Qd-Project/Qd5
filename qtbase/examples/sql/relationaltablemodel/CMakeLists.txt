@@ -1,0 +1,34 @@
+# Generated from relationaltablemodel.pro.
+
+cmake_minimum_required(VERSION 3.14)
+project(relationaltablemodel LANGUAGES CXX)
+
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+
+set(INSTALL_EXAMPLEDIR "examples/sql/relationaltablemodel")
+
+find_package(Qt5 COMPONENTS Core)
+find_package(Qt5 COMPONENTS Gui)
+find_package(Qt5 COMPONENTS Sql)
+find_package(Qt5 COMPONENTS Widgets)
+
+add_qt_gui_executable(relationaltablemodel
+    ../connection.h
+    relationaltablemodel.cpp
+)
+target_link_libraries(relationaltablemodel PUBLIC
+    Qt::Core
+    Qt::Gui
+    Qt::Sql
+    Qt::Widgets
+)
+
+install(TARGETS relationaltablemodel
+    RUNTIME DESTINATION "${INSTALL_EXAMPLEDIR}"
+    BUNDLE DESTINATION "${INSTALL_EXAMPLEDIR}"
+    LIBRARY DESTINATION "${INSTALL_EXAMPLEDIR}"
+)

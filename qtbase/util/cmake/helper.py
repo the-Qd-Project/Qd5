@@ -1,0 +1,742 @@
+#############################################################################
+##
+## Copyright (C) 2018 The Qt Company Ltd.
+## Contact: https://www.qt.io/licensing/
+##
+## This file is part of the plugins of the Qt Toolkit.
+##
+## $QT_BEGIN_LICENSE:GPL-EXCEPT$
+## Commercial License Usage
+## Licensees holding valid commercial Qt licenses may use this file in
+## accordance with the commercial license agreement provided with the
+## Software or, alternatively, in accordance with the terms contained in
+## a written agreement between you and The Qt Company. For licensing terms
+## and conditions see https://www.qt.io/terms-conditions. For further
+## information use the contact form at https://www.qt.io/contact-us.
+##
+## GNU General Public License Usage
+## Alternatively, this file may be used under the terms of the GNU
+## General Public License version 3 as published by the Free Software
+## Foundation with exceptions as appearing in the file LICENSE.GPL3-EXCEPT
+## included in the packaging of this file. Please review the following
+## information to ensure the GNU General Public License requirements will
+## be met: https://www.gnu.org/licenses/gpl-3.0.html.
+##
+## $QT_END_LICENSE$
+##
+#############################################################################
+
+import re
+import typing
+
+
+class LibraryMapping:
+    def __init__(
+        self,
+        soName: str,
+        packageName: typing.Optional[str],
+        targetName: typing.Optional[str],
+        *,
+        resultVariable: typing.Optional[str] = None,
+        extra: typing.List[str] = [],
+        appendFoundSuffix: bool = True,
+        emit_if: str = "",
+    ) -> None:
+        self.soName = soName
+        self.packageName = packageName
+        self.resultVariable = resultVariable
+        self.appendFoundSuffix = appendFoundSuffix
+        self.extra = extra
+        self.targetName = targetName
+
+        # if emit_if is non-empty, the generated find_package call
+        # for a library will be surrounded by this condition.
+        self.emit_if = emit_if
+
+    def is_qt(self) -> bool:
+        return self.packageName == "Qt" or self.packageName == "Qt5" or self.packageName == "Qt5"
+
+
+_qt_library_map = [
+    # Qt:
+    LibraryMapping(
+        "accessibility_support",
+        "Qt5",
+        "Qt::AccessibilitySupport",
+        extra=["COMPONENTS", "AccessibilitySupport"],
+    ),
+    LibraryMapping(
+        "androidextras", "Qt5", "Qt::AndroidExtras", extra=["COMPONENTS", "AndroidExtras"]
+    ),
+    LibraryMapping("animation", "Qt5", "Qt::3DAnimation", extra=["COMPONENTS", "3DAnimation"]),
+    LibraryMapping(
+        "application-lib", "Qt5", "Qt::AppManApplication", extra=["COMPONENTS", "AppManApplication"]
+    ),
+    LibraryMapping("bluetooth", "Qt5", "Qt::Bluetooth", extra=["COMPONENTS", "Bluetooth"]),
+    LibraryMapping("bootstrap", "Qt5", "Qt::Bootstrap", extra=["COMPONENTS", "Bootstrap"]),
+    # bootstrap-dbus: Not needed in Qt5!
+    LibraryMapping("client", "Qt5", "Qt::WaylandClient", extra=["COMPONENTS", "WaylandClient"]),
+    LibraryMapping(
+        "clipboard_support", "Qt5", "Qt::ClipboardSupport", extra=["COMPONENTS", "ClipboardSupport"]
+    ),
+    LibraryMapping("coap", "Qt5", "Qt::Coap", extra=["COMPONENTS", "Coap"]),
+    LibraryMapping("common-lib", "Qt5", "Qt::AppManCommon", extra=["COMPONENTS", "AppManCommon"]),
+    LibraryMapping(
+        "compositor", "Qt5", "Qt::WaylandCompositor", extra=["COMPONENTS", "WaylandCompositor"]
+    ),
+    LibraryMapping("concurrent", "Qt5", "Qt::Concurrent", extra=["COMPONENTS", "Concurrent"]),
+    LibraryMapping("container", "Qt5", "Qt::AxContainer", extra=["COMPONENTS", "AxContainer"]),
+    LibraryMapping("control", "Qt5", "Qt::AxServer", extra=["COMPONENTS", "AxServer"]),
+    LibraryMapping(
+        "core_headers", "Qt5", "Qt::WebEngineCore", extra=["COMPONENTS", "WebEngineCore"]
+    ),
+    LibraryMapping("core", "Qt5", "Qt::Core", extra=["COMPONENTS", "Core"]),
+    LibraryMapping("coretest", "Qt5", "Qt::3DCoreTest", extra=["COMPONENTS", "3DCoreTest"]),
+    LibraryMapping("crypto-lib", "Qt5", "Qt::AppManCrypto", extra=["COMPONENTS", "AppManCrypto"]),
+    LibraryMapping("dbus", "Qt5", "Qt::DBus", extra=["COMPONENTS", "DBus"]),
+    LibraryMapping("designer", "Qt5", "Qt::Designer", extra=["COMPONENTS", "Designer"]),
+    LibraryMapping(
+        "designercomponents",
+        "Qt5",
+        "Qt::DesignerComponents",
+        extra=["COMPONENTS", "DesignerComponents"],
+    ),
+    LibraryMapping(
+        "devicediscovery",
+        "Qt5",
+        "Qt::DeviceDiscoverySupport",
+        extra=["COMPONENTS", "DeviceDiscoverySupport"],
+    ),
+    LibraryMapping(
+        "devicediscovery_support",
+        "Qt5",
+        "Qt::DeviceDiscoverySupport",
+        extra=["COMPONENTS", "DeviceDiscoverySupport"],
+    ),
+    LibraryMapping("edid", "Qt5", "Qt::EdidSupport", extra=["COMPONENTS", "EdidSupport"]),
+    LibraryMapping("edid_support", "Qt5", "Qt::EdidSupport", extra=["COMPONENTS", "EdidSupport"]),
+    LibraryMapping("eglconvenience", "Qt5", "Qt::EglSupport", extra=["COMPONENTS", "EglSupport"]),
+    LibraryMapping(
+        "eglfsdeviceintegration",
+        "Qt5",
+        "Qt::EglFSDeviceIntegration",
+        extra=["COMPONENTS", "EglFSDeviceIntegration"],
+    ),
+    LibraryMapping(
+        "eglfs_kms_support", "Qt5", "Qt::EglFsKmsSupport", extra=["COMPONENTS", "EglFsKmsSupport"]
+    ),
+    LibraryMapping("egl_support", "Qt5", "Qt::EglSupport", extra=["COMPONENTS", "EglSupport"]),
+    # enginio: Not needed in Qt5!
+    LibraryMapping(
+        "eventdispatchers",
+        "Qt5",
+        "Qt::EventDispatcherSupport",
+        extra=["COMPONENTS", "EventDispatcherSupport"],
+    ),
+    LibraryMapping(
+        "eventdispatcher_support",
+        "Qt5",
+        "Qt::EventDispatcherSupport",
+        extra=["COMPONENTS", "EventDispatcherSupport"],
+    ),
+    LibraryMapping("extras", "Qt5", "Qt::3DExtras", extra=["COMPONENTS", "3DExtras"]),
+    LibraryMapping("fbconvenience", "Qt5", "Qt::FbSupport", extra=["COMPONENTS", "FbSupport"]),
+    LibraryMapping("fb_support", "Qt5", "Qt::FbSupport", extra=["COMPONENTS", "FbSupport"]),
+    LibraryMapping(
+        "fontdatabase_support",
+        "Qt5",
+        "Qt::FontDatabaseSupport",
+        extra=["COMPONENTS", "FontDatabaseSupport"],
+    ),
+    LibraryMapping("gamepad", "Qt5", "Qt::Gamepad", extra=["COMPONENTS", "Gamepad"]),
+    LibraryMapping(
+        "global", "Qt5", "Qt::Core", extra=["COMPONENTS", "Core"]
+    ),  # manually added special case
+    LibraryMapping("glx_support", "Qt5", "Qt::GlxSupport", extra=["COMPONENTS", "GlxSupport"]),
+    LibraryMapping(
+        "graphics_support", "Qt5", "Qt::GraphicsSupport", extra=["COMPONENTS", "GraphicsSupport"]
+    ),
+    LibraryMapping(
+        "gsttools", "Qt5", "Qt::MultimediaGstTools", extra=["COMPONENTS", "MultimediaGstTools"]
+    ),
+    LibraryMapping("gui", "Qt5", "Qt::Gui", extra=["COMPONENTS", "Gui"]),
+    LibraryMapping("help", "Qt5", "Qt::Help", extra=["COMPONENTS", "Help"]),
+    LibraryMapping(
+        "hunspellinputmethod",
+        "Qt5",
+        "Qt::HunspellInputMethod",
+        extra=["COMPONENTS", "HunspellInputMethod"],
+    ),
+    LibraryMapping("input", "Qt5", "Qt::InputSupport", extra=["COMPONENTS", "InputSupport"]),
+    LibraryMapping(
+        "input_support", "Qt5", "Qt::InputSupport", extra=["COMPONENTS", "InputSupport"]
+    ),
+    LibraryMapping(
+        "installer-lib", "Qt5", "Qt::AppManInstaller", extra=["COMPONENTS", "AppManInstaller"]
+    ),
+    LibraryMapping("knx", "Qt5", "Qt::Knx", extra=["COMPONENTS", "Knx"]),
+    LibraryMapping("kmsconvenience", "Qt5", "Qt::KmsSupport", extra=["COMPONENTS", "KmsSupport"]),
+    LibraryMapping("kms_support", "Qt5", "Qt::KmsSupport", extra=["COMPONENTS", "KmsSupport"]),
+    LibraryMapping(
+        "launcher-lib", "Qt5", "Qt::AppManLauncher", extra=["COMPONENTS", "AppManLauncher"]
+    ),
+    LibraryMapping("lib", "Qt5", "Qt::Designer", extra=["COMPONENTS", "Designer"]),
+    LibraryMapping(
+        "linuxaccessibility_support",
+        "Qt5",
+        "Qt::LinuxAccessibilitySupport",
+        extra=["COMPONENTS", "LinuxAccessibilitySupport"],
+    ),
+    LibraryMapping("location", "Qt5", "Qt::Location", extra=["COMPONENTS", "Location"]),
+    LibraryMapping("logic", "Qt5", "Qt::3DLogic", extra=["COMPONENTS", "3DLogic"]),
+    LibraryMapping("macextras", "Qt5", "Qt::MacExtras", extra=["COMPONENTS", "MacExtras"]),
+    LibraryMapping("main-lib", "Qt5", "Qt::AppManMain", extra=["COMPONENTS", "AppManMain"]),
+    LibraryMapping(
+        "manager-lib", "Qt5", "Qt::AppManManager", extra=["COMPONENTS", "AppManManager"]
+    ),
+    LibraryMapping(
+        "monitor-lib", "Qt5", "Qt::AppManMonitor", extra=["COMPONENTS", "AppManMonitor"]
+    ),
+    LibraryMapping("mqtt", "Qt5", "Qt::Mqtt", extra=["COMPONENTS", "Mqtt"]),
+    LibraryMapping("multimedia", "Qt5", "Qt::Multimedia", extra=["COMPONENTS", "Multimedia"]),
+    LibraryMapping(
+        "multimediawidgets",
+        "Qt5",
+        "Qt::MultimediaWidgets",
+        extra=["COMPONENTS", "MultimediaWidgets"],
+    ),
+    LibraryMapping("network", "Qt5", "Qt::Network", extra=["COMPONENTS", "Network"]),
+    LibraryMapping("networkauth", "Qt5", "Qt::NetworkAuth", extra=["COMPONENTS", "NetworkAuth"]),
+    LibraryMapping("nfc", "Qt5", "Qt::Nfc", extra=["COMPONENTS", "Nfc"]),
+    LibraryMapping("oauth", "Qt5", "Qt::NetworkAuth", extra=["COMPONENTS", "NetworkAuth"]),
+    LibraryMapping(
+        "openglextensions", "Qt5", "Qt::OpenGLExtensions", extra=["COMPONENTS", "OpenGLExtensions"]
+    ),
+    LibraryMapping("opengl", "Qt5", "Qt::OpenGL", extra=["COMPONENTS", "OpenGL"]),
+    LibraryMapping(
+        "package-lib", "Qt5", "Qt::AppManPackage", extra=["COMPONENTS", "AppManPackage"]
+    ),
+    LibraryMapping(
+        "packetprotocol", "Qt5", "Qt::PacketProtocol", extra=["COMPONENTS", "PacketProtocol"]
+    ),
+    LibraryMapping(
+        "particles", "Qt5", "Qt::QuickParticles", extra=["COMPONENTS", "QuickParticles"]
+    ),
+    LibraryMapping(
+        "platformcompositor",
+        "Qt5",
+        "Qt::PlatformCompositorSupport",
+        extra=["COMPONENTS", "PlatformCompositorSupport"],
+    ),
+    LibraryMapping(
+        "platformcompositor_support",
+        "Qt5",
+        "Qt::PlatformCompositorSupport",
+        extra=["COMPONENTS", "PlatformCompositorSupport"],
+    ),
+    LibraryMapping(
+        "plugin-interfaces",
+        "Qt5",
+        "Qt::AppManPluginInterfaces",
+        extra=["COMPONENTS", "AppManPluginInterfaces"],
+    ),
+    LibraryMapping("positioning", "Qt5", "Qt::Positioning", extra=["COMPONENTS", "Positioning"]),
+    LibraryMapping(
+        "positioningquick", "Qt5", "Qt::PositioningQuick", extra=["COMPONENTS", "PositioningQuick"]
+    ),
+    LibraryMapping("printsupport", "Qt5", "Qt::PrintSupport", extra=["COMPONENTS", "PrintSupport"]),
+    LibraryMapping("purchasing", "Qt5", "Qt::Purchasing", extra=["COMPONENTS", "Purchasing"]),
+    LibraryMapping("qmldebug", "Qt5", "Qt::QmlDebug", extra=["COMPONENTS", "QmlDebug"]),
+    LibraryMapping("qmldevtools", "Qt5", "Qt::QmlDevTools", extra=["COMPONENTS", "QmlDevTools"]),
+    LibraryMapping("qml", "Qt5", "Qt::Qml", extra=["COMPONENTS", "Qml"]),
+    LibraryMapping("qmlmodels", "Qt5", "Qt::QmlModels", extra=["COMPONENTS", "QmlModels"]),
+    LibraryMapping("qmltest", "Qt5", "Qt::QuickTest", extra=["COMPONENTS", "QuickTest"]),
+    LibraryMapping(
+        "qtmultimediaquicktools",
+        "Qt5",
+        "Qt::MultimediaQuick",
+        extra=["COMPONENTS", "MultimediaQuick"],
+    ),
+    LibraryMapping(
+        "quick3dassetimport",
+        "Qt5",
+        "Qt::Quick3DAssetImport",
+        extra=["COMPONENTS", "Quick3DAssetImport"],
+    ),
+    LibraryMapping("quick3d", "Qt5", "Qt::Quick3D", extra=["COMPONENTS", "Quick3D"]),
+    LibraryMapping(
+        "quick3drender", "Qt5", "Qt::Quick3DRender", extra=["COMPONENTS", "Quick3DRender"]
+    ),
+    LibraryMapping(
+        "quick3druntimerender",
+        "Qt5",
+        "Qt::Quick3DRuntimeRender",
+        extra=["COMPONENTS", "Quick3DRuntimeRender"],
+    ),
+    LibraryMapping("quick3dutils", "Qt5", "Qt::Quick3DUtils", extra=["COMPONENTS", "Quick3DUtils"]),
+    LibraryMapping(
+        "quickcontrols2", "Qt5", "Qt::QuickControls2", extra=["COMPONENTS", "QuickControls2"]
+    ),
+    LibraryMapping("quick", "Qt5", "Qt::Quick", extra=["COMPONENTS", "Quick"]),
+    LibraryMapping("quickshapes", "Qt5", "Qt::QuickShapes", extra=["COMPONENTS", "QuickShapes"]),
+    LibraryMapping(
+        "quicktemplates2", "Qt5", "Qt::QuickTemplates2", extra=["COMPONENTS", "QuickTemplates2"]
+    ),
+    LibraryMapping("quickwidgets", "Qt5", "Qt::QuickWidgets", extra=["COMPONENTS", "QuickWidgets"]),
+    LibraryMapping("render", "Qt5", "Qt::3DRender", extra=["COMPONENTS", "3DRender"]),
+    LibraryMapping(
+        "remoteobjects", "Qt5", "Qt::RemoteObjects", extra=["COMPONENTS", "RemoteObjects"]
+    ),
+    LibraryMapping("script", "Qt5", "Qt::Script", extra=["COMPONENTS", "Script"]),
+    LibraryMapping("scripttools", "Qt5", "Qt::ScriptTools", extra=["COMPONENTS", "ScriptTools"]),
+    LibraryMapping("scxml", "Qt5", "Qt::Scxml", extra=["COMPONENTS", "Scxml"]),
+    LibraryMapping("sensors", "Qt5", "Qt::Sensors", extra=["COMPONENTS", "Sensors"]),
+    LibraryMapping("serialport", "Qt5", "Qt::SerialPort", extra=["COMPONENTS", "SerialPort"]),
+    LibraryMapping("serialbus", "Qt5", "Qt::SerialBus", extra=["COMPONENTS", "SerialBus"]),
+    LibraryMapping("services", "Qt5", "Qt::ServiceSupport", extra=["COMPONENTS", "ServiceSupport"]),
+    LibraryMapping(
+        "service_support", "Qt5", "Qt::ServiceSupport", extra=["COMPONENTS", "ServiceSupport"]
+    ),
+    LibraryMapping("shadertools", "Qt5", "Qt::ShaderTools", extra=["COMPONENTS", "ShaderTools"]),
+    LibraryMapping("sql", "Qt5", "Qt::Sql", extra=["COMPONENTS", "Sql"]),
+    LibraryMapping("svg", "Qt5", "Qt::Svg", extra=["COMPONENTS", "Svg"]),
+    LibraryMapping("testlib", "Qt5", "Qt::Test", extra=["COMPONENTS", "Test"]),
+    LibraryMapping("texttospeech", "Qt5", "Qt::TextToSpeech", extra=["COMPONENTS", "TextToSpeech"]),
+    LibraryMapping(
+        "theme_support", "Qt5", "Qt::ThemeSupport", extra=["COMPONENTS", "ThemeSupport"]
+    ),
+    LibraryMapping("tts", "Qt5", "Qt::TextToSpeech", extra=["COMPONENTS", "TextToSpeech"]),
+    LibraryMapping("uiplugin", "Qt5", "Qt::UiPlugin", extra=["COMPONENTS", "UiPlugin"]),
+    LibraryMapping("uitools", "Qt5", "Qt::UiTools", extra=["COMPONENTS", "UiTools"]),
+    LibraryMapping(
+        "virtualkeyboard", "Qt5", "Qt::VirtualKeyboard", extra=["COMPONENTS", "VirtualKeyboard"]
+    ),
+    LibraryMapping(
+        "vulkan_support", "Qt5", "Qt::VulkanSupport", extra=["COMPONENTS", "VulkanSupport"]
+    ),
+    LibraryMapping(
+        "waylandclient", "Qt5", "Qt::WaylandClient", extra=["COMPONENTS", "WaylandClient"]
+    ),
+    LibraryMapping(
+        "waylandcompositor",
+        "Qt5",
+        "Qt::WaylandCompositor",
+        extra=["COMPONENTS", "WaylandCompositor"],
+    ),
+    LibraryMapping("webchannel", "Qt5", "Qt::WebChannel", extra=["COMPONENTS", "WebChannel"]),
+    LibraryMapping("webengine", "Qt5", "Qt::WebEngine", extra=["COMPONENTS", "WebEngine"]),
+    LibraryMapping(
+        "webenginewidgets", "Qt5", "Qt::WebEngineWidgets", extra=["COMPONENTS", "WebEngineWidgets"]
+    ),
+    LibraryMapping("websockets", "Qt5", "Qt::WebSockets", extra=["COMPONENTS", "WebSockets"]),
+    LibraryMapping("webview", "Qt5", "Qt::WebView", extra=["COMPONENTS", "WebView"]),
+    LibraryMapping("widgets", "Qt5", "Qt::Widgets", extra=["COMPONENTS", "Widgets"]),
+    LibraryMapping("window-lib", "Qt5", "Qt::AppManWindow", extra=["COMPONENTS", "AppManWindow"]),
+    LibraryMapping(
+        "windowsuiautomation_support",
+        "Qt5",
+        "Qt::WindowsUIAutomationSupport",
+        extra=["COMPONENTS", "WindowsUIAutomationSupport"],
+    ),
+    LibraryMapping("winextras", "Qt5", "Qt::WinExtras", extra=["COMPONENTS", "WinExtras"]),
+    LibraryMapping("x11extras", "Qt5", "Qt::X11Extras", extra=["COMPONENTS", "X11Extras"]),
+    LibraryMapping("xcb_qpa_lib", "Qt5", "Qt::XcbQpa", extra=["COMPONENTS", "XcbQpa"]),
+    LibraryMapping(
+        "xkbcommon_support", "Qt5", "Qt::XkbCommonSupport", extra=["COMPONENTS", "XkbCommonSupport"]
+    ),
+    LibraryMapping("xmlpatterns", "Qt5", "Qt::XmlPatterns", extra=["COMPONENTS", "XmlPatterns"]),
+    LibraryMapping("xml", "Qt5", "Qt::Xml", extra=["COMPONENTS", "Xml"]),
+    LibraryMapping(
+        "qmlworkerscript", "Qt5", "Qt::QmlWorkerScript", extra=["COMPONENTS", "QmlWorkerScript"]
+    ),
+    LibraryMapping(
+        "quickparticles", "Qt5", "Qt::QuickParticles", extra=["COMPONENTS", "QuickParticles"]
+    ),
+    LibraryMapping(
+        "linuxofono_support",
+        "Qt5",
+        "Qt::LinuxOfonoSupport",
+        extra=["COMPONENTS", "LinuxOfonoSupport"],
+    ),
+    LibraryMapping(
+        "linuxofono_support_private",
+        "Qt5",
+        "Qt::LinuxOfonoSupportPrivate",
+        extra=["COMPONENTS", "LinuxOfonoSupportPrivate"],
+    ),
+    LibraryMapping("tools", "Qt5", "Qt::Tools", extra=["COMPONENTS", "Tools"]),
+    LibraryMapping("axcontainer", "Qt5", "Qt::AxContainer", extra=["COMPONENTS", "AxContainer"]),
+    LibraryMapping(
+        "webkitwidgets", "Qt5", "Qt::WebKitWidgets", extra=["COMPONENTS", "WebKitWidgets"]
+    )
+    # qtzlib: No longer supported.
+]
+
+# Note that the library map is adjusted dynamically further down.
+_library_map = [
+    # 3rd party:
+    LibraryMapping("atspi", "ATSPI2", "PkgConfig::ATSPI2"),
+    LibraryMapping("bluez", "BlueZ", "PkgConfig::BlueZ"),
+    LibraryMapping("corewlan", None, None),
+    LibraryMapping("cups", "Cups", "Cups::Cups"),
+    LibraryMapping("directfb", "DirectFB", "PkgConfig::DirectFB"),
+    LibraryMapping("db2", "DB2", "DB2::DB2"),
+    LibraryMapping("dbus", "WrapDBus1", "dbus-1", resultVariable="DBus1"),
+    LibraryMapping("doubleconversion", None, None),
+    LibraryMapping("drm", "Libdrm", "Libdrm::Libdrm"),
+    LibraryMapping("egl", "EGL", "EGL::EGL"),
+    LibraryMapping("flite", "Flite", "Flite::Flite"),
+    LibraryMapping("flite_alsa", "ALSA", "ALSA::ALSA"),
+    LibraryMapping(
+        "fontconfig", "Fontconfig", "Fontconfig::Fontconfig", resultVariable="FONTCONFIG"
+    ),
+    LibraryMapping("freetype", "WrapFreetype", "WrapFreetype::WrapFreetype", extra=["REQUIRED"]),
+    LibraryMapping("gbm", "gbm", "gbm::gbm"),
+    LibraryMapping("glib", "GLIB2", "GLIB2::GLIB2"),
+    LibraryMapping("gnu_iconv", None, None),
+    LibraryMapping("gtk3", "GTK3", "PkgConfig::GTK3"),
+    LibraryMapping("gssapi", "GSSAPI", "GSSAPI::GSSAPI"),
+    LibraryMapping("harfbuzz", "WrapHarfbuzz", "WrapHarfbuzz::WrapHarfbuzz"),
+    LibraryMapping("host_dbus", None, None),
+    LibraryMapping(
+        "icu", "ICU", "ICU::i18n ICU::uc ICU::data", extra=["COMPONENTS", "i18n", "uc", "data"]
+    ),
+    LibraryMapping("journald", "Libsystemd", "PkgConfig::Libsystemd"),
+    LibraryMapping("jpeg", "JPEG", "JPEG::JPEG"),  # see also libjpeg
+    LibraryMapping("libatomic", "Atomic", "Atomic"),
+    LibraryMapping("libclang", "WrapLibClang", "WrapLibClang::WrapLibClang"),
+    LibraryMapping("libdl", None, "${CMAKE_DL_LIBS}"),
+    LibraryMapping("libinput", "Libinput", "Libinput::Libinput"),
+    LibraryMapping("libjpeg", "JPEG", "JPEG::JPEG"),  # see also jpeg
+    LibraryMapping("libpng", "PNG", "PNG::PNG"),
+    LibraryMapping("libproxy", "Libproxy", "PkgConfig::Libproxy"),
+    LibraryMapping("librt", "WrapRt", "WrapRt"),
+    LibraryMapping("libudev", "Libudev", "PkgConfig::Libudev"),
+    LibraryMapping("lttng-ust", "LTTngUST", "LTTng::UST", resultVariable="LTTNGUST"),
+    LibraryMapping("mtdev", "Mtdev", "PkgConfig::Mtdev"),
+    LibraryMapping("mysql", "MySQL", "MySQL::MySQL"),
+    LibraryMapping("odbc", "ODBC", "ODBC::ODBC"),
+    LibraryMapping("opengl_es2", "GLESv2", "GLESv2::GLESv2"),
+    LibraryMapping("opengl", "OpenGL", "OpenGL::GL", resultVariable="OpenGL_OpenGL"),
+    LibraryMapping(
+        "openssl_headers",
+        "OpenSSL",
+        "OpenSSL::SSL_nolink",
+        resultVariable="OPENSSL_INCLUDE_DIR",
+        appendFoundSuffix=False,
+    ),
+    LibraryMapping("openssl", "OpenSSL", "OpenSSL::SSL"),
+    LibraryMapping("oci", "Oracle", "Oracle::OCI"),
+    LibraryMapping("pcre2", "WrapPCRE2", "WrapPCRE2::WrapPCRE2", extra=["REQUIRED"]),
+    LibraryMapping("posix_iconv", None, None),
+    LibraryMapping("pps", "PPS", "PPS::PPS"),
+    LibraryMapping("psql", "PostgreSQL", "PostgreSQL::PostgreSQL"),
+    LibraryMapping("slog2", "Slog2", "Slog2::Slog2"),
+    LibraryMapping("speechd", "SpeechDispatcher", "SpeechDispatcher::SpeechDispatcher"),
+    LibraryMapping("sqlite2", None, None),  # No more sqlite2 support in Qt5!
+    LibraryMapping("sqlite3", "SQLite3", "SQLite::SQLite3"),
+    LibraryMapping("sun_iconv", None, None),
+    LibraryMapping("tslib", "Tslib", "PkgConfig::Tslib"),
+    LibraryMapping("udev", "Libudev", "PkgConfig::Libudev"),
+    LibraryMapping("udev", "Libudev", "PkgConfig::Libudev"),  # see also libudev!
+    LibraryMapping("vulkan", "Vulkan", "Vulkan::Vulkan"),
+    LibraryMapping("wayland_server", "Wayland", "Wayland::Server"),  # used in qtbase/src/gui
+    LibraryMapping("wayland-server", "Wayland", "Wayland::Server"),  # used in qtwayland
+    LibraryMapping("wayland-client", "Wayland", "Wayland::Client"),
+    LibraryMapping("wayland-cursor", "Wayland", "Wayland::Cursor"),
+    LibraryMapping("wayland-egl", "Wayland", "Wayland::Egl"),
+    LibraryMapping(
+        "wayland-kms", "Waylandkms", "PkgConfig::Waylandkms"
+    ),  # TODO: check if this actually works
+    LibraryMapping("x11", "X11", "X11::X11"),
+    LibraryMapping("x11sm", "X11", "${X11_SM_LIB} ${X11_ICE_LIB}", resultVariable="X11_SM"),
+    LibraryMapping(
+        "xcb",
+        "XCB",
+        "XCB::XCB",
+        extra=["1.9"],
+        resultVariable="TARGET XCB::XCB",
+        appendFoundSuffix=False,
+    ),
+    LibraryMapping(
+        "xcb_glx", "XCB", "XCB::GLX", extra=["COMPONENTS", "GLX"], resultVariable="XCB_GLX"
+    ),
+    LibraryMapping(
+        "xcb_icccm", "XCB", "XCB::ICCCM", extra=["COMPONENTS", "ICCCM"], resultVariable="XCB_ICCCM"
+    ),
+    LibraryMapping(
+        "xcb_image", "XCB", "XCB::IMAGE", extra=["COMPONENTS", "IMAGE"], resultVariable="XCB_IMAGE"
+    ),
+    LibraryMapping(
+        "xcb_keysyms",
+        "XCB",
+        "XCB::KEYSYMS",
+        extra=["COMPONENTS", "KEYSYMS"],
+        resultVariable="XCB_KEYSYMS",
+    ),
+    LibraryMapping(
+        "xcb_randr", "XCB", "XCB::RANDR", extra=["COMPONENTS", "RANDR"], resultVariable="XCB_RANDR"
+    ),
+    LibraryMapping(
+        "xcb_render",
+        "XCB",
+        "XCB::RENDER",
+        extra=["COMPONENTS", "RENDER"],
+        resultVariable="XCB_RENDER",
+    ),
+    LibraryMapping(
+        "xcb_renderutil",
+        "XCB",
+        "XCB::RENDERUTIL",
+        extra=["COMPONENTS", "RENDERUTIL"],
+        resultVariable="XCB_RENDERUTIL",
+    ),
+    LibraryMapping(
+        "xcb_shape", "XCB", "XCB::SHAPE", extra=["COMPONENTS", "SHAPE"], resultVariable="XCB_SHAPE"
+    ),
+    LibraryMapping(
+        "xcb_shm", "XCB", "XCB::SHM", extra=["COMPONENTS", "SHM"], resultVariable="XCB_SHM"
+    ),
+    LibraryMapping(
+        "xcb_sync", "XCB", "XCB::SYNC", extra=["COMPONENTS", "SYNC"], resultVariable="XCB_SYNC"
+    ),
+    LibraryMapping(
+        "xcb_xfixes",
+        "XCB",
+        "XCB::XFIXES",
+        extra=["COMPONENTS", "XFIXES"],
+        resultVariable="XCB_XFIXES",
+    ),
+    LibraryMapping(
+        "xcb_xinerama",
+        "XCB",
+        "XCB::XINERAMA",
+        extra=["COMPONENTS", "XINERAMA"],
+        resultVariable="XCB_XINERAMA",
+    ),
+    LibraryMapping(
+        "xcb_xinput",
+        "XCB",
+        "XCB::XINPUT",
+        extra=["COMPONENTS", "XINPUT"],
+        resultVariable="XCB_XINPUT",
+    ),
+    LibraryMapping(
+        "xcb_xkb", "XCB", "XCB::XKB", extra=["COMPONENTS", "XKB"], resultVariable="XCB_XKB"
+    ),
+    LibraryMapping("xcb_xlib", "X11_XCB", "X11::XCB"),
+    LibraryMapping("xcomposite", "XComposite", "PkgConfig::XComposite"),
+    LibraryMapping("xkbcommon_evdev", "XKB", "XKB::XKB", extra=["0.4.1"]),  # see also xkbcommon
+    LibraryMapping("xkbcommon_x11", "XKB", "XKB::XKB", extra=["0.4.1"]),  # see also xkbcommon
+    LibraryMapping("xkbcommon", "XKB", "XKB::XKB", extra=["0.4.1"]),
+    LibraryMapping("xlib", "X11", "X11::XCB"),  # FIXME: Is this correct?
+    LibraryMapping("xrender", "XRender", "PkgConfig::XRender"),
+    LibraryMapping("zlib", "ZLIB", "ZLIB::ZLIB", extra=["REQUIRED"]),
+    LibraryMapping("zstd", "ZSTD", "ZSTD::ZSTD"),
+    LibraryMapping("tiff", "TIFF", "TIFF::TIFF"),
+    LibraryMapping("webp", "WrapWebP", "WrapWebP::WrapWebP"),
+    LibraryMapping("jasper", "WrapJasper", "WrapJasper::WrapJasper"),
+    LibraryMapping("sdl2", "WrapSDL2", "WrapSDL2::WrapSDL2"),
+    LibraryMapping("assimp", "WrapAssimp", "WrapAssimp::WrapAssimp", extra=["5"]),
+]
+
+
+def _adjust_library_map():
+    # Assign a Linux condition on all x and wayland related packages.
+    # We don't want to get pages of package not found messages on
+    # Windows and macOS, and this also improves configure time on
+    # those platforms.
+    linux_package_prefixes = ["xcb", "x11", "xkb", "xrender", "xlib", "wayland"]
+    for i, _ in enumerate(_library_map):
+        if any([_library_map[i].soName.startswith(p) for p in linux_package_prefixes]):
+            _library_map[i].emit_if = "config.linux"
+
+
+_adjust_library_map()
+
+
+def find_3rd_party_library_mapping(soName: str) -> typing.Optional[LibraryMapping]:
+    for i in _library_map:
+        if i.soName == soName:
+            return i
+    return None
+
+
+def find_qt_library_mapping(soName: str) -> typing.Optional[LibraryMapping]:
+    for i in _qt_library_map:
+        if i.soName == soName:
+            return i
+    return None
+
+
+def find_library_info_for_target(targetName: str) -> typing.Optional[LibraryMapping]:
+    qt_target = targetName
+    if targetName.endswith("Private"):
+        qt_target = qt_target[:-7]
+
+    for i in _qt_library_map:
+        if i.targetName == qt_target:
+            return i
+
+    for i in _library_map:
+        if i.targetName == targetName:
+            return i
+
+    return None
+
+
+def featureName(name: str) -> str:
+    replacement_char = "_"
+    if name.startswith("c++"):
+        replacement_char = "x"
+    return re.sub(r"[^a-zA-Z0-9_]", replacement_char, name)
+
+
+def map_qt_library(lib: str) -> str:
+    private = False
+    if lib.endswith("-private"):
+        private = True
+        lib = lib[:-8]
+    mapped = find_qt_library_mapping(lib)
+    qt_name = lib
+    if mapped:
+        assert mapped.targetName  # Qt libs must have a target name set
+        qt_name = mapped.targetName
+    if private:
+        qt_name += "Private"
+    return qt_name
+
+
+platform_mapping = {
+    "win32": "WIN32",
+    "win": "WIN32",
+    "unix": "UNIX",
+    "darwin": "APPLE",
+    "linux": "LINUX",
+    "integrity": "INTEGRITY",
+    "qnx": "QNX",
+    "vxworks": "VXWORKS",
+    "hpux": "HPUX",
+    "nacl": "NACL",
+    "android": "ANDROID",
+    "android-embedded": "ANDROID_EMBEDDED",
+    "uikit": "APPLE_UIKIT",
+    "tvos": "APPLE_TVOS",
+    "watchos": "APPLE_WATCHOS",
+    "winrt": "WINRT",
+    "wasm": "WASM",
+    "emscripten": "EMSCRIPTEN",
+    "msvc": "MSVC",
+    "clang": "CLANG",
+    "gcc": "GCC",
+    "icc": "ICC",
+    "intel_icc": "ICC",
+    "osx": "APPLE_OSX",
+    "ios": "APPLE_IOS",
+    "freebsd": "FREEBSD",
+    "openbsd": "OPENBSD",
+    "netbsd": "NETBSD",
+    "haiku": "HAIKU",
+    "netbsd": "NETBSD",
+    "mac": "APPLE",
+    "macx": "APPLE_OSX",
+    "macos": "APPLE_OSX",
+    "macx-icc": "(APPLE_OSX AND ICC)",
+}
+
+
+def map_platform(platform: str) -> str:
+    """ Return the qmake platform as cmake platform or the unchanged string. """
+    return platform_mapping.get(platform, platform)
+
+
+def is_known_3rd_party_library(lib: str) -> bool:
+    if lib.endswith("/nolink") or lib.endswith("_nolink"):
+        lib = lib[:-7]
+    mapping = find_3rd_party_library_mapping(lib)
+
+    return mapping is not None
+
+
+def map_3rd_party_library(lib: str) -> str:
+    libpostfix = ""
+    if lib.endswith("/nolink"):
+        lib = lib[:-7]
+        libpostfix = "_nolink"
+    mapping = find_3rd_party_library_mapping(lib)
+    if not mapping or not mapping.targetName:
+        return lib
+    return mapping.targetName + libpostfix
+
+
+def generate_find_package_info(
+    lib: LibraryMapping, use_qt_find_package: bool = True, *, indent: int = 0, emit_if: str = ""
+) -> str:
+    isRequired = False
+
+    extra = lib.extra.copy()
+
+    if "REQUIRED" in extra and use_qt_find_package:
+        isRequired = True
+        extra.remove("REQUIRED")
+
+    cmake_target_name = lib.targetName
+    assert cmake_target_name
+
+    # _nolink or not does not matter at this point:
+    if cmake_target_name.endswith("_nolink") or cmake_target_name.endswith("/nolink"):
+        cmake_target_name = cmake_target_name[:-7]
+
+    if cmake_target_name and use_qt_find_package:
+        extra += ["PROVIDED_TARGETS", cmake_target_name]
+
+    result = ""
+    one_ind = "    "
+    ind = one_ind * indent
+
+    if use_qt_find_package:
+        if extra:
+            result = f"{ind}qt_find_package({lib.packageName} {' '.join(extra)})\n"
+        else:
+            result = f"{ind}qt_find_package({lib.packageName})\n"
+
+        if isRequired:
+            result += f"{ind}set_package_properties({lib.packageName} PROPERTIES TYPE REQUIRED)\n"
+    else:
+        if extra:
+            result = f"{ind}find_package({lib.packageName} {' '.join(extra)})\n"
+        else:
+            result = f"{ind}find_package({lib.packageName})\n"
+
+    # If a package should be found only in certain conditions, wrap
+    # the find_package call within that condition.
+    if emit_if:
+        result = f"if(({emit_if}) OR QT_FIND_ALL_PACKAGES_ALWAYS)\n{one_ind}{result}endif()\n"
+
+    return result
+
+
+def _set_up_py_parsing_nicer_debug_output(pp):
+    indent = -1
+
+    def increase_indent(fn):
+        def wrapper_function(*args):
+            nonlocal indent
+            indent += 1
+            print("> " * indent, end="")
+            return fn(*args)
+
+        return wrapper_function
+
+    def decrease_indent(fn):
+        def wrapper_function(*args):
+            nonlocal indent
+            print("> " * indent, end="")
+            indent -= 1
+            return fn(*args)
+
+        return wrapper_function
+
+    pp._defaultStartDebugAction = increase_indent(pp._defaultStartDebugAction)
+    pp._defaultSuccessDebugAction = decrease_indent(pp._defaultSuccessDebugAction)
+    pp._defaultExceptionDebugAction = decrease_indent(pp._defaultExceptionDebugAction)

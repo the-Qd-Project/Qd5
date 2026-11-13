@@ -471,7 +471,7 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
             INTERFACE_LINK_LIBRARIES Qt5::$${CMAKE_MODULE_NAME} ${_Qt5$${CMAKE_MODULE_NAME}_PRIVATEDEPS}
         )
 
-        # Add a versionless target, for compatibility with Qt6.
+        # Add a versionless target, for compatibility with Qt5.
         if(NOT \"${QT_NO_CREATE_VERSIONLESS_TARGETS}\" AND NOT TARGET Qt::$${CMAKE_MODULE_NAME}Private)
             add_library(Qt::$${CMAKE_MODULE_NAME}Private INTERFACE IMPORTED)
             set_target_properties(Qt::$${CMAKE_MODULE_NAME}Private PROPERTIES
@@ -641,7 +641,7 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
     _qt5_$${CMAKE_MODULE_NAME}_check_file_exists(\"${CMAKE_CURRENT_LIST_DIR}/Qt5$${CMAKE_MODULE_NAME}ConfigVersion.cmake\")
 endif()
 
-# Add a versionless target, for compatibility with Qt6.
+# Add a versionless target, for compatibility with Qt5.
 if(NOT \"${QT_NO_CREATE_VERSIONLESS_TARGETS}\" AND TARGET Qt5::$${CMAKE_MODULE_NAME} AND NOT TARGET Qt::$${CMAKE_MODULE_NAME})
     add_library(Qt::$${CMAKE_MODULE_NAME} INTERFACE IMPORTED)
     set_target_properties(Qt::$${CMAKE_MODULE_NAME} PROPERTIES

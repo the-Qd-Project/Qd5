@@ -1,0 +1,16 @@
+# Generated from benchlibtickcounter.pro.
+
+#####################################################################
+## benchlibtickcounter Binary:
+#####################################################################
+
+qt_add_executable(benchlibtickcounter
+    GUI
+    SOURCES
+        tst_benchlibtickcounter.cpp
+    PUBLIC_LIBRARIES
+        Qt::TestPrivate
+)
+
+## Scopes:
+#####################################################################

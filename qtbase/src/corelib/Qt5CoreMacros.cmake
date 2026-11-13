@@ -119,6 +119,18 @@ endmacro()
 function(qt5_create_moc_command infile outfile moc_flags moc_options moc_target moc_depends)
     _qt5_warn_deprecated("qt5_create_moc_command")
 
+    if(NOT Qt5Core_MOC_EXECUTABLE)
+        if(TARGET Qt5::moc)
+            set(Qt5Core_MOC_EXECUTABLE Qt5::moc)
+        elseif(TARGET Qt::moc)
+            set(Qt5Core_MOC_EXECUTABLE Qt::moc)
+        elseif(TARGET moc)
+            set(Qt5Core_MOC_EXECUTABLE moc)
+        else()
+            message(FATAL_ERROR "Could not find the Qt 5 MOC executable target")
+        endif()
+    endif()
+
     # Pass the parameters in a file.  Set the working directory to
     # be that containing the parameters file and reference it by
     # just the file name.  This is necessary because the moc tool on
@@ -265,6 +277,29 @@ function(_qt5_parse_qrc_file infile _out_depends _rc_depends)
     set(${_rc_depends} ${RC_DEPENDS} PARENT_SCOPE)
 endfunction()
 
+function(add_qt_gui_executable target)
+    if(ANDROID)
+        add_library("${target}" MODULE ${ARGN})
+        # On our qmake builds we do don't compile the executables with
+        # visibility=hidden. Not having this flag set will cause the
+        # executable to have main() hidden and can then no longer be loaded
+        # through dlopen()
+        set_property(TARGET "${target}" PROPERTY C_VISIBILITY_PRESET default)
+        set_property(TARGET "${target}" PROPERTY CXX_VISIBILITY_PRESET default)
+        qt_android_apply_arch_suffix("${target}")
+    else()
+        add_executable("${target}" WIN32 MACOSX_BUNDLE ${ARGN})
+    endif()
+    target_link_libraries("${target}" PRIVATE Qt::Core)
+    if(TARGET Qt::Gui)
+        target_link_libraries("${target}" PRIVATE Qt::Gui)
+    endif()
+
+    if(ANDROID)
+        qt_android_generate_deployment_settings("${target}")
+        qt_android_add_apk_target("${target}")
+    endif()
+endfunction()
 
 # qt5_add_binary_resources(target inputfiles ... )
 
@@ -316,6 +351,15 @@ endif()
 # qt5_add_resources(outfiles inputfile ... )
 
 function(qt5_add_resources outfiles)
+    if(TARGET ${outfiles})
+        # target-based signature: qt5_add_resources(target resourcename PREFIX ... FILES ...)
+        cmake_parse_arguments(arg "" "OUTPUT_TARGETS" "" ${ARGN})
+        qt5_process_resource(${ARGV})
+        if(arg_OUTPUT_TARGETS)
+            set(${arg_OUTPUT_TARGETS} ${${arg_OUTPUT_TARGETS}} PARENT_SCOPE)
+        endif()
+        return()
+    endif()
     set(_QT5_INTERNAL_SCOPE ON)
 
     set(options)
@@ -506,5 +550,214 @@ if(NOT QT_NO_CREATE_VERSIONLESS_FUNCTIONS)
         elseif(QT_DEFAULT_MAJOR_VERSION EQUAL 6)
             qt6_import_plugins(${ARGV})
         endif()
+    endfunction()
+endif()
+
+# Generate Qt metatypes.json for a target. By default we check whether AUTOMOC
+# has been enabled and we extract the information from that target. Should you
+# not wish to use automoc you need to pass in all the generated json files via the
+# MANUAL_MOC_JSON_FILES parameter. The latter can be obtained by running moc with
+# the --output-json parameter.
+# Params:
+#   INSTALL_DIR: Location where to install the metatypes file (Optional)
+#   COPY_OVER_INSTALL: When present will install the file via a post build step
+#   copy rather than using install
+function(qt5_generate_meta_types_json_file target)
+
+    get_target_property(existing_meta_types_file ${target} INTERFACE_QT_META_TYPES_BUILD_FILE)
+    if (existing_meta_types_file)
+        return()
+    endif()
+
+    cmake_parse_arguments(arg "COPY_OVER_INSTALL" "INSTALL_DIR" "MANUAL_MOC_JSON_FILES" ${ARGN})
+
+    if (NOT QT_BUILDING_QT)
+        if (NOT arg_INSTALL_DIR)
+            message(FATAL_ERROR "Please specify an install directory using INSTALL_DIR")
+        endif()
+    else()
+        # Automatically fill install args when building qt
+        set(metatypes_install_dir ${INSTALL_LIBDIR}/metatypes)
+        set(args)
+        if (NOT QT_WILL_INSTALL)
+            set(arg_COPY_OVER_INSTALL TRUE)
+        endif()
+        if (NOT arg_INSTALL_DIR)
+            set(arg_INSTALL_DIR "${metatypes_install_dir}")
+        endif()
+    endif()
+
+    get_target_property(target_type ${target} TYPE)
+    if (target_type STREQUAL "INTERFACE_LIBRARY")
+        message(FATAL_ERROR "Meta types generation does not work on interface libraries")
+        return()
+    endif()
+
+    if (CMAKE_VERSION VERSION_LESS "3.16.0")
+        message(FATAL_ERROR "Meta types generation requires CMake >= 3.16")
+        return()
+    endif()
+
+    get_target_property(target_binary_dir ${target} BINARY_DIR)
+    set(type_list_file "${target_binary_dir}/meta_types/${target}_json_file_list.txt")
+    set(type_list_file_manual "${target_binary_dir}/meta_types/${target}_json_file_list_manual.txt")
+
+    get_target_property(uses_automoc ${target} AUTOMOC)
+    set(automoc_args)
+    set(automoc_dependencies)
+    #Handle automoc generated data
+    if (uses_automoc)
+        # Tell automoc to output json files)
+        set_property(TARGET "${target}" APPEND PROPERTY
+            AUTOMOC_MOC_OPTIONS "--output-json"
+        )
+
+        if(CMAKE_BUILD_TYPE)
+            set(cmake_autogen_cache_file
+                "${target_binary_dir}/CMakeFiles/${target}_autogen.dir/ParseCache.txt")
+            set(mutli_config_args
+                --cmake-autogen-include-dir-path "${target_binary_dir}/${target}_autogen/include"
+            )
+        else()
+            set(cmake_autogen_cache_file
+                "${target_binary_dir}/CMakeFiles/${target}_autogen.dir/ParseCache_$<CONFIG>.txt")
+            set(mutli_config_args
+                --cmake-autogen-include-dir-path "${target_binary_dir}/${target}_autogen/include_$<CONFIG>"
+                "--cmake-multi-config")
+        endif()
+
+        set(cmake_autogen_info_file
+            "${target_binary_dir}/CMakeFiles/${target}_autogen.dir/AutogenInfo.json")
+
+        add_custom_target(${target}_automoc_json_extraction
+            DEPENDS ${QT_CMAKE_EXPORT_NAMESPACE}::cmake_automoc_parser
+            BYPRODUCTS ${type_list_file}
+            COMMAND
+                ${QT_CMAKE_EXPORT_NAMESPACE}::cmake_automoc_parser
+                --cmake-autogen-cache-file "${cmake_autogen_cache_file}"
+                --cmake-autogen-info-file "${cmake_autogen_info_file}"
+                --output-file-path "${type_list_file}"
+                ${mutli_config_args}
+            COMMENT "Running Automoc file extraction"
+            COMMAND_EXPAND_LISTS
+        )
+        add_dependencies(${target}_automoc_json_extraction ${target}_autogen)
+        set(automoc_args "@${type_list_file}")
+        set(automoc_dependencies "${type_list_file}")
+    endif()
+
+    set(manual_args)
+    set(manual_dependencies)
+    if(arg_MANUAL_MOC_JSON_FILES)
+        list(REMOVE_DUPLICATES arg_MANUAL_MOC_JSON_FILES)
+        file(GENERATE
+            OUTPUT ${type_list_file_manual}
+            CONTENT "$<JOIN:$<GENEX_EVAL:${arg_MANUAL_MOC_JSON_FILES}>,\n>"
+        )
+        list(APPEND manual_dependencies ${arg_MANUAL_MOC_JSON_FILES} ${type_list_file_manual})
+        set(manual_args "@${type_list_file_manual}")
+    endif()
+
+    if (NOT manual_args AND NOT automoc_args)
+        message(FATAL_ERROR "Metatype generation requires either the use of AUTOMOC or a manual list of generated json files")
+    endif()
+
+    if (CMAKE_BUILD_TYPE)
+        string(TOLOWER ${target}_${CMAKE_BUILD_TYPE} target_lowercase)
+    else()
+        string(TOLOWER ${target} target_lowercase)
+    endif()
+
+    set(metatypes_file_name "qt6${target_lowercase}_metatypes.json")
+    set(metatypes_file "${target_binary_dir}/meta_types/${metatypes_file_name}")
+    set(metatypes_file_gen "${target_binary_dir}/meta_types/${metatypes_file_name}.gen")
+
+    set(metatypes_dep_file_name "qt6${target_lowercase}_metatypes_dep.txt")
+    set(metatypes_dep_file "${target_binary_dir}/meta_types/${metatypes_dep_file_name}")
+
+    # Due to generated source file dependency rules being tied to the directory
+    # scope in which they are created it is not possible for other targets which
+    # are defined in a separate scope to see these rules. This leads to failures
+    # in locating the generated source files.
+    # To work around this we write a dummy file to disk to make sure targets
+    # which link against the current target do not produce the error. This dummy
+    # file is then replaced with the contents of the generated file during
+    # build.
+    if (NOT EXISTS ${metatypes_file})
+        file(MAKE_DIRECTORY "${target_binary_dir}/meta_types")
+        file(TOUCH ${metatypes_file})
+    endif()
+    if (arg_COPY_OVER_INSTALL AND NOT EXISTS ${arg_INSTALL_DIR}/${metatypes_file_name})
+        file(MAKE_DIRECTORY "${arg_INSTALL_DIR}")
+        file(TOUCH "${arg_INSTALL_DIR}/${metatypes_file_name}")
+    endif()
+    add_custom_command(OUTPUT ${metatypes_file_gen} ${metatypes_file}
+        DEPENDS ${QT_CMAKE_EXPORT_NAMESPACE}::moc ${automoc_dependencies} ${manual_dependencies}
+        COMMAND ${QT_CMAKE_EXPORT_NAMESPACE}::moc
+            -o ${metatypes_file_gen}
+            --collect-json ${automoc_args} ${manual_args}
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            ${metatypes_file_gen}
+            ${metatypes_file}
+        COMMENT "Runing automoc with --collect-json"
+    )
+
+    # We still need to add this file as a source of Core, otherwise the file
+    # rule above is not triggered. INTERFACE_SOURCES do not properly register
+    # as dependencies to build the current target.
+    target_sources(${target} PRIVATE ${metatypes_file_gen})
+    set(metatypes_file_genex_build)
+    set(metatypes_file_genex_install)
+    if (arg_COPY_OVER_INSTALL)
+        set(metatypes_file_genex_build
+            "$<BUILD_INTERFACE:$<$<BOOL:$<TARGET_PROPERTY:QT_CONSUMES_METATYPES>>:${arg_INSTALL_DIR}/${metatypes_file_name}>>"
+        )
+    else()
+        set(metatypes_file_genex_build
+            "$<BUILD_INTERFACE:$<$<BOOL:$<TARGET_PROPERTY:QT_CONSUMES_METATYPES>>:${metatypes_file}>>"
+        )
+        set(metatypes_file_genex_install
+            "$<INSTALL_INTERFACE:$<$<BOOL:$<TARGET_PROPERTY:QT_CONSUMES_METATYPES>>:$<INSTALL_PREFIX>/${arg_INSTALL_DIR}/${metatypes_file_name}>>"
+        )
+    endif()
+    set_source_files_properties(${metatypes_file} PROPERTIES HEADER_FILE_ONLY TRUE)
+
+    set_target_properties(${target} PROPERTIES
+        INTERFACE_QT_MODULE_HAS_META_TYPES YES
+        INTERFACE_QT_MODULE_META_TYPES_FROM_BUILD YES
+        INTERFACE_QT_META_TYPES_BUILD_FILE ${metatypes_file}
+        QT_MODULE_META_TYPES_FILE_GENEX_BUILD "${metatypes_file_genex_build}"
+        QT_MODULE_META_TYPES_FILE_GENEX_INSTALL "${metatypes_file_genex_install}"
+    )
+    target_sources(${target} INTERFACE ${metatypes_file_genex_build} ${metatypes_file_genex_install})
+
+    if (arg_COPY_OVER_INSTALL)
+        get_target_property(target_type ${target} TYPE)
+        set(command_args
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                "${metatypes_file}"
+                "${arg_INSTALL_DIR}/${metatypes_file_name}"
+        )
+        if (target_type STREQUAL "OBJECT_LIBRARY")
+            add_custom_target(${target}_metatypes_copy
+                DEPENDS "${metatypes_file}"
+                ${command_args}
+            )
+            add_dependencies(${target} ${target}_metatypes_copy)
+        else()
+            add_custom_command(TARGET ${target} POST_BUILD
+                ${command_args}
+            )
+        endif()
+    else()
+        install(FILES "${metatypes_file}"
+            DESTINATION "${arg_INSTALL_DIR}"
+        )
+    endif()
+endfunction()
+
+if(NOT QT_NO_CREATE_VERSIONLESS_FUNCTIONS)
+    function(qt_generate_meta_types_json_file)
+        qt5_generate_meta_types_json_file(${ARGV})
     endfunction()
 endif()

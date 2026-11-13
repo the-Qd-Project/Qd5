@@ -1,0 +1,47 @@
+# Generated from draggableicons.pro.
+
+cmake_minimum_required(VERSION 3.14)
+project(draggableicons LANGUAGES CXX)
+
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+
+set(INSTALL_EXAMPLEDIR "examples/widgets/draganddrop/draggableicons")
+
+find_package(Qt5 COMPONENTS Core)
+find_package(Qt5 COMPONENTS Gui)
+find_package(Qt5 COMPONENTS Widgets)
+
+add_qt_gui_executable(draggableicons
+    dragwidget.cpp dragwidget.h
+    main.cpp
+)
+target_link_libraries(draggableicons PUBLIC
+    Qt::Core
+    Qt::Gui
+    Qt::Widgets
+)
+
+
+# Resources:
+set(draggableicons_resource_files
+    "images/boat.png"
+    "images/car.png"
+    "images/house.png"
+)
+
+qt5_add_resources(draggableicons "draggableicons"
+    PREFIX
+        "/"
+    FILES
+        ${draggableicons_resource_files}
+)
+
+install(TARGETS draggableicons
+    RUNTIME DESTINATION "${INSTALL_EXAMPLEDIR}"
+    BUNDLE DESTINATION "${INSTALL_EXAMPLEDIR}"
+    LIBRARY DESTINATION "${INSTALL_EXAMPLEDIR}"
+)

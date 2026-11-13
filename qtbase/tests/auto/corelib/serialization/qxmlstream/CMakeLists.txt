@@ -1,0 +1,20 @@
+# Generated from qxmlstream.pro.
+
+#####################################################################
+## tst_qxmlstream Test:
+#####################################################################
+
+# Collect test data
+list(APPEND test_data "data")
+list(APPEND test_data "XML-Test-Suite")
+list(APPEND test_data "tokenError")
+
+qt_add_test(tst_qxmlstream
+    SOURCES
+        tst_qxmlstream.cpp
+    PUBLIC_LIBRARIES
+        Qt::GuiPrivate
+        Qt::Network
+        Qt::Xml
+    TESTDATA ${test_data}
+)
