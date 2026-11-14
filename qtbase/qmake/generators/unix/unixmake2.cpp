@@ -192,8 +192,9 @@ UnixMakefileGenerator::writeMakeParts(QTextStream &t)
     writeExportedVariables(t);
 
     t << "####### Compiler, tools and options\n\n";
-    t << "CC            = " << var("QMAKE_CC") << Qt::endl;
-    t << "CXX           = " << var("QMAKE_CXX") << Qt::endl;
+    t << "QRUN          = $(dir $(QMAKE))qrun\n.SILENT:\n\n";
+    t << "CC            = $(QRUN) \"$(OBJECTS)\" CC " << var("QMAKE_CC") << Qt::endl;
+    t << "CXX           = $(QRUN) \"$(OBJECTS)\" CXX " << var("QMAKE_CXX") << Qt::endl;
     t << "DEFINES       = "
       << varGlue("PRL_EXPORT_DEFINES","-D"," -D"," ")
       << varGlue("DEFINES","-D"," -D","") << Qt::endl;
@@ -217,7 +218,7 @@ UnixMakefileGenerator::writeMakeParts(QTextStream &t)
     writeDefaultVariables(t);
 
     if(!project->isActiveConfig("staticlib")) {
-        t << "LINK          = " << var("QMAKE_LINK") << Qt::endl;
+        t << "LINK          = $(QRUN) \"$(OBJECTS)\" LINK " << var("QMAKE_LINK") << Qt::endl;
         t << "LFLAGS        = " << var("QMAKE_LFLAGS") << Qt::endl;
         t << "LIBS          = $(SUBLIBS) " << fixLibFlags("LIBS").join(' ') << ' '
                                            << fixLibFlags("LIBS_PRIVATE").join(' ') << ' '
@@ -225,7 +226,7 @@ UnixMakefileGenerator::writeMakeParts(QTextStream &t)
                                            << fixLibFlags("QMAKE_LIBS_PRIVATE").join(' ') << Qt::endl;
     }
 
-    t << "AR            = " << var("QMAKE_AR") << Qt::endl;
+    t << "AR            = $(QRUN) \"$(OBJECTS)\" AR " << var("QMAKE_AR") << Qt::endl;
     t << "RANLIB        = " << var("QMAKE_RANLIB") << Qt::endl;
     t << "SED           = " << var("QMAKE_STREAM_EDITOR") << Qt::endl;
     t << "STRIP         = " << var("QMAKE_STRIP") << Qt::endl;

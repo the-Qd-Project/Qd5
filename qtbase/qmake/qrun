@@ -1,0 +1,68 @@
+#!/bin/sh
+# qrun OBJS ROLE TOOL [ARGS...]   ROLE: CC | CXX | LINK | AR
+set -f
+objs=$1; role=$2; shift 2
+
+quote() { printf '%s' "$1" | sed "s/'/'\\\\''/g"; }
+
+out= lib= compile= shared= prev=
+for a in "$@"; do
+    [ "$prev" = "-o" ] && out=$a
+    case $a in
+        -c) compile=1 ;;
+        -shared|-dynamiclib|-bundle) shared=1 ;;
+        *.a) [ -z "$lib" ] && lib=$a ;;
+    esac
+    prev=$a
+done
+
+case $role in
+    CC|CXX)
+        [ -n "$compile" ] && [ -n "$out" ] || exec "$@"
+        lang=$role; [ "$role" = CC ] && lang=C
+        msg="Building $lang object $out"; kind=compile ;;
+    LINK)
+        [ -n "$out" ] || exec "$@"
+        if [ -n "$shared" ]; then msg="Linking CXX shared library $out"
+        else msg="Linking CXX executable $out"; fi
+        kind=link ;;
+    AR)
+        [ -n "$lib" ] || exec "$@"
+        out=$lib; msg="Linking static library $lib"; kind=link ;;
+    *) exec "$@" ;;
+esac
+
+total=0 have=0
+for o in $objs; do
+    total=$((total + 1))
+    [ -e "$o" ] && have=$((have + 1))
+done
+if [ "$kind" = link ] || [ "$total" -eq 0 ]; then
+    pct=100
+else
+    [ -e "$out" ] || have=$((have + 1))
+    pct=$((have * 100 / (total + 1)))
+    [ "$pct" -gt 99 ] && pct=99
+fi
+printf '[%3d%%] %s\n' "$pct" "$msg"
+
+"$@"
+rc=$?
+if [ "$rc" -ne 0 ]; then
+    cat >&2 <<'BANNER'
+
+ _____ _    ___ _
+|  ___/ \  |_ _| |
+| |_ / _ \  | || |
+|  _/ ___ \ | || |___
+|_|/_/   \_\___|_____|
+
+BANNER
+    {
+        echo "FAILED: $msg"
+        printf 'COMMAND:'
+        for a in "$@"; do printf " '%s'" "$(quote "$a")"; done
+        printf '\n(exit code %s)\n\n' "$rc"
+    } >&2
+fi
+exit $rc
