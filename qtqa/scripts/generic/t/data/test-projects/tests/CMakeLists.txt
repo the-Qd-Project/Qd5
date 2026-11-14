@@ -1,0 +1,14 @@
+# Generated from tests.pro.
+
+add_subdirectory(failing_disabled_test)
+add_subdirectory(passing_custom_check_target)
+add_subdirectory(failing_custom_check_target)
+add_subdirectory(passing_significant_test)
+add_subdirectory(passing_insignificant_test)
+add_subdirectory(failing_significant_test)
+add_subdirectory(failing_insignificant_test)
+add_subdirectory(sub1)
+add_subdirectory(sub2)
+add_subdirectory(failing_disabled_test)
+add_subdirectory(passing_custom_check_target)
+add_subdirectory(failing_custom_check_target)

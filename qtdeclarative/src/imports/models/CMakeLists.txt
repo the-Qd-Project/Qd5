@@ -1,0 +1,24 @@
+# Generated from models.pro.
+
+#####################################################################
+## modelsplugin Plugin:
+#####################################################################
+
+qt_add_qml_module(modelsplugin
+    TARGET_PATH "QtQml/Models.2"
+    URI "QtQml.Models"
+    VERSION "2.${CMAKE_PROJECT_VERSION_MINOR}"
+    DESIGNER_SUPPORTED
+    CLASSNAME QtQmlModelsPlugin
+    SKIP_TYPE_REGISTRATION
+    SOURCES
+        plugin.cpp
+    PUBLIC_LIBRARIES
+        Qt::QmlModelsPrivate
+        Qt::QmlPrivate
+)
+
+#### Keys ignored in scope 1:.:.:models.pro:<TRUE>:
+# CXX_MODULE = "qml"
+# IMPORT_VERSION = "2.$$QT_MINOR_VERSION"
+# TARGETPATH = "QtQml/Models.2"
