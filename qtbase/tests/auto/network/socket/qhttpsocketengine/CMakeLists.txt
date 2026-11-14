@@ -8,7 +8,7 @@ endif()
 ## tst_qhttpsocketengine Test:
 #####################################################################
 
-qt_add_test(tst_qhttpsocketengine
+add_qt_test(tst_qhttpsocketengine
     SOURCES
         tst_qhttpsocketengine.cpp
     INCLUDE_DIRECTORIES

@@ -1,7 +1,7 @@
 # Generated from part5.pro.
 
 cmake_minimum_required(VERSION 3.14)
-project(part5 LANGUAGES CXX)
+project(example_widgets_tutorials_addressbook_part5 LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -15,19 +15,23 @@ find_package(Qt5 COMPONENTS Core)
 find_package(Qt5 COMPONENTS Gui)
 find_package(Qt5 COMPONENTS Widgets)
 
-add_qt_gui_executable(part5
+add_qt_gui_executable(example_widgets_tutorials_addressbook_part5
     addressbook.cpp addressbook.h
     finddialog.cpp finddialog.h
     main.cpp
 )
-target_link_libraries(part5 PUBLIC
+target_link_libraries(example_widgets_tutorials_addressbook_part5 PUBLIC
     Qt::Core
     Qt::Gui
     Qt::Widgets
 )
 
-install(TARGETS part5
+install(TARGETS example_widgets_tutorials_addressbook_part5
     RUNTIME DESTINATION "${INSTALL_EXAMPLEDIR}"
     BUNDLE DESTINATION "${INSTALL_EXAMPLEDIR}"
     LIBRARY DESTINATION "${INSTALL_EXAMPLEDIR}"
 )
+
+if(TARGET example_widgets_tutorials_addressbook_part5)
+    set_target_properties(example_widgets_tutorials_addressbook_part5 PROPERTIES OUTPUT_NAME "part5")
+endif()

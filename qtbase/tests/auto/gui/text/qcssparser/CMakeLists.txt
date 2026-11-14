@@ -11,7 +11,7 @@ endif()
 # Collect test data
 list(APPEND test_data "testdata")
 
-qt_add_test(tst_qcssparser
+add_qt_test(tst_qcssparser
     SOURCES
         tst_qcssparser.cpp
     DEFINES

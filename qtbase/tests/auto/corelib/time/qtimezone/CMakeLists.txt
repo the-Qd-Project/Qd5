@@ -4,7 +4,7 @@
 ## tst_qtimezone Test:
 #####################################################################
 
-qt_add_test(tst_qtimezone
+add_qt_test(tst_qtimezone
     SOURCES
         tst_qtimezone.cpp
     PUBLIC_LIBRARIES

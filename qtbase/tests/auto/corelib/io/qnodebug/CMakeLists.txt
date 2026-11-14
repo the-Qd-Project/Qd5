@@ -4,7 +4,7 @@
 ## tst_qnodebug Test:
 #####################################################################
 
-qt_add_test(tst_qnodebug
+add_qt_test(tst_qnodebug
     SOURCES
         tst_qnodebug.cpp
 )

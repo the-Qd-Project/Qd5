@@ -7,7 +7,7 @@
 # Collect test data
 list(APPEND test_data "testdata")
 
-qt_add_test(tst_qzip
+add_qt_test(tst_qzip
     SOURCES
         tst_qzip.cpp
     PUBLIC_LIBRARIES

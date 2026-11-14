@@ -28,7 +28,7 @@ if(NOT QT_BUILD_STANDALONE_TESTS)
     unset(QT_BUILD_INTERNALS_SKIP_CMAKE_MODULE_PATH_ADDITION)
 else()
     # When building standalone tests, an istalled BuildInternals package already exists.
-    find_package(Qt6 REQUIRED COMPONENTS BuildInternals CMAKE_FIND_ROOT_PATH_BOTH)
+    find_package(Qt5 REQUIRED COMPONENTS BuildInternals CMAKE_FIND_ROOT_PATH_BOTH)
 endif()
 
 qt_build_repo_begin()

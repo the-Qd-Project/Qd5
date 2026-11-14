@@ -4,7 +4,7 @@
 ## tst_moc Test:
 #####################################################################
 
-qt_add_test(tst_moc
+add_qt_test(tst_moc
     SOURCES
         backslash-newlines.h
         c-comments.h
@@ -55,33 +55,70 @@ qt_add_test(tst_moc
         "-Muri=com.company.app"
         "-Muri=com.company.app.private"
         "-DDEFINE_CMDLINE_EMPTY="
-        ""-DDEFINE_CMDLINE_SIGNAL=void cmdlineSignal(const QMap<int, int> &i)""
+        "-DDEFINE_CMDLINE_SIGNAL=void cmdlineSignal ( const QMap<int, int> &i )"
         "--output-json"
+    EXCEPTIONS
 )
-#### Ignored generated resource: ${CMAKE_CURRENT_BINARY_DIR}/allmocs.qrc
-#### Keys ignored in scope 1:.:.:moc.pro:<TRUE>:
-# BASELINE_IN = "allmocs_baseline_in.json"
-# JSON_HEADERS = "$$HEADERS" "-cxx-attributes.h" "-enum_inc.h"
-# QMAKE_EXTRA_COMPILERS = "moc_json_header" "copy_baseline" "jsoncollector"
-# allmocs_contents = "<!DOCTYPE RCC><RCC version="1.0">" "<qresource prefix="/">" "<file>allmocs.json</file>" "<file>allmocs_baseline.json</file>" "</qresource>" "</RCC>"
-# copy_baseline.CONFIG = "no_link"
-# copy_baseline.commands = "$${QMAKE_COPY}" "$$shell_path(${QMAKE_FILE_NAME})" "${QMAKE_FILE_OUT}"
-# copy_baseline.input = "BASELINE_IN"
-# copy_baseline.output = "$$OUT_PWD/allmocs_baseline.json"
-# jsoncollector.CONFIG = "combine"
-# jsoncollector.commands = "$$MOC_COLLECT_JSON" "--collect-json" "-o" "${QMAKE_FILE_OUT}" "${QMAKE_FILE_IN}"
-# jsoncollector.input = "MOC_JSON_HEADERS"
-# jsoncollector.output = "$$OUT_PWD/allmocs.json"
-# jsoncollector.variable_out = "GENERATED_FILES"
-# moc_json_header.CONFIG = "no_link" "moc_verify"
-# moc_json_header.commands = "$$escape_expand(\\n)"
-# moc_json_header.depends = "$$MOC_CPP_DIR/$${QMAKE_H_MOD_MOC}${QMAKE_FILE_BASE}$${firstQMAKE_EXT_CPP}"
-# moc_json_header.input = "JSON_HEADERS"
-# moc_json_header.output = "$$MOC_CPP_DIR/$${QMAKE_H_MOD_MOC}${QMAKE_FILE_BASE}$${firstQMAKE_EXT_CPP}.json"
-# moc_json_header.variable_out = "MOC_JSON_HEADERS"
 
-## Scopes:
-#####################################################################
+qt_manual_moc(comparison_relevant_moc_list
+    backslash-newlines.h
+    c-comments.h
+    cstyle-enums.h
+    cxx11-enums.h
+    cxx11-explicit-override-control.h
+    cxx11-final-classes.h
+    cxx11-trailing-return.h
+    cxx17-namespaces.h
+    escapes-in-string-literals.h
+    enum_with_include.h
+    forward-declared-param.h
+    function-with-attributes.h
+    gadgetwithnoenums.h
+    grand-parent-gadget-class.h
+    namespace.h
+    namespaced-flags.h
+    no-keywords.h
+    non-gadget-parent-class.h
+    oldstyle-casts.h
+    parse-defines.h
+    plugin_metadata.h
+    pure-virtual-signals.h
+    qinvokable.h
+    qprivateslots.h
+    qtbug-35657-gadget.h
+    related-metaobjects-in-gadget.h
+    related-metaobjects-in-namespaces.h
+    related-metaobjects-name-conflict.h
+    single-quote-digit-separator-n3781.h
+    slots-with-void-template.h
+    task192552.h
+    task234909.h
+    task240368.h
+    task87883.h
+    trigraphs.h
+    using-namespaces.h
+
+    FLAGS
+        "-Muri=com.company.app"
+        "-Muri=com.company.app.private"
+        "-DDEFINE_CMDLINE_EMPTY="
+        "-DDEFINE_CMDLINE_SIGNAL=void cmdlineSignal(const QMap<int, int> &i)"
+        "--output-json"
+
+    OUTPUT_MOC_JSON_FILES moc_json_files
+)
+
+target_sources(tst_moc PRIVATE ${comparison_relevant_moc_list})
+
+qt_extend_target(tst_moc LIBRARIES Qt::CorePrivate)
+
+if(UNIX AND (CLANG OR GCC OR ICC))
+    qt_manual_moc(os9_newlines_moc
+        os9-newlines.h
+    )
+
+    target_sources(tst_moc PRIVATE ${os9_newlines_moc})
+endif()
 
 qt_extend_target(tst_moc CONDITION CMAKE_CROSSCOMPILING
     DEFINES
@@ -127,3 +164,52 @@ qt_extend_target(tst_moc CONDITION TARGET Qt::Sql
 
 #### Keys ignored in scope 12:.:.:moc.pro:else:
 # MOC_CPP_DIR = "$$MOC_DIR"
+
+set(comparison_relevant_moc_headers
+    backslash-newlines.h
+    c-comments.h
+    cstyle-enums.h
+    cxx11-enums.h
+    cxx11-explicit-override-control.h
+    cxx11-final-classes.h
+    cxx11-trailing-return.h
+    cxx17-namespaces.h
+    escapes-in-string-literals.h
+    enum_with_include.h
+    forward-declared-param.h
+    function-with-attributes.h
+    gadgetwithnoenums.h
+    grand-parent-gadget-class.h
+    namespace.h
+    namespaced-flags.h
+    no-keywords.h
+    non-gadget-parent-class.h
+    oldstyle-casts.h
+    parse-defines.h
+    plugin_metadata.h
+    pure-virtual-signals.h
+    qinvokable.h
+    qprivateslots.h
+    qtbug-35657-gadget.h
+    related-metaobjects-in-gadget.h
+    related-metaobjects-in-namespaces.h
+    related-metaobjects-name-conflict.h
+    single-quote-digit-separator-n3781.h
+    slots-with-void-template.h
+    task192552.h
+    task234909.h
+    task240368.h
+    task87883.h
+    trigraphs.h
+    using-namespaces.h
+)
+
+set_source_files_properties(${comparison_relevant_moc_headers}
+    PROPERTIES SKIP_AUTOMOC ON
+)
+
+if(UNIX AND (CLANG OR GCC OR ICC))
+    set_source_files_properties(os9-newlines.h
+        PROPERTIES SKIP_AUTOMOC ON
+    )
+endif()

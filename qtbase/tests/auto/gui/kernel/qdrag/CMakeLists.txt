@@ -4,7 +4,7 @@
 ## tst_qdrag Test:
 #####################################################################
 
-qt_add_test(tst_qdrag
+add_qt_test(tst_qdrag
     SOURCES
         tst_qdrag.cpp
     PUBLIC_LIBRARIES

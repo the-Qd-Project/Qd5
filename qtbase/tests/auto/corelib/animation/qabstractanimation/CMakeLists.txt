@@ -4,7 +4,7 @@
 ## tst_qabstractanimation Test:
 #####################################################################
 
-qt_add_test(tst_qabstractanimation
+add_qt_test(tst_qabstractanimation
     SOURCES
         tst_qabstractanimation.cpp
 )

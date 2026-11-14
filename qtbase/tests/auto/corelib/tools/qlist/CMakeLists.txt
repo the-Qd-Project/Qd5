@@ -4,7 +4,7 @@
 ## tst_qlist Test:
 #####################################################################
 
-qt_add_test(tst_qlist
+add_qt_test(tst_qlist
     SOURCES
         tst_qlist.cpp
 )

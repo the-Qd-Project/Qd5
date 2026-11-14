@@ -4,7 +4,7 @@
 ## tst_qtreeview Test:
 #####################################################################
 
-qt_add_test(tst_qtreeview
+add_qt_test(tst_qtreeview
     SOURCES
         ../../../../shared/fakedirmodel.h
         tst_qtreeview.cpp

@@ -4,7 +4,7 @@
 ## tst_qdialogbuttonbox Test:
 #####################################################################
 
-qt_add_test(tst_qdialogbuttonbox
+add_qt_test(tst_qdialogbuttonbox
     SOURCES
         tst_qdialogbuttonbox.cpp
     PUBLIC_LIBRARIES

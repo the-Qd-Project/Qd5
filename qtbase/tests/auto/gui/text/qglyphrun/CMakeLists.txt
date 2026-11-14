@@ -4,7 +4,7 @@
 ## tst_qglyphrun Test:
 #####################################################################
 
-qt_add_test(tst_qglyphrun
+add_qt_test(tst_qglyphrun
     SOURCES
         tst_qglyphrun.cpp
     PUBLIC_LIBRARIES

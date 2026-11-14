@@ -4,11 +4,9 @@
 ## tst_qset Test:
 #####################################################################
 
-qt_add_test(tst_qset
+add_qt_test(tst_qset
     SOURCES
         tst_qset.cpp
-    DEFINES
-        -QT_NO_JAVA_STYLE_ITERATORS
 )
 
 ## Scopes:

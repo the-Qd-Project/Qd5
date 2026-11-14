@@ -4,7 +4,7 @@
 ## tst_qwizard Test:
 #####################################################################
 
-qt_add_test(tst_qwizard
+add_qt_test(tst_qwizard
     SOURCES
         tst_qwizard.cpp
         tst_qwizard_2.cpp

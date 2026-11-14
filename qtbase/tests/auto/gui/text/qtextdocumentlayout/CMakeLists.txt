@@ -4,7 +4,7 @@
 ## tst_qtextdocumentlayout Test:
 #####################################################################
 
-qt_add_test(tst_qtextdocumentlayout
+add_qt_test(tst_qtextdocumentlayout
     SOURCES
         tst_qtextdocumentlayout.cpp
     PUBLIC_LIBRARIES

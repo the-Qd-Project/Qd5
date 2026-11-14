@@ -7,7 +7,7 @@
 # Collect test data
 list(APPEND test_data "entrylist")
 
-qt_add_test(tst_qdiriterator
+add_qt_test(tst_qdiriterator
     SOURCES
         tst_qdiriterator.cpp
     PUBLIC_LIBRARIES

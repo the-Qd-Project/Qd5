@@ -4,7 +4,7 @@
 ## tst_qnetworkconfigurationmanager Test:
 #####################################################################
 
-qt_add_test(tst_qnetworkconfigurationmanager
+add_qt_test(tst_qnetworkconfigurationmanager
     SOURCES
         ../qbearertestcommon.h
         tst_qnetworkconfigurationmanager.cpp

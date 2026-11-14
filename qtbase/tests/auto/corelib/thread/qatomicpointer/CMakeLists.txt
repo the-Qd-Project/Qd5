@@ -4,7 +4,7 @@
 ## tst_qatomicpointer Test:
 #####################################################################
 
-qt_add_test(tst_qatomicpointer
+add_qt_test(tst_qatomicpointer
     SOURCES
         tst_qatomicpointer.cpp
 )

@@ -4,7 +4,7 @@
 ## tst_qtconcurrentmedian Test:
 #####################################################################
 
-qt_add_test(tst_qtconcurrentmedian
+add_qt_test(tst_qtconcurrentmedian
     SOURCES
         tst_qtconcurrentmedian.cpp
     DEFINES

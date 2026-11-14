@@ -4,7 +4,7 @@
 ## tst_qurlquery Test:
 #####################################################################
 
-qt_add_test(tst_qurlquery
+add_qt_test(tst_qurlquery
     SOURCES
         tst_qurlquery.cpp
 

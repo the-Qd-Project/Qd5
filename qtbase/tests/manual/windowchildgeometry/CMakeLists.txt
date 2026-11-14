@@ -16,6 +16,7 @@ qt_add_manual_test(windowchildgeometry
         ../windowflags
     PUBLIC_LIBRARIES
         Qt::Gui
+        Qt::Widgets
 )
 
 #### Keys ignored in scope 1:.:.:windowchildgeometry.pro:<TRUE>:
@@ -23,8 +24,3 @@ qt_add_manual_test(windowchildgeometry
 
 ## Scopes:
 #####################################################################
-
-qt_extend_target(windowchildgeometry CONDITION (QT_MAJOR_VERSION GREATER 4)
-    PUBLIC_LIBRARIES
-        Qt::Widgets
-)

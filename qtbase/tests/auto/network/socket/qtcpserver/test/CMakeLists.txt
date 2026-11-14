@@ -4,7 +4,7 @@
 ## tst_qtcpserver Test:
 #####################################################################
 
-qt_add_test(tst_qtcpserver
+add_qt_test(tst_qtcpserver
     OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/../"
     SOURCES
         ../tst_qtcpserver.cpp

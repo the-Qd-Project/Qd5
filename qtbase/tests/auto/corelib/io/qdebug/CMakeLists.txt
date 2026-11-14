@@ -4,7 +4,7 @@
 ## tst_qdebug Test:
 #####################################################################
 
-qt_add_test(tst_qdebug
+add_qt_test(tst_qdebug
     SOURCES
         tst_qdebug.cpp
     PUBLIC_LIBRARIES

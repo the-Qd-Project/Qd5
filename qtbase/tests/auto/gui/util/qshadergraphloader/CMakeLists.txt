@@ -4,7 +4,7 @@
 ## tst_qshadergraphloader Test:
 #####################################################################
 
-qt_add_test(tst_qshadergraphloader
+add_qt_test(tst_qshadergraphloader
     SOURCES
         tst_qshadergraphloader.cpp
     PUBLIC_LIBRARIES

@@ -4,7 +4,7 @@
 ## tst_qarraydata_strictiterators Test:
 #####################################################################
 
-qt_add_test(tst_qarraydata_strictiterators
+add_qt_test(tst_qarraydata_strictiterators
     SOURCES
         ../qarraydata/simplevector.h
         ../qarraydata/tst_qarraydata.cpp

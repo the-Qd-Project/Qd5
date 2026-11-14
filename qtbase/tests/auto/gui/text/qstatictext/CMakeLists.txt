@@ -4,7 +4,7 @@
 ## tst_qstatictext Test:
 #####################################################################
 
-qt_add_test(tst_qstatictext
+add_qt_test(tst_qstatictext
     SOURCES
         tst_qstatictext.cpp
     PUBLIC_LIBRARIES

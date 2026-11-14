@@ -4,7 +4,7 @@
 ## tst_qprocessenvironment Test:
 #####################################################################
 
-qt_add_test(tst_qprocessenvironment
+add_qt_test(tst_qprocessenvironment
     SOURCES
         tst_qprocessenvironment.cpp
 )

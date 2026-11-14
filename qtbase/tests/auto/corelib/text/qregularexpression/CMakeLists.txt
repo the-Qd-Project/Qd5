@@ -4,7 +4,7 @@
 ## tst_qregularexpression Test:
 #####################################################################
 
-qt_add_test(tst_qregularexpression
+add_qt_test(tst_qregularexpression
     SOURCES
         tst_qregularexpression.cpp
 )

@@ -4,7 +4,7 @@
 ## tst_qregularexpressionvalidator Test:
 #####################################################################
 
-qt_add_test(tst_qregularexpressionvalidator
+add_qt_test(tst_qregularexpressionvalidator
     SOURCES
         tst_qregularexpressionvalidator.cpp
     PUBLIC_LIBRARIES

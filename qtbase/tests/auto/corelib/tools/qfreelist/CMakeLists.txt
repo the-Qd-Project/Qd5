@@ -4,7 +4,7 @@
 ## tst_qfreelist Test:
 #####################################################################
 
-qt_add_test(tst_qfreelist
+add_qt_test(tst_qfreelist
     SOURCES
         tst_qfreelist.cpp
     PUBLIC_LIBRARIES

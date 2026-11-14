@@ -8,7 +8,7 @@ endif()
 ## tst_qglfunctions Test:
 #####################################################################
 
-qt_add_test(tst_qglfunctions
+add_qt_test(tst_qglfunctions
     SOURCES
         tst_qglfunctions.cpp
     PUBLIC_LIBRARIES

@@ -4,7 +4,7 @@
 ## tst_qnumeric Test:
 #####################################################################
 
-qt_add_test(tst_qnumeric
+add_qt_test(tst_qnumeric
     SOURCES
         tst_qnumeric.cpp
     PUBLIC_LIBRARIES

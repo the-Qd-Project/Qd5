@@ -4,7 +4,7 @@
 ## tst_qstatemachine Test:
 #####################################################################
 
-qt_add_test(tst_qstatemachine
+add_qt_test(tst_qstatemachine
     SOURCES
         tst_qstatemachine.cpp
     PUBLIC_LIBRARIES

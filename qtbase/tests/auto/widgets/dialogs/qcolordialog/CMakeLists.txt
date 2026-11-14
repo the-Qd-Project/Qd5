@@ -4,7 +4,7 @@
 ## tst_qcolordialog Test:
 #####################################################################
 
-qt_add_test(tst_qcolordialog
+add_qt_test(tst_qcolordialog
     SOURCES
         tst_qcolordialog.cpp
     PUBLIC_LIBRARIES

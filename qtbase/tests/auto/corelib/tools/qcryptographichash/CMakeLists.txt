@@ -10,10 +10,11 @@ file(GLOB_RECURSE test_data_glob
     data/*)
 list(APPEND test_data ${test_data_glob})
 
-qt_add_test(tst_qcryptographichash
+add_qt_test(tst_qcryptographichash
     SOURCES
         tst_qcryptographichash.cpp
     TESTDATA ${test_data}
+    EXCEPTIONS
 )
 
 ## Scopes:

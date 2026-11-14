@@ -4,7 +4,7 @@
 ## tst_qmimedata Test:
 #####################################################################
 
-qt_add_test(tst_qmimedata
+add_qt_test(tst_qmimedata
     SOURCES
         tst_qmimedata.cpp
     PUBLIC_LIBRARIES

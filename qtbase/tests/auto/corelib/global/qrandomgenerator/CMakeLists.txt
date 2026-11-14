@@ -4,7 +4,7 @@
 ## tst_qrandomgenerator Test:
 #####################################################################
 
-qt_add_test(tst_qrandomgenerator
+add_qt_test(tst_qrandomgenerator
     SOURCES
         tst_qrandomgenerator.cpp
     PUBLIC_LIBRARIES

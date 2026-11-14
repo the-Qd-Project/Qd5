@@ -4,7 +4,7 @@
 ## tst_qthread Test:
 #####################################################################
 
-qt_add_test(tst_qthread
+add_qt_test(tst_qthread
     SOURCES
         ../../../../shared/emulationdetector.h
         tst_qthread.cpp

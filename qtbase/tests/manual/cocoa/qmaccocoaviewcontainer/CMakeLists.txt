@@ -1,10 +1,10 @@
 # Generated from qmaccocoaviewcontainer.pro.
 
 #####################################################################
-## qmaccocoaviewcontainer Binary:
+## manual_cocoa_qmaccocoaviewcontainer Binary:
 #####################################################################
 
-qt_add_manual_test(qmaccocoaviewcontainer
+qt_add_manual_test(manual_cocoa_qmaccocoaviewcontainer
     GUI
     SOURCES
         TestMouseMovedNSView.h TestMouseMovedNSView.m
@@ -19,3 +19,7 @@ qt_add_manual_test(qmaccocoaviewcontainer
 
 #### Keys ignored in scope 1:.:.:qmaccocoaviewcontainer.pro:<TRUE>:
 # TEMPLATE = "app"
+
+if(TARGET manual_cocoa_qmaccocoaviewcontainer)
+    set_target_properties(manual_cocoa_qmaccocoaviewcontainer PROPERTIES OUTPUT_NAME "qmaccocoaviewcontainer")
+endif()

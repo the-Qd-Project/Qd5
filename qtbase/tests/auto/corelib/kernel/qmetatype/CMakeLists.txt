@@ -7,11 +7,10 @@
 # Collect test data
 list(APPEND test_data "./typeFlags.bin")
 
-qt_add_test(tst_qmetatype
+add_qt_test(tst_qmetatype
     SOURCES
         tst_qmetatype.cpp
     DEFINES
-        -QT_NO_LINKED_LIST
         QT_DISABLE_DEPRECATED_BEFORE=0
     INCLUDE_DIRECTORIES
         ../../../other/qvariant_common

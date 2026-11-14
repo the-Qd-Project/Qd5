@@ -22,7 +22,7 @@ file(GLOB_RECURSE test_data_glob
     images/*)
 list(APPEND test_data ${test_data_glob})
 
-qt_add_test(tst_qpixmap
+add_qt_test(tst_qpixmap
     SOURCES
         tst_qpixmap.cpp
     PUBLIC_LIBRARIES

@@ -4,7 +4,7 @@
 ## tst_qmacautoreleasepool Test:
 #####################################################################
 
-qt_add_test(tst_qmacautoreleasepool
+add_qt_test(tst_qmacautoreleasepool
     SOURCES
         tst_qmacautoreleasepool.mm
     PUBLIC_LIBRARIES

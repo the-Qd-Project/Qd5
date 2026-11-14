@@ -4,7 +4,7 @@
 ## tst_qpolygon Test:
 #####################################################################
 
-qt_add_test(tst_qpolygon
+add_qt_test(tst_qpolygon
     SOURCES
         tst_qpolygon.cpp
     PUBLIC_LIBRARIES

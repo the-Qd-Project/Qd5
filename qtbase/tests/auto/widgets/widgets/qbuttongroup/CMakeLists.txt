@@ -4,7 +4,7 @@
 ## tst_qbuttongroup Test:
 #####################################################################
 
-qt_add_test(tst_qbuttongroup
+add_qt_test(tst_qbuttongroup
     SOURCES
         tst_qbuttongroup.cpp
     PUBLIC_LIBRARIES

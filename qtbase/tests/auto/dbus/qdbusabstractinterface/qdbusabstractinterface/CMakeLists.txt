@@ -3,16 +3,7 @@
 #####################################################################
 ## tst_qdbusabstractinterface Test:
 #####################################################################
-
-qt_add_test(tst_qdbusabstractinterface
-    OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/../"
-    SOURCES
-        ../interface.cpp ../interface.h
-        ../tst_qdbusabstractinterface.cpp
-    DBUS_INTERFACE_SOURCES
-        ../org.qtproject.QtDBus.Pinger.xml
-    DBUS_INTERFACE_FLAGS
-        "-i" "../interface.h"
-    PUBLIC_LIBRARIES
-        Qt::DBus
-)
+# special case begin
+# this test can not be generated here. It needs to be set up in the
+# parent directory
+# special case end

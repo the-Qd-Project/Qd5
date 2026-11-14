@@ -1,10 +1,10 @@
 # Generated from qdesktopservices.pro.
 
 #####################################################################
-## tst_qdesktopservices Binary:
+## manual_qdesktopservices Binary:
 #####################################################################
 
-qt_add_manual_test(tst_qdesktopservices
+qt_add_manual_test(manual_qdesktopservices
     SOURCES
         tst_qdesktopservices.cpp
     DEFINES
@@ -17,3 +17,7 @@ qt_add_manual_test(tst_qdesktopservices
 #### Keys ignored in scope 1:.:.:qdesktopservices.pro:<TRUE>:
 # OTHER_FILES = "test.txt"
 # TEMPLATE = "app"
+
+if(TARGET manual_qdesktopservices)
+    set_target_properties(manual_qdesktopservices PROPERTIES OUTPUT_NAME "tst_qdesktopservices")
+endif()

@@ -4,7 +4,7 @@
 ## outformat Test:
 #####################################################################
 
-qt_add_test(outformat
+add_qt_test(outformat
     SOURCES
         tst_outformat.cpp
 )

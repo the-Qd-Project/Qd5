@@ -4,7 +4,7 @@
 ## tst_qgraphicsscene Test:
 #####################################################################
 
-qt_add_test(tst_qgraphicsscene
+add_qt_test(tst_qgraphicsscene
     SOURCES
         tst_qgraphicsscene.cpp
     DEFINES

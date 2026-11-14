@@ -4,7 +4,7 @@
 ## tst_qlist_strictiterators Test:
 #####################################################################
 
-qt_add_test(tst_qlist_strictiterators
+add_qt_test(tst_qlist_strictiterators
     SOURCES
         ../qlist/tst_qlist.cpp
     DEFINES

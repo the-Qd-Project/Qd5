@@ -4,7 +4,7 @@
 ## tst_qwinregistry Test:
 #####################################################################
 
-qt_add_test(tst_qwinregistry
+add_qt_test(tst_qwinregistry
     SOURCES
         tst_qwinregistry.cpp
     PUBLIC_LIBRARIES

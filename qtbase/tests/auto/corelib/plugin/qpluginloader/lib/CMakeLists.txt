@@ -4,7 +4,7 @@
 ## tst_qpluginloaderlib Generic Library:
 #####################################################################
 
-qt_add_cmake_library(tst_qpluginloaderlib
+add_cmake_library(tst_qpluginloaderlib
     SHARED
     INSTALL_DIRECTORY "${INSTALL_TESTSDIR}/tst_qpluginloader/bin"
     OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/../bin"
@@ -28,7 +28,14 @@ qt_add_cmake_library(tst_qpluginloaderlib
 #### Keys ignored in scope 7:.:..:../winrt.pri:else:
 # DESTDIR = "../release/bin"
 
-qt_extend_target(tst_qpluginloaderlib CONDITION MSVC
+extend_target(tst_qpluginloaderlib CONDITION MSVC
     DEFINES
         WIN32_MSVC
 )
+
+# special case begin
+set_target_properties(tst_qpluginloaderlib PROPERTIES
+    C_VISIBILITY_PRESET "default"
+    CXX_VISIBILITY_PRESET "default"
+)
+# special case end

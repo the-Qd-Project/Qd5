@@ -4,7 +4,7 @@
 ## tst_qmutex Test:
 #####################################################################
 
-qt_add_test(tst_qmutex
+add_qt_test(tst_qmutex
     SOURCES
         tst_qmutex.cpp
 )

@@ -4,7 +4,7 @@
 ## tst_qdbusmetaobject Test:
 #####################################################################
 
-qt_add_test(tst_qdbusmetaobject
+add_qt_test(tst_qdbusmetaobject
     SOURCES
         tst_qdbusmetaobject.cpp
     PUBLIC_LIBRARIES

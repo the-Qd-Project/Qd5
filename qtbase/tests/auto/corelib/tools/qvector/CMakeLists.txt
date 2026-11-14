@@ -4,7 +4,7 @@
 ## tst_qvector Test:
 #####################################################################
 
-qt_add_test(tst_qvector
+add_qt_test(tst_qvector
     SOURCES
         tst_qvector.cpp
 )

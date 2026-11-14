@@ -4,7 +4,7 @@
 ## tst_qcache Test:
 #####################################################################
 
-qt_add_test(tst_qcache
+add_qt_test(tst_qcache
     SOURCES
         tst_qcache.cpp
 )

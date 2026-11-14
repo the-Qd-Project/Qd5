@@ -11,7 +11,7 @@ endif()
 ## tst_macgui Test:
 #####################################################################
 
-qt_add_test(tst_macgui
+add_qt_test(tst_macgui
     SOURCES
         guitest.cpp guitest.h
         tst_macgui.cpp

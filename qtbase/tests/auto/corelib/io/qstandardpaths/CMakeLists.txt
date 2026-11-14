@@ -8,7 +8,7 @@
 list(APPEND test_data "tst_qstandardpaths.cpp")
 list(APPEND test_data "qstandardpaths.pro")
 
-qt_add_test(tst_qstandardpaths
+add_qt_test(tst_qstandardpaths
     SOURCES
         tst_qstandardpaths.cpp
     TESTDATA ${test_data}

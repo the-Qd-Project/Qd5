@@ -4,7 +4,7 @@
 ## tst_qlockfile Test:
 #####################################################################
 
-qt_add_test(tst_qlockfile
+add_qt_test(tst_qlockfile
     SOURCES
         tst_qlockfile.cpp
     PUBLIC_LIBRARIES

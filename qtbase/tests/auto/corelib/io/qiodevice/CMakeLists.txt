@@ -7,7 +7,7 @@
 # Collect test data
 list(APPEND test_data "tst_qiodevice.cpp")
 
-qt_add_test(tst_qiodevice
+add_qt_test(tst_qiodevice
     SOURCES
         tst_qiodevice.cpp
     PUBLIC_LIBRARIES

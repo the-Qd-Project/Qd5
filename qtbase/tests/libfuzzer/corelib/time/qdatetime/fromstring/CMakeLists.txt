@@ -15,12 +15,12 @@ qt_add_executable(fromstring
 ## Scopes:
 #####################################################################
 
-qt_extend_target(fromstring CONDITION FUZZ_ENGINE_ISEMPTY
+qt_extend_target(fromstring CONDITION NOT FUZZ_ENGINE
     LINK_OPTIONS
         "-fsanitize=fuzzer"
 )
 
-qt_extend_target(fromstring CONDITION NOT FUZZ_ENGINE_ISEMPTY
+qt_extend_target(fromstring CONDITION FUZZ_ENGINE
     PUBLIC_LIBRARIES
         $ENV{LIB_FUZZING_ENGINE}
 )

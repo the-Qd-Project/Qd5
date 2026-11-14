@@ -8,7 +8,7 @@ endif()
 ## tst_sessionmanagement_macos Test:
 #####################################################################
 
-qt_add_test(tst_sessionmanagement_macos
+add_qt_test(tst_sessionmanagement_macos
     SOURCES
         tst_sessionmanagement_macos.mm
     DEFINES

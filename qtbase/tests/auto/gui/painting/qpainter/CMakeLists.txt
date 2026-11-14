@@ -23,7 +23,7 @@ file(GLOB_RECURSE test_data_glob
 list(APPEND test_data ${test_data_glob})
 list(APPEND test_data "task217400.png")
 
-qt_add_test(tst_qpainter
+add_qt_test(tst_qpainter
     SOURCES
         tst_qpainter.cpp
     PUBLIC_LIBRARIES

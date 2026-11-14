@@ -4,7 +4,7 @@
 ## tst_qguimetatype Test:
 #####################################################################
 
-qt_add_test(tst_qguimetatype
+add_qt_test(tst_qguimetatype
     SOURCES
         tst_qguimetatype.cpp
     PUBLIC_LIBRARIES

@@ -4,7 +4,7 @@
 ## tst_qnetworkproxy Test:
 #####################################################################
 
-qt_add_test(tst_qnetworkproxy
+add_qt_test(tst_qnetworkproxy
     SOURCES
         tst_qnetworkproxy.cpp
     PUBLIC_LIBRARIES

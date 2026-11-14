@@ -4,7 +4,7 @@
 ## tst_qlineedit Test:
 #####################################################################
 
-qt_add_test(tst_qlineedit
+add_qt_test(tst_qlineedit
     SOURCES
         tst_qlineedit.cpp
     PUBLIC_LIBRARIES

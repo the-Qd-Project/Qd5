@@ -4,7 +4,7 @@
 ## tst_qarraydata Test:
 #####################################################################
 
-qt_add_test(tst_qarraydata
+add_qt_test(tst_qarraydata
     SOURCES
         simplevector.h
         tst_qarraydata.cpp

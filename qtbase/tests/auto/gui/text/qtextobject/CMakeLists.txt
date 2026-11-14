@@ -4,7 +4,7 @@
 ## tst_qtextobject Test:
 #####################################################################
 
-qt_add_test(tst_qtextobject
+add_qt_test(tst_qtextobject
     SOURCES
         tst_qtextobject.cpp
     PUBLIC_LIBRARIES

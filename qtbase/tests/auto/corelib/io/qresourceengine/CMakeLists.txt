@@ -1,5 +1,7 @@
 # Generated from qresourceengine_test.pro.
 
+add_subdirectory(staticplugin)
+
 #####################################################################
 ## tst_qresourceengine Test:
 #####################################################################
@@ -15,7 +17,7 @@ file(GLOB_RECURSE test_data_glob
     *.rcc)
 list(APPEND test_data ${test_data_glob})
 
-qt_add_test(tst_qresourceengine
+add_qt_test(tst_qresourceengine
     SOURCES
         tst_qresourceengine.cpp
     PUBLIC_LIBRARIES

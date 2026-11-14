@@ -4,7 +4,7 @@
 ## tst_qlocale Test:
 #####################################################################
 
-qt_add_test(tst_qlocale
+add_qt_test(tst_qlocale
     OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/../"
     SOURCES
         ../tst_qlocale.cpp

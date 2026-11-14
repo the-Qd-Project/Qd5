@@ -4,7 +4,7 @@
 ## tst_qitemdelegate Test:
 #####################################################################
 
-qt_add_test(tst_qitemdelegate
+add_qt_test(tst_qitemdelegate
     SOURCES
         tst_qitemdelegate.cpp
     PUBLIC_LIBRARIES

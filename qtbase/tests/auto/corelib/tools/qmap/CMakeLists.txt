@@ -4,9 +4,7 @@
 ## tst_qmap Test:
 #####################################################################
 
-qt_add_test(tst_qmap
+add_qt_test(tst_qmap
     SOURCES
         tst_qmap.cpp
-    DEFINES
-        -QT_NO_JAVA_STYLE_ITERATORS
 )

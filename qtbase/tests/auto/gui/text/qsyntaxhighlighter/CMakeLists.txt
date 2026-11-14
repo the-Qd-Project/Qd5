@@ -4,7 +4,7 @@
 ## tst_qsyntaxhighlighter Test:
 #####################################################################
 
-qt_add_test(tst_qsyntaxhighlighter
+add_qt_test(tst_qsyntaxhighlighter
     SOURCES
         tst_qsyntaxhighlighter.cpp
     PUBLIC_LIBRARIES

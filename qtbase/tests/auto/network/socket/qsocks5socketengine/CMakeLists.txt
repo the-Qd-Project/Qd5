@@ -8,7 +8,7 @@ endif()
 ## tst_qsocks5socketengine Test:
 #####################################################################
 
-qt_add_test(tst_qsocks5socketengine
+add_qt_test(tst_qsocks5socketengine
     SOURCES
         tst_qsocks5socketengine.cpp
     INCLUDE_DIRECTORIES

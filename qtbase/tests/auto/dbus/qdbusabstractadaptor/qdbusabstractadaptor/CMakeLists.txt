@@ -4,7 +4,7 @@
 ## tst_qdbusabstractadaptor Test:
 #####################################################################
 
-qt_add_test(tst_qdbusabstractadaptor
+add_qt_test(tst_qdbusabstractadaptor
     OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/../"
     SOURCES
         ../myobject.h

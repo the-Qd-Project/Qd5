@@ -4,7 +4,7 @@
 ## tst_qqueue Test:
 #####################################################################
 
-qt_add_test(tst_qqueue
+add_qt_test(tst_qqueue
     SOURCES
         tst_qqueue.cpp
 )

@@ -4,7 +4,7 @@
 ## tst_quuid Test:
 #####################################################################
 
-qt_add_test(tst_quuid
+add_qt_test(tst_quuid
     SOURCES
         ../tst_quuid.cpp
 )

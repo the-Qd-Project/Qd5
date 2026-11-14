@@ -4,7 +4,7 @@
 ## tst_qnetworkrequest Test:
 #####################################################################
 
-qt_add_test(tst_qnetworkrequest
+add_qt_test(tst_qnetworkrequest
     SOURCES
         tst_qnetworkrequest.cpp
     PUBLIC_LIBRARIES

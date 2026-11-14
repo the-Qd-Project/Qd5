@@ -4,7 +4,7 @@
 ## tst_qrasterwindow Test:
 #####################################################################
 
-qt_add_test(tst_qrasterwindow
+add_qt_test(tst_qrasterwindow
     SOURCES
         tst_qrasterwindow.cpp
     PUBLIC_LIBRARIES

@@ -4,7 +4,7 @@
 ## tst_qmetaenum Test:
 #####################################################################
 
-qt_add_test(tst_qmetaenum
+add_qt_test(tst_qmetaenum
     SOURCES
         tst_qmetaenum.cpp
 )

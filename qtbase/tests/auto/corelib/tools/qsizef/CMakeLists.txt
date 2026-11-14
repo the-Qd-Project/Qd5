@@ -4,7 +4,7 @@
 ## tst_qsizef Test:
 #####################################################################
 
-qt_add_test(tst_qsizef
+add_qt_test(tst_qsizef
     SOURCES
         tst_qsizef.cpp
 )

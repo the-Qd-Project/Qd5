@@ -4,7 +4,7 @@
 ## tst_qtabbar Test:
 #####################################################################
 
-qt_add_test(tst_qtabbar
+add_qt_test(tst_qtabbar
     SOURCES
         tst_qtabbar.cpp
     PUBLIC_LIBRARIES

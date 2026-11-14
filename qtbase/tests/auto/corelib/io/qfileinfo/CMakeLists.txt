@@ -4,7 +4,7 @@
 ## tst_qfileinfo Test:
 #####################################################################
 
-qt_add_test(tst_qfileinfo
+add_qt_test(tst_qfileinfo
     SOURCES
         tst_qfileinfo.cpp
     PUBLIC_LIBRARIES

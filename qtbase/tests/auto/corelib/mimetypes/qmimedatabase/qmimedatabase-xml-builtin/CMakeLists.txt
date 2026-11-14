@@ -8,7 +8,7 @@ endif()
 ## tst_qmimedatabase-xml-builtin Test:
 #####################################################################
 
-qt_add_test(tst_qmimedatabase-xml-builtin
+add_qt_test(tst_qmimedatabase-xml-builtin
     SOURCES
         ../tst_qmimedatabase.h
         tst_qmimedatabase-xml-builtin.cpp
@@ -105,3 +105,7 @@ qt_extend_target(tst_qmimedatabase-xml-builtin CONDITION UNIX AND NOT APPLE AND 
     DEFINES
         USE_XDG_DATA_DIRS
 )
+
+if(TARGET tst_qmimedatabase_qmimedatabase_xml_builtin)
+    set_target_properties(tst_qmimedatabase_qmimedatabase_xml_builtin PROPERTIES OUTPUT_NAME "tst_qmimedatabase")
+endif()

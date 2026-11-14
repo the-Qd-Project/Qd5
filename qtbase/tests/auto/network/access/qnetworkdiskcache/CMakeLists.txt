@@ -4,7 +4,7 @@
 ## tst_qnetworkdiskcache Test:
 #####################################################################
 
-qt_add_test(tst_qnetworkdiskcache
+add_qt_test(tst_qnetworkdiskcache
     SOURCES
         tst_qnetworkdiskcache.cpp
     PUBLIC_LIBRARIES

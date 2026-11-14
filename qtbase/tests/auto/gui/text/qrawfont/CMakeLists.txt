@@ -4,7 +4,7 @@
 ## tst_qrawfont Test:
 #####################################################################
 
-qt_add_test(tst_qrawfont
+add_qt_test(tst_qrawfont
     SOURCES
         tst_qrawfont.cpp
     PUBLIC_LIBRARIES

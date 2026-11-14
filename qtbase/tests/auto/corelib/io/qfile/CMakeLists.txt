@@ -17,7 +17,7 @@ list(APPEND test_data "forCopying.txt")
 list(APPEND test_data "forRenaming.txt")
 list(APPEND test_data "resources/file1.ext1")
 
-qt_add_test(tst_qfile
+add_qt_test(tst_qfile
     SOURCES
         ../../../../shared/emulationdetector.h
         tst_qfile.cpp

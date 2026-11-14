@@ -4,7 +4,7 @@
 ## BigMenuCreator Binary:
 #####################################################################
 
-qt_add_manual_test(BigMenuCreator
+add_qt_manual_test(BigMenuCreator
     GUI
     SOURCES
         main.cpp
@@ -13,17 +13,10 @@ qt_add_manual_test(BigMenuCreator
         QT_DEPRECATED_WARNINGS
     PUBLIC_LIBRARIES
         Qt::Gui
+        Qt::Widgets
     ENABLE_AUTOGEN_TOOLS
         uic
 )
 
 #### Keys ignored in scope 1:.:.:bigmenucreator.pro:<TRUE>:
 # TEMPLATE = "app"
-
-## Scopes:
-#####################################################################
-
-qt_extend_target(BigMenuCreator CONDITION (QT_MAJOR_VERSION GREATER 4)
-    PUBLIC_LIBRARIES
-        Qt::Widgets
-)

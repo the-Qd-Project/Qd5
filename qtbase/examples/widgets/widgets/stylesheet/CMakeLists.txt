@@ -1,7 +1,7 @@
 # Generated from stylesheet.pro.
 
 cmake_minimum_required(VERSION 3.14)
-project(stylesheet LANGUAGES CXX)
+project(example_widgets_widgets_stylesheet LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -15,12 +15,12 @@ find_package(Qt5 COMPONENTS Core)
 find_package(Qt5 COMPONENTS Gui)
 find_package(Qt5 COMPONENTS Widgets)
 
-add_qt_gui_executable(stylesheet
+add_qt_gui_executable(example_widgets_widgets_stylesheet
     main.cpp
     mainwindow.cpp mainwindow.h mainwindow.ui
     stylesheeteditor.cpp stylesheeteditor.h stylesheeteditor.ui
 )
-target_link_libraries(stylesheet PUBLIC
+target_link_libraries(example_widgets_widgets_stylesheet PUBLIC
     Qt::Core
     Qt::Gui
     Qt::Widgets
@@ -66,15 +66,19 @@ set(stylesheet_resource_files
     "qss/pagefold.qss"
 )
 
-qt5_add_resources(stylesheet "stylesheet"
+qt5_add_resources(example_widgets_widgets_stylesheet "stylesheet"
     PREFIX
         "/"
     FILES
         ${stylesheet_resource_files}
 )
 
-install(TARGETS stylesheet
+install(TARGETS example_widgets_widgets_stylesheet
     RUNTIME DESTINATION "${INSTALL_EXAMPLEDIR}"
     BUNDLE DESTINATION "${INSTALL_EXAMPLEDIR}"
     LIBRARY DESTINATION "${INSTALL_EXAMPLEDIR}"
 )
+
+if(TARGET example_widgets_widgets_stylesheet)
+    set_target_properties(example_widgets_widgets_stylesheet PROPERTIES OUTPUT_NAME "stylesheet")
+endif()

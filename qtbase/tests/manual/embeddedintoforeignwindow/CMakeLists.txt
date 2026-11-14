@@ -4,7 +4,7 @@
 ## embeddedintoforeignwindow Binary:
 #####################################################################
 
-qt_add_manual_test(embeddedintoforeignwindow
+add_qt_manual_test(embeddedintoforeignwindow
     SOURCES
         ../diaglib/eventfilter.cpp ../diaglib/eventfilter.h
         ../diaglib/nativewindowdump.h
@@ -17,6 +17,7 @@ qt_add_manual_test(embeddedintoforeignwindow
     INCLUDE_DIRECTORIES
         ../diaglib
     PUBLIC_LIBRARIES
+        Qt::CorePrivate
         Qt::Gui
         Qt::GuiPrivate
 )
@@ -27,39 +28,30 @@ qt_add_manual_test(embeddedintoforeignwindow
 ## Scopes:
 #####################################################################
 
-qt_extend_target(embeddedintoforeignwindow CONDITION WIN32 AND NOT WINRT
+extend_target(embeddedintoforeignwindow CONDITION WIN32 AND NOT WINRT
     SOURCES
         ../diaglib/nativewindowdump_win.cpp
     PUBLIC_LIBRARIES
         user32
 )
 
-qt_extend_target(embeddedintoforeignwindow CONDITION UNIX OR WINRT
+extend_target(embeddedintoforeignwindow CONDITION UNIX OR WINRT
     SOURCES
         ../diaglib/nativewindowdump.cpp
 )
 
-qt_extend_target(embeddedintoforeignwindow CONDITION (QT_MAJOR_VERSION GREATER 4)
+extend_target(embeddedintoforeignwindow CONDITION QT_FEATURE_widgets
+    SOURCES
+        ../diaglib/debugproxystyle.cpp ../diaglib/debugproxystyle.h
+        ../diaglib/logwidget.cpp ../diaglib/logwidget.h
+        ../diaglib/qwidgetdump.cpp ../diaglib/qwidgetdump.h
     PUBLIC_LIBRARIES
-        Qt::CorePrivate
-        Qt::GuiPrivate
+        Qt::WidgetsPrivate
 )
 
-qt_extend_target(embeddedintoforeignwindow CONDITION ((QT_MAJOR_VERSION GREATER 4)) AND (QT_FEATURE_widgets)
-    SOURCES
-        ../diaglib/debugproxystyle.cpp ../diaglib/debugproxystyle.h
-        ../diaglib/logwidget.cpp ../diaglib/logwidget.h
-        ../diaglib/qwidgetdump.cpp ../diaglib/qwidgetdump.h
-)
-
-qt_extend_target(embeddedintoforeignwindow CONDITION NOT ((QT_MAJOR_VERSION GREATER 4))
-    SOURCES
-        ../diaglib/debugproxystyle.cpp ../diaglib/debugproxystyle.h
-        ../diaglib/logwidget.cpp ../diaglib/logwidget.h
-        ../diaglib/qwidgetdump.cpp ../diaglib/qwidgetdump.h
-)
-
-qt_extend_target(embeddedintoforeignwindow CONDITION QT_FEATURE_opengl
+extend_target(embeddedintoforeignwindow CONDITION QT_FEATURE_opengl
     SOURCES
         ../diaglib/glinfo.cpp ../diaglib/glinfo.h
+    PUBLIC_LIBRARIES
+        Qt::OpenGL
 )

@@ -1,10 +1,10 @@
 # Generated from qurl.pro.
 
 #####################################################################
-## tst_qurl Binary:
+## bench_corelib_io_qurl Binary:
 #####################################################################
 
-qt_add_benchmark(tst_qurl
+qt_add_benchmark(bench_corelib_io_qurl
     SOURCES
         main.cpp
     PUBLIC_LIBRARIES
@@ -17,7 +17,11 @@ qt_add_benchmark(tst_qurl
 ## Scopes:
 #####################################################################
 
-qt_extend_target(tst_qurl CONDITION WIN32
+qt_extend_target(bench_corelib_io_qurl CONDITION WIN32
     DEFINES
         _CRT_SECURE_NO_WARNINGS
 )
+
+if(TARGET bench_corelib_io_qurl)
+    set_target_properties(bench_corelib_io_qurl PROPERTIES OUTPUT_NAME "tst_qurl")
+endif()

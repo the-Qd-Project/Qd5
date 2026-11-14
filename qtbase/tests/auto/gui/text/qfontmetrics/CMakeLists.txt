@@ -4,7 +4,7 @@
 ## tst_qfontmetrics Test:
 #####################################################################
 
-qt_add_test(tst_qfontmetrics
+add_qt_test(tst_qfontmetrics
     SOURCES
         tst_qfontmetrics.cpp
     PUBLIC_LIBRARIES

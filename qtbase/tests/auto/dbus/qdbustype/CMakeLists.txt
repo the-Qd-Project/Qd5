@@ -4,7 +4,7 @@
 ## tst_qdbustype Test:
 #####################################################################
 
-qt_add_test(tst_qdbustype
+add_qt_test(tst_qdbustype
     SOURCES
         tst_qdbustype.cpp
     PUBLIC_LIBRARIES

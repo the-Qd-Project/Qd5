@@ -4,7 +4,7 @@
 ## tst_qwritelocker Test:
 #####################################################################
 
-qt_add_test(tst_qwritelocker
+add_qt_test(tst_qwritelocker
     SOURCES
         tst_qwritelocker.cpp
 )

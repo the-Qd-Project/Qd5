@@ -4,7 +4,7 @@
 ## tst_qstring Test:
 #####################################################################
 
-qt_add_test(tst_qstring
+add_qt_test(tst_qstring
     SOURCES
         tst_qstring.cpp
     DEFINES

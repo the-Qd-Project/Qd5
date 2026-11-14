@@ -4,7 +4,7 @@
 ## tst_qtexttable Test:
 #####################################################################
 
-qt_add_test(tst_qtexttable
+add_qt_test(tst_qtexttable
     SOURCES
         tst_qtexttable.cpp
     PUBLIC_LIBRARIES

@@ -8,7 +8,7 @@ endif()
 ## tst_qsocketnotifier Test:
 #####################################################################
 
-qt_add_test(tst_qsocketnotifier
+add_qt_test(tst_qsocketnotifier
     SOURCES
         tst_qsocketnotifier.cpp
     INCLUDE_DIRECTORIES

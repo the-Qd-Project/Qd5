@@ -4,7 +4,7 @@
 ## tst_noqteventloop Test:
 #####################################################################
 
-qt_add_test(tst_noqteventloop
+add_qt_test(tst_noqteventloop
     SOURCES
         tst_noqteventloop.cpp
     PUBLIC_LIBRARIES

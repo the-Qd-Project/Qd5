@@ -4,7 +4,7 @@
 ## tst_qgraphicsitem Test:
 #####################################################################
 
-qt_add_test(tst_qgraphicsitem
+add_qt_test(tst_qgraphicsitem
     SOURCES
         tst_qgraphicsitem.cpp
     DEFINES

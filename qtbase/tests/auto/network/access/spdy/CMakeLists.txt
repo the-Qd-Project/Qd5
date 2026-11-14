@@ -4,7 +4,7 @@
 ## tst_spdy Test:
 #####################################################################
 
-qt_add_test(tst_spdy
+add_qt_test(tst_spdy
     SOURCES
         tst_spdy.cpp
     PUBLIC_LIBRARIES

@@ -4,7 +4,7 @@
 ## tst_qtouchevent Test:
 #####################################################################
 
-qt_add_test(tst_qtouchevent
+add_qt_test(tst_qtouchevent
     SOURCES
         tst_qtouchevent.cpp
     PUBLIC_LIBRARIES

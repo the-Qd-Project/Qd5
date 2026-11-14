@@ -4,7 +4,7 @@
 ## tst_qgraphicslayout Test:
 #####################################################################
 
-qt_add_test(tst_qgraphicslayout
+add_qt_test(tst_qgraphicslayout
     SOURCES
         tst_qgraphicslayout.cpp
     DEFINES

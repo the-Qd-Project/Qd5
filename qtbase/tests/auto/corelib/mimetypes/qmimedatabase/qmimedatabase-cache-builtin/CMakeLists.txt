@@ -8,7 +8,7 @@ endif()
 ## tst_qmimedatabase-cache-builtin Test:
 #####################################################################
 
-qt_add_test(tst_qmimedatabase-cache-builtin
+add_qt_test(tst_qmimedatabase-cache-builtin
     SOURCES
         ../tst_qmimedatabase.h
         tst_qmimedatabase-cache-builtin.cpp
@@ -105,3 +105,7 @@ qt_extend_target(tst_qmimedatabase-cache-builtin CONDITION UNIX AND NOT APPLE AN
     DEFINES
         USE_XDG_DATA_DIRS
 )
+
+if(TARGET tst_qmimedatabase_qmimedatabase_cache_builtin)
+    set_target_properties(tst_qmimedatabase_qmimedatabase_cache_builtin PROPERTIES OUTPUT_NAME "tst_qmimedatabase")
+endif()

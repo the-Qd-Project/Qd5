@@ -1,10 +1,10 @@
 # Generated from multiwindow.pro.
 
 #####################################################################
-## multiwindow Binary:
+## manual_rhi_multiwindow Binary:
 #####################################################################
 
-qt_add_manual_test(multiwindow
+qt_add_manual_test(manual_rhi_multiwindow
     GUI
     SOURCES
         multiwindow.cpp
@@ -26,7 +26,7 @@ set(multiwindow_resource_files
     "../shared/color.vert.qsb"
 )
 
-qt_add_resource(multiwindow "multiwindow"
+qt_add_resource(manual_rhi_multiwindow "manual_rhi_multiwindow"
     PREFIX
         "/"
     FILES
@@ -36,3 +36,7 @@ qt_add_resource(multiwindow "multiwindow"
 
 #### Keys ignored in scope 1:.:.:multiwindow.pro:<TRUE>:
 # TEMPLATE = "app"
+
+if(TARGET manual_rhi_multiwindow)
+    set_target_properties(manual_rhi_multiwindow PROPERTIES OUTPUT_NAME "multiwindow")
+endif()

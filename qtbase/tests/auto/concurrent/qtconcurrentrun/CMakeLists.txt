@@ -4,7 +4,7 @@
 ## tst_qtconcurrentrun Test:
 #####################################################################
 
-qt_add_test(tst_qtconcurrentrun
+add_qt_test(tst_qtconcurrentrun
     SOURCES
         tst_qtconcurrentrun.cpp
     PUBLIC_LIBRARIES

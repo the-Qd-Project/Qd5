@@ -4,7 +4,7 @@
 ## tst_qinputmethod Test:
 #####################################################################
 
-qt_add_test(tst_qinputmethod
+add_qt_test(tst_qinputmethod
     SOURCES
         tst_qinputmethod.cpp
     PUBLIC_LIBRARIES

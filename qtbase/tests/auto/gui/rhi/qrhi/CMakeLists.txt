@@ -4,7 +4,7 @@
 ## tst_qrhi Test:
 #####################################################################
 
-qt_add_test(tst_qrhi
+add_qt_test(tst_qrhi
     SOURCES
         tst_qrhi.cpp
     PUBLIC_LIBRARIES

@@ -7,7 +7,7 @@
 # Collect test data
 list(APPEND test_data "rfc3252.txt")
 
-qt_add_test(tst_qbytearray
+add_qt_test(tst_qbytearray
     SOURCES
         tst_qbytearray.cpp
     PUBLIC_LIBRARIES

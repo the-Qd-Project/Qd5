@@ -4,7 +4,7 @@
 ## tst_qurl Test:
 #####################################################################
 
-qt_add_test(tst_qurl
+add_qt_test(tst_qurl
     SOURCES
         tst_qurl.cpp
     PUBLIC_LIBRARIES

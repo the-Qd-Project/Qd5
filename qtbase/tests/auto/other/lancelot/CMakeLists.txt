@@ -10,7 +10,7 @@ file(GLOB_RECURSE test_data_glob
     scripts/*)
 list(APPEND test_data ${test_data_glob})
 
-qt_add_test(tst_lancelot
+add_qt_test(tst_lancelot
     SOURCES
         ../../../baselineserver/shared/baselineprotocol.cpp ../../../baselineserver/shared/baselineprotocol.h
         ../../../baselineserver/shared/lookup3.cpp

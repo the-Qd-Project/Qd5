@@ -29,6 +29,7 @@
 #include <QApplication>
 #include <QFileDialog>
 #include <QPainter>
+#include <QPainterPath>
 #include <QPdfWriter>
 
 int main(int argc, char *argv[])

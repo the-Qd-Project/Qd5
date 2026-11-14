@@ -1,10 +1,10 @@
 # Generated from tableview.pro.
 
 #####################################################################
-## tableview Binary:
+## manual_repaint_tableview Binary:
 #####################################################################
 
-qt_add_manual_test(tableview
+qt_add_manual_test(manual_repaint_tableview
     GUI
     SOURCES
         ../shared/shared.h
@@ -13,3 +13,7 @@ qt_add_manual_test(tableview
         Qt::Gui
         Qt::Widgets
 )
+
+if(TARGET manual_repaint_tableview)
+    set_target_properties(manual_repaint_tableview PROPERTIES OUTPUT_NAME "tableview")
+endif()

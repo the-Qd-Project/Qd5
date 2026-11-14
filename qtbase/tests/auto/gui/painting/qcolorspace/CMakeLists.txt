@@ -10,7 +10,7 @@ file(GLOB_RECURSE test_data_glob
     resources/*)
 list(APPEND test_data ${test_data_glob})
 
-qt_add_test(tst_qcolorspace
+add_qt_test(tst_qcolorspace
     SOURCES
         tst_qcolorspace.cpp
     PUBLIC_LIBRARIES

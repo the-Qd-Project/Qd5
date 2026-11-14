@@ -4,7 +4,7 @@
 ## tst_qscroller Test:
 #####################################################################
 
-qt_add_test(tst_qscroller
+add_qt_test(tst_qscroller
     SOURCES
         tst_qscroller.cpp
     PUBLIC_LIBRARIES

@@ -19,7 +19,7 @@ file(GLOB_RECURSE test_data_glob
     subdir/*)
 list(APPEND test_data ${test_data_glob})
 
-qt_add_test(tst_qtextbrowser
+add_qt_test(tst_qtextbrowser
     SOURCES
         tst_qtextbrowser.cpp
     PUBLIC_LIBRARIES

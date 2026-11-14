@@ -4,7 +4,7 @@
 ## tst_qmouseevent Test:
 #####################################################################
 
-qt_add_test(tst_qmouseevent
+add_qt_test(tst_qmouseevent
     SOURCES
         tst_qmouseevent.cpp
     PUBLIC_LIBRARIES

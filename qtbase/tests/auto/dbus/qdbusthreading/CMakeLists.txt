@@ -4,7 +4,7 @@
 ## tst_qdbusthreading Test:
 #####################################################################
 
-qt_add_test(tst_qdbusthreading
+add_qt_test(tst_qdbusthreading
     SOURCES
         tst_qdbusthreading.cpp
     PUBLIC_LIBRARIES

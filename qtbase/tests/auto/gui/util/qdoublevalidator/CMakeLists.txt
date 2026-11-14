@@ -4,7 +4,7 @@
 ## tst_qdoublevalidator Test:
 #####################################################################
 
-qt_add_test(tst_qdoublevalidator
+add_qt_test(tst_qdoublevalidator
     SOURCES
         tst_qdoublevalidator.cpp
     PUBLIC_LIBRARIES

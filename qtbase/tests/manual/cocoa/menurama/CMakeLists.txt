@@ -12,6 +12,7 @@ qt_add_manual_test(Menurama
         menuramaapplication.cpp menuramaapplication.h
     PUBLIC_LIBRARIES
         Qt::Gui
+        Qt::Widgets
     ENABLE_AUTOGEN_TOOLS
         uic
 )
@@ -21,8 +22,3 @@ qt_add_manual_test(Menurama
 
 ## Scopes:
 #####################################################################
-
-qt_extend_target(Menurama CONDITION (QT_MAJOR_VERSION GREATER 4)
-    PUBLIC_LIBRARIES
-        Qt::Widgets
-)

@@ -4,7 +4,7 @@
 ## tst_qwmatrix Test:
 #####################################################################
 
-qt_add_test(tst_qwmatrix
+add_qt_test(tst_qwmatrix
     SOURCES
         tst_qwmatrix.cpp
     PUBLIC_LIBRARIES

@@ -30,11 +30,19 @@ qt_add_plugin(QOffscreenIntegrationPlugin
 ## Scopes:
 #####################################################################
 
+if(QT_FEATURE_opengl AND QT_FEATURE_xlib AND NOT QT_FEATURE_opengles2)
+    qt_find_package(X11
+        PROVIDED_TARGETS
+            X11::X11
+    )
+endif()
+
 qt_extend_target(QOffscreenIntegrationPlugin CONDITION QT_FEATURE_opengl AND QT_FEATURE_xlib AND NOT QT_FEATURE_opengles2
     SOURCES
         qoffscreenintegration_x11.cpp qoffscreenintegration_x11.h
     PUBLIC_LIBRARIES
         Qt::GlxSupportPrivate
+        X11::X11
 )
 
 #### Keys ignored in scope 3:.:.:offscreen.pro:NOT TARGET___equals____ss_QT_DEFAULT_QPA_PLUGIN:

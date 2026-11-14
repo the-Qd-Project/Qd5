@@ -4,7 +4,7 @@
 ## tst_qhostaddress Test:
 #####################################################################
 
-qt_add_test(tst_qhostaddress
+add_qt_test(tst_qhostaddress
     SOURCES
         tst_qhostaddress.cpp
     PUBLIC_LIBRARIES

@@ -7,7 +7,7 @@
 # Collect test data
 list(APPEND test_data "../library_path/invalid.so")
 
-qt_add_test(tst_qlibrary
+add_qt_test(tst_qlibrary
     OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/../"
     SOURCES
         ../tst_qlibrary.cpp

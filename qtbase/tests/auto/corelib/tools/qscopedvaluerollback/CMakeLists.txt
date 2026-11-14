@@ -4,7 +4,7 @@
 ## tst_qscopedvaluerollback Test:
 #####################################################################
 
-qt_add_test(tst_qscopedvaluerollback
+add_qt_test(tst_qscopedvaluerollback
     SOURCES
         tst_qscopedvaluerollback.cpp
 )

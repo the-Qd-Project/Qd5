@@ -4,7 +4,7 @@
 ## tst_qfontcache Test:
 #####################################################################
 
-qt_add_test(tst_qfontcache
+add_qt_test(tst_qfontcache
     SOURCES
         tst_qfontcache.cpp
     PUBLIC_LIBRARIES

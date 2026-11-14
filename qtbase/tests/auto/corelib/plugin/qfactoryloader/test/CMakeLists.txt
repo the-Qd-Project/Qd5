@@ -4,7 +4,7 @@
 ## tst_qfactoryloader Test:
 #####################################################################
 
-qt_add_test(tst_qfactoryloader
+add_qt_test(tst_qfactoryloader
     OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/../"
     SOURCES
         ../plugin1/plugininterface1.h

@@ -14,7 +14,7 @@ file(GLOB_RECURSE test_data_glob
     baseline/*)
 list(APPEND test_data ${test_data_glob})
 
-qt_add_test(tst_qimagereader
+add_qt_test(tst_qimagereader
     SOURCES
         tst_qimagereader.cpp
     PUBLIC_LIBRARIES

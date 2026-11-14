@@ -4,7 +4,7 @@
 ## tst_qtcpsocket Test:
 #####################################################################
 
-qt_add_test(tst_qtcpsocket
+add_qt_test(tst_qtcpsocket
     SOURCES
         ../tst_qtcpsocket.cpp
     PUBLIC_LIBRARIES

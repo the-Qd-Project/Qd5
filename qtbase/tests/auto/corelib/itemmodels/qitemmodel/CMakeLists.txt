@@ -4,7 +4,7 @@
 ## tst_qitemmodel Test:
 #####################################################################
 
-qt_add_test(tst_qitemmodel
+add_qt_test(tst_qitemmodel
     SOURCES
         tst_qitemmodel.cpp
     PUBLIC_LIBRARIES

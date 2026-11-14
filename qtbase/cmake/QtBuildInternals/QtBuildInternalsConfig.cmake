@@ -129,7 +129,7 @@ macro(qt_build_repo)
     # Do this before adding src, because there might be test related conditions
     # in source.
     if (BUILD_TESTING AND NOT QT_BUILD_STANDALONE_TESTS)
-        find_package(Qt6 ${PROJECT_VERSION} CONFIG REQUIRED COMPONENTS Test)
+        find_package(Qt5 ${PROJECT_VERSION} CONFIG REQUIRED COMPONENTS Test)
     endif()
 
     if(NOT QT_BUILD_STANDALONE_TESTS)
@@ -179,7 +179,7 @@ macro(qt_build_tests)
         include("${_qt_build_tests_install_prefix}/${PROJECT_NAME}TestsConfig.cmake" OPTIONAL)
 
         # Of course we always need the test module as well.
-        find_package(Qt6 ${PROJECT_VERSION} CONFIG REQUIRED COMPONENTS Test)
+        find_package(Qt5 ${PROJECT_VERSION} CONFIG REQUIRED COMPONENTS Test)
     endif()
 
     if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/auto/CMakeLists.txt")
@@ -196,8 +196,8 @@ endmacro()
 macro(qt_examples_build_begin)
     # Examples that are built as part of the Qt build need to use the CMake config files from the
     # build dir, because they are not installed yet in a prefix build.
-    # Appending to CMAKE_PREFIX_PATH helps find the initial Qt6Config.cmake.
-    # Appending to QT_EXAMPLES_CMAKE_PREFIX_PATH helps find components of Qt6, because those
+    # Appending to CMAKE_PREFIX_PATH helps find the initial Qt5Config.cmake.
+    # Appending to QT_EXAMPLES_CMAKE_PREFIX_PATH helps find components of Qt5, because those
     # find_package calls use NO_DEFAULT_PATH, and thus CMAKE_PREFIX_PATH is ignored.
     list(APPEND CMAKE_PREFIX_PATH "${QT_BUILD_DIR}")
     list(APPEND QT_EXAMPLES_CMAKE_PREFIX_PATH "${QT_BUILD_DIR}")

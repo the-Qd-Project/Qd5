@@ -28,7 +28,7 @@ if(QT_WILL_INSTALL)
                  ${CMAKE_INSTALL_PREFIX} ${__GlobalConfig_install_dir_absolute})
 endif()
 
-# Generate and install Qt6 config file.
+# Generate and install Qt5 config file.
 configure_package_config_file(
     "${PROJECT_SOURCE_DIR}/cmake/QtConfig.cmake.in"
     "${__GlobalConfig_build_dir}/${INSTALL_CMAKE_NAMESPACE}Config.cmake"
@@ -41,7 +41,7 @@ write_basic_package_version_file(
     COMPATIBILITY AnyNewerVersion
 )
 
-# Generate and install Qt6Tools config file.
+# Generate and install Qt5Tools config file.
 configure_package_config_file(
     "${PROJECT_SOURCE_DIR}/cmake/QtToolsConfig.cmake.in"
     "${__GlobalConfig_build_dir}/${INSTALL_CMAKE_NAMESPACE}ToolsConfig.cmake"

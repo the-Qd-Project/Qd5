@@ -4,7 +4,7 @@
 ## tst_qsharedmemory Test:
 #####################################################################
 
-qt_add_test(tst_qsharedmemory
+add_qt_test(tst_qsharedmemory
     SOURCES
         tst_qsharedmemory.cpp
     PUBLIC_LIBRARIES

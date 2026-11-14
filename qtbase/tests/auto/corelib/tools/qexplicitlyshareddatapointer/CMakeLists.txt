@@ -4,7 +4,7 @@
 ## tst_qexplicitlyshareddatapointer Test:
 #####################################################################
 
-qt_add_test(tst_qexplicitlyshareddatapointer
+add_qt_test(tst_qexplicitlyshareddatapointer
     SOURCES
         tst_qexplicitlyshareddatapointer.cpp
 )

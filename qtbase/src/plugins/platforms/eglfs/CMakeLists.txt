@@ -57,12 +57,12 @@ qt_extend_target(EglFSDeviceIntegration CONDITION QT_FEATURE_vulkan
         Qt::VulkanSupportPrivate
 )
 
-qt_extend_target(EglFSDeviceIntegration CONDITION NOT EGLFS_PLATFORM_HOOKS_SOURCES_ISEMPTY
+qt_extend_target(EglFSDeviceIntegration CONDITION EGLFS_PLATFORM_HOOKS_SOURCES
     DEFINES
         EGLFS_PLATFORM_HOOKS
 )
 
-qt_extend_target(EglFSDeviceIntegration CONDITION NOT EGLFS_DEVICE_INTEGRATION_ISEMPTY
+qt_extend_target(EglFSDeviceIntegration CONDITION EGLFS_DEVICE_INTEGRATION
     DEFINES
         EGLFS_PREFERRED_PLUGIN=
 )

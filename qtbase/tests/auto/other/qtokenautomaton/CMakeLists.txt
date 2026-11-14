@@ -4,7 +4,7 @@
 ## tst_qtokenautomaton Test:
 #####################################################################
 
-qt_add_test(tst_qtokenautomaton
+add_qt_test(tst_qtokenautomaton
     SOURCES
         tokenizers/basic/basic.cpp tokenizers/basic/basic.h
         tokenizers/basicNamespace/basicNamespace.cpp tokenizers/basicNamespace/basicNamespace.h

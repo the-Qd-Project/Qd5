@@ -4,7 +4,7 @@
 ## tst_qdirmodel Test:
 #####################################################################
 
-qt_add_test(tst_qdirmodel
+add_qt_test(tst_qdirmodel
     SOURCES
         ../../../../shared/emulationdetector.h
         tst_qdirmodel.cpp

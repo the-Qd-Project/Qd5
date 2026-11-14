@@ -12,6 +12,7 @@ qt_add_manual_test(qtexttableborders
     PUBLIC_LIBRARIES
         Qt::Gui
         Qt::PrintSupport
+        Qt::Widgets
     ENABLE_AUTOGEN_TOOLS
         uic
 )
@@ -35,8 +36,3 @@ qt_add_resource(qtexttableborders "resources"
 
 ## Scopes:
 #####################################################################
-
-qt_extend_target(qtexttableborders CONDITION (QT_MAJOR_VERSION GREATER 4)
-    PUBLIC_LIBRARIES
-        Qt::Widgets
-)

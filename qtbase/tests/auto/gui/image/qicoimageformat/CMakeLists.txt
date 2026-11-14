@@ -10,7 +10,7 @@ file(GLOB_RECURSE test_data_glob
     icons/*)
 list(APPEND test_data ${test_data_glob})
 
-qt_add_test(tst_qicoimageformat
+add_qt_test(tst_qicoimageformat
     SOURCES
         tst_qicoimageformat.cpp
     PUBLIC_LIBRARIES

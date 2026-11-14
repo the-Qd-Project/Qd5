@@ -4,7 +4,7 @@
 ## tst_qinputcontrol Test:
 #####################################################################
 
-qt_add_test(tst_qinputcontrol
+add_qt_test(tst_qinputcontrol
     SOURCES
         tst_qinputcontrol.cpp
     PUBLIC_LIBRARIES

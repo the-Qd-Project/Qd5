@@ -4,7 +4,7 @@
 ## tst_qsettings Test:
 #####################################################################
 
-qt_add_test(tst_qsettings
+add_qt_test(tst_qsettings
     SOURCES
         tst_qsettings.cpp
     DEFINES

@@ -4,7 +4,7 @@
 ## tst_qdbuscontext Test:
 #####################################################################
 
-qt_add_test(tst_qdbuscontext
+add_qt_test(tst_qdbuscontext
     SOURCES
         tst_qdbuscontext.cpp
     PUBLIC_LIBRARIES

@@ -4,7 +4,7 @@
 ## tst_qguieventloop Test:
 #####################################################################
 
-qt_add_test(tst_qguieventloop
+add_qt_test(tst_qguieventloop
     SOURCES
         ../../../corelib/kernel/qeventloop/tst_qeventloop.cpp
     PUBLIC_LIBRARIES

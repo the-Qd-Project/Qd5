@@ -31,7 +31,7 @@ if(NOT @BUILD_SHARED_LIBS@)
         set(_build_allow_plugin_link_rules_genex 1)
     endif()
 
-    # The code in here uses the properties defined in qt_import_plugins (Qt6CoreMacros.cmake)
+    # The code in here uses the properties defined in qt_import_plugins (Qt5CoreMacros.cmake)
     foreach(target @qt_plugins@)
         set(_plugin_target "@INSTALL_CMAKE_NAMESPACE@::${target}")
         set(_plugin_target_versionless "Qt::${target}")

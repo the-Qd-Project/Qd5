@@ -22,12 +22,12 @@ qt_internal_add_plugin(QWebpPlugin
 ## Scopes:
 #####################################################################
 
-qt_internal_extend_target(QWebpPlugin CONDITION QT_FEATURE_system_webp
+qt_extend_target(QWebpPlugin CONDITION QT_FEATURE_system_webp
     LIBRARIES
         WrapWebP::WrapWebP
 )
 
-qt_internal_extend_target(QWebpPlugin CONDITION NOT QT_FEATURE_system_webp
+qt_extend_target(QWebpPlugin CONDITION NOT QT_FEATURE_system_webp
     SOURCES
         ../../../3rdparty/libwebp/sharpyuv/sharpyuv.c
         ../../../3rdparty/libwebp/sharpyuv/sharpyuv_cpu.c
@@ -153,7 +153,7 @@ qt_internal_extend_target(QWebpPlugin CONDITION NOT QT_FEATURE_system_webp
         ../../../3rdparty/libwebp/src/webp
 )
 
-qt_internal_extend_target(QWebpPlugin CONDITION ANDROID AND NOT ANDROID_EMBEDDED AND NOT QT_FEATURE_system_webp
+qt_extend_target(QWebpPlugin CONDITION ANDROID AND NOT ANDROID_EMBEDDED AND NOT QT_FEATURE_system_webp
     SOURCES
         ${CMAKE_ANDROID_NDK}/sources/android/cpufeatures/cpu-features.c   # special case
     INCLUDE_DIRECTORIES
@@ -176,7 +176,7 @@ set(neon_sources
 
 if(NOT QT_FEATURE_system_webp)
     if(ANDROID)
-        qt_internal_extend_target(QWebpPlugin
+        qt_extend_target(QWebpPlugin
             CONDITION (CMAKE_ANDROID_ARM_NEON OR CMAKE_ANDROID_ARCH_ABI STREQUAL "arm64-v8a")
             SOURCES ${neon_sources}
         )

@@ -4,7 +4,7 @@
 ## tst_qregexpvalidator Test:
 #####################################################################
 
-qt_add_test(tst_qregexpvalidator
+add_qt_test(tst_qregexpvalidator
     SOURCES
         tst_qregexpvalidator.cpp
     PUBLIC_LIBRARIES

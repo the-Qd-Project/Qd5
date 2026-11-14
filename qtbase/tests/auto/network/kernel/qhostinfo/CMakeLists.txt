@@ -8,7 +8,7 @@ endif()
 ## tst_qhostinfo Test:
 #####################################################################
 
-qt_add_test(tst_qhostinfo
+add_qt_test(tst_qhostinfo
     SOURCES
         tst_qhostinfo.cpp
     PUBLIC_LIBRARIES

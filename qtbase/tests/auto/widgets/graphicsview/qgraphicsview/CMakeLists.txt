@@ -4,7 +4,7 @@
 ## tst_qgraphicsview Test:
 #####################################################################
 
-qt_add_test(tst_qgraphicsview
+add_qt_test(tst_qgraphicsview
     SOURCES
         tst_qgraphicsview.cpp tst_qgraphicsview.h
         tst_qgraphicsview_2.cpp

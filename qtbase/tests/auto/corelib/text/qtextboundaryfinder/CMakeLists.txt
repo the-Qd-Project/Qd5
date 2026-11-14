@@ -7,7 +7,7 @@
 # Collect test data
 list(APPEND test_data "data")
 
-qt_add_test(tst_qtextboundaryfinder
+add_qt_test(tst_qtextboundaryfinder
     SOURCES
         tst_qtextboundaryfinder.cpp
     TESTDATA ${test_data}

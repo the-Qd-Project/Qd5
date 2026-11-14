@@ -1,10 +1,16 @@
 # Generated from qnetworkreply.pro.
 
 #####################################################################
-## tst_qnetworkreply Binary:
+## tst_manual_qnetworkreply Binary:
 #####################################################################
 
-qt_add_manual_test(tst_qnetworkreply
+# special case begin
+if (NOT QT_FEATURE_private_tests)
+    return()
+endif()
+# special case end
+
+add_qt_manual_test(tst_manual_qnetworkreply
     SOURCES
         main.cpp
     PUBLIC_LIBRARIES

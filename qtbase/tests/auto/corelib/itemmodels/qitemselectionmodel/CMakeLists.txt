@@ -4,7 +4,7 @@
 ## tst_qitemselectionmodel Test:
 #####################################################################
 
-qt_add_test(tst_qitemselectionmodel
+add_qt_test(tst_qitemselectionmodel
     SOURCES
         tst_qitemselectionmodel.cpp
     PUBLIC_LIBRARIES

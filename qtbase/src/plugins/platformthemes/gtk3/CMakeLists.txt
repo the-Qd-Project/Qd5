@@ -1,5 +1,8 @@
 # Generated from gtk3.pro.
 
+qt_find_package(GTK3) # special case
+qt_find_package(X11) # special case
+
 #####################################################################
 ## QGtk3ThemePlugin Plugin:
 #####################################################################
@@ -14,6 +17,8 @@ qt_add_plugin(QGtk3ThemePlugin
         qgtk3theme.cpp qgtk3theme.h
     DEFINES
         GDK_VERSION_MIN_REQUIRED=GDK_VERSION_3_6
+    LIBRARIES # special case
+        X11::X11 # special case
     PUBLIC_LIBRARIES
         PkgConfig::GTK3
         Qt::Core
@@ -25,4 +30,3 @@ qt_add_plugin(QGtk3ThemePlugin
 
 #### Keys ignored in scope 1:.:.:gtk3.pro:<TRUE>:
 # PLUGIN_EXTENDS = "-"
-# QMAKE_CXXFLAGS_WARN_ON = "-Wno-error=parentheses"

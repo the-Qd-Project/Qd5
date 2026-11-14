@@ -4,7 +4,7 @@
 ## tst_qtconcurrentiteratekernel Test:
 #####################################################################
 
-qt_add_test(tst_qtconcurrentiteratekernel
+add_qt_test(tst_qtconcurrentiteratekernel
     SOURCES
         tst_qtconcurrentiteratekernel.cpp
     PUBLIC_LIBRARIES

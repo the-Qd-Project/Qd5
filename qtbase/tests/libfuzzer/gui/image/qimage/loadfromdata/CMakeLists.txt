@@ -24,12 +24,12 @@ qt_extend_target(loadfromdata CONDITION NOT QT.svg.name_ISEMPTY
         Qt::Svg
 )
 
-qt_extend_target(loadfromdata CONDITION FUZZ_ENGINE_ISEMPTY
+qt_extend_target(loadfromdata CONDITION NOT FUZZ_ENGINE
     LINK_OPTIONS
         "-fsanitize=fuzzer"
 )
 
-qt_extend_target(loadfromdata CONDITION NOT FUZZ_ENGINE_ISEMPTY
+qt_extend_target(loadfromdata CONDITION FUZZ_ENGINE
     PUBLIC_LIBRARIES
         $ENV{LIB_FUZZING_ENGINE}
 )

@@ -4,7 +4,7 @@
 ## tst_qfontdialog Test:
 #####################################################################
 
-qt_add_test(tst_qfontdialog
+add_qt_test(tst_qfontdialog
     SOURCES
         tst_qfontdialog.cpp
     PUBLIC_LIBRARIES

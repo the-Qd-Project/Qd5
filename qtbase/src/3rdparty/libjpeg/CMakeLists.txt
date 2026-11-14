@@ -120,7 +120,7 @@ qt_set_symbol_visibility_hidden(BundledLibjpeg)
 qt_set_symbol_visibility_hidden(BundledLibjpeg12bits)
 qt_set_symbol_visibility_hidden(BundledLibjpeg16bits)
 
-qt_internal_extend_target(BundledLibjpeg CONDITION MSVC
+qt_extend_target(BundledLibjpeg CONDITION MSVC
     DEFINES
         _CRT_SECURE_NO_WARNINGS
 )

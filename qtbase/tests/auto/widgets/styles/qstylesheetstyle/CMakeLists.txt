@@ -8,7 +8,7 @@ endif()
 ## tst_qstylesheetstyle Test:
 #####################################################################
 
-qt_add_test(tst_qstylesheetstyle
+add_qt_test(tst_qstylesheetstyle
     SOURCES
         tst_qstylesheetstyle.cpp
     PUBLIC_LIBRARIES

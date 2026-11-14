@@ -4,7 +4,7 @@
 ## tst_qtransform Test:
 #####################################################################
 
-qt_add_test(tst_qtransform
+add_qt_test(tst_qtransform
     SOURCES
         tst_qtransform.cpp
     PUBLIC_LIBRARIES

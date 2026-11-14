@@ -4,9 +4,9 @@
 ## crashonexit Binary:
 #####################################################################
 
-qt_add_executable(crashonexit
-    OUTPUT_DIRECTORY "${INSTALL_TESTSDIR}/tst_qthreadstorage/crashonexit"
-    INSTALL_DIRECTORY "${INSTALL_TESTSDIR}/tst_qthreadstorage/crashonexit"
+add_qt_executable(crashOnExit_helper
+    OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/.." # special case
+    INSTALL_DIRECTORY "${INSTALL_TESTSDIR}/tst_qthreadstorage/crashOnExit_helper" # special case
     SOURCES
         crashOnExit.cpp
 )

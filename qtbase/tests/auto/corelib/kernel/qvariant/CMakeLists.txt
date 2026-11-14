@@ -4,11 +4,11 @@
 ## tst_qvariant Test:
 #####################################################################
 
-qt_add_test(tst_qvariant
+add_qt_test(tst_qvariant
     SOURCES
         tst_qvariant.cpp
     DEFINES
-        -QT_NO_LINKED_LIST
+        
         QT_DISABLE_DEPRECATED_BEFORE=0
     INCLUDE_DIRECTORIES
         ../../../other/qvariant_common

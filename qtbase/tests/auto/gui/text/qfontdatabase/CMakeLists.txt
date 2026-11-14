@@ -7,7 +7,7 @@
 # Collect test data
 list(APPEND test_data "LED_REAL.TTF")
 
-qt_add_test(tst_qfontdatabase
+add_qt_test(tst_qfontdatabase
     SOURCES
         tst_qfontdatabase.cpp
     PUBLIC_LIBRARIES

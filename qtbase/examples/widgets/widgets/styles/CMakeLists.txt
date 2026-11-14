@@ -1,7 +1,7 @@
 # Generated from styles.pro.
 
 cmake_minimum_required(VERSION 3.14)
-project(styles LANGUAGES CXX)
+project(example_widgets_widgets_styles LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -15,12 +15,12 @@ find_package(Qt5 COMPONENTS Core)
 find_package(Qt5 COMPONENTS Gui)
 find_package(Qt5 COMPONENTS Widgets)
 
-add_qt_gui_executable(styles
+add_qt_gui_executable(example_widgets_widgets_styles
     main.cpp
     norwegianwoodstyle.cpp norwegianwoodstyle.h
     widgetgallery.cpp widgetgallery.h
 )
-target_link_libraries(styles PUBLIC
+target_link_libraries(example_widgets_widgets_styles PUBLIC
     Qt::Core
     Qt::Gui
     Qt::Widgets
@@ -33,15 +33,19 @@ set(styles_resource_files
     "images/woodbutton.png"
 )
 
-qt5_add_resources(styles "styles"
+qt5_add_resources(example_widgets_widgets_styles "styles"
     PREFIX
         "/"
     FILES
         ${styles_resource_files}
 )
 
-install(TARGETS styles
+install(TARGETS example_widgets_widgets_styles
     RUNTIME DESTINATION "${INSTALL_EXAMPLEDIR}"
     BUNDLE DESTINATION "${INSTALL_EXAMPLEDIR}"
     LIBRARY DESTINATION "${INSTALL_EXAMPLEDIR}"
 )
+
+if(TARGET example_widgets_widgets_styles)
+    set_target_properties(example_widgets_widgets_styles PROPERTIES OUTPUT_NAME "styles")
+endif()

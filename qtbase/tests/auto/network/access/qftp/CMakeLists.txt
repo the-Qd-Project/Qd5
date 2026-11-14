@@ -8,7 +8,7 @@ endif()
 ## tst_qftp Test:
 #####################################################################
 
-qt_add_test(tst_qftp
+add_qt_test(tst_qftp
     SOURCES
         tst_qftp.cpp
     PUBLIC_LIBRARIES

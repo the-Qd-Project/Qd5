@@ -4,7 +4,7 @@
 ## tst_qbrush Test:
 #####################################################################
 
-qt_add_test(tst_qbrush
+add_qt_test(tst_qbrush
     SOURCES
         tst_qbrush.cpp
     PUBLIC_LIBRARIES

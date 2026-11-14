@@ -4,7 +4,7 @@
 ## tst_json Test:
 #####################################################################
 
-qt_add_test(tst_json
+add_qt_test(tst_json
     SOURCES
         tst_qtjson.cpp
     PUBLIC_LIBRARIES

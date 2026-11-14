@@ -4,7 +4,7 @@
 ## tst_qcolor Test:
 #####################################################################
 
-qt_add_test(tst_qcolor
+add_qt_test(tst_qcolor
     SOURCES
         tst_qcolor.cpp
     PUBLIC_LIBRARIES

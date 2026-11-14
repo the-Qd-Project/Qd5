@@ -4,7 +4,7 @@
 ## tst_qdbusinterface Test:
 #####################################################################
 
-qt_add_test(tst_qdbusinterface
+add_qt_test(tst_qdbusinterface
     OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/../"
     SOURCES
         ../myobject.h

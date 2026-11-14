@@ -4,7 +4,7 @@
 ## tst_qdeadlinetimer Test:
 #####################################################################
 
-qt_add_test(tst_qdeadlinetimer
+add_qt_test(tst_qdeadlinetimer
     SOURCES
         tst_qdeadlinetimer.cpp
 )

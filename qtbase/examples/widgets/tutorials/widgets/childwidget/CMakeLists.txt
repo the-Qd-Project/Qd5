@@ -1,7 +1,7 @@
 # Generated from childwidget.pro.
 
 cmake_minimum_required(VERSION 3.14)
-project(childwidget LANGUAGES CXX)
+project(example_widgets_tutorials_widgets_childwidget LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -15,17 +15,21 @@ find_package(Qt5 COMPONENTS Core)
 find_package(Qt5 COMPONENTS Gui)
 find_package(Qt5 COMPONENTS Widgets)
 
-add_qt_gui_executable(childwidget
+add_qt_gui_executable(example_widgets_tutorials_widgets_childwidget
     main.cpp
 )
-target_link_libraries(childwidget PUBLIC
+target_link_libraries(example_widgets_tutorials_widgets_childwidget PUBLIC
     Qt::Core
     Qt::Gui
     Qt::Widgets
 )
 
-install(TARGETS childwidget
+install(TARGETS example_widgets_tutorials_widgets_childwidget
     RUNTIME DESTINATION "${INSTALL_EXAMPLEDIR}"
     BUNDLE DESTINATION "${INSTALL_EXAMPLEDIR}"
     LIBRARY DESTINATION "${INSTALL_EXAMPLEDIR}"
 )
+
+if(TARGET example_widgets_tutorials_widgets_childwidget)
+    set_target_properties(example_widgets_tutorials_widgets_childwidget PROPERTIES OUTPUT_NAME "childwidget")
+endif()

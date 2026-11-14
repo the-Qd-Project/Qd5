@@ -4,7 +4,7 @@
 ## tst_qnetworksession Test:
 #####################################################################
 
-qt_add_test(tst_qnetworksession
+add_qt_test(tst_qnetworksession
     SOURCES
         ../../qbearertestcommon.h
         tst_qnetworksession.cpp

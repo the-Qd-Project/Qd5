@@ -4,7 +4,7 @@
 ## tst_qlistwidget Test:
 #####################################################################
 
-qt_add_test(tst_qlistwidget
+add_qt_test(tst_qlistwidget
     SOURCES
         tst_qlistwidget.cpp
     PUBLIC_LIBRARIES

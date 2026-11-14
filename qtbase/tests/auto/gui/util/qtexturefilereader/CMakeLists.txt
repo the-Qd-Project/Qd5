@@ -4,7 +4,7 @@
 ## tst_qtexturefilereader Test:
 #####################################################################
 
-qt_add_test(tst_qtexturefilereader
+add_qt_test(tst_qtexturefilereader
     SOURCES
         tst_qtexturefilereader.cpp
     PUBLIC_LIBRARIES

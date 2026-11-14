@@ -4,7 +4,7 @@
 ## tst_qopengl Test:
 #####################################################################
 
-qt_add_test(tst_qopengl
+add_qt_test(tst_qopengl
     SOURCES
         tst_qopengl.cpp
     PUBLIC_LIBRARIES

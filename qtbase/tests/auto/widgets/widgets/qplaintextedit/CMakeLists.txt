@@ -4,7 +4,7 @@
 ## tst_qplaintextedit Test:
 #####################################################################
 
-qt_add_test(tst_qplaintextedit
+add_qt_test(tst_qplaintextedit
     SOURCES
         tst_qplaintextedit.cpp
     INCLUDE_DIRECTORIES

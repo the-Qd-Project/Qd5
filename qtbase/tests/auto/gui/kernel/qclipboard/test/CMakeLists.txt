@@ -4,7 +4,7 @@
 ## tst_qclipboard Test:
 #####################################################################
 
-qt_add_test(tst_qclipboard
+add_qt_test(tst_qclipboard
     OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/../"
     SOURCES
         ../tst_qclipboard.cpp

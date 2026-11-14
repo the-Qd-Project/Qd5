@@ -8,7 +8,7 @@ endif()
 ## tst_qgl Test:
 #####################################################################
 
-qt_add_test(tst_qgl
+add_qt_test(tst_qgl
     SOURCES
         tst_qgl.cpp
     PUBLIC_LIBRARIES

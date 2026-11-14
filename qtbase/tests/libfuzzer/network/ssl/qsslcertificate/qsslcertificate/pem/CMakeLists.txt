@@ -17,12 +17,12 @@ qt_add_executable(pem
 ## Scopes:
 #####################################################################
 
-qt_extend_target(pem CONDITION FUZZ_ENGINE_ISEMPTY
+qt_extend_target(pem CONDITION NOT FUZZ_ENGINE
     LINK_OPTIONS
         "-fsanitize=fuzzer"
 )
 
-qt_extend_target(pem CONDITION NOT FUZZ_ENGINE_ISEMPTY
+qt_extend_target(pem CONDITION FUZZ_ENGINE
     PUBLIC_LIBRARIES
         $ENV{LIB_FUZZING_ENGINE}
 )

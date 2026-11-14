@@ -4,7 +4,7 @@
 ## tst_qmakelib Test:
 #####################################################################
 
-qt_add_test(tst_qmakelib
+add_qt_test(tst_qmakelib
     SOURCES
         ../../../../qmake/library/ioutils.cpp
         ../../../../qmake/library/proitems.cpp

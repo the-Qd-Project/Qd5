@@ -4,7 +4,7 @@
 ## tst_qtooltip Test:
 #####################################################################
 
-qt_add_test(tst_qtooltip
+add_qt_test(tst_qtooltip
     SOURCES
         tst_qtooltip.cpp
     PUBLIC_LIBRARIES

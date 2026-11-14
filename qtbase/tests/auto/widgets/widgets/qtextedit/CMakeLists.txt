@@ -7,7 +7,7 @@
 # Collect test data
 list(APPEND test_data "fullWidthSelection")
 
-qt_add_test(tst_qtextedit
+add_qt_test(tst_qtextedit
     SOURCES
         tst_qtextedit.cpp
     PUBLIC_LIBRARIES

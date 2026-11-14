@@ -4,7 +4,7 @@
 ## tst_qguivariant Test:
 #####################################################################
 
-qt_add_test(tst_qguivariant
+add_qt_test(tst_qguivariant
     SOURCES
         tst_qguivariant.cpp
     INCLUDE_DIRECTORIES

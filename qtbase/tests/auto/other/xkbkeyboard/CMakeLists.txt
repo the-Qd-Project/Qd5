@@ -4,7 +4,7 @@
 ## tst_xkbkeyboard Test:
 #####################################################################
 
-qt_add_test(tst_xkbkeyboard
+add_qt_test(tst_xkbkeyboard
     SOURCES
         tst_xkbkeyboard.cpp
     PUBLIC_LIBRARIES

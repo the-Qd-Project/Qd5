@@ -4,7 +4,7 @@
 ## tst_qresultstore Test:
 #####################################################################
 
-qt_add_test(tst_qresultstore
+add_qt_test(tst_qresultstore
     SOURCES
         tst_qresultstore.cpp
     DEFINES

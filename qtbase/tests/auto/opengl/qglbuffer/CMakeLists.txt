@@ -8,7 +8,7 @@ endif()
 ## tst_qglbuffer Test:
 #####################################################################
 
-qt_add_test(tst_qglbuffer
+add_qt_test(tst_qglbuffer
     SOURCES
         tst_qglbuffer.cpp
     PUBLIC_LIBRARIES

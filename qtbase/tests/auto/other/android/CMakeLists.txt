@@ -4,7 +4,7 @@
 ## tst_android Test:
 #####################################################################
 
-qt_add_test(tst_android
+add_qt_test(tst_android
     SOURCES
         tst_android.cpp
 )

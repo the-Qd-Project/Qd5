@@ -4,7 +4,7 @@
 ## tst_qfont Test:
 #####################################################################
 
-qt_add_test(tst_qfont
+add_qt_test(tst_qfont
     SOURCES
         tst_qfont.cpp
     PUBLIC_LIBRARIES

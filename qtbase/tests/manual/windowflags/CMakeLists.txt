@@ -1,10 +1,10 @@
 # Generated from windowflags.pro.
 
 #####################################################################
-## windowflags Binary:
+## tst_manual_windowflags Binary:
 #####################################################################
 
-qt_add_manual_test(windowflags
+add_qt_manual_test(tst_manual_windowflags
     GUI
     SOURCES
         controllerwindow.cpp controllerwindow.h
@@ -13,12 +13,5 @@ qt_add_manual_test(windowflags
         previewwindow.cpp previewwindow.h
     PUBLIC_LIBRARIES
         Qt::Gui
-)
-
-## Scopes:
-#####################################################################
-
-qt_extend_target(windowflags CONDITION (QT_MAJOR_VERSION GREATER 4)
-    PUBLIC_LIBRARIES
         Qt::Widgets
 )

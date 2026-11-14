@@ -4,7 +4,7 @@
 ## tst_qpalette Test:
 #####################################################################
 
-qt_add_test(tst_qpalette
+add_qt_test(tst_qpalette
     SOURCES
         tst_qpalette.cpp
     PUBLIC_LIBRARIES

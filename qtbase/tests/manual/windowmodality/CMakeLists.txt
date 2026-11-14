@@ -4,7 +4,7 @@
 ## windowmodality Binary:
 #####################################################################
 
-qt_add_manual_test(windowmodality
+add_qt_manual_test(windowmodality
     GUI
     SOURCES
         dialog.ui
@@ -12,15 +12,8 @@ qt_add_manual_test(windowmodality
         widget.ui
     PUBLIC_LIBRARIES
         Qt::Gui
-    ENABLE_AUTOGEN_TOOLS
-        uic
-)
-
-## Scopes:
-#####################################################################
-
-qt_extend_target(windowmodality CONDITION (QT_MAJOR_VERSION GREATER 4)
-    PUBLIC_LIBRARIES
         Qt::PrintSupport
         Qt::Widgets
+    ENABLE_AUTOGEN_TOOLS
+        uic
 )

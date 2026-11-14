@@ -1,10 +1,10 @@
 # Generated from qtabbar.pro.
 
 #####################################################################
-## qtabbar Binary:
+## manual_qtabbar Binary:
 #####################################################################
 
-qt_add_manual_test(qtabbar
+qt_add_manual_test(manual_qtabbar
     GUI
     SOURCES
         main.cpp
@@ -18,3 +18,7 @@ qt_add_manual_test(qtabbar
 
 #### Keys ignored in scope 1:.:.:qtabbar.pro:<TRUE>:
 # TEMPLATE = "app"
+
+if(TARGET manual_qtabbar)
+    set_target_properties(manual_qtabbar PROPERTIES OUTPUT_NAME "qtabbar")
+endif()

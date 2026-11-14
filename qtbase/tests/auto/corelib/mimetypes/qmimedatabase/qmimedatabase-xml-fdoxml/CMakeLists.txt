@@ -8,7 +8,7 @@ endif()
 ## tst_qmimedatabase-xml-fdoxml Test:
 #####################################################################
 
-qt_add_test(tst_qmimedatabase-xml-fdoxml
+add_qt_test(tst_qmimedatabase-xml-fdoxml
     SOURCES
         ../tst_qmimedatabase.h
         tst_qmimedatabase-xml-fdoxml.cpp
@@ -120,3 +120,7 @@ qt_extend_target(tst_qmimedatabase-xml-fdoxml CONDITION UNIX AND NOT APPLE AND N
     DEFINES
         USE_XDG_DATA_DIRS
 )
+
+if(TARGET tst_qmimedatabase_qmimedatabase_xml_fdoxml)
+    set_target_properties(tst_qmimedatabase_qmimedatabase_xml_fdoxml PROPERTIES OUTPUT_NAME "tst_qmimedatabase")
+endif()

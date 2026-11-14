@@ -1,10 +1,10 @@
 # Generated from multiwindow.pro.
 
 #####################################################################
-## multiwindow Binary:
+## manual_qopenglwindow_multiwindow Binary:
 #####################################################################
 
-qt_add_manual_test(multiwindow
+qt_add_manual_test(manual_qopenglwindow_multiwindow
     GUI
     SOURCES
         main.cpp
@@ -14,3 +14,7 @@ qt_add_manual_test(multiwindow
 
 #### Keys ignored in scope 1:.:.:multiwindow.pro:<TRUE>:
 # TEMPLATE = "app"
+
+if(TARGET manual_qopenglwindow_multiwindow)
+    set_target_properties(manual_qopenglwindow_multiwindow PROPERTIES OUTPUT_NAME "multiwindow")
+endif()

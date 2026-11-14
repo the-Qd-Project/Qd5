@@ -37,7 +37,7 @@
 # needs to be set to the installation prefix or build prefix of Qt
 # before running these tests.
 
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.14)
 
 project(qmake_cmake_files)
 

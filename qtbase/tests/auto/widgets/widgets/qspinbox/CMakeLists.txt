@@ -4,7 +4,7 @@
 ## tst_qspinbox Test:
 #####################################################################
 
-qt_add_test(tst_qspinbox
+add_qt_test(tst_qspinbox
     SOURCES
         tst_qspinbox.cpp
     PUBLIC_LIBRARIES

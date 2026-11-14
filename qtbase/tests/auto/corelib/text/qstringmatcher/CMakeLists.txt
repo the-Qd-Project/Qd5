@@ -4,7 +4,7 @@
 ## tst_qstringmatcher Test:
 #####################################################################
 
-qt_add_test(tst_qstringmatcher
+add_qt_test(tst_qstringmatcher
     SOURCES
         tst_qstringmatcher.cpp
     DEFINES

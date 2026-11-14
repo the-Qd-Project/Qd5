@@ -4,7 +4,7 @@
 ## tst_qpointer Test:
 #####################################################################
 
-qt_add_test(tst_qpointer
+add_qt_test(tst_qpointer
     SOURCES
         tst_qpointer.cpp
     PUBLIC_LIBRARIES

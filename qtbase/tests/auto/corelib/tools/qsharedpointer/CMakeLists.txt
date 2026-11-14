@@ -8,7 +8,7 @@
 list(APPEND test_data "forwarddeclared.cpp")
 list(APPEND test_data "forwarddeclared.h")
 
-qt_add_test(tst_qsharedpointer
+add_qt_test(tst_qsharedpointer
     SOURCES
         externaltests.cpp externaltests.h
         forwarddeclared.cpp forwarddeclared.h
@@ -16,7 +16,7 @@ qt_add_test(tst_qsharedpointer
         tst_qsharedpointer.cpp
         wrapper.cpp wrapper.h
     DEFINES
-        DEFAULT_MAKESPEC=\\\"(QMAKESPEC, \\\\, /)\\\"
+        "DEFAULT_MAKESPEC=\"${QT_QMAKE_TARGET_MKSPEC}\""
         QT_DISABLE_DEPRECATED_BEFORE=0
     TESTDATA ${test_data}
 )

@@ -4,7 +4,7 @@
 ## tst_qmdiarea Test:
 #####################################################################
 
-qt_add_test(tst_qmdiarea
+add_qt_test(tst_qmdiarea
     SOURCES
         tst_qmdiarea.cpp
     DEFINES

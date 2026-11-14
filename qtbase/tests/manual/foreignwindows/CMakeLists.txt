@@ -4,7 +4,7 @@
 ## foreignwindows Binary:
 #####################################################################
 
-qt_add_manual_test(foreignwindows
+add_qt_manual_test(foreignwindows
     SOURCES
         ../diaglib/eventfilter.cpp ../diaglib/eventfilter.h
         ../diaglib/nativewindowdump.h
@@ -16,7 +16,9 @@ qt_add_manual_test(foreignwindows
     INCLUDE_DIRECTORIES
         ../diaglib
     PUBLIC_LIBRARIES
+        Qt::CorePrivate
         Qt::Gui
+        Qt::GuiPrivate
         Qt::Widgets
 )
 
@@ -26,39 +28,30 @@ qt_add_manual_test(foreignwindows
 ## Scopes:
 #####################################################################
 
-qt_extend_target(foreignwindows CONDITION WIN32 AND NOT WINRT
+extend_target(foreignwindows CONDITION WIN32 AND NOT WINRT
     SOURCES
         ../diaglib/nativewindowdump_win.cpp
     PUBLIC_LIBRARIES
         user32
 )
 
-qt_extend_target(foreignwindows CONDITION UNIX OR WINRT
+extend_target(foreignwindows CONDITION UNIX OR WINRT
     SOURCES
         ../diaglib/nativewindowdump.cpp
 )
 
-qt_extend_target(foreignwindows CONDITION (QT_MAJOR_VERSION GREATER 4)
+extend_target(foreignwindows CONDITION QT_FEATURE_widgets
+    SOURCES
+        ../diaglib/debugproxystyle.cpp ../diaglib/debugproxystyle.h
+        ../diaglib/logwidget.cpp ../diaglib/logwidget.h
+        ../diaglib/qwidgetdump.cpp ../diaglib/qwidgetdump.h
     PUBLIC_LIBRARIES
-        Qt::CorePrivate
-        Qt::GuiPrivate
+        Qt::WidgetsPrivate
 )
 
-qt_extend_target(foreignwindows CONDITION ((QT_MAJOR_VERSION GREATER 4)) AND (QT_FEATURE_widgets)
-    SOURCES
-        ../diaglib/debugproxystyle.cpp ../diaglib/debugproxystyle.h
-        ../diaglib/logwidget.cpp ../diaglib/logwidget.h
-        ../diaglib/qwidgetdump.cpp ../diaglib/qwidgetdump.h
-)
-
-qt_extend_target(foreignwindows CONDITION NOT ((QT_MAJOR_VERSION GREATER 4))
-    SOURCES
-        ../diaglib/debugproxystyle.cpp ../diaglib/debugproxystyle.h
-        ../diaglib/logwidget.cpp ../diaglib/logwidget.h
-        ../diaglib/qwidgetdump.cpp ../diaglib/qwidgetdump.h
-)
-
-qt_extend_target(foreignwindows CONDITION QT_FEATURE_opengl
+extend_target(foreignwindows CONDITION QT_FEATURE_opengl
     SOURCES
         ../diaglib/glinfo.cpp ../diaglib/glinfo.h
+    PUBLIC_LIBRARIES
+        Qt::OpenGL
 )

@@ -4,7 +4,7 @@
 ## tst_qkeysequenceedit Test:
 #####################################################################
 
-qt_add_test(tst_qkeysequenceedit
+add_qt_test(tst_qkeysequenceedit
     SOURCES
         tst_qkeysequenceedit.cpp
     PUBLIC_LIBRARIES

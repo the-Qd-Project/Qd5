@@ -8,7 +8,7 @@ endif()
 ## tst_qguiapplication Test:
 #####################################################################
 
-qt_add_test(tst_qguiapplication
+add_qt_test(tst_qguiapplication
     SOURCES
         tst_qcoreapplication.cpp tst_qcoreapplication.h
         tst_qguiapplication.cpp

@@ -7,7 +7,7 @@
 # Collect test data
 list(APPEND test_data "data/NormalizationTest.txt")
 
-qt_add_test(tst_qchar
+add_qt_test(tst_qchar
     SOURCES
         tst_qchar.cpp
     PUBLIC_LIBRARIES

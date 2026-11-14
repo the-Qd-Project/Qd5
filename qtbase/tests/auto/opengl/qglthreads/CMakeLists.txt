@@ -8,7 +8,7 @@ endif()
 ## tst_qglthreads Test:
 #####################################################################
 
-qt_add_test(tst_qglthreads
+add_qt_test(tst_qglthreads
     SOURCES
         tst_qglthreads.cpp tst_qglthreads.h
     PUBLIC_LIBRARIES

@@ -4,7 +4,7 @@
 ## tst_qabstracttextdocumentlayout Test:
 #####################################################################
 
-qt_add_test(tst_qabstracttextdocumentlayout
+add_qt_test(tst_qabstracttextdocumentlayout
     SOURCES
         tst_qabstracttextdocumentlayout.cpp
     PUBLIC_LIBRARIES

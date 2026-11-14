@@ -4,7 +4,7 @@
 ## tst_qmenubar Test:
 #####################################################################
 
-qt_add_test(tst_qmenubar
+add_qt_test(tst_qmenubar
     SOURCES
         tst_qmenubar.cpp
     PUBLIC_LIBRARIES

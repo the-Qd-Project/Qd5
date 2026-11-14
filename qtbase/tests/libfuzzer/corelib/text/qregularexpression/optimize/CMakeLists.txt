@@ -16,12 +16,12 @@ qt_add_executable(optimize
 ## Scopes:
 #####################################################################
 
-qt_extend_target(optimize CONDITION FUZZ_ENGINE_ISEMPTY
+qt_extend_target(optimize CONDITION NOT FUZZ_ENGINE
     LINK_OPTIONS
         "-fsanitize=fuzzer"
 )
 
-qt_extend_target(optimize CONDITION NOT FUZZ_ENGINE_ISEMPTY
+qt_extend_target(optimize CONDITION FUZZ_ENGINE
     PUBLIC_LIBRARIES
         $ENV{LIB_FUZZING_ENGINE}
 )

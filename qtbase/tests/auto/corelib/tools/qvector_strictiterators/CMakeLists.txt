@@ -4,7 +4,7 @@
 ## tst_qvector_strictiterators Test:
 #####################################################################
 
-qt_add_test(tst_qvector_strictiterators
+add_qt_test(tst_qvector_strictiterators
     SOURCES
         ../qvector/tst_qvector.cpp
     DEFINES

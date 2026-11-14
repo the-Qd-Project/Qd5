@@ -4,7 +4,7 @@
 ## tst_qrect Test:
 #####################################################################
 
-qt_add_test(tst_qrect
+add_qt_test(tst_qrect
     SOURCES
         tst_qrect.cpp
 )

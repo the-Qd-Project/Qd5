@@ -4,7 +4,7 @@
 ## tst_qsequentialanimationgroup Test:
 #####################################################################
 
-qt_add_test(tst_qsequentialanimationgroup
+add_qt_test(tst_qsequentialanimationgroup
     SOURCES
         tst_qsequentialanimationgroup.cpp
 )

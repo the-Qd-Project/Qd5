@@ -4,11 +4,14 @@
 ## qcursorhighdpi Binary:
 #####################################################################
 
-qt_add_manual_test(qcursorhighdpi
+add_qt_manual_test(qcursorhighdpi
     SOURCES
         main.cpp
     PUBLIC_LIBRARIES
+        Qt::CorePrivate
         Qt::Gui
+        Qt::GuiPrivate
+        Qt::Widgets
 )
 
 #### Keys ignored in scope 1:.:.:qcursorhighdpi.pro:<TRUE>:
@@ -17,14 +20,7 @@ qt_add_manual_test(qcursorhighdpi
 ## Scopes:
 #####################################################################
 
-qt_extend_target(qcursorhighdpi CONDITION (QT_MAJOR_VERSION GREATER 4)
-    PUBLIC_LIBRARIES
-        Qt::CorePrivate
-        Qt::GuiPrivate
-        Qt::Widgets
-)
-
-qt_extend_target(qcursorhighdpi CONDITION WIN32
+extend_target(qcursorhighdpi CONDITION WIN32
     PUBLIC_LIBRARIES
         User32
 )

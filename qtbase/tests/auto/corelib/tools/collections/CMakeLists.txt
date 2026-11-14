@@ -4,11 +4,7 @@
 ## tst_collections Test:
 #####################################################################
 
-qt_add_test(tst_collections
+add_qt_test(tst_collections
     SOURCES
         tst_collections.cpp
-    DEFINES
-        -QT_NO_JAVA_STYLE_ITERATORS
-        -QT_NO_LINKED_LIST
-        -QT_STRICT_ITERATORS
 )

@@ -4,7 +4,7 @@
 ## tst_qscopedpointer Test:
 #####################################################################
 
-qt_add_test(tst_qscopedpointer
+add_qt_test(tst_qscopedpointer
     SOURCES
         tst_qscopedpointer.cpp
 )

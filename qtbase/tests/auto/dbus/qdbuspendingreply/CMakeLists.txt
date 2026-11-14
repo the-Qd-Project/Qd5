@@ -4,7 +4,7 @@
 ## tst_qdbuspendingreply Test:
 #####################################################################
 
-qt_add_test(tst_qdbuspendingreply
+add_qt_test(tst_qdbuspendingreply
     SOURCES
         tst_qdbuspendingreply.cpp
     PUBLIC_LIBRARIES

@@ -7,7 +7,7 @@
 # Collect test data
 list(APPEND test_data "tst_qtemporaryfile.cpp")
 
-qt_add_test(tst_qtemporaryfile
+add_qt_test(tst_qtemporaryfile
     SOURCES
         tst_qtemporaryfile.cpp
     PUBLIC_LIBRARIES

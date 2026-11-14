@@ -4,7 +4,7 @@
 ## tst_qfileselectors Test:
 #####################################################################
 
-qt_add_test(tst_qfileselectors
+add_qt_test(tst_qfileselectors
     SOURCES
         tst_qfileselector.cpp
     PUBLIC_LIBRARIES

@@ -1,10 +1,10 @@
 # Generated from chip.pro.
 
 #####################################################################
-## chip Binary:
+## bench_widgets_graphicsview_qgraphicsview_benchapps_chipTest Binary:
 #####################################################################
 
-qt_add_benchmark(chip
+qt_add_benchmark(bench_widgets_graphicsview_qgraphicsview_benchapps_chipTest
     GUI
     SOURCES
         chip.cpp chip.h
@@ -25,7 +25,7 @@ set(images_resource_files
     "zoomout.png"
 )
 
-qt_add_resource(chip "images"
+qt_add_resource(bench_widgets_graphicsview_qgraphicsview_benchapps_chipTest "images"
     PREFIX
         "/"
     FILES
@@ -42,7 +42,11 @@ qt_add_resource(chip "images"
 ## Scopes:
 #####################################################################
 
-qt_extend_target(chip CONDITION TARGET Qt::OpenGL
+qt_extend_target(bench_widgets_graphicsview_qgraphicsview_benchapps_chipTest CONDITION TARGET Qt::OpenGL
     PUBLIC_LIBRARIES
         Qt::OpenGL
 )
+
+if(TARGET bench_widgets_graphicsview_qgraphicsview_benchapps_chipTest)
+    set_target_properties(bench_widgets_graphicsview_qgraphicsview_benchapps_chipTest PROPERTIES OUTPUT_NAME "chip")
+endif()

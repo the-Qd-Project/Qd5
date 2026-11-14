@@ -4,7 +4,7 @@
 ## almostplugin Generic Library:
 #####################################################################
 
-qt_add_cmake_library(almostplugin
+add_cmake_library(almostplugin
     MODULE
     INSTALL_DIRECTORY "${INSTALL_TESTSDIR}/tst_qpluginloader/bin"
     OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/../bin"
@@ -22,9 +22,11 @@ qt_add_cmake_library(almostplugin
 ## Scopes:
 #####################################################################
 
-qt_extend_target(almostplugin CONDITION GCC
-    LINK_OPTIONS
-        "--Wl,--no-undefined"
-)
-
 qt_autogen_tools_initial_setup(almostplugin)
+# special case begin
+# We want the opposite of this
+#extend_target(almostplugin CONDITION GCC
+#    LINK_OPTIONS
+#        "--Wl,--no-undefined"
+#)
+# special case end

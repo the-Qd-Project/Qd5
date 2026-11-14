@@ -4,7 +4,7 @@
 ## tst_qtconcurrentmap Test:
 #####################################################################
 
-qt_add_test(tst_qtconcurrentmap
+add_qt_test(tst_qtconcurrentmap
     SOURCES
         tst_qtconcurrentmap.cpp
     DEFINES

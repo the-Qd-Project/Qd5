@@ -4,7 +4,7 @@
 ## tst_qscopeguard Test:
 #####################################################################
 
-qt_add_test(tst_qscopeguard
+add_qt_test(tst_qscopeguard
     SOURCES
         tst_qscopeguard.cpp
 )

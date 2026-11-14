@@ -4,7 +4,8 @@
 ## tst_qbitarray Test:
 #####################################################################
 
-qt_add_test(tst_qbitarray
+add_qt_test(tst_qbitarray
     SOURCES
         tst_qbitarray.cpp
+    EXCEPTIONS
 )

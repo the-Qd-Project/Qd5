@@ -4,7 +4,7 @@
 ## qtouchevent Binary:
 #####################################################################
 
-qt_add_manual_test(qtouchevent
+add_qt_manual_test(qtouchevent
     SOURCES
         form.ui
         main.cpp
@@ -12,14 +12,7 @@ qt_add_manual_test(qtouchevent
     PUBLIC_LIBRARIES
         Qt::Gui
         Qt::Test
+        Qt::Widgets
     ENABLE_AUTOGEN_TOOLS
         uic
-)
-
-## Scopes:
-#####################################################################
-
-qt_extend_target(qtouchevent CONDITION (QT_MAJOR_VERSION GREATER 4)
-    PUBLIC_LIBRARIES
-        Qt::Widgets
 )

@@ -10,7 +10,7 @@ file(GLOB_RECURSE test_data_glob
     images/*)
 list(APPEND test_data ${test_data_glob})
 
-qt_add_test(tst_qimage
+add_qt_test(tst_qimage
     SOURCES
         tst_qimage.cpp
     PUBLIC_LIBRARIES

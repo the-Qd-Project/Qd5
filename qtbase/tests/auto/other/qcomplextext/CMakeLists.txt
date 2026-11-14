@@ -7,7 +7,7 @@
 # Collect test data
 list(APPEND test_data "data")
 
-qt_add_test(tst_qcomplextext
+add_qt_test(tst_qcomplextext
     SOURCES
         tst_qcomplextext.cpp
     PUBLIC_LIBRARIES

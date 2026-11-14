@@ -1,10 +1,10 @@
 # Generated from scrollarea.pro.
 
 #####################################################################
-## scrollarea Binary:
+## manual_repaint_scrollarea Binary:
 #####################################################################
 
-qt_add_manual_test(scrollarea
+qt_add_manual_test(manual_repaint_scrollarea
     GUI
     SOURCES
         ../shared/shared.h
@@ -13,3 +13,7 @@ qt_add_manual_test(scrollarea
         Qt::Gui
         Qt::Widgets
 )
+
+if(TARGET manual_repaint_scrollarea)
+    set_target_properties(manual_repaint_scrollarea PROPERTIES OUTPUT_NAME "scrollarea")
+endif()

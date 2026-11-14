@@ -4,7 +4,7 @@
 ## tst_qtextdocumentfragment Test:
 #####################################################################
 
-qt_add_test(tst_qtextdocumentfragment
+add_qt_test(tst_qtextdocumentfragment
     SOURCES
         tst_qtextdocumentfragment.cpp
     PUBLIC_LIBRARIES

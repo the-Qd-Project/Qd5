@@ -1,10 +1,10 @@
 # Generated from stylesheet.pro.
 
 #####################################################################
-## stylesheet Binary:
+## manual_widgets_widgets_qtabbar_stylesheet Binary:
 #####################################################################
 
-qt_add_manual_test(stylesheet
+qt_add_manual_test(manual_widgets_widgets_qtabbar_stylesheet
     GUI
     SOURCES
         main.cpp
@@ -18,7 +18,7 @@ set(res_resource_files
     "v.ico"
 )
 
-qt_add_resource(stylesheet "res"
+qt_add_resource(manual_widgets_widgets_qtabbar_stylesheet "res"
     PREFIX
         "/"
     FILES
@@ -28,3 +28,7 @@ qt_add_resource(stylesheet "res"
 
 #### Keys ignored in scope 1:.:.:stylesheet.pro:<TRUE>:
 # TEMPLATE = "app"
+
+if(TARGET manual_widgets_widgets_qtabbar_stylesheet)
+    set_target_properties(manual_widgets_widgets_qtabbar_stylesheet PROPERTIES OUTPUT_NAME "stylesheet")
+endif()

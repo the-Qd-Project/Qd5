@@ -1,10 +1,10 @@
 # Generated from graphicsview.pro.
 
 #####################################################################
-## graphicsview Binary:
+## manual_gestures_graphicsview Binary:
 #####################################################################
 
-qt_add_manual_test(graphicsview
+qt_add_manual_test(manual_gestures_graphicsview
     GUI
     SOURCES
         gestures.cpp gestures.h
@@ -15,3 +15,7 @@ qt_add_manual_test(graphicsview
         Qt::Gui
         Qt::Widgets
 )
+
+if(TARGET manual_gestures_graphicsview)
+    set_target_properties(manual_gestures_graphicsview PROPERTIES OUTPUT_NAME "graphicsview")
+endif()

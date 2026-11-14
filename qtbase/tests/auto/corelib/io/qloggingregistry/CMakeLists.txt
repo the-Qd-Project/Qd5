@@ -7,7 +7,7 @@
 # Collect test data
 list(APPEND test_data "qtlogging.ini")
 
-qt_add_test(tst_qloggingregistry
+add_qt_test(tst_qloggingregistry
     SOURCES
         tst_qloggingregistry.cpp
     PUBLIC_LIBRARIES

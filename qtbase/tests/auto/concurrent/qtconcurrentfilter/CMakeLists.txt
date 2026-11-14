@@ -4,7 +4,7 @@
 ## tst_qtconcurrentfilter Test:
 #####################################################################
 
-qt_add_test(tst_qtconcurrentfilter
+add_qt_test(tst_qtconcurrentfilter
     SOURCES
         tst_qtconcurrentfilter.cpp
     DEFINES

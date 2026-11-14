@@ -8,7 +8,7 @@ endif()
 ## tst_platformsocketengine Test:
 #####################################################################
 
-qt_add_test(tst_platformsocketengine
+add_qt_test(tst_platformsocketengine
     SOURCES
         tst_platformsocketengine.cpp
     INCLUDE_DIRECTORIES

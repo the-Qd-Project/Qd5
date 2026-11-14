@@ -8,7 +8,7 @@ endif()
 ## tst_qpathclipper Test:
 #####################################################################
 
-qt_add_test(tst_qpathclipper
+add_qt_test(tst_qpathclipper
     SOURCES
         paths.cpp paths.h
         tst_qpathclipper.cpp

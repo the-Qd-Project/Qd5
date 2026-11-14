@@ -4,7 +4,7 @@
 ## tst_qgraphicsproxywidget Test:
 #####################################################################
 
-qt_add_test(tst_qgraphicsproxywidget
+add_qt_test(tst_qgraphicsproxywidget
     SOURCES
         tst_qgraphicsproxywidget.cpp
     DEFINES

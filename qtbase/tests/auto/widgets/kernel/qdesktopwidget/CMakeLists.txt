@@ -4,7 +4,7 @@
 ## tst_qdesktopwidget Test:
 #####################################################################
 
-qt_add_test(tst_qdesktopwidget
+add_qt_test(tst_qdesktopwidget
     SOURCES
         tst_qdesktopwidget.cpp
     PUBLIC_LIBRARIES

@@ -10,7 +10,7 @@ file(GLOB_RECURSE test_data_glob
     animations/*)
 list(APPEND test_data ${test_data_glob})
 
-qt_add_test(tst_qmovie
+add_qt_test(tst_qmovie
     SOURCES
         tst_qmovie.cpp
     PUBLIC_LIBRARIES

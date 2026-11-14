@@ -13,7 +13,7 @@ list(APPEND test_data "entrylist")
 list(APPEND test_data "types")
 list(APPEND test_data "tst_qdir.cpp")
 
-qt_add_test(tst_qdir
+add_qt_test(tst_qdir
     SOURCES
         tst_qdir.cpp
     PUBLIC_LIBRARIES

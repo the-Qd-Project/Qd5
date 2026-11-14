@@ -4,7 +4,7 @@
 ## tst_initmain Test:
 #####################################################################
 
-qt_add_test(tst_initmain
+add_qt_test(tst_initmain
     SOURCES
         tst_initmain.cpp
 )

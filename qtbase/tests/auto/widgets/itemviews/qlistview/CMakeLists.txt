@@ -4,7 +4,7 @@
 ## tst_qlistview Test:
 #####################################################################
 
-qt_add_test(tst_qlistview
+add_qt_test(tst_qlistview
     SOURCES
         tst_qlistview.cpp
     PUBLIC_LIBRARIES

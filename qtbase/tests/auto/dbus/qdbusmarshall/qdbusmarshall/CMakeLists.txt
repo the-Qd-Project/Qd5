@@ -4,7 +4,7 @@
 ## tst_qdbusmarshall Test:
 #####################################################################
 
-qt_add_test(tst_qdbusmarshall
+add_qt_test(tst_qdbusmarshall
     OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/../"
     SOURCES
         ../tst_qdbusmarshall.cpp

@@ -4,7 +4,7 @@
 ## tst_qshortcut Test:
 #####################################################################
 
-qt_add_test(tst_qshortcut
+add_qt_test(tst_qshortcut
     SOURCES
         tst_qshortcut.cpp
     INCLUDE_DIRECTORIES

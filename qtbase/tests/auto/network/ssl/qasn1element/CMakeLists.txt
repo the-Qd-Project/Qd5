@@ -4,7 +4,7 @@
 ## tst_qasn1element Test:
 #####################################################################
 
-qt_add_test(tst_qasn1element
+add_qt_test(tst_qasn1element
     SOURCES
         tst_qasn1element.cpp
     PUBLIC_LIBRARIES

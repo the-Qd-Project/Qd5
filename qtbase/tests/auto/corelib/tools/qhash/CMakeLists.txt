@@ -4,9 +4,7 @@
 ## tst_qhash Test:
 #####################################################################
 
-qt_add_test(tst_qhash
+add_qt_test(tst_qhash
     SOURCES
         tst_qhash.cpp
-    DEFINES
-        -QT_NO_JAVA_STYLE_ITERATORS
 )

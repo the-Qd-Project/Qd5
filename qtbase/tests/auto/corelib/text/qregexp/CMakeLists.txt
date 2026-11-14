@@ -4,7 +4,7 @@
 ## tst_qregexp Test:
 #####################################################################
 
-qt_add_test(tst_qregexp
+add_qt_test(tst_qregexp
     SOURCES
         tst_qregexp.cpp
 )

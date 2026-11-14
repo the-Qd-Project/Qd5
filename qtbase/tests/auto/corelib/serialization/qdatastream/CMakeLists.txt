@@ -7,11 +7,11 @@
 # Collect test data
 list(APPEND test_data "datastream.q42")
 
-qt_add_test(tst_qdatastream
+add_qt_test(tst_qdatastream
     SOURCES
         tst_qdatastream.cpp
     DEFINES
-        -QT_NO_LINKED_LIST
+        
     PUBLIC_LIBRARIES
         Qt::Gui
     TESTDATA ${test_data}

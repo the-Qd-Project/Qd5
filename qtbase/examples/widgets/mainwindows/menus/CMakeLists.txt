@@ -1,7 +1,7 @@
 # Generated from menus.pro.
 
 cmake_minimum_required(VERSION 3.14)
-project(menus LANGUAGES CXX)
+project(example_widgets_mainwindows_menus LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -15,18 +15,22 @@ find_package(Qt5 COMPONENTS Core)
 find_package(Qt5 COMPONENTS Gui)
 find_package(Qt5 COMPONENTS Widgets)
 
-add_qt_gui_executable(menus
+add_qt_gui_executable(example_widgets_mainwindows_menus
     main.cpp
     mainwindow.cpp mainwindow.h
 )
-target_link_libraries(menus PUBLIC
+target_link_libraries(example_widgets_mainwindows_menus PUBLIC
     Qt::Core
     Qt::Gui
     Qt::Widgets
 )
 
-install(TARGETS menus
+install(TARGETS example_widgets_mainwindows_menus
     RUNTIME DESTINATION "${INSTALL_EXAMPLEDIR}"
     BUNDLE DESTINATION "${INSTALL_EXAMPLEDIR}"
     LIBRARY DESTINATION "${INSTALL_EXAMPLEDIR}"
 )
+
+if(TARGET example_widgets_mainwindows_menus)
+    set_target_properties(example_widgets_mainwindows_menus PROPERTIES OUTPUT_NAME "menus")
+endif()

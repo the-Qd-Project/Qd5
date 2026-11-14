@@ -30,7 +30,7 @@ file(GLOB_RECURSE test_data_glob
     *.svgz)
 list(APPEND test_data ${test_data_glob})
 
-qt_add_test(tst_qicon
+add_qt_test(tst_qicon
     SOURCES
         tst_qicon.cpp
     PUBLIC_LIBRARIES

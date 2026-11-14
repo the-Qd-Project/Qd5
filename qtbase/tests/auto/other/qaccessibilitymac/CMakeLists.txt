@@ -8,7 +8,7 @@ endif()
 ## tst_qaccessibilitymac Test:
 #####################################################################
 
-qt_add_test(tst_qaccessibilitymac
+add_qt_test(tst_qaccessibilitymac
     SOURCES
         tst_qaccessibilitymac.cpp
         tst_qaccessibilitymac_helpers.h

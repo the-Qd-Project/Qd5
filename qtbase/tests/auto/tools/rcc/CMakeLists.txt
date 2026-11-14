@@ -4,7 +4,7 @@
 ## tst_rcc Test:
 #####################################################################
 
-qt_add_test(tst_rcc
+add_qt_test(tst_rcc
     SOURCES
         tst_rcc.cpp
 )

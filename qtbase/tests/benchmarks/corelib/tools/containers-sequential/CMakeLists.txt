@@ -13,3 +13,7 @@ qt_add_benchmark(tst_bench_containers-sequential
 
 #### Keys ignored in scope 1:.:.:containers-sequential.pro:<TRUE>:
 # TEMPLATE = "app"
+
+if(TARGET bench_corelib_tools_containers_sequential)
+    set_target_properties(bench_corelib_tools_containers_sequential PROPERTIES OUTPUT_NAME "tst_bench_containers")
+endif()

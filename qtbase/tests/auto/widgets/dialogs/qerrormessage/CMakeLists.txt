@@ -4,7 +4,7 @@
 ## tst_qerrormessage Test:
 #####################################################################
 
-qt_add_test(tst_qerrormessage
+add_qt_test(tst_qerrormessage
     SOURCES
         tst_qerrormessage.cpp
     PUBLIC_LIBRARIES

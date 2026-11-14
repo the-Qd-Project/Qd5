@@ -4,7 +4,7 @@
 ## tst_qhooks Test:
 #####################################################################
 
-qt_add_test(tst_qhooks
+add_qt_test(tst_qhooks
     SOURCES
         tst_qhooks.cpp
     PUBLIC_LIBRARIES

@@ -4,7 +4,7 @@
 ## tst_qtextimagehandler Test:
 #####################################################################
 
-qt_add_test(tst_qtextimagehandler
+add_qt_test(tst_qtextimagehandler
     SOURCES
         tst_qtextimagehandler.cpp
     PUBLIC_LIBRARIES

@@ -4,7 +4,7 @@
 ## tst_qpixelformat Test:
 #####################################################################
 
-qt_add_test(tst_qpixelformat
+add_qt_test(tst_qpixelformat
     SOURCES
         tst_qpixelformat.cpp
     PUBLIC_LIBRARIES

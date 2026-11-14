@@ -1,7 +1,7 @@
 # Generated from chip.pro.
 
 cmake_minimum_required(VERSION 3.14)
-project(chip LANGUAGES CXX)
+project(example_widgets_graphicsview_chip LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -15,13 +15,13 @@ find_package(Qt5 COMPONENTS Core)
 find_package(Qt5 COMPONENTS Gui)
 find_package(Qt5 COMPONENTS Widgets)
 
-add_qt_gui_executable(chip
+add_qt_gui_executable(example_widgets_graphicsview_chip
     chip.cpp chip.h
     main.cpp
     mainwindow.cpp mainwindow.h
     view.cpp view.h
 )
-target_link_libraries(chip PUBLIC
+target_link_libraries(example_widgets_graphicsview_chip PUBLIC
     Qt::Core
     Qt::Gui
     Qt::Widgets
@@ -38,7 +38,7 @@ set(images_resource_files
     "zoomout.png"
 )
 
-qt5_add_resources(chip "images"
+qt5_add_resources(example_widgets_graphicsview_chip "images"
     PREFIX
         "/"
     FILES
@@ -46,19 +46,23 @@ qt5_add_resources(chip "images"
 )
 
 if(TARGET Qt::PrintSupport)
-    target_link_libraries(chip PUBLIC
+    target_link_libraries(example_widgets_graphicsview_chip PUBLIC
         Qt::PrintSupport
     )
 endif()
 
 if(TARGET Qt::OpenGL)
-    target_link_libraries(chip PUBLIC
+    target_link_libraries(example_widgets_graphicsview_chip PUBLIC
         Qt::OpenGL
     )
 endif()
 
-install(TARGETS chip
+install(TARGETS example_widgets_graphicsview_chip
     RUNTIME DESTINATION "${INSTALL_EXAMPLEDIR}"
     BUNDLE DESTINATION "${INSTALL_EXAMPLEDIR}"
     LIBRARY DESTINATION "${INSTALL_EXAMPLEDIR}"
 )
+
+if(TARGET example_widgets_graphicsview_chip)
+    set_target_properties(example_widgets_graphicsview_chip PROPERTIES OUTPUT_NAME "chip")
+endif()

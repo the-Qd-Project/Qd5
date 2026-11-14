@@ -14,7 +14,7 @@ file(GLOB_RECURSE test_data_glob
     rsa-*.pem)
 list(APPEND test_data ${test_data_glob})
 
-qt_add_test(tst_qsslkey
+add_qt_test(tst_qsslkey
     SOURCES
         tst_qsslkey.cpp
     PUBLIC_LIBRARIES

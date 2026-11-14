@@ -4,7 +4,7 @@
 ## tst_qgroupbox Test:
 #####################################################################
 
-qt_add_test(tst_qgroupbox
+add_qt_test(tst_qgroupbox
     SOURCES
         tst_qgroupbox.cpp
     PUBLIC_LIBRARIES

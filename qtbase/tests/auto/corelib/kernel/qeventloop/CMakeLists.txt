@@ -4,7 +4,7 @@
 ## tst_qeventloop Test:
 #####################################################################
 
-qt_add_test(tst_qeventloop
+add_qt_test(tst_qeventloop
     SOURCES
         tst_qeventloop.cpp
     PUBLIC_LIBRARIES

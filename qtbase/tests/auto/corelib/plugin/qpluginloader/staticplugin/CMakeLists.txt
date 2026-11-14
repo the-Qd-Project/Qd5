@@ -4,7 +4,7 @@
 ## staticplugin Generic Library:
 #####################################################################
 
-qt_add_cmake_library(staticplugin
+add_cmake_library(staticplugin
     STATIC
     SOURCES
         main.cpp

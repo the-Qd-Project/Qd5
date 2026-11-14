@@ -48,7 +48,7 @@ qt_extend_target(QDirectFbIntegrationPlugin CONDITION QT_CONFIG___contains___dir
         Qt::EglSupportPrivate
 )
 
-qt_extend_target(QDirectFbIntegrationPlugin CONDITION NOT DIRECTFB_PLATFORM_HOOKS_SOURCES_ISEMPTY
+qt_extend_target(QDirectFbIntegrationPlugin CONDITION DIRECTFB_PLATFORM_HOOKS_SOURCES
     DEFINES
         DIRECTFB_PLATFORM_HOOKS
 )
@@ -56,7 +56,7 @@ qt_extend_target(QDirectFbIntegrationPlugin CONDITION NOT DIRECTFB_PLATFORM_HOOK
 #### Keys ignored in scope 3:.:.:directfb.pro:NOT DIRECTFB_PLATFORM_HOOKS_SOURCES_ISEMPTY:
 # QMAKE_LIBDIR = "$$DIRECTFB_PLATFORM_HOOKS_LIBDIR"
 
-qt_extend_target(QDirectFbIntegrationPlugin CONDITION DIRECTFB_PLATFORM_HOOKS_SOURCES_ISEMPTY
+qt_extend_target(QDirectFbIntegrationPlugin CONDITION NOT DIRECTFB_PLATFORM_HOOKS_SOURCES
     SOURCES
         qdirectfbeglhooks_stub.cpp
 )
