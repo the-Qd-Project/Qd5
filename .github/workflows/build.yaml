@@ -9,11 +9,55 @@ on:
   workflow_call:
 jobs:
   linux:
-    runs-on: ubuntu-26.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-26.04
+            build-name: Linux x86_64
+          - os: ubuntu-26.04-arm
+            build-name: Linux aarch64
+          - os: windows-2025-vs2026
+            vcvars-arch: amd64
+            build-name: Windows MSVC x86_64
+          - os: windows-11-vs2026-arm
+            vcvars-arch: arm64
+            build-name: Windows MSVC aarch64
+          - os: windows-2025
+            msystem: CLANG64
+            build-name: Windows MinGW x86_64
+            vcvars-arch: amd64_x86
+          - os: windows-11-arm
+            msystem: CLANGARM64
+            build-name: Windows MinGW aarch64
+            vcvars-arch: arm64
+          - os: macos-26
+            macosx-deployment-target: 10.13
+            build-name: macOS
+
+    runs-on: ${{ matrix.os }}
+
+    defaults:
+      run:
+        shell: ${{ matrix.msystem != '' && 'msys2 {0}' || 'bash' }}
+
+    env:
+      BUILD_TYPE: ${{ inputs.build-type || 'Debug' }}
+      MACOSX_DEPLOYMENT_TARGET: ${{ matrix.macosx-deployment-target }}
+
     steps:
       - uses: actions/checkout@v7
         with:
           submodules: recursive
+
+      - name: Setup dependencies
+        id: setup-dependencies
+        uses: ./.github/actions/setup-dependencies
+        with:
+          build-type: ${{ env.BUILD_TYPE }}
+          artifact-name: ${{ matrix.artifact-name }}
+          msystem: ${{ matrix.msystem }}
+          vcvars-arch: ${{ matrix.vcvars-arch }}
 
       - name: Install dependencies
         run: |
@@ -62,17 +106,7 @@ jobs:
           LLVM_CONFIG="$(command -v llvm-config || command -v llvm-config-21)"
           export LLVM_INSTALL_DIR="$("$LLVM_CONFIG" --prefix)"
 
-          ./configure \
-            -prefix "$RUNNER_TEMP/qt-install" \
-            -opensource \
-            -confirm-license \
-            -opengl desktop \
-            -make tests \
-            -make examples \
-            -make tools \
-            -make libs \
-            -c++std c++17 \
-            -v -ccache
+          ./configure 
 
       - name: Build
         run: make -j"$(nproc)"

@@ -18,7 +18,7 @@ qt_add_module(QmlWorkerScript
         ENABLE_DFG_JIT_UTILITY_METHODS=1
         ENABLE_JIT_CONSTANT_BLINDING=0
         ENABLE_LLINT=0
-        JS_EXPORT_PRIVATE=""
+        JS_EXPORT_PRIVATE=
         QT_NO_FOREACH
         QT_NO_INTEGER_EVENT_COORDINATES
         QT_NO_URL_CAST_FROM_STRING
@@ -26,7 +26,7 @@ qt_add_module(QmlWorkerScript
         WTFReportAssertionFailure=qmlWTFReportAssertionFailure
         WTFReportAssertionFailureWithMessage=qmlWTFReportAssertionFailureWithMessage
         WTFReportBacktrace=qmlWTFReportBacktrace
-        WTF_EXPORT_PRIVATE=""
+        WTF_EXPORT_PRIVATE=
     INCLUDE_DIRECTORIES
         ../3rdparty/masm
         ../3rdparty/masm/assembler

@@ -1,0 +1,32 @@
+# Generated from calculatorform.pro.
+
+cmake_minimum_required(VERSION 3.14)
+project(calculatorform LANGUAGES CXX)
+
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+
+set(INSTALL_EXAMPLEDIR "examples/designer/calculatorform")
+
+find_package(Qt5 COMPONENTS Core)
+find_package(Qt5 COMPONENTS Gui)
+find_package(Qt5 COMPONENTS Widgets)
+
+add_qt_gui_executable(calculatorform
+    calculatorform.cpp calculatorform.h calculatorform.ui
+    main.cpp
+)
+target_link_libraries(calculatorform PUBLIC
+    Qt::Core
+    Qt::Gui
+    Qt::Widgets
+)
+
+install(TARGETS calculatorform
+    RUNTIME DESTINATION "${INSTALL_EXAMPLEDIR}"
+    BUNDLE DESTINATION "${INSTALL_EXAMPLEDIR}"
+    LIBRARY DESTINATION "${INSTALL_EXAMPLEDIR}"
+)

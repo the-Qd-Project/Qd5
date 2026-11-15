@@ -121,7 +121,7 @@ function(__qt_quick_compiler_process_resources target resource_name)
             ${QT_TOOL_PATH_SETUP_COMMAND}
             COMMAND
                 @QT_CMAKE_EXPORT_NAMESPACE@::qmlcachegen
-                --resource-name "${resource_name_arg}"
+                --resource "${resource_name_arg}"
                 -o "${qmlcache_loader_file}"
                 "@${qmlcache_loader_list}"
             DEPENDS

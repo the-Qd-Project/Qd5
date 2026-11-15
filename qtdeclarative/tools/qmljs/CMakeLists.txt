@@ -14,12 +14,12 @@ qt_add_tool(qmljs
         ENABLE_DFG_JIT_UTILITY_METHODS=1
         ENABLE_JIT_CONSTANT_BLINDING=0
         ENABLE_LLINT=0
-        JS_EXPORT_PRIVATE=""
+        JS_EXPORT_PRIVATE=
         WTFInvokeCrashHook=qmlWTFInvokeCrashHook
         WTFReportAssertionFailure=qmlWTFReportAssertionFailure
         WTFReportAssertionFailureWithMessage=qmlWTFReportAssertionFailureWithMessage
         WTFReportBacktrace=qmlWTFReportBacktrace
-        WTF_EXPORT_PRIVATE=""
+        WTF_EXPORT_PRIVATE=
     INCLUDE_DIRECTORIES
         ../../src/3rdparty/masm
         ../../src/3rdparty/masm/assembler

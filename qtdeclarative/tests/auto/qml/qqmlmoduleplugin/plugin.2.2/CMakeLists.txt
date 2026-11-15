@@ -22,3 +22,9 @@ qt_add_cmake_library(plugin.2.2
 # TEMPLATE = "lib"
 
 qt_autogen_tools_initial_setup(plugin.2.2)
+# special case begin
+set_target_properties(plugin.2.2 PROPERTIES OUTPUT_NAME "plugin")
+file(COPY qmldir
+    DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/../imports/org/qtproject/AutoTestQmlPluginType.2.2"
+)
+# special case end

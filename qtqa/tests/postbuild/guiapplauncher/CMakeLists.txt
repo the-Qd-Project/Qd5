@@ -21,11 +21,13 @@ qt_add_test(tst_guiapplauncher
 #####################################################################
 
 qt_extend_target(tst_guiapplauncher CONDITION WIN32
-    PUBLIC_LIBRARIES
+    LIBRARIES
         user32
 )
 
 qt_extend_target(tst_guiapplauncher CONDITION QT_FEATURE_xlib # special case
     DEFINES
         Q_WS_X11
+    LIBRARIES
+        X11
 )

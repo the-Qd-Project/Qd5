@@ -1,5 +1,9 @@
 cmake_minimum_required(VERSION 3.15.0)
 
+if(POLICY CMP0219)
+    cmake_policy(SET CMP0219 OLD)
+endif()
+
 project(Qd
     VERSION 5.16.0
     DESCRIPTION "Qd Libraries"

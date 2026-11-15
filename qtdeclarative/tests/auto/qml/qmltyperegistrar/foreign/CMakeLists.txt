@@ -17,3 +17,5 @@ qt_add_cmake_library(foreign
 
 ## Scopes:
 #####################################################################
+
+set_target_properties(foreign PROPERTIES AUTOMOC ON)

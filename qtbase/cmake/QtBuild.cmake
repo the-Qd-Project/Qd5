@@ -1,3 +1,6 @@
+# Copyright (C) 2022 The Qt Company Ltd.
+# SPDX-License-Identifier: BSD-3-Clause
+
 include(CMakePackageConfigHelpers)
 
 # Install locations:
@@ -2745,9 +2748,38 @@ function(qt_add_test name)
     if(NOT QT_INSTALL_DIR)
         list(APPEND plugin_paths "${CMAKE_INSTALL_PREFIX}/${INSTALL_PLUGINSDIR}")
     endif()
-    #TODO: Collect all paths from known repositories when performing a super
-    # build.
-    list(APPEND plugin_paths "${PROJECT_BINARY_DIR}/${INSTALL_PLUGINSDIR}")
+    # Configure plugin search paths for tests.
+    set(plugin_paths)
+
+    # Add the install prefix to plugin paths when doing a prefix build.
+    if(NOT QT_INSTALL_DIR)
+        list(APPEND plugin_paths
+            "${CMAKE_INSTALL_PREFIX}/${INSTALL_PLUGINSDIR}"
+        )
+    endif()
+
+    # Use QtBase's build directory instead of PROJECT_BINARY_DIR.
+    set(qt_plugin_dir
+        "${QT_BUILD_DIR}/${INSTALL_PLUGINSDIR}"
+    )
+
+    set(qt_platform_plugin_dir
+        "${qt_plugin_dir}/platforms"
+    )
+
+    list(APPEND plugin_paths "${qt_plugin_dir}")
+
+    list(REMOVE_DUPLICATES plugin_paths)
+
+    list(JOIN plugin_paths "${QT_PATH_SEPARATOR}" plugin_paths_joined)
+    string(REPLACE ";" "\\;" plugin_paths_joined "${plugin_paths_joined}")
+
+    file(TO_NATIVE_PATH "${qt_platform_plugin_dir}" qt_platform_plugin_dir)
+
+    set_property(TEST "${name}" APPEND PROPERTY ENVIRONMENT
+        "QT_PLUGIN_PATH=${plugin_paths_joined}"
+        "QT_QPA_PLATFORM_PLUGIN_PATH=${qt_platform_plugin_dir}"
+    )
     list(JOIN plugin_paths "${QT_PATH_SEPARATOR}" plugin_paths_joined)
     set_property(TEST "${name}" APPEND PROPERTY ENVIRONMENT "QT_PLUGIN_PATH=${plugin_paths_joined}")
 
@@ -4067,4 +4099,69 @@ endfunction()
 
 function(add_cmake_library)
     qt_add_cmake_library(${ARGV})
+endfunction()
+
+function(_qt_internal_configure_file mode)
+    cmake_parse_arguments(PARSE_ARGV 1 arg "" "OUTPUT;INPUT;CONTENT" "")
+
+    if(NOT arg_OUTPUT)
+        message(FATAL_ERROR "No OUTPUT file provided to _qt_internal_configure_file.")
+    endif()
+
+    # Substitute the '@' wrapped variables and generate the file with the
+    # the generator expressions evaluation inside the resulting CONTENT.
+    if(mode STREQUAL "GENERATE")
+        if(arg_INPUT)
+            configure_file("${arg_INPUT}" "${arg_OUTPUT}.tmp" @ONLY)
+            file(GENERATE OUTPUT "${arg_OUTPUT}" INPUT "${arg_OUTPUT}.tmp")
+        else()
+            string(CONFIGURE "${arg_CONTENT}" arg_CONTENT @ONLY)
+            file(GENERATE OUTPUT "${arg_OUTPUT}" CONTENT "${arg_CONTENT}")
+        endif()
+        return()
+    endif()
+
+    # We use this check for the cases when the specified CONTENT is empty. The value of arg_CONTENT
+    # is undefined, but we still want to create a file with empty content.
+    if("CONTENT" IN_LIST ARGV)
+        if(arg_INPUT)
+            message(WARNING "Both CONTENT and INPUT are specified. CONTENT will be used to generate"
+                " output")
+        endif()
+        if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.18)
+            file(CONFIGURE OUTPUT "${arg_OUTPUT}" CONTENT "${arg_CONTENT}" @ONLY)
+            return()
+        endif()
+        set(template_name "QtFileConfigure.txt.in")
+        # When building qtbase, use the source template file.
+        # Otherwise use the installed file (basically wherever Qt6 package is found).
+        # This should work for non-prefix and superbuilds as well.
+        if(QtBase_SOURCE_DIR)
+            set(input_file "${QtBase_SOURCE_DIR}/cmake/${template_name}")
+        else()
+            set(input_file "${_qt_5_config_cmake_dir}/${template_name}")
+        endif()
+        set(__qt_file_configure_content "${arg_CONTENT}")
+    elseif(arg_INPUT)
+        set(input_file "${arg_INPUT}")
+    else()
+        message(FATAL_ERROR "No input value provided to _qt_internal_configure_file.")
+    endif()
+
+    configure_file("${input_file}" "${arg_OUTPUT}" @ONLY)
+endfunction()
+
+function(qt_configure_file)
+    cmake_parse_arguments(PARSE_ARGV 0 arg "" "OUTPUT;INPUT;CONTENT" "")
+    if("CONTENT" IN_LIST ARGV)
+        if(arg_INPUT)
+            message(WARNING "Both CONTENT and INPUT are specified. CONTENT will be used to generate"
+                " output")
+        endif()
+        _qt_internal_configure_file(CONFIGURE OUTPUT "${arg_OUTPUT}" CONTENT "${arg_CONTENT}")
+    elseif(arg_INPUT)
+        _qt_internal_configure_file(CONFIGURE OUTPUT "${arg_OUTPUT}" INPUT "${arg_INPUT}")
+    else()
+        message(FATAL_ERROR "No input value provided to _qt_internal_configure_file.")
+    endif()
 endfunction()

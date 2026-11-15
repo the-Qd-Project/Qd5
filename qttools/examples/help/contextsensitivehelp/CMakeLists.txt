@@ -1,0 +1,35 @@
+# Generated from contextsensitivehelp.pro.
+
+cmake_minimum_required(VERSION 3.14)
+project(contextsensitivehelp LANGUAGES CXX)
+
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+
+set(INSTALL_EXAMPLEDIR "examples/help/contextsensitivehelp")
+
+find_package(Qt5 COMPONENTS Core)
+find_package(Qt5 COMPONENTS Gui)
+find_package(Qt5 COMPONENTS Help)
+find_package(Qt5 COMPONENTS Widgets)
+
+add_qt_gui_executable(contextsensitivehelp
+    helpbrowser.cpp helpbrowser.h
+    main.cpp
+    wateringconfigdialog.cpp wateringconfigdialog.h wateringconfigdialog.ui
+)
+target_link_libraries(contextsensitivehelp PUBLIC
+    Qt::Core
+    Qt::Gui
+    Qt::Help
+    Qt::Widgets
+)
+
+install(TARGETS contextsensitivehelp
+    RUNTIME DESTINATION "${INSTALL_EXAMPLEDIR}"
+    BUNDLE DESTINATION "${INSTALL_EXAMPLEDIR}"
+    LIBRARY DESTINATION "${INSTALL_EXAMPLEDIR}"
+)

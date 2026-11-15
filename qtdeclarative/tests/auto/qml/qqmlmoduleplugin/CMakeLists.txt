@@ -55,6 +55,16 @@ qt_add_resource(tst_qqmlmoduleplugin "qmake_staticPlugin"
         ${qmake_staticPlugin_resource_files}
 )
 
+# special case begin
+add_qt_resource(tst_qqmlmoduleplugin waitingPlugin
+    PREFIX /qt-project.org/imports
+    FILES moduleWithWaitingPlugin/qmldir
+)
+add_qt_resource(tst_qqmlmoduleplugin staticPlugin
+    PREFIX /qt-project.org/imports
+    FILES moduleWithStaticPlugin/qmldir
+)
+# special case end
 
 ## Scopes:
 #####################################################################

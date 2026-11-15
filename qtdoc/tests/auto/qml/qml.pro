@@ -6,4 +6,3 @@ qtConfig(qml-devtools):
 
 qtConfig(private_tests): \
     SUBDIRS += qqmlparser
-

@@ -1,0 +1,33 @@
+# Generated from trollprint.pro.
+
+cmake_minimum_required(VERSION 3.14)
+project(trollprint LANGUAGES CXX)
+
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+
+set(INSTALL_EXAMPLEDIR "examples/linguist/trollprint")
+
+find_package(Qt5 COMPONENTS Core)
+find_package(Qt5 COMPONENTS Gui)
+find_package(Qt5 COMPONENTS Widgets)
+
+add_qt_gui_executable(trollprint
+    main.cpp
+    mainwindow.cpp mainwindow.h
+    printpanel.cpp printpanel.h
+)
+target_link_libraries(trollprint PUBLIC
+    Qt::Core
+    Qt::Gui
+    Qt::Widgets
+)
+
+install(TARGETS trollprint
+    RUNTIME DESTINATION "${INSTALL_EXAMPLEDIR}"
+    BUNDLE DESTINATION "${INSTALL_EXAMPLEDIR}"
+    LIBRARY DESTINATION "${INSTALL_EXAMPLEDIR}"
+)
