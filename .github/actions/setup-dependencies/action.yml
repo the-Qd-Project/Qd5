@@ -152,11 +152,11 @@ runs:
         install: >-
           perl
           rsync
+          make
         pacboy: >-
           toolchain:p
           cmake:p
           ninja:p
-          make:p
           pkgconf:p
           gperf:p
           python:p
@@ -202,7 +202,11 @@ runs:
           pkgconf \
           cmake \
           ninja \
-          mono
+          mono \
+          autoconf \
+          autoconf-archive \
+          automake \
+          libtool
 
     - name: Setup vcpkg cache (macOS)
       if: ${{ runner.os == 'macOS' }}
@@ -223,7 +227,7 @@ runs:
           setapikey "$GITHUB_TOKEN" \
           -Source "$FEED_URL"
         echo "VCPKG_BINARY_SOURCES=clear;nuget,$FEED_URL,readwrite" >> "$GITHUB_ENV"
-    
+
     - name: Install macOS dependencies
       if: ${{ runner.os == 'macOS' }}
       shell: bash
@@ -291,7 +295,7 @@ runs:
       run: |
         brew install unixodbc freetds
 
-    # TODO: Add support sccache to Qd!
+    # TODO: Add support of sccache to Qd!
     - name: Setup ccache
       if: ${{ runner.os != 'Windows' && inputs.msystem == '' }}
       uses: hendrikmuhs/ccache-action@v1.2.24

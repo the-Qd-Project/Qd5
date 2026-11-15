@@ -1,4 +1,4 @@
-name: Build Qd5
+name: Build Qd
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -7,6 +7,9 @@ on:
   pull_request:
   workflow_dispatch:
   workflow_call:
+permissions:
+  contents: read
+  packages: write
 jobs:
   build:
     strategy:
