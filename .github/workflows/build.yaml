@@ -8,32 +8,25 @@ on:
   workflow_dispatch:
   workflow_call:
 jobs:
-  linux:
+  build:
     strategy:
       fail-fast: false
       matrix:
         include:
           - os: ubuntu-26.04
-            build-name: Linux x86_64
           - os: ubuntu-26.04-arm
-            build-name: Linux aarch64
           - os: windows-2025-vs2026
             vcvars-arch: amd64
-            build-name: Windows MSVC x86_64
           - os: windows-11-vs2026-arm
             vcvars-arch: arm64
-            build-name: Windows MSVC aarch64
           - os: windows-2025
             msystem: CLANG64
-            build-name: Windows MinGW x86_64
             vcvars-arch: amd64_x86
           - os: windows-11-arm
             msystem: CLANGARM64
-            build-name: Windows MinGW aarch64
             vcvars-arch: arm64
           - os: macos-26
             macosx-deployment-target: 10.13
-            build-name: macOS
 
     runs-on: ${{ matrix.os }}
 
@@ -54,8 +47,6 @@ jobs:
         id: setup-dependencies
         uses: ./.github/actions/setup-dependencies
         with:
-          build-type: ${{ env.BUILD_TYPE }}
-          artifact-name: ${{ matrix.artifact-name }}
           msystem: ${{ matrix.msystem }}
           vcvars-arch: ${{ matrix.vcvars-arch }}
 
@@ -80,7 +71,7 @@ jobs:
         run: make -j"$(nproc)"
 
       - name: Test
-        run: make -j"$(nproc)" check
+        run: make check
 
       - name: Install
         run: make install

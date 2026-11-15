@@ -9,14 +9,6 @@ inputs:
     description: Visual Studio architecture to use
     required: false
 
-outputs:
-  build-type:
-    description: Type of build used
-    value: ${{ inputs.build-type }}
-  qt-version:
-    description: Version of Qt used
-    value: ${{ inputs.qt-version }}
-
 runs:
   using: composite
 
@@ -89,13 +81,6 @@ runs:
           setapikey "$env:GITHUB_TOKEN" `
           -Source "$env:FEED_URL"
         "VCPKG_BINARY_SOURCES=clear;nuget,$env:FEED_URL,readwrite" | Out-File -Append $env:GITHUB_ENV
-        # The org-wide feed already holds packages with vcpkg's plain ids (bzip2_x64-windows, ...)
-        # that were published with a personal token and are linked to no repository. GITHUB_TOKEN
-        # may only write packages it created or that are linked to this repository, so pushing to
-        # those ids is answered with "403 Forbidden". A prefix makes vcpkg publish its own packages
-        # (<prefix>bzip2_x64-windows, ...), which this workflow creates and which vcpkg links to
-        # this repository through the GITHUB_REPOSITORY metadata it adds by itself.
-        "X_VCPKG_NUGET_ID_PREFIX=meshmc." | Out-File -Append $env:GITHUB_ENV
 
     - name: Install Windows MSVC build tools
       if: ${{ runner.os == 'Windows' && inputs.msystem == '' }}
@@ -238,9 +223,6 @@ runs:
           setapikey "$GITHUB_TOKEN" \
           -Source "$FEED_URL"
         echo "VCPKG_BINARY_SOURCES=clear;nuget,$FEED_URL,readwrite" >> "$GITHUB_ENV"
-        # Own package ids, see the Windows step: the plain vcpkg ids in the org feed belong to
-        # packages GITHUB_TOKEN may not write to (403 Forbidden).
-        echo "X_VCPKG_NUGET_ID_PREFIX=meshmc." >> "$GITHUB_ENV"
     
     - name: Install macOS dependencies
       if: ${{ runner.os == 'macOS' }}
@@ -309,9 +291,29 @@ runs:
       run: |
         brew install unixodbc freetds
 
+    # TODO: Add support sccache to Qd!
     - name: Setup ccache
+      if: ${{ runner.os != 'Windows' && inputs.msystem == '' }}
       uses: hendrikmuhs/ccache-action@v1.2.24
       with:
         variant: ccache
         create-symlink: true
         key: ${{ runner.os }}-${{ runner.arch }}-ccache
+
+    - name: Retrieve ccache cache (MinGW)
+      if: ${{ runner.os != 'Windows' && inputs.msystem != '' }}
+      uses: actions/cache@v6.1.0
+      with:
+        path: '${{ github.workspace }}\.ccache'
+        key: ${{ runner.os }}-mingw-w64-ccache-${{ github.run_id }}
+        restore-keys: |
+          ${{ runner.os }}-mingw-w64-ccache
+
+    - name: Setup ccache (MinGW)
+      if: ${{ runner.os != 'Windows' && inputs.msystem != '' }}
+      shell: msys2 {0}
+      run: |
+        ccache --set-config=cache_dir='${{ github.workspace }}\.ccache'
+        ccache --set-config=max_size='500M'
+        ccache --set-config=compression=true
+        ccache -p  # Show config
