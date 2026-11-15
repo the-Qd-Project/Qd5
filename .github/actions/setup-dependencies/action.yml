@@ -29,6 +29,7 @@ runs:
 
     - name: Install dependencies (Linux)
       if: ${{ runner.os == 'Linux' }}
+      shell: bash
       run: |
         sudo apt-get update
         sudo apt-get install -y --no-install-recommends \
@@ -205,6 +206,7 @@ runs:
 
     - name: Install macOS build tools
       if: ${{ runner.os == 'macOS' }}
+      shell: bash
       run: |
         brew install \
           gperf \
@@ -303,6 +305,7 @@ runs:
 
     - name: Install macOS SQL dependencies
       if: ${{ runner.os == 'macOS' }}
+      shell: bash
       run: |
         brew install unixodbc freetds
 
