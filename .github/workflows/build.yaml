@@ -17,19 +17,46 @@ jobs:
       matrix:
         include:
           - os: ubuntu-26.04
+            target: desktop
+            configure: -release
           - os: ubuntu-26.04-arm
-          - os: windows-2025-vs2026
-            vcvars-arch: amd64
-          - os: windows-11-vs2026-arm
-            vcvars-arch: arm64
+            target: desktop
+            configure: -release
           - os: windows-2025
-            msystem: CLANG64
-            vcvars-arch: amd64_x86
+            vcvars-arch: amd64
+            target: desktop
+            configure: -debug-and-release
           - os: windows-11-arm
-            msystem: CLANGARM64
             vcvars-arch: arm64
+            target: desktop
+            configure: -debug-and-release
+          - os: windows-2025
+            msystem: UCRT64
+            vcvars-arch: amd64_x86
+            target: desktop
+            configure: -platform win32-g++ -debug-and-release
           - os: macos-26
             macosx-deployment-target: 10.13
+            target: desktop
+            configure: -release
+          - os: ubuntu-26.04
+            target: android
+            android-abi: arm64-v8a
+            configure: -xplatform android-clang -android-ndk-host linux-x86_64 -release
+          - os: ubuntu-26.04
+            target: android
+            android-abi: armeabi-v7a
+            configure: -xplatform android-clang -android-ndk-host linux-x86_64 -release
+          - os: macos-26
+            target: ios
+            ios-sdk: iphoneos
+            ios-arch: arm64
+            configure: -xplatform macx-ios-clang -release
+          - os: macos-26
+            target: ios
+            ios-sdk: iphonesimulator
+            ios-arch: arm64
+            configure: -xplatform macx-ios-clang -release
 
     runs-on: ${{ matrix.os }}
 
@@ -38,11 +65,11 @@ jobs:
         shell: ${{ matrix.msystem != '' && 'msys2 {0}' || 'bash' }}
 
     env:
-      BUILD_TYPE: ${{ inputs.build-type || 'Debug' }}
       MACOSX_DEPLOYMENT_TARGET: ${{ matrix.macosx-deployment-target }}
+      CONFIGURE_ARGS: ${{ matrix.configure }}
 
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
         with:
           submodules: recursive
 
@@ -52,31 +79,94 @@ jobs:
         with:
           msystem: ${{ matrix.msystem }}
           vcvars-arch: ${{ matrix.vcvars-arch }}
+          target: ${{ matrix.target }}
 
       - name: Configure
         run: |
-          LLVM_CONFIG="$(command -v llvm-config || command -v llvm-config-21)"
-          export LLVM_INSTALL_DIR="$("$LLVM_CONFIG" --prefix)"
+          read -r -a EXTRA_ARGS <<< "$CONFIGURE_ARGS"
 
-          ./configure \
-            -prefix "$RUNNER_TEMP/qt-install" \
-            -opensource \
-            -confirm-license \
-            -opengl desktop \
-            -make tests \
-            -make examples \
-            -make tools \
-            -make libs \
-            -c++std c++17 \
-            -v -ccache
+          COMMON_ARGS=(
+            -prefix "$RUNNER_TEMP/qt-install"
+            -opensource
+            -confirm-license
+            -c++std c++17
+            -v
+            -qt-zlib
+            "${EXTRA_ARGS[@]}"
+          )
 
-      - name: Build
-        run: make -j"$(nproc)"
+          case "${{ matrix.target }}" in
+            desktop)
+              ./configure \
+                "${COMMON_ARGS[@]}" \
+                -opengl desktop \
+                -make tests \
+                -make examples \
+                -make tools \
+                -make libs \
+                -ccache
+              ;;
 
-      - name: Test
+            android)
+              ./configure \
+                "${COMMON_ARGS[@]}" \
+                -opengl es2 \
+                -android-sdk "$ANDROID_SDK_ROOT" \
+                -android-ndk "$ANDROID_NDK_ROOT" \
+                -android-abis "${{ matrix.android-abi }}" \
+                -nomake tests \
+                -nomake examples \
+                -make tools \
+                -make libs \
+                -ccache
+              ;;
+
+            ios)
+              ./configure \
+                "${COMMON_ARGS[@]}" \
+                -sdk "${{ matrix.ios-sdk }}" \
+                -arch "${{ matrix.ios-arch }}" \
+                -nomake tests \
+                -nomake examples \
+                -make tools \
+                -make libs \
+                -ccache
+              ;;
+          esac
+
+      - name: Build (Non MSVC)
+        if: ${{ runner.os != 'Windows' || matrix.msystem != '' }}
+        run: |
+          if command -v nproc >/dev/null 2>&1; then
+            JOBS="$(nproc)"
+          elif command -v sysctl >/dev/null 2>&1; then
+            JOBS="$(sysctl -n hw.ncpu)"
+          else
+            JOBS="${NUMBER_OF_PROCESSORS:-2}"
+          fi
+
+          make -j"$JOBS"
+
+      - name: Build (MSVC)
+        if: ${{ runner.os == 'Windows' && matrix.msystem == '' }}
+        shell: pwsh
+        run: |
+          jom /J (Get-CimInstance Win32_ComputerSystem).NumberOfLogicalProcessors
+
+      - name: Test (Non MSVC)
+        if: ${{ matrix.target == 'desktop' && ( runner.os != 'Windows' || matrix.msystem != '' ) }}
         run: make check
 
-      - name: Install
+      - name: Test (MSVC)
+        if: ${{ matrix.target == 'desktop' && ( runner.os == 'Windows' && matrix.msystem == '' ) }}
+        run: jom check
+
+      - name: Install (Non MSVC)
+        if: ${{ runner.os != 'Windows' || matrix.msystem != '' }}
         run: make install
+
+      - name: Install (MSVC)
+        if: ${{ runner.os == 'Windows' && matrix.msystem == '' }}
+        run: jom install
 
       # TODO: Package
