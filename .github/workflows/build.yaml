@@ -75,7 +75,7 @@ jobs:
 
       - name: Setup dependencies
         id: setup-dependencies
-        uses: ./.github/actions/setup-dependencies
+        uses: $/.github/actions/setup-dependencies
         with:
           msystem: ${{ matrix.msystem }}
           vcvars-arch: ${{ matrix.vcvars-arch }}

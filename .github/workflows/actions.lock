@@ -4,10 +4,46 @@
 version: 'v0.0.3'
 workflows:
     '.github/workflows/build.yaml':
+        - 'actions/cache@v6.1.0'
         - 'actions/checkout@v7.0.1'
+        - 'actions/setup-java@v6.3.0'
+        - 'android-actions/setup-android@v3.2.2'
+        - 'hendrikmuhs/ccache-action@v1.2.24'
+        - 'ilammy/msvc-dev-cmd@v1.13.0'
+        - 'msys2/setup-msys2@v2.33.0'
 dependencies:
+    'actions/cache@v6.1.0':
+        ref: 'v6.1.0'
+        commit: 'sha1-55cc8345863c7cc4c66a329aec7e433d2d1c52a9'
+        owner_id: 44036562
+        repo_id: 215566462
     'actions/checkout@v7.0.1':
         ref: 'v7.0.1'
         commit: 'sha1-3d3c42e5aac5ba805825da76410c181273ba90b1'
         owner_id: 44036562
         repo_id: 197814629
+    'actions/setup-java@v6.3.0':
+        ref: 'v6.3.0'
+        commit: 'sha1-d1374f8ac74474200d16ef8ecee22c7ae7a51880'
+        owner_id: 44036562
+        repo_id: 196057608
+    'android-actions/setup-android@v3.2.2':
+        ref: 'v3.2.2'
+        commit: 'sha1-9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407'
+        owner_id: 69522701
+        repo_id: 286780795
+    'hendrikmuhs/ccache-action@v1.2.24':
+        ref: 'v1.2.24'
+        commit: 'sha1-f09c25b45002a07be2955cbe52e8cee55643f89d'
+        owner_id: 7126422
+        repo_id: 319035161
+    'ilammy/msvc-dev-cmd@v1.13.0':
+        ref: 'v1.13.0'
+        commit: 'sha1-0b201ec74fa43914dc39ae48a89fd1d8cb592756'
+        owner_id: 1256587
+        repo_id: 212181767
+    'msys2/setup-msys2@v2.33.0':
+        ref: 'v2.33.0'
+        commit: 'sha1-ec48f7c5447b3140e2b088413ae3a55687bccb6e'
+        owner_id: 6759993
+        repo_id: 213203501
