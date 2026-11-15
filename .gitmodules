@@ -1,17 +1,17 @@
 [submodule "qt3d/src/3rdparty/assimp/src"]
 	path = qt3d/src/3rdparty/assimp/src
-	url = https://github.com/qt/qtquick3d-assimp.git
+	url = https://github.com/the-Qd-Project/qtquick3d-assimp.git
 [submodule "qtdeclarative/tests/auto/qml/ecmascripttests/test262"]
 	path = qtdeclarative/tests/auto/qml/ecmascripttests/test262
-	url = https://github.com/qt/qtdeclarative-testsuites.git
+	url = https://github.com/the-Qd-Project/qtdeclarative-testsuites.git
 	branch = snapshot-20180312-3c69133-based
 [submodule "qtlocation/src/3rdparty/mapbox-gl-native"]
 	path = qtlocation/src/3rdparty/mapbox-gl-native
-	url = https://github.com/qt/qtlocation-mapboxgl.git
-	branch = upstream/qt-staging
+	url = https://github.com/the-Qd-Project/qtlocation-mapboxgl.git
+	branch = kde/5.15
 [submodule "qtquick3d/src/3rdparty/assimp/src"]
 	path = qtquick3d/src/3rdparty/assimp/src
-	url = https://github.com/qt/qtquick3d-assimp.git
+	url = https://github.com/the-Qd-Project/qtquick3d-assimp.git
 [submodule "qtxmlpatterns/tests/auto/3rdparty/testsuites"]
 	path = qtxmlpatterns/tests/auto/3rdparty/testsuites
-	url = https://github.com/qt/qtxmlpatterns-testsuites.git
+	url = https://github.com/the-Qd-Project/qtxmlpatterns-testsuites.git

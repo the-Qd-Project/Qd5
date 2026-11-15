@@ -8337,7 +8337,7 @@
  page-setup-32.png
  print-24.png
  print-32.png
- qtlogo-64.png
+ qdlogo-64.png
  status-color.png
  status-gray-scale.png
  view-page-multi-24.png

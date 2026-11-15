@@ -1,0 +1,314 @@
+name: Setup Dependencies
+description: Install and setup dependencies for building MeshMC
+
+inputs:
+  msystem:
+    description: MSYS2 subsystem to use
+    required: false
+  vcvars-arch:
+    description: Visual Studio architecture to use
+    required: false
+
+outputs:
+  build-type:
+    description: Type of build used
+    value: ${{ inputs.build-type }}
+  qt-version:
+    description: Version of Qt used
+    value: ${{ inputs.qt-version }}
+
+runs:
+  using: composite
+
+  steps:
+    - name: Setup Java
+      uses: actions/setup-java@v6
+      with:
+        distribution: zulu
+        java-version: 17
+
+    - name: Install dependencies (Linux)
+      if: ${{ runner.os == 'Linux' }}
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y --no-install-recommends \
+          build-essential gperf bison flex perl python3 pkg-config \
+          clang llvm libclang-dev \
+          libgl-dev libglu1-mesa-dev libegl-dev libgles-dev \
+          libvulkan-dev libgbm-dev libdrm-dev libgl1-mesa-dri \
+          libx11-dev libx11-xcb-dev libxext-dev libxfixes-dev \
+          libxi-dev libxrender-dev libxcomposite-dev libxrandr-dev \
+          libxcursor-dev libxinerama-dev libsm-dev libice-dev \
+          libxcb1-dev libxcb-glx0-dev libxcb-icccm4-dev \
+          libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev \
+          libxcb-render0-dev libxcb-render-util0-dev \
+          libxcb-shape0-dev libxcb-shm0-dev libxcb-sync-dev \
+          libxcb-util-dev libxcb-xfixes0-dev libxcb-xinerama0-dev \
+          libxcb-xinput-dev libxcb-xkb-dev \
+          libxkbcommon-dev libxkbcommon-x11-dev \
+          libfontconfig-dev libfreetype-dev libharfbuzz-dev \
+          libglib2.0-dev libdbus-1-dev libatspi2.0-dev \
+          libudev-dev libinput-dev libmtdev-dev libts-dev \
+          libproxy-dev libkrb5-dev libsctp-dev \
+          libicu-dev libpcre2-dev libdouble-conversion-dev \
+          libzstd-dev zlib1g-dev libssl-dev libsqlite3-dev \
+          libjpeg-dev libpng-dev libmd4c-dev \
+          libmng-dev libtiff-dev libwebp-dev \
+          default-libmysqlclient-dev libpq-dev unixodbc-dev \
+          freetds-dev firebird-dev \
+          libgtk-3-dev libcups2-dev \
+          libasound2-dev libgstreamer1.0-dev \
+          libgstreamer-plugins-base1.0-dev libopenal-dev libpulse-dev \
+          libbluetooth-dev libsdl2-dev libassimp-dev \
+          libwayland-dev libwayland-egl-backend-dev wayland-protocols \
+          flite1-dev libspeechd-dev libassimp-dev
+
+    - name: Enter VS Developer shell
+      if: ${{ runner.os == 'Windows' }}
+      uses: ilammy/msvc-dev-cmd@v1
+      with:
+        arch: ${{ inputs.vcvars-arch }}
+
+    - name: Setup vcpkg cache (MSVC)
+      if: ${{ runner.os == 'Windows' && inputs.msystem == '' }}
+      shell: pwsh
+      env:
+        USERNAME: ${{ github.repository_owner }}
+        GITHUB_TOKEN: ${{ github.token }}
+        FEED_URL: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
+      run: |
+        .$(vcpkg fetch nuget) `
+          sources add `
+          -Source "$env:FEED_URL" `
+          -StorePasswordInClearText `
+          -Name GitHubPackages `
+          -UserName "$env:USERNAME" `
+          -Password "$env:GITHUB_TOKEN"
+        .$(vcpkg fetch nuget) `
+          setapikey "$env:GITHUB_TOKEN" `
+          -Source "$env:FEED_URL"
+        "VCPKG_BINARY_SOURCES=clear;nuget,$env:FEED_URL,readwrite" | Out-File -Append $env:GITHUB_ENV
+        # The org-wide feed already holds packages with vcpkg's plain ids (bzip2_x64-windows, ...)
+        # that were published with a personal token and are linked to no repository. GITHUB_TOKEN
+        # may only write packages it created or that are linked to this repository, so pushing to
+        # those ids is answered with "403 Forbidden". A prefix makes vcpkg publish its own packages
+        # (<prefix>bzip2_x64-windows, ...), which this workflow creates and which vcpkg links to
+        # this repository through the GITHUB_REPOSITORY metadata it adds by itself.
+        "X_VCPKG_NUGET_ID_PREFIX=meshmc." | Out-File -Append $env:GITHUB_ENV
+
+    - name: Install Windows MSVC build tools
+      if: ${{ runner.os == 'Windows' && inputs.msystem == '' }}
+      shell: pwsh
+      run: |
+        choco install -y --no-progress gperf winflexbison3 pkgconfiglite
+
+        $wfb = "$env:ChocolateyInstall\lib\winflexbison3\tools"
+
+        Copy-Item "$wfb\win_bison.exe" "$wfb\bison.exe" -Force
+        Copy-Item "$wfb\win_flex.exe" "$wfb\flex.exe" -Force
+
+        Add-Content -Path $env:GITHUB_PATH -Value $wfb
+
+
+    - name: Install Windows MSVC dependencies
+      if: ${{ runner.os == 'Windows' && inputs.msystem == '' }}
+      shell: pwsh
+      run: |
+        $env:VCPKG_ROOT = $env:VCPKG_INSTALLATION_ROOT
+        $triplet = "x64-windows"
+
+        & "$env:VCPKG_ROOT\vcpkg.exe" install `
+          --triplet $triplet `
+          assimp `
+          double-conversion `
+          egl-registry `
+          freetype `
+          harfbuzz `
+          icu `
+          libjpeg-turbo `
+          libpng `
+          md4c `
+          pcre2 `
+          openssl `
+          sqlite3 `
+          tiff `
+          libwebp `
+          zlib `
+          zstd `
+          openal-soft `
+          sdl2 `
+          'gstreamer[plugins-base]' `
+          libpq `
+          libmysql `
+          vulkan
+
+        $vcpkgPrefix = "$env:VCPKG_ROOT\installed\$triplet"
+        $llvmRoot = Split-Path -Parent (Split-Path -Parent (Get-Command clang.exe).Source)
+
+        Add-Content -Path $env:GITHUB_ENV -Value "VCPKG_ROOT=$env:VCPKG_ROOT"
+        Add-Content -Path $env:GITHUB_ENV -Value "VCPKG_TARGET_TRIPLET=$triplet"
+        Add-Content -Path $env:GITHUB_ENV -Value "VCPKG_PREFIX=$vcpkgPrefix"
+        Add-Content -Path $env:GITHUB_ENV -Value "LLVM_INSTALL_DIR=$llvmRoot"
+
+        # Header and library discovery
+        Add-Content -Path $env:GITHUB_ENV -Value "INCLUDE=$vcpkgPrefix\include;$env:INCLUDE"
+        Add-Content -Path $env:GITHUB_ENV -Value "LIB=$vcpkgPrefix\lib;$env:LIB"
+
+        # pkg-config discovery
+        Add-Content -Path $env:GITHUB_ENV -Value "PKG_CONFIG_PATH=$vcpkgPrefix\lib\pkgconfig;$vcpkgPrefix\share\pkgconfig"
+
+    - name: Install MinGW dependencies
+      if: ${{ inputs.msystem != '' }}
+      uses: msys2/setup-msys2@v2
+      with:
+        msystem: ${{ inputs.msystem }}
+        update: true
+        install: >-
+          perl
+          rsync
+        pacboy: >-
+          toolchain:p
+          cmake:p
+          ninja:p
+          make:p
+          pkgconf:p
+          gperf:p
+          python:p
+          assimp:p
+          angleproject:p
+          dbus:p
+          double-conversion:p
+          fontconfig:p
+          freetype:p
+          harfbuzz:p
+          icu:p
+          libjpeg-turbo:p
+          libpng:p
+          md4c:p
+          openssl:p
+          pcre2:p
+          sqlite3:p
+          vulkan:p
+          vulkan-headers:p
+          egl-headers:p
+          gles-headers:p
+          zlib:p
+          zstd:p
+          firebird:p
+          libmariadbclient:p
+          postgresql:p
+          jasper:p
+          libmng:p
+          libtiff:p
+          libwebp:p
+          openal:p
+
+    - name: Install macOS build tools
+      if: ${{ runner.os == 'macOS' }}
+      run: |
+        brew install \
+          gperf \
+          bison \
+          flex \
+          perl \
+          python \
+          pkgconf \
+          cmake \
+          ninja \
+          mono
+
+    - name: Setup vcpkg cache (macOS)
+      if: ${{ runner.os == 'macOS' }}
+      shell: bash
+      env:
+        USERNAME: ${{ github.repository_owner }}
+        GITHUB_TOKEN: ${{ github.token }}
+        FEED_URL: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
+      run: |
+        mono `vcpkg fetch nuget | tail -n 1` \
+          sources add \
+          -Source "$FEED_URL" \
+          -StorePasswordInClearText \
+          -Name GitHubPackages \
+          -UserName "$USERNAME" \
+          -Password "$GITHUB_TOKEN"
+        mono `vcpkg fetch nuget | tail -n 1` \
+          setapikey "$GITHUB_TOKEN" \
+          -Source "$FEED_URL"
+        echo "VCPKG_BINARY_SOURCES=clear;nuget,$FEED_URL,readwrite" >> "$GITHUB_ENV"
+        # Own package ids, see the Windows step: the plain vcpkg ids in the org feed belong to
+        # packages GITHUB_TOKEN may not write to (403 Forbidden).
+        echo "X_VCPKG_NUGET_ID_PREFIX=meshmc." >> "$GITHUB_ENV"
+    
+    - name: Install macOS dependencies
+      if: ${{ runner.os == 'macOS' }}
+      shell: bash
+      run: |
+        git clone --depth 1 https://github.com/microsoft/vcpkg.git "$RUNNER_TEMP/vcpkg"
+
+        "$RUNNER_TEMP/vcpkg/bootstrap-vcpkg.sh" -disableMetrics
+
+        VCPKG_ROOT="$RUNNER_TEMP/vcpkg"
+
+        if [[ "$(uname -m)" == "arm64" ]]; then
+          TRIPLET="arm64-osx"
+        else
+          TRIPLET="x64-osx"
+        fi
+
+        "$VCPKG_ROOT/vcpkg" install \
+          --triplet "$TRIPLET" \
+          assimp \
+          double-conversion \
+          egl-registry \
+          fontconfig \
+          freetype \
+          harfbuzz \
+          icu \
+          libjpeg-turbo \
+          libpng \
+          md4c \
+          pcre2 \
+          openssl \
+          sqlite3 \
+          tiff \
+          libwebp \
+          zlib \
+          zstd \
+          openal-soft \
+          sdl2 \
+          'gstreamer[plugins-base]' \
+          libpq \
+          libmysql \
+          vulkan \
+          dbus
+
+        VCPKG_PREFIX="$VCPKG_ROOT/installed/$TRIPLET"
+
+        {
+          echo "VCPKG_ROOT=$VCPKG_ROOT"
+          echo "VCPKG_TARGET_TRIPLET=$TRIPLET"
+          echo "VCPKG_PREFIX=$VCPKG_PREFIX"
+
+          # pkg-config: QMake dependency detection
+          echo "PKG_CONFIG_PATH=$VCPKG_PREFIX/lib/pkgconfig:$VCPKG_PREFIX/share/pkgconfig"
+
+          # Compiler header and library discovery
+          echo "CPATH=$VCPKG_PREFIX/include"
+          echo "LIBRARY_PATH=$VCPKG_PREFIX/lib"
+
+          # Runtime library discovery
+          echo "DYLD_LIBRARY_PATH=$VCPKG_PREFIX/lib"
+        } >> "$GITHUB_ENV"
+
+    - name: Install macOS SQL dependencies
+      if: ${{ runner.os == 'macOS' }}
+      run: |
+        brew install unixodbc freetds
+
+    - name: Setup ccache
+      uses: hendrikmuhs/ccache-action@v1.2.24
+      with:
+        variant: ccache
+        create-symlink: true
+        key: ${{ runner.os }}-${{ runner.arch }}-ccache

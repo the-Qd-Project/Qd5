@@ -6389,7 +6389,7 @@ QIcon QCommonStyle::standardIcon(StandardPixmap standardIcon, const QStyleOption
 #  ifndef QT_NO_IMAGEFORMAT_XPM
         icon.addPixmap(titleBarMenuCachedPixmapFromXPM());
 #  endif
-        icon.addFile(QLatin1String(":/qt-project.org/qmessagebox/images/qtlogo-64.png"));
+        icon.addFile(QLatin1String(":/qt-project.org/qmessagebox/images/qdlogo-64.png"));
         break;
     case SP_TitleBarNormalButton:
         addIconFiles(iconResourcePrefix() + QStringLiteral("normalizedockup-"),

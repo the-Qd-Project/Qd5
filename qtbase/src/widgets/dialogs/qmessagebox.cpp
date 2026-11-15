@@ -3,6 +3,9 @@
 ** Copyright (C) 2020 The Qt Company Ltd.
 ** Contact: https://www.qt.io/licensing/
 **
+** Copyright (C) 2026 The Qd Project.
+** Contact: https://qd.org.tr/licensing/
+**
 ** This file is part of the QtWidgets module of the Qt Toolkit.
 **
 ** $QT_BEGIN_LICENSE:LGPL$
@@ -1867,43 +1870,48 @@ void QMessageBox::aboutQt(QWidget *parent, const QString &title)
 
     QString translatedTextAboutQtCaption;
     translatedTextAboutQtCaption = QMessageBox::tr(
-        "<h3>About Qt</h3>"
-        "<p>This program uses Qt version %1.</p>"
+        "<h3>About Qd</h3>"
+        "<p>This program uses Qd version %1.</p>"
         ).arg(QLatin1String(QT_VERSION_STR));
     //: Leave this text untranslated or include a verbatim copy of it below
     //: and note that it is the authoritative version in case of doubt.
     const QString translatedTextAboutQtText = QMessageBox::tr(
-        "<p>Qt is a C++ toolkit for cross-platform application "
+        "<p>Qd is a C++ toolkit for cross-platform application "
         "development.</p>"
-        "<p>Qt provides single-source portability across all major desktop "
+        "<p>Qd originated as a fork of the older Qt 5.15.19 version. It "
+        "serves as an unofficial continuation of Qt, with the goal of allowing "
+        "legacy Qt5 applications to keep running without the need for porting.</p>"
+        "<p>Qd provides single-source portability across all major desktop "
         "operating systems. It is also available for embedded Linux and other "
         "embedded and mobile operating systems.</p>"
-        "<p>Qt is available under multiple licensing options designed "
+        "<p>Qd is available under multiple licensing options designed "
         "to accommodate the needs of our various users.</p>"
-        "<p>Qt licensed under our commercial license agreement is appropriate "
-        "for development of proprietary/commercial software where you do not "
-        "want to share any source code with third parties or otherwise cannot "
-        "comply with the terms of GNU (L)GPL.</p>"
-        "<p>Qt licensed under GNU (L)GPL is appropriate for the "
-        "development of Qt&nbsp;applications provided you can comply with the terms "
+        "<p>Qd licensed under GNU (L)GPL is appropriate for the "
+        "development of Qd&nbsp;applications provided you can comply with the terms "
         "and conditions of the respective licenses.</p>"
         "<p>Please see <a href=\"http://%2/\">%2</a> "
-        "for an overview of Qt licensing.</p>"
+        "for an overview of Qd licensing.</p>"
         "<p>Copyright (C) %1 The Qt Company Ltd and other "
         "contributors.</p>"
+        "<p>Copyright (C) %5 The Qd Project</p>"
         "<p>Qt and the Qt logo are trademarks of The Qt Company Ltd.</p>"
+        "<p>Qd and the Qd logo are trademarks of The Qd Project HQ</p>"
         "<p>Qt is The Qt Company Ltd product developed as an open source "
         "project. See <a href=\"http://%3/\">%3</a> for more information.</p>"
-        ).arg(QStringLiteral("2023"),
-              QStringLiteral("qt.io/licensing"),
-              QStringLiteral("qt.io"));
+        "<p>Qd is The Qd Project developed as an open source project. See "
+        "<a href=\"http://%4/\">%4</a> for more information.</p>"
+        ).arg(QStringLiteral("2012-2023"),
+              QStringLiteral("qd.org.tr/licensing"),
+              QStringLiteral("qt.io"),
+              QStringLiteral("qd.org.tr"),
+              QStringLiteral("2026"));
     QMessageBox *msgBox = new QMessageBox(parent);
     msgBox->setAttribute(Qt::WA_DeleteOnClose);
-    msgBox->setWindowTitle(title.isEmpty() ? tr("About Qt") : title);
+    msgBox->setWindowTitle(title.isEmpty() ? tr("About Qd") : title);
     msgBox->setText(translatedTextAboutQtCaption);
     msgBox->setInformativeText(translatedTextAboutQtText);
 
-    QPixmap pm(QLatin1String(":/qt-project.org/qmessagebox/images/qtlogo-64.png"));
+    QPixmap pm(QLatin1String(":/qt-project.org/qmessagebox/images/qdlogo-64.png"));
     if (!pm.isNull())
         msgBox->setIconPixmap(pm);
 

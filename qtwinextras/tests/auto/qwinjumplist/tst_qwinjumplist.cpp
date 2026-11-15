@@ -256,7 +256,7 @@ void tst_QWinJumpList::testItems()
     item.setWorkingDirectory(QCoreApplication::applicationDirPath());
     QCOMPARE(item.workingDirectory(), QCoreApplication::applicationDirPath());
 
-    QIcon icon("qrc:/qt-project.org/qmessagebox/images/qtlogo-64.png");
+    QIcon icon("qrc:/qt-project.org/qmessagebox/images/qdlogo-64.png");
     item.setIcon(icon);
     QCOMPARE(item.icon().cacheKey(), icon.cacheKey());
 

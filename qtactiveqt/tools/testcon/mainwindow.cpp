@@ -504,7 +504,7 @@ VersionDialog::VersionDialog(QWidget *parent) : QDialog(parent)
     setWindowTitle(tr("About Testcon"));
     QGridLayout *layout = new QGridLayout(this);
     QLabel *logoLabel = new QLabel;
-    logoLabel->setPixmap(QStringLiteral(":/qt-project.org/qmessagebox/images/qtlogo-64.png"));
+    logoLabel->setPixmap(QStringLiteral(":/qt-project.org/qmessagebox/images/qdlogo-64.png"));
     const QString aboutText =
         tr(aboutTextFormat).arg(QLatin1String(QLibraryInfo::build()),
                                 QStringLiteral("2017"));

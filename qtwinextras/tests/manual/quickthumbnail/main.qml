@@ -42,18 +42,18 @@ ApplicationWindow {
 
     ThumbnailToolBar {
         id: toolBar
-        iconicThumbnailSource : "qrc:/qt-project.org/qmessagebox/images/qtlogo-64.png"
-        iconicLivePreviewSource : "qrc:/qt-project.org/qmessagebox/images/qtlogo-64.png"
+        iconicThumbnailSource : "qrc:/qt-project.org/qmessagebox/images/qdlogo-64.png"
+        iconicLivePreviewSource : "qrc:/qt-project.org/qmessagebox/images/qdlogo-64.png"
 
         ThumbnailToolButton {
             tooltip: "Button #1"
-            iconSource: "qrc:/qt-project.org/qmessagebox/images/qtlogo-64.png"
+            iconSource: "qrc:/qt-project.org/qmessagebox/images/qdlogo-64.png"
         }
 
         Component {
             id: buttonComponent
             ThumbnailToolButton {
-                iconSource: "qrc:/qt-project.org/qmessagebox/images/qtlogo-64.png"
+                iconSource: "qrc:/qt-project.org/qmessagebox/images/qdlogo-64.png"
             }
         }
     }
@@ -174,7 +174,7 @@ ApplicationWindow {
                             model: ListModel {
                                 id: iconModel
                                 ListElement { name: "None"; source: "" }
-                                ListElement { name: "Qt logo (64)"; source: "qrc:/qt-project.org/qmessagebox/images/qtlogo-64.png" }
+                                ListElement { name: "Qd logo (64)"; source: "qrc:/qt-project.org/qmessagebox/images/qdlogo-64.png" }
                                 ListElement { name: "Up (16)"; source: "qrc:/qt-project.org/styles/commonstyle/images/up-16.png" }
                                 ListElement { name: "Left (32)"; source: "qrc:/qt-project.org/styles/commonstyle/images/left-32.png" }
                                 ListElement { name: "Right (32)"; source: "qrc:/qt-project.org/styles/commonstyle/images/right-32.png" }
