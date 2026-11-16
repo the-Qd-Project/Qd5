@@ -346,7 +346,7 @@ runs:
       with:
         variant: ccache
         create-symlink: true
-        key: ${{ runner.os }}-${{ runner.arch }}-ccache
+        key: ${{ runner.os }}-${{ runner.arch }}-${{ inputs.target }}-ccache
 
     - name: Retrieve ccache cache (MinGW)
       if: ${{ runner.os != 'Windows' && inputs.msystem != '' }}

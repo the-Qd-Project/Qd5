@@ -11,159 +11,270 @@ permissions:
   contents: read
   packages: write
 jobs:
-  build:
+  linux:
     strategy:
       fail-fast: false
       matrix:
         include:
           - os: ubuntu-24.04
-            target: desktop
-            configure: -release -platform linux-g++
           - os: ubuntu-24.04-arm
-            target: desktop
-            configure: -release -platform linux-g++
-          - os: windows-2025
-            vcvars-arch: amd64
-            target: desktop
-            configure: -debug-and-release -platform win32-msvc
-          - os: windows-11-arm
-            vcvars-arch: arm64
-            target: desktop
-            configure: -debug-and-release -platform win32-msvc
-          - os: windows-2025
-            msystem: UCRT64
-            vcvars-arch: amd64_x86
-            target: desktop
-            configure: -platform win32-g++ -debug-and-release
-          - os: macos-26
-            macosx-deployment-target: 10.13
-            target: desktop
-            configure: -release -platform macx-clang
-          - os: ubuntu-24.04
-            target: android
-            android-abi: arm64-v8a
-            configure: -xplatform android-clang -android-ndk-host linux-x86_64 -release
-          - os: ubuntu-24.04
-            target: android
-            android-abi: armeabi-v7a
-            configure: -xplatform android-clang -android-ndk-host linux-x86_64 -release
-          - os: macos-26
-            target: ios
-            ios-sdk: iphoneos
-            configure: -xplatform macx-ios-clang -release
-          - os: macos-26
-            target: ios
-            ios-sdk: iphonesimulator
-            configure: -xplatform macx-ios-clang -release
-
     runs-on: ${{ matrix.os }}
-
-    defaults:
-      run:
-        shell: ${{ matrix.msystem != '' && 'msys2 {0}' || 'bash' }}
-
-    env:
-      MACOSX_DEPLOYMENT_TARGET: ${{ matrix.macosx-deployment-target }}
-      CONFIGURE_ARGS: ${{ matrix.configure }}
-
     steps:
       - uses: actions/checkout@v7.0.1
         with:
           submodules: recursive
-
       - name: Setup dependencies
         id: setup-dependencies
         uses: $/.github/actions/setup-dependencies
         with:
-          msystem: ${{ matrix.msystem }}
-          vcvars-arch: ${{ matrix.vcvars-arch }}
-          target: ${{ matrix.target }}
-
+          target: desktop
+      - name: Configure
+        shell: bash
+        run: |
+          ./configure \
+            -prefix "$RUNNER_TEMP/qt-install" \
+            -opensource \
+            -confirm-license \
+            -c++std c++11 \
+            -v \
+            -qt-zlib \
+            -opengl desktop \
+            -make tests \
+            -make examples \
+            -make tools \
+            -make libs \
+            -ccache \
+            -release \
+            -platform linux-g++
+      - name: Build
+        shell: bash
+        run: make -j"$(nproc)"
+      - name: Test
+        shell: bash
+        run: make check
+      - name: Install
+        shell: bash
+        run: make INSTALL_ROOT="$RUNNER_TEMP/qt-install" install
+      # TODO: Package
+  macos:
+    runs-on: macos-26
+    env:
+      MACOSX_DEPLOYMENT_TARGET: 10.13
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          submodules: recursive
+      - name: Setup dependencies
+        id: setup-dependencies
+        uses: $/.github/actions/setup-dependencies
+        with:
+          target: desktop
+      - name: Configure
+        shell: bash
+        run: |
+          ./configure \
+            -prefix "$RUNNER_TEMP/qt-install" \
+            -opensource \
+            -confirm-license \
+            -c++std c++11 \
+            -v -qt-zlib \
+            -opengl desktop \
+            -make tests \
+            -make examples \
+            -make tools \
+            -make libs \
+            -ccache \
+            -release \
+            -platform macx-clang
+      - name: Build
+        shell: bash
+        run: make -j"$(sysctl -n hw.ncpu)"
+      - name: Test
+        shell: bash
+        run: make check
+      - name: Install
+        shell: bash
+        run: make INSTALL_ROOT="$RUNNER_TEMP/qt-install" install
+      # TODO: Package
+  android:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            android-abi: arm64-v8a
+          - os: ubuntu-24.04
+            android-abi: armeabi-v7a
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          submodules: recursive
+      - name: Setup dependencies
+        id: setup-dependencies
+        uses: $/.github/actions/setup-dependencies
+        with:
+          target: android
+      - name: Configure
+        shell: bash
+        run: |
+          ./configure \
+            -prefix "$RUNNER_TEMP/qt-install" \
+            -opensource \
+            -confirm-license \
+            -c++std c++11 \
+            -v \
+            -qt-zlib \
+            -opengl es2 \
+            -android-sdk "$ANDROID_SDK_ROOT" \
+            -android-ndk "$ANDROID_NDK_ROOT" \
+            -android-abis "${{ matrix.android-abi }}" \
+            -nomake tests \
+            -nomake examples \
+            -make tools \
+            -make libs \
+            -ccache \
+            -xplatform android-clang \
+            -android-ndk-host linux-x86_64 \
+            -release
+      - name: Build
+        shell: bash
+        run: make -j"$(nproc)"
+      - name: Install
+        shell: bash
+        run: make INSTALL_ROOT="$RUNNER_TEMP/qt-install" install
+      # TODO: Package
+  ios:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-26
+            ios-sdk: iphoneos
+          - os: macos-26
+            ios-sdk: iphonesimulator
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          submodules: recursive
+      - name: Setup dependencies
+        id: setup-dependencies
+        uses: $/.github/actions/setup-dependencies
+        with:
+          target: ios
+      - name: Configure
+        shell: bash
+        run: |
+          ./configure \
+            -prefix "$RUNNER_TEMP/qt-install" \
+            -opensource \
+            -confirm-license \
+            -c++std c++11 \
+            -v \
+            -qt-zlib \
+            -xplatform macx-ios-clang \
+            -release \
+            -sdk "${{ matrix.ios-sdk }}" \
+            -nomake tests \
+            -nomake examples \
+            -make tools \
+            -make libs \
+            -ccache
+      - name: Build
+        shell: bash
+        run: make -j"$(sysctl -n hw.ncpu)"
+      - name: Install
+        shell: bash
+        run: make INSTALL_ROOT="$RUNNER_TEMP/qt-install" install
+      # TODO: Package
+  windows_mingw:
+    runs-on: windows-2025
+    defaults:
+      run:
+        shell: ${{ 'msys2 {0}' || 'bash' }}
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          submodules: recursive
+      - name: Setup dependencies
+        id: setup-dependencies
+        uses: $/.github/actions/setup-dependencies
+        with:
+          msystem: UCRT64
+          vcvars-arch: amd64_x86
+          target: desktop
       - name: Configure
         run: |
-          read -r -a EXTRA_ARGS <<< "$CONFIGURE_ARGS"
-
-          COMMON_ARGS=(
-            -prefix "$RUNNER_TEMP/qt-install"
-            -opensource
-            -confirm-license
-            -c++std c++17
-            -v
-            -qt-zlib
-            "${EXTRA_ARGS[@]}"
-          )
-
-          case "${{ matrix.target }}" in
-            desktop)
-              ./configure \
-                "${COMMON_ARGS[@]}" \
-                -opengl desktop \
-                -make tests \
-                -make examples \
-                -make tools \
-                -make libs \
-                -ccache
-              ;;
-
-            android)
-              ./configure \
-                "${COMMON_ARGS[@]}" \
-                -opengl es2 \
-                -android-sdk "$ANDROID_SDK_ROOT" \
-                -android-ndk "$ANDROID_NDK_ROOT" \
-                -android-abis "${{ matrix.android-abi }}" \
-                -nomake tests \
-                -nomake examples \
-                -make tools \
-                -make libs \
-                -ccache
-              ;;
-
-            ios)
-              ./configure \
-                "${COMMON_ARGS[@]}" \
-                -sdk "${{ matrix.ios-sdk }}" \
-                -nomake tests \
-                -nomake examples \
-                -make tools \
-                -make libs \
-                -ccache
-              ;;
-          esac
-
-      - name: Build (Non MSVC)
-        if: ${{ runner.os != 'Windows' || matrix.msystem != '' }}
-        run: |
-          if command -v nproc >/dev/null 2>&1; then
-            JOBS="$(nproc)"
-          elif command -v sysctl >/dev/null 2>&1; then
-            JOBS="$(sysctl -n hw.ncpu)"
-          else
-            JOBS="${NUMBER_OF_PROCESSORS:-2}"
-          fi
-
-          make -j"$JOBS"
-
-      - name: Build (MSVC)
-        if: ${{ runner.os == 'Windows' && matrix.msystem == '' }}
-        shell: pwsh
-        run: |
-          jom /J (Get-CimInstance Win32_ComputerSystem).NumberOfLogicalProcessors
-
-      - name: Test (Non MSVC)
-        if: ${{ matrix.target == 'desktop' && ( runner.os != 'Windows' || matrix.msystem != '' ) }}
+          ./configure \
+            -prefix "$RUNNER_TEMP/qt-install" \
+            -opensource \
+            -confirm-license \
+            -c++std c++11 \
+            -v \
+            -qt-zlib \
+            -platform win32-g++ \
+            -debug-and-release \
+            -opengl desktop \
+            -make tests \
+            -make examples \
+            -make tools \
+            -make libs
+      - name: Build
+        run: make -j"$(nproc)"
+      - name: Test
         run: make check
-
-      - name: Test (MSVC)
-        if: ${{ matrix.target == 'desktop' && ( runner.os == 'Windows' && matrix.msystem == '' ) }}
+      - name: Install
+        run: make INSTALL_ROOT="$RUNNER_TEMP/qt-install" install
+      # TODO: Package
+  windows_msvc:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-2025
+            vcvars-arch: amd64
+          - os: windows-11-arm
+            vcvars-arch: arm64
+    runs-on: ${{ matrix.os }}
+    env:
+      CONFIGURE_ARGS: ${{ matrix.configure }}
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          submodules: recursive
+      - name: Setup dependencies
+        id: setup-dependencies
+        uses: $/.github/actions/setup-dependencies
+        with:
+          vcvars-arch: ${{ matrix.vcvars-arch }}
+          target: desktop
+      - name: Configure
+        shell: cmd
+        run: |
+          configure.bat ^
+            -prefix "%RUNNER_TEMP%\qt-install" ^
+            -opensource ^
+            -confirm-license ^
+            -c++std c++11 ^
+            -v ^
+            -qt-zlib ^
+            -debug-and-release ^
+            -platform win32-msvc ^
+            -opengl desktop ^
+            -make tests ^
+            -make examples ^
+            -make tools ^
+            -make libs ^
+            -ccache
+          if errorlevel 1 exit /b %errorlevel%
+      - name: Build
+        shell: pwsh
+        run: jom /J (Get-CimInstance Win32_ComputerSystem).NumberOfLogicalProcessors
+      - name: Test
+        shell: pwsh
         run: jom check
-
-      - name: Install (Non MSVC)
-        if: ${{ runner.os != 'Windows' || matrix.msystem != '' }}
-        run: make install
-
-      - name: Install (MSVC)
-        if: ${{ runner.os == 'Windows' && matrix.msystem == '' }}
-        run: jom install
-
+      - name: Install
+        shell: pwsh
+        run: jom "INSTALL_ROOT=$env:RUNNER_TEMP\qt-install" install
       # TODO: Package
