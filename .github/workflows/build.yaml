@@ -45,18 +45,17 @@ jobs:
             -opensource \
             -confirm-license \
             -c++std c++17 \
-            -v \
-            -zlib qt \
-            -doubleconversion qt \
-            -pcre qt \
-            -freetype qt \
-            -harfbuzz qt \
-            -libpng qt \
-            -libjpeg qt \
-            -sqlite qt \
-            -assimp qt \
-            -tiff qt \
-            -webp qt \
+            -v -qt-zlib \
+            -qt-doubleconversion \
+            -qt-pcre \
+            -qt-freetype \
+            -qt-harfbuzz \
+            -qt-libpng \
+            -qt-libjpeg \
+            -qt-sqlite \
+            -qt-assimp \
+            -qt-tiff \
+            -qt-webp \
             -icu \
             -openssl-runtime \
             -opengl desktop \
@@ -105,17 +104,17 @@ jobs:
             -confirm-license \
             -opengl desktop \
             -c++std c++17 \
-            -v -zlib qt \
-            -doubleconversion qt \
-            -pcre qt \
-            -freetype qt \
-            -harfbuzz qt \
-            -libpng qt \
-            -libjpeg qt \
-            -sqlite qt \
-            -assimp qt \
-            -tiff qt \
-            -webp qt \
+            -v -qt-zlib \
+            -qt-doubleconversion \
+            -qt-pcre \
+            -qt-freetype \
+            -qt-harfbuzz \
+            -qt-libpng \
+            -qt-libjpeg \
+            -qt-sqlite \
+            -qt-assimp \
+            -qt-tiff \
+            -qt-webp \
             -icu \
             -make tests \
             -make examples \
@@ -167,18 +166,17 @@ jobs:
             -opensource \
             -confirm-license \
             -c++std c++17 \
-            -v \
-            -zlib qt \
-            -doubleconversion qt \
-            -pcre qt \
-            -freetype qt \
-            -harfbuzz qt \
-            -libpng qt \
-            -libjpeg qt \
-            -sqlite qt \
-            -assimp qt \
-            -tiff qt \
-            -webp qt \
+            -v -qt-zlib \
+            -qt-doubleconversion \
+            -qt-pcre \
+            -qt-freetype \
+            -qt-harfbuzz \
+            -qt-libpng \
+            -qt-libjpeg \
+            -qt-sqlite \
+            -qt-assimp \
+            -qt-tiff \
+            -qt-webp \
             -icu \
             -opengl es2 \
             -android-sdk "$ANDROID_SDK_ROOT" \
@@ -232,18 +230,17 @@ jobs:
             -opensource \
             -confirm-license \
             -c++std c++17 \
-            -v \
-            -zlib qt \
-            -doubleconversion qt \
-            -pcre qt \
-            -freetype qt \
-            -harfbuzz qt \
-            -libpng qt \
-            -libjpeg qt \
-            -sqlite qt \
-            -assimp qt \
-            -tiff qt \
-            -webp qt \
+            -v -qt-zlib \
+            -qt-doubleconversion \
+            -qt-pcre \
+            -qt-freetype \
+            -qt-harfbuzz \
+            -qt-libpng \
+            -qt-libjpeg \
+            -qt-sqlite \
+            -qt-assimp \
+            -qt-tiff \
+            -qt-webp \
             -icu \
             -xplatform macx-ios-clang \
             -release \
@@ -284,18 +281,17 @@ jobs:
             -opensource \
             -confirm-license \
             -c++std c++17 \
-            -v \
-            -zlib qt \
-            -doubleconversion qt \
-            -pcre qt \
-            -freetype qt \
-            -harfbuzz qt \
-            -libpng qt \
-            -libjpeg qt \
-            -sqlite qt \
-            -assimp qt \
-            -tiff qt \
-            -webp qt \
+            -v -qt-zlib \
+            -qt-doubleconversion \
+            -qt-pcre \
+            -qt-freetype \
+            -qt-harfbuzz \
+            -qt-libpng \
+            -qt-libjpeg \
+            -qt-sqlite \
+            -qt-assimp \
+            -qt-tiff \
+            -qt-webp \
             -icu \
             -openssl-runtime \
             -platform win32-g++ \
@@ -344,18 +340,17 @@ jobs:
             -opensource ^
             -confirm-license ^
             -c++std c++17 ^
-            -v ^
-            -zlib qt ^
-            -doubleconversion qt ^
-            -pcre qt ^
-            -freetype qt ^
-            -harfbuzz qt ^
-            -libpng qt ^
-            -libjpeg qt ^
-            -sqlite qt ^
-            -assimp qt ^
-            -tiff qt ^
-            -webp qt ^
+            -v -qt-zlib ^
+            -qt-doubleconversion ^
+            -qt-pcre ^
+            -qt-freetype ^
+            -qt-harfbuzz ^
+            -qt-libpng ^
+            -qt-libjpeg ^
+            -qt-sqlite ^
+            -qt-assimp ^
+            -qt-tiff ^
+            -qt-webp ^
             -icu ^
             -openssl-runtime ^
             -debug-and-release ^
