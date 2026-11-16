@@ -222,13 +222,18 @@ if "%SYNCQT%" == "" (
     )
 )
 if "%SYNCQT%" == "true" (
-    if not "%perl.exe%" == "" (
-        echo Running syncqt ...
-        "%perl.exe%" -w "%QTSRC%\bin\syncqt.pl" -minimal -version %QTVERSION% -module QtCore -outdir "%QTDIR%" %QTSRC%
-        if errorlevel 1 exit /b
-    ) else (
-        echo Perl not found in PATH. Aborting. >&2
+    if "%perl.exe%" == "" (
+        echo You need perl in your PATH to make a build from GIT. >&2
+        echo Cannot proceed. >&2
         exit /b 1
+    )
+
+    for /d %%M in ("%QTSRC%\..\qt*") do (
+        if exist "%%M\sync.profile" (
+            echo Running syncqt for %%~nxM...
+            "%perl.exe%" -w "%QTSRC%\bin\syncqt.pl" -version %QTVERSION% -outdir "%%~fM" "%%~fM"
+            if errorlevel 1 exit /b
+        )
     )
 )
 

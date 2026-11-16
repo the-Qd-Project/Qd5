@@ -1,5 +1,5 @@
 name: Setup Dependencies
-description: Install and setup dependencies for building MeshMC
+description: Install and setup dependencies for building the Qd Project
 
 inputs:
   msystem:
@@ -11,6 +11,9 @@ inputs:
   target:
     description: Build target
     required: true
+  ios-sdk:
+    description: iOS SDK
+    required: false
 
 runs:
   using: composite
@@ -57,7 +60,7 @@ runs:
           libgstreamer-plugins-base1.0-dev libopenal-dev libpulse-dev \
           libbluetooth-dev libsdl2-dev libassimp-dev \
           libwayland-dev libwayland-egl-backend-dev wayland-protocols \
-          flite1-dev libspeechd-dev libassimp-dev
+          flite1-dev libspeechd-dev
 
     - name: Enter VS Developer shell
       if: ${{ runner.os == 'Windows' }}
@@ -104,8 +107,11 @@ runs:
       shell: pwsh
       run: |
         $env:VCPKG_ROOT = $env:VCPKG_INSTALLATION_ROOT
-        $triplet = "x64-windows"
-
+        $triplet = if ("${{ inputs.vcvars-arch }}" -eq "arm64") {
+          "arm64-windows"
+        } else {
+          "x64-windows"
+        }
         & "$env:VCPKG_ROOT\vcpkg.exe" install `
           --triplet $triplet `
           assimp `
@@ -232,7 +238,9 @@ runs:
           autoconf-archive \
           automake \
           libtool \
-          nasm
+          nasm llvm
+
+        echo "LLVM_INSTALL_DIR=$(brew --prefix llvm)" >> "$GITHUB_ENV"
 
     - name: Setup vcpkg cache (macOS)
       if: ${{ runner.os == 'macOS' }}
@@ -264,14 +272,42 @@ runs:
 
         VCPKG_ROOT="$RUNNER_TEMP/vcpkg"
 
-        if [[ "$(uname -m)" == "arm64" ]]; then
-          TRIPLET="arm64-osx"
+        if [[ "${{ inputs.target }}" == "ios" ]]; then
+          case "${{ inputs.ios-sdk }}" in
+              iphoneos)
+                  TRIPLET="arm64-ios"
+                  ;;
+              iphonesimulator)
+                  if [[ "$(uname -m)" == "arm64" ]]; then
+                      TRIPLET="arm64-ios-simulator"
+                  else
+                      TRIPLET="x64-ios"
+                  fi
+                  ;;
+              *)
+                  echo "Unsupported iOS SDK: ${{ inputs.ios-sdk }}"
+                  exit 1
+                  ;;
+          esac
+
+          if [[ "$(uname -m)" == "arm64" ]]; then
+              HOST_TRIPLET="arm64-osx"
+          else
+              HOST_TRIPLET="x64-osx"
+          fi
         else
-          TRIPLET="x64-osx"
+          if [[ "$(uname -m)" == "arm64" ]]; then
+              TRIPLET="arm64-osx"
+              HOST_TRIPLET="arm64-osx"
+          else
+              TRIPLET="x64-osx"
+              HOST_TRIPLET="x64-osx"
+          fi
         fi
 
         "$VCPKG_ROOT/vcpkg" install \
           --triplet "$TRIPLET" \
+          --host-triplet "$HOST_TRIPLET" \
           assimp \
           double-conversion \
           egl-registry \
@@ -349,7 +385,7 @@ runs:
         key: ${{ runner.os }}-${{ runner.arch }}-${{ inputs.target }}-ccache
 
     - name: Retrieve ccache cache (MinGW)
-      if: ${{ runner.os != 'Windows' && inputs.msystem != '' }}
+      if: ${{ inputs.msystem != '' }}
       uses: actions/cache@v6.1.0
       with:
         path: '${{ github.workspace }}\.ccache'
@@ -358,7 +394,7 @@ runs:
           ${{ runner.os }}-mingw-w64-ccache
 
     - name: Setup ccache (MinGW)
-      if: ${{ runner.os != 'Windows' && inputs.msystem != '' }}
+      if: ${{ inputs.msystem != '' }}
       shell: msys2 {0}
       run: |
         ccache --set-config=cache_dir='${{ github.workspace }}\.ccache'
