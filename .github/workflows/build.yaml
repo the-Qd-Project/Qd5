@@ -16,20 +16,20 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-26.04
+          - os: ubuntu-24.04
             target: desktop
             configure: -release -platform linux-g++
-          - os: ubuntu-26.04-arm
+          - os: ubuntu-24.04-arm
             target: desktop
             configure: -release -platform linux-g++
           - os: windows-2025
             vcvars-arch: amd64
             target: desktop
-            configure: -debug-and-release -platform win32-msvc2019
+            configure: -debug-and-release -platform win32-msvc
           - os: windows-11-arm
             vcvars-arch: arm64
             target: desktop
-            configure: -debug-and-release -platform win32-msvc2019
+            configure: -debug-and-release -platform win32-msvc
           - os: windows-2025
             msystem: UCRT64
             vcvars-arch: amd64_x86
@@ -39,23 +39,21 @@ jobs:
             macosx-deployment-target: 10.13
             target: desktop
             configure: -release -platform macx-clang
-          - os: ubuntu-26.04
+          - os: ubuntu-24.04
             target: android
             android-abi: arm64-v8a
             configure: -xplatform android-clang -android-ndk-host linux-x86_64 -release
-          - os: ubuntu-26.04
+          - os: ubuntu-24.04
             target: android
             android-abi: armeabi-v7a
             configure: -xplatform android-clang -android-ndk-host linux-x86_64 -release
           - os: macos-26
             target: ios
             ios-sdk: iphoneos
-            ios-arch: arm64
             configure: -xplatform macx-ios-clang -release
           - os: macos-26
             target: ios
             ios-sdk: iphonesimulator
-            ios-arch: arm64
             configure: -xplatform macx-ios-clang -release
 
     runs-on: ${{ matrix.os }}
@@ -125,7 +123,6 @@ jobs:
               ./configure \
                 "${COMMON_ARGS[@]}" \
                 -sdk "${{ matrix.ios-sdk }}" \
-                -arch "${{ matrix.ios-arch }}" \
                 -nomake tests \
                 -nomake examples \
                 -make tools \
@@ -160,25 +157,6 @@ jobs:
       - name: Test (MSVC)
         if: ${{ matrix.target == 'desktop' && ( runner.os == 'Windows' && matrix.msystem == '' ) }}
         run: jom check
-
-      - name: Debug DBus controller
-        if: ${{ matrix.target == 'desktop' && ( runner.os == 'Linux' && failure() ) }}
-        working-directory: qtbase/examples/dbus/remotecontrolledcar/controller
-        run: |
-          echo "=== GENERATED HEADER ==="
-          cat car_interface.h
-
-          echo "=== GENERATED SOURCE ==="
-          cat car_interface.cpp
-
-          echo "=== MOC OUTPUT ==="
-          cat .moc/moc_car_interface.cpp
-
-          echo "=== MOC SYMBOLS ==="
-          nm -C .obj/moc_car_interface.o | grep -E 'OrgExampleExamplesCarInterfaceInterface|staticMetaObject' || true
-
-          echo "=== GENERATED FILE STATUS ==="
-          ls -lah car_interface.h car_interface.cpp .moc/moc_car_interface.cpp .obj/moc_car_interface.o
 
       - name: Install (Non MSVC)
         if: ${{ runner.os != 'Windows' || matrix.msystem != '' }}
