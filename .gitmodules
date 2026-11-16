@@ -8,7 +8,7 @@
 [submodule "qtlocation/src/3rdparty/mapbox-gl-native"]
 	path = qtlocation/src/3rdparty/mapbox-gl-native
 	url = https://github.com/the-Qd-Project/qtlocation-mapboxgl.git
-	branch = kde/5.15
+	branch = qd
 [submodule "qtquick3d/src/3rdparty/assimp/src"]
 	path = qtquick3d/src/3rdparty/assimp/src
 	url = https://github.com/the-Qd-Project/qtquick3d-assimp.git
