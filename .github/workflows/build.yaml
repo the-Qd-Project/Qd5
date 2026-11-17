@@ -56,7 +56,6 @@ jobs:
             -qt-assimp \
             -qt-tiff \
             -qt-webp \
-            -icu \
             -openssl-runtime \
             -opengl desktop \
             -journald \
@@ -115,7 +114,6 @@ jobs:
             -qt-assimp \
             -qt-tiff \
             -qt-webp \
-            -icu \
             -make tests \
             -make examples \
             -make tools \
@@ -177,7 +175,6 @@ jobs:
             -qt-assimp \
             -qt-tiff \
             -qt-webp \
-            -icu \
             -opengl es2 \
             -android-sdk "$ANDROID_SDK_ROOT" \
             -android-ndk "$ANDROID_NDK_ROOT" \
@@ -241,7 +238,6 @@ jobs:
             -qt-assimp \
             -qt-tiff \
             -qt-webp \
-            -icu \
             -xplatform macx-ios-clang \
             -release \
             -sdk "${{ matrix.ios-sdk }}" \
@@ -292,7 +288,6 @@ jobs:
             -qt-assimp \
             -qt-tiff \
             -qt-webp \
-            -icu \
             -openssl-runtime \
             -platform win32-g++ \
             -debug-and-release \
@@ -351,7 +346,6 @@ jobs:
             -qt-assimp ^
             -qt-tiff ^
             -qt-webp ^
-            -icu ^
             -openssl-runtime ^
             -debug-and-release ^
             -platform win32-msvc ^

@@ -60,7 +60,7 @@ runs:
           libgstreamer-plugins-base1.0-dev libopenal-dev libpulse-dev \
           libbluetooth-dev libsdl2-dev libassimp-dev \
           libwayland-dev libwayland-egl-backend-dev wayland-protocols \
-          flite1-dev libspeechd-dev
+          flite1-dev libspeechd-dev libsystemd-dev
 
     - name: Enter VS Developer shell
       if: ${{ runner.os == 'Windows' }}
@@ -187,6 +187,7 @@ runs:
         pacboy: >-
           toolchain:p
           cmake:p
+          ccache:p
           ninja:p
           pkgconf:p
           gperf:p
@@ -305,33 +306,40 @@ runs:
           fi
         fi
 
+        DEPENDENCIES=(
+          assimp
+          double-conversion
+          egl-registry
+          fontconfig
+          freetype
+          harfbuzz
+          icu
+          libjpeg-turbo
+          libpng
+          md4c
+          pcre2
+          openssl
+          sqlite3
+          tiff
+          libwebp
+          zlib
+          zstd
+          openal-soft
+          sdl2
+          'gstreamer[plugins-base]'
+          libpq
+          libmysql
+          vulkan
+        )
+
+        if [[ "${{ inputs.target }}" != "ios" ]]; then
+          DEPENDENCIES+=(dbus)
+        fi
+
         "$VCPKG_ROOT/vcpkg" install \
           --triplet "$TRIPLET" \
           --host-triplet "$HOST_TRIPLET" \
-          assimp \
-          double-conversion \
-          egl-registry \
-          fontconfig \
-          freetype \
-          harfbuzz \
-          icu \
-          libjpeg-turbo \
-          libpng \
-          md4c \
-          pcre2 \
-          openssl \
-          sqlite3 \
-          tiff \
-          libwebp \
-          zlib \
-          zstd \
-          openal-soft \
-          sdl2 \
-          'gstreamer[plugins-base]' \
-          libpq \
-          libmysql \
-          vulkan \
-          dbus
+          "${DEPENDENCIES[@]}"
 
         VCPKG_PREFIX="$VCPKG_ROOT/installed/$TRIPLET"
 
