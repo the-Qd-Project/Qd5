@@ -144,6 +144,10 @@ QDBusConnectionManager::QDBusConnectionManager()
             this, &QDBusConnectionManager::createServer, Qt::BlockingQueuedConnection);
     moveToThread(this);         // ugly, don't do this in other projects
 
+    qAddPostRoutine([]() {
+        QMetaObject::invokeMethod(QDBusConnectionManager::instance(), "quit");
+    });
+
 #ifdef Q_OS_WIN
     // prevent the library from being unloaded on Windows. See comments in the function.
     preventDllUnload();

@@ -598,7 +598,7 @@ static QString getRelocatablePrefix()
         const QLatin1Char slash('/');
 #if defined(Q_CC_MINGW)
         const QString implibPrefix = QStringLiteral("lib");
-        const QString implibSuffix = QStringLiteral(".a");
+        const QString implibSuffix = QStringLiteral(".dll.a");
 #else
         const QString implibPrefix;
         const QString implibSuffix = QStringLiteral(".lib");

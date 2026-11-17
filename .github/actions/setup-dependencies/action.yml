@@ -330,10 +330,15 @@ runs:
           libpq
           libmysql
           vulkan
+          moltenvk
         )
 
         if [[ "${{ inputs.target }}" != "ios" ]]; then
           DEPENDENCIES+=(dbus)
+        fi
+
+        if [[ "${{ inputs.target }}" == "ios" ]]; then
+          export LDFLAGS="${LDFLAGS:+$LDFLAGS }-framework CoreFoundation"
         fi
 
         "$VCPKG_ROOT/vcpkg" install \

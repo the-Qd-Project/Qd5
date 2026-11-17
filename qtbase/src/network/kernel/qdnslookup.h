@@ -196,6 +196,10 @@ public:
     };
     Q_ENUM(Error)
 
+#ifdef PTR
+#define PTR_OLD_DEFINE PTR
+#undef PTR
+#endif
     enum Type
     {
         A = 1,
@@ -209,6 +213,10 @@ public:
         TXT = 16
     };
     Q_ENUM(Type)
+// Set PTR back what it previously contained.
+#ifdef PTR_OLD_DEFINE
+#define PTR PTR_OLD_DEFINE
+#endif
 
     explicit QDnsLookup(QObject *parent = nullptr);
     QDnsLookup(Type type, const QString &name, QObject *parent = nullptr);

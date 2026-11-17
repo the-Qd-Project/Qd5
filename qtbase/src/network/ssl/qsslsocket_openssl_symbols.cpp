@@ -654,9 +654,9 @@ static QStringList findAllLibCrypto()
 
 #if (OPENSSL_VERSION_NUMBER >> 28) < 3
 #define QT_OPENSSL_VERSION "1_1"
-#elif OPENSSL_VERSION_MAJOR == 3 // Starting with 3.0 this define is available
-#define QT_OPENSSL_VERSION "3"
-#endif // > 3 intentionally left undefined
+#elif OPENSSL_VERSION_MAJOR >= 3 // Starting with 3.0 this define is available
+#define QT_OPENSSL_VERSION QT_STRINGIFY(OPENSSL_VERSION_MAJOR)
+#endif
 
 #ifdef Q_OS_WIN
 

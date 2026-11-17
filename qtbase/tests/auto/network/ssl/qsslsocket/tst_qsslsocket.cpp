@@ -87,7 +87,7 @@ typedef QSharedPointer<QSslSocket> QSslSocketPtr;
 #define ALPN_SUPPORTED 1
 #endif
 
-#if QT_CONFIG(schannel) && !defined(Q_CC_MINGW)
+#if QT_CONFIG(schannel)
 #define ALPN_SUPPORTED 1
 #endif
 

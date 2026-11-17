@@ -147,7 +147,7 @@ goto doneargs
 :doneargs
 
 rem Find various executables
-for %%C in (clang-cl.exe clang.exe cl.exe icl.exe g++.exe perl.exe jom.exe) do set %%C=%%~$PATH:C
+for %%C in (g++.exe clang-cl.exe clang.exe cl.exe icl.exe perl.exe jom.exe) do set %%C=%%~$PATH:C
 
 rem Determine host spec
 

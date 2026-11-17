@@ -15,7 +15,7 @@ qtConfig(freetype) {
     include($$PWD/freetype/freetype.pri)
 }
 
-unix {
+-unix|win32-g++|win32-clang-g++ {
     include($$PWD/genericunix/genericunix.pri)
 }
 
