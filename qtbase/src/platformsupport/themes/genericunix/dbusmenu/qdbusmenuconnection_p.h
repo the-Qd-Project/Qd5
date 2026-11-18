@@ -73,7 +73,7 @@ public:
     ~QDBusMenuConnection();
     QDBusConnection connection() const { return m_connection; }
     QDBusServiceWatcher *dbusWatcher() const { return m_dbusWatcher; }
-    bool isStatusNotifierHostRegistered() const { return m_statusNotifierHostRegistered; }
+    bool isWatcherRegistered() const { return m_watcherRegistered; }
 #ifndef QT_NO_SYSTEMTRAYICON
     bool registerTrayIconMenu(QDBusTrayIcon *item);
     void unregisterTrayIconMenu(QDBusTrayIcon *item);
@@ -94,7 +94,7 @@ private:
     QString m_serviceName;
     QDBusConnection m_connection;
     QDBusServiceWatcher *m_dbusWatcher;
-    bool m_statusNotifierHostRegistered;
+    bool m_watcherRegistered;
 };
 
 QT_END_NAMESPACE

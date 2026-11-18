@@ -106,7 +106,7 @@ static bool isDBusTrayAvailable() {
     static bool dbusTrayAvailableKnown = false;
     if (!dbusTrayAvailableKnown) {
         QDBusMenuConnection conn;
-        if (conn.isStatusNotifierHostRegistered())
+        if (conn.isWatcherRegistered())
             dbusTrayAvailable = true;
         dbusTrayAvailableKnown = true;
         qCDebug(qLcTray) << "D-Bus tray available:" << dbusTrayAvailable;
@@ -204,7 +204,7 @@ QPlatformMenuBar *QGenericUnixTheme::createPlatformMenuBar() const
 #if !defined(QT_NO_DBUS) && !defined(QT_NO_SYSTEMTRAYICON)
 QPlatformSystemTrayIcon *QGenericUnixTheme::createPlatformSystemTrayIcon() const
 {
-    if (isDBusTrayAvailable())
+    if (shouldUseDBusTray())
         return new QDBusTrayIcon();
     return nullptr;
 }
@@ -683,7 +683,7 @@ QPlatformMenuBar *QKdeTheme::createPlatformMenuBar() const
 #if !defined(QT_NO_DBUS) && !defined(QT_NO_SYSTEMTRAYICON)
 QPlatformSystemTrayIcon *QKdeTheme::createPlatformSystemTrayIcon() const
 {
-    if (isDBusTrayAvailable())
+    if (shouldUseDBusTray())
         return new QDBusTrayIcon();
     return nullptr;
 }
@@ -806,7 +806,7 @@ QPlatformMenuBar *QGnomeTheme::createPlatformMenuBar() const
 #if !defined(QT_NO_DBUS) && !defined(QT_NO_SYSTEMTRAYICON)
 QPlatformSystemTrayIcon *QGnomeTheme::createPlatformSystemTrayIcon() const
 {
-    if (isDBusTrayAvailable())
+    if (shouldUseDBusTray())
         return new QDBusTrayIcon();
     return nullptr;
 }

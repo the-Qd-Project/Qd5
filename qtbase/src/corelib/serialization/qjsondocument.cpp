@@ -356,9 +356,15 @@ QJsonDocument QJsonDocument::fromBinaryData(const QByteArray &data, DataValidati
     memcpy(&root, data.constData() + sizeof(QBinaryJsonPrivate::Header),
            sizeof(QBinaryJsonPrivate::Base));
 
-    const uint size = sizeof(QBinaryJsonPrivate::Header) + root.size;
-    if (h.tag != QJsonDocument::BinaryFormatTag || h.version != 1U || size > uint(data.size()))
+    // sizeof() is of type size_t while root.size is a 32 bit field taken
+    // straight from the input, so do the sum in 64 bits: root.size values
+    // close to UINT_MAX would otherwise wrap around and pass the check below.
+    const quint64 size64 = quint64(sizeof(QBinaryJsonPrivate::Header)) + root.size;
+    if (h.tag != QJsonDocument::BinaryFormatTag || h.version != 1U
+        || size64 > quint64(data.size())) {
         return QJsonDocument();
+    }
+    const uint size = uint(size64);
 
     std::unique_ptr<QBinaryJsonPrivate::ConstData> d
             = qt_make_unique<QBinaryJsonPrivate::ConstData>(data.constData(), size);

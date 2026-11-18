@@ -16,6 +16,7 @@ SUBDIRS=\
    qtransform \
    qwmatrix \
    qpolygon \
+   qtriangulator \
 
 !qtConfig(private_tests): SUBDIRS -= \
     qpathclipper \

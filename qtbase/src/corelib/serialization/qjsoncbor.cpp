@@ -204,11 +204,17 @@ static QJsonValue convertExtendedTypeToJson(QCborContainerPrivate *d)
     qint64 tag = d->elements.at(0).value;
 
     switch (tag) {
-    case qint64(QCborKnownTags::Url):
+    case qint64(QCborKnownTags::Url): {
         // use the fullly-encoded URL form
-        if (d->elements.at(1).type == QCborValue::String)
-            return QUrl::fromEncoded(d->byteData(1)->asByteArrayView()).toString(QUrl::FullyEncoded);
+        Element e = d->elements.at(1);
+        const ByteData *bd = d->byteData(e);
+        if (e.type == QCborValue::String) {
+            if (!bd)
+                return QString();
+            return QUrl::fromEncoded(bd->asByteArrayView()).toString(QUrl::FullyEncoded);
+        }
         Q_FALLTHROUGH();
+    }
 
     case qint64(QCborKnownTags::DateTimeString):
     case qint64(QCborKnownTags::ExpectedBase64url):

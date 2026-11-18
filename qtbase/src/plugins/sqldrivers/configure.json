@@ -52,7 +52,7 @@
             "headers": "ibase.h",
             "sources": [
                 { "libs": "-lgds32_ms", "condition": "config.win32" },
-                { "libs": "-lgds", "condition": "!config.win32" }
+                { "libs": "-lfbclient", "condition": "!config.win32" }
             ]
         },
         "mysql": {
@@ -67,6 +67,7 @@
             },
             "headers": "mysql.h",
             "sources": [
+                { "type": "pkgConfig", "args": "mariadb" },
                 { "type": "mysqlConfig", "query": "--libs_r", "cleanlibs": true },
                 { "type": "mysqlConfig", "query": "--libs", "cleanlibs": true },
                 { "type": "mysqlConfig", "query": "--libs_r", "cleanlibs": false },
