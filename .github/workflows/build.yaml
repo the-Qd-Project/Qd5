@@ -356,48 +356,9 @@ jobs:
             -make libs ^
             -ccache
           if errorlevel 1 exit /b %errorlevel%
-# DEBUG!!!
-      - name: Diagnose qvkgen
-        shell: cmd
-        run: |
-          cd /d D:\a\Qd5\Qd5\qtbase\src\gui
-
-          echo ==== WORKING DIRECTORY ====
-          cd
-
-          echo ==== WRAPPER ====
-          type qvkgen_wrapper.bat
-
-          echo ==== VULKAN XML ====
-          if exist vulkan\vk.xml (echo FOUND) else (echo MISSING)
-
-          echo ==== LICENSE HEADER ====
-          if exist ..\..\header.LGPL (echo FOUND) else (echo MISSING)
-
-          echo ==== QVKGEN ====
-          if exist ..\..\bin\qvkgen.exe (echo FOUND) else (echo MISSING)
-
-          echo ==== QTCORE DLL IN BIN ====
-          dir ..\..\bin\Qt5Core*.dll
-
-          echo ==== QTCORE DLL IN LIB ====
-          dir ..\..\lib\Qt5Core*.dll
-
-          echo ==== EXECUTING QVKGEN ====
-          call qvkgen_wrapper.bat vulkan\vk.xml ..\..\header.LGPL vulkan\qvkgen_probe > qvkgen_probe.log 2>&1
-
-          set "QVKGEN_RC=%ERRORLEVEL%"
-
-          type qvkgen_probe.log
-
-          echo QVKGEN_EXIT=%QVKGEN_RC%
-
-          echo ==== GENERATED FILES ====
-          dir vulkan\qvkgen_probe*
-# DEBUG!!!
       - name: Build
         shell: pwsh
-        run: jom /J (Get-CimInstance Win32_ComputerSystem).NumberOfLogicalProcessors
+        run: jom /J 1 /D /W
       - name: Test
         shell: pwsh
         continue-on-error: true
