@@ -363,8 +363,11 @@ jobs:
         if: failure()
         shell: cmd
         run: |
-          dir D:\a\Qd5\Qd5\qtbase\bin\*.dll
-          dumpbin /dependents D:\a\Qd5\Qd5\qtbase\bin\qvkgen.exe
+          set PATH=D:\a\Qd5\Qd5\qtbase\bin;%PATH%
+          dumpbin /dependents D:\a\Qd5\Qd5\qtbase\bin\Qt5Core.dll
+          for /f "tokens=*" %%d in ('dumpbin /dependents D:\a\Qd5\Qd5\qtbase\bin\Qt5Core.dll ^| findstr /r /c:"^    .*\.dll$"') do (where %%d >nul 2>&1 || echo MISSING: %%d)
+          echo VCToolsRedistDir=%VCToolsRedistDir%
+          dir "%VCToolsRedistDir%" 2>nul
       - name: Test
         shell: pwsh
         continue-on-error: true
