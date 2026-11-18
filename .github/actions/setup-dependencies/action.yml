@@ -384,6 +384,7 @@ runs:
           "$RUNNER_TEMP/MoltenVK"
 
         cd "$RUNNER_TEMP/MoltenVK"
+        ./fetchDependencies --all
         make $MoltenVKMK
 
         echo "MOLTENVK_ROOT=$PWD/Package/Release/MoltenVK" >> "$GITHUB_ENV"
