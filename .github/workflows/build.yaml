@@ -359,6 +359,15 @@ jobs:
       - name: Build
         shell: pwsh
         run: jom /J 1 /D /W
+      - name: Debug qvkgen
+        if: failure()
+        shell: cmd
+        run: |
+          dir D:\a\Qd5\Qd5\qtbase\bin\qvkgen.exe
+          cd /d D:\a\Qd5\Qd5\qtbase\src\gui
+          type qvkgen_wrapper.bat
+          call qvkgen_wrapper.bat vulkan\vk.xml D:/a/Qd5/Qd5/qtbase/header.LGPL vulkan/qvulkanfunctions
+          echo ERRORLEVEL=%errorlevel%
       - name: Test
         shell: pwsh
         continue-on-error: true
