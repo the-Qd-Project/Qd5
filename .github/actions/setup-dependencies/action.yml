@@ -122,14 +122,12 @@ runs:
           icu `
           libjpeg-turbo `
           libpng `
-          md4c `
           pcre2 `
           openssl `
           sqlite3 `
           tiff `
           libwebp `
           zlib `
-          zstd `
           openal-soft `
           sdl2 `
           'gstreamer[plugins-base]' `
@@ -137,7 +135,19 @@ runs:
           libmysql `
           vulkan
 
+        $staticTriplet = if ("${{ inputs.vcvars-arch }}" -eq "arm64") {
+          "arm64-windows-static-md"
+        } else {
+          "x64-windows-static-md"
+        }
+        & "$env:VCPKG_ROOT\vcpkg.exe" install `
+          --triplet $staticTriplet `
+          zstd `
+          md4c
+        if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
         $vcpkgPrefix = "$env:VCPKG_ROOT\installed\$triplet"
+        $staticPrefix = "$env:VCPKG_ROOT\installed\$staticTriplet"
         $llvmRoot = Split-Path -Parent (Split-Path -Parent (Get-Command clang.exe).Source)
 
         Add-Content -Path $env:GITHUB_ENV -Value "VCPKG_ROOT=$env:VCPKG_ROOT"
@@ -146,8 +156,8 @@ runs:
         Add-Content -Path $env:GITHUB_ENV -Value "LLVM_INSTALL_DIR=$llvmRoot"
 
         # Header and library discovery
-        Add-Content -Path $env:GITHUB_ENV -Value "INCLUDE=$vcpkgPrefix\include;$env:INCLUDE"
-        Add-Content -Path $env:GITHUB_ENV -Value "LIB=$vcpkgPrefix\lib;$env:LIB"
+        Add-Content -Path $env:GITHUB_ENV -Value "INCLUDE=$staticPrefix\include;$vcpkgPrefix\include;$env:INCLUDE"
+        Add-Content -Path $env:GITHUB_ENV -Value "LIB=$staticPrefix\lib;$vcpkgPrefix\lib;$env:LIB"
 
         # pkg-config discovery
         Add-Content -Path $env:GITHUB_ENV -Value "PKG_CONFIG_PATH=$vcpkgPrefix\lib\pkgconfig;$vcpkgPrefix\share\pkgconfig"
@@ -306,6 +316,67 @@ runs:
           fi
         fi
 
+        OVERLAY_TRIPLETS=""
+
+        if [[ "${{ inputs.target }}" == "ios" ]]; then
+          case "$TRIPLET" in
+              arm64-*)
+                  IOS_ARCH="arm64"
+                  ;;
+              x64-*)
+                  IOS_ARCH="x86_64"
+                  ;;
+              *)
+                  echo "Unsupported iOS triplet: $TRIPLET"
+                  exit 1
+                  ;;
+          esac
+
+          IOS_SDK="${{ inputs.ios-sdk }}"
+          IOS_SYSROOT="$(xcrun --sdk "$IOS_SDK" --show-sdk-path)"
+          IOS_CLANG="$(xcrun --sdk "$IOS_SDK" --find clang)"
+          IOS_CLANGXX="$(xcrun --sdk "$IOS_SDK" --find clang++)"
+
+          OVERLAY_TRIPLETS="$RUNNER_TEMP/vcpkg-overlay-triplets"
+
+          mkdir -p "$OVERLAY_TRIPLETS"
+
+          BASE_TRIPLET="$VCPKG_ROOT/triplets/community/$TRIPLET.cmake"
+
+          if [[ ! -f "$BASE_TRIPLET" ]]; then
+            BASE_TRIPLET="$VCPKG_ROOT/triplets/$TRIPLET.cmake"
+          fi
+
+          if [[ ! -f "$BASE_TRIPLET" ]]; then
+            echo "Triplet not found: $TRIPLET"
+            exit 1
+          fi
+
+          cp "$BASE_TRIPLET" "$OVERLAY_TRIPLETS/$TRIPLET.cmake"
+
+          cat > "$OVERLAY_TRIPLETS/ios-objc.ini" <<EOF
+        [binaries]
+        objc = ['$IOS_CLANG']
+        objcpp = ['$IOS_CLANGXX']
+
+        [built-in options]
+        objc_args = ['-arch', '$IOS_ARCH', '-isysroot', '$IOS_SYSROOT']
+        objc_link_args = ['-arch', '$IOS_ARCH', '-isysroot', '$IOS_SYSROOT']
+        objcpp_args = ['-arch', '$IOS_ARCH', '-isysroot', '$IOS_SYSROOT']
+        objcpp_link_args = ['-arch', '$IOS_ARCH', '-isysroot', '$IOS_SYSROOT']
+        EOF
+
+          cat >> "$OVERLAY_TRIPLETS/$TRIPLET.cmake" <<'EOF'
+
+        set(VCPKG_MESON_CROSS_FILE_DEBUG "${CMAKE_CURRENT_LIST_DIR}/ios-objc.ini")
+        set(VCPKG_MESON_CROSS_FILE_RELEASE "${CMAKE_CURRENT_LIST_DIR}/ios-objc.ini")
+
+        list(APPEND VCPKG_HASH_ADDITIONAL_FILES
+            "${CMAKE_CURRENT_LIST_DIR}/ios-objc.ini"
+        )
+        EOF
+        fi
+
         DEPENDENCIES=(
           assimp
           double-conversion
@@ -340,9 +411,17 @@ runs:
           export LDFLAGS="${LDFLAGS:+$LDFLAGS }-framework CoreFoundation"
         fi
 
+        VCPKG_INSTALL_OPTIONS=(
+          --triplet "$TRIPLET"
+          --host-triplet "$HOST_TRIPLET"
+        )
+
+        if [[ -n "$OVERLAY_TRIPLETS" ]]; then
+          VCPKG_INSTALL_OPTIONS+=(--overlay-triplets "$OVERLAY_TRIPLETS")
+        fi
+
         "$VCPKG_ROOT/vcpkg" install \
-          --triplet "$TRIPLET" \
-          --host-triplet "$HOST_TRIPLET" \
+          "${VCPKG_INSTALL_OPTIONS[@]}" \
           "${DEPENDENCIES[@]}"
 
         VCPKG_PREFIX="$VCPKG_ROOT/installed/$TRIPLET"

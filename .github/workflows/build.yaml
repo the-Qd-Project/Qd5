@@ -359,15 +359,6 @@ jobs:
       - name: Build
         shell: pwsh
         run: jom /J (Get-CimInstance Win32_ComputerSystem).NumberOfLogicalProcessors
-      - name: Debug qvkgen
-        if: failure()
-        shell: cmd
-        run: |
-          set PATH=D:\a\Qd5\Qd5\qtbase\bin;%PATH%
-          dumpbin /dependents D:\a\Qd5\Qd5\qtbase\bin\Qt5Core.dll
-          for /f "tokens=*" %%d in ('dumpbin /dependents D:\a\Qd5\Qd5\qtbase\bin\Qt5Core.dll ^| findstr /r /c:"^    .*\.dll$"') do (where %%d >nul 2>&1 || echo MISSING: %%d)
-          echo VCToolsRedistDir=%VCToolsRedistDir%
-          dir "%VCToolsRedistDir%" 2>nul
       - name: Test
         shell: pwsh
         continue-on-error: true

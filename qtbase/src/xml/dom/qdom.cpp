@@ -1005,7 +1005,9 @@ QDomNodePrivate::~QDomNodePrivate()
         } else {                         // p ran out of children (= is a leaf now)
             if (p == this)
                 break;                   // we're done, don't `delete this`
-            delete std::exchange(p, p->parent());  // deletes and ascends
+            QDomNodePrivate *parent = p->parent();
+            delete p;
+            p = parent;
         }
     }
     first = nullptr;
