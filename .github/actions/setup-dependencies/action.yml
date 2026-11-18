@@ -330,7 +330,6 @@ runs:
           libpq
           libmysql
           vulkan
-          moltenvk
         )
 
         if [[ "${{ inputs.target }}" != "ios" ]]; then
@@ -363,6 +362,31 @@ runs:
           # Runtime library discovery
           echo "DYLD_LIBRARY_PATH=$VCPKG_PREFIX/lib"
         } >> "$GITHUB_ENV"
+
+        if [[ -n "${{ inputs.ios-sdk }}" ]]; then
+          case "${{ inputs.ios-sdk }}" in
+              iphoneos)
+                  MoltenVKMK="ios"
+                  ;;
+              iphonesimulator)
+                  MoltenVKMK="iossim"
+                  ;;
+              *)
+                  MoltenVKMK="macos"
+                  ;;
+          esac
+        else
+          MoltenVKMK="macos"
+        fi
+
+        git clone --depth 1 \
+          https://github.com/KhronosGroup/MoltenVK.git \
+          "$RUNNER_TEMP/MoltenVK"
+
+        cd "$RUNNER_TEMP/MoltenVK"
+        make $MoltenVKMK
+
+        echo "MOLTENVK_ROOT=$PWD/Package/Release/MoltenVK" >> "$GITHUB_ENV"
 
     - name: Install macOS SQL dependencies
       if: ${{ runner.os == 'macOS' }}
